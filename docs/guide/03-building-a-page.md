@@ -14,7 +14,7 @@ Tatsu and Elementor impose a fixed hierarchy: a section contains rows, which con
 | **Stack (Flex)** | Align elements **in a row or a column**: a heading and its text, buttons side by side, a visual to the right of a text | Flexbox |
 | **Grid** | Spread elements over **equal columns**: cards, gallery, logos | CSS Grid |
 
-A few landmarks to choose:
+Here are a few guidelines to help you choose:
 
 - elements **one below the other** with regular spacing: a **stack** in a column;
 - elements **side by side** of different sizes (a wide text, a narrow visual): a **stack** in a row;
@@ -35,7 +35,7 @@ Rather than nesting boxes by hand, start from the **Compositions**, at the botto
 | **Hero** | Heading, text and button, with a visual next to them | The visual goes below |
 | **Card**, **Logo**, **Call to action**, **Image grid**, **Accordion (FAQ)**, **Tab block**, **About**, **Features**, **Testimonials**, **Pricing**, **Team**, **Contact** | Complete sections, to customize | Adapted |
 
-Once inserted, a composition is an ordinary set of boxes and components: you can change, add or delete anything. Its texts are written in the site's language. The **Sections** tab of the library offers other sections and those you have saved (chapter [Reuse](08-reuse.md)).
+Once inserted, a composition is an ordinary set of boxes and components: you can change, add or delete anything. Its text is written in the site's language. The **Sections** tab of the library offers other sections and those you have saved (chapter [Reuse](08-reuse.md)).
 
 ## Adding an element
 
@@ -106,7 +106,7 @@ The **Text** field has a small toolbar: **bold** (<kbd>⌘</kbd> <kbd>B</kbd>), 
 
 ![The rich text field and its toolbar](images/rich-text.png)
 
-For an enumeration, use the **List** component: in the inspector, each item has its own rich field, with arrows to move it, a trash to delete it and **Add an item** at the bottom. Subheadings inside a text are not available: use a **Heading** component between two **Text**s, which keeps the heading hierarchy right.
+For an enumeration, use the **List** component: in the inspector, each item has its own rich field, with arrows to move it, a trash icon to delete it and **Add an item** at the bottom. Subheadings inside a text are not available: use a **Heading** component between two **Text**s, which keeps the heading hierarchy right.
 
 ## Good habits
 

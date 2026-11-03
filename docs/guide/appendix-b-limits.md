@@ -2,13 +2,13 @@
 title: "Appendix B. Current limits and workarounds"
 ---
 
-The Studio is young: some features of page builders do not exist yet, others are deliberately absent. This appendix lists what you will run into, with the workaround when there is one. The **deliberate** absences (free HTML, plugins…) are explained in [appendix A](appendix-a-equivalences.md).
+The Studio is young: some features of page builders do not exist yet, others are deliberately absent. This appendix lists what you will run into, with the workaround when there is one. The **deliberate** absences (arbitrary HTML, plugins…) are explained in [appendix A](appendix-a-equivalences.md).
 
 ## Editing
 
 | Limit | Workaround |
 |---|---|
-| Texts are not edited directly in the page | Click the text in the canvas, change it in the inspector (Content section) |
+| Text is not edited directly on the page | Click the text in the canvas, change it in the inspector (Content section) |
 | An element cannot be grabbed in the canvas to move it | Drag its row in the **layers**, or cut and paste (<kbd>⌘</kbd> <kbd>X</kbd>, select the destination, <kbd>⌘</kbd> <kbd>V</kbd>) |
 | No auto-scroll during a drag and drop | Collapse parts of the layers, or use cut and paste |
 | No multiple selection | Group the elements in a box, then act on the box |
@@ -17,7 +17,7 @@ The Studio is young: some features of page builders do not exist yet, others are
 | No subheading or list inside a text | A **Heading** or **List** component between two **Text**s |
 | No size, background or gradient on part of a text (only bold, italic, color, link) | Split into several elements, or apply the setting to the whole element |
 | A color chosen in the text does not follow changes of the design system | For a whole element, use the inspector's **Text color** |
-| The canvas does not show animations by default | Tick **Play animations in the canvas**, or use the **Site preview** |
+| The canvas does not display animations by default | Tick **Play animations in the canvas**, or use the **Site preview** |
 | No history between two sessions: undo and the log start from zero when reopening | Before a big change, export the project archive (**⋯** menu) |
 | No automatic saving | <kbd>⌘</kbd> <kbd>S</kbd> regularly; the Studio warns if you close the tab without saving |
 | Interface languages: English and French only | Another language is added with a translation file (see the repository's CONTRIBUTING) |
@@ -54,7 +54,7 @@ The Studio is young: some features of page builders do not exist yet, others are
 | A single header and a single footer | Hide them on a page and build its own there |
 | No accounts or rights: the whole team has every right | Organize yourselves: one project, one person at a time |
 | Two people on the same project: the second to save is warned of a conflict | Reload the page to start again from the saved version, or choose to overwrite |
-| A deleted project goes to a trash on the server, without restoring from the interface | Ask the administrator to recover it |
+| A deleted project is moved to the server's trash and cannot be restored from the interface | Ask the administrator to recover it |
 
 ## Export and publishing
 

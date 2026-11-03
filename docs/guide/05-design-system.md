@@ -110,7 +110,7 @@ Keep this stylesheet for real needs: an inspector setting stays simpler to maint
 - Renaming a token breaks nothing: elements point to it by an internal id, not by its name.
 - A **used** token cannot be deleted: the Studio says how many elements or styles use it. Replace it on these elements first.
 
-## Advised method
+## Recommended workflow
 
 1. **Before building the pages**, set the brand guidelines: 3 to 6 colors, one or two fonts, the Body text, Heading 1, Heading 2 and Heading 3 styles (with their mobile sizes), two or three spacings.
 2. **While building**, use tokens rather than custom values.

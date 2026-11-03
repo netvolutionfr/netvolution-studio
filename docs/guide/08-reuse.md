@@ -17,7 +17,7 @@ The **Sections** tab of the library (at the top left, next to **Components**) sh
 ![A library section: preview, description, copied or linked insertion](images/sections.png)
 
 - The **Search** field and the **Category** list filter the sections.
-- **Insert** places an **independent copy**: you change it freely, nothing links it to the library any more. Its texts are written in the site's language.
+- **Insert** places an **independent copy**: you change it freely, nothing links it to the library any more. Its text is written in the site's language.
 - The **link** icon (insert linked) places a **linked instance**: the section becomes a reusable component of the project (see below).
 
 As in the Components tab, the section is inserted into the selected box, after the selected element, or at the end of the page.
@@ -51,7 +51,7 @@ The texts, links, images and lists of a component are its **parameters**: each i
 
 Everything else (structure, styling, animations) comes from the component. If you change an instance **outside its parameters** (a color, a spacing), the inspector says so: these changes will be **overwritten** by the next update. For an instance to depart from the model durably, **detach it**.
 
-### Evolving the component
+### Updating a component
 
 1. Open the component: the **Edit the component** icon (pencil) of an instance, or its name in **Shared components** of the Pages panel.
 2. Change it like a page. The instances do not change yet.
@@ -82,7 +82,7 @@ A site template is a **complete project** (pages, header and footer, menus, desi
 
 Each template exists in English and in French, page addresses included. The list shows a template's language when it is not that of the interface.
 
-The texts, contact details and visuals of these templates are fictional: replace them with your client's. Their visuals are generated illustrations, free of rights; their fonts come from the catalog and are already in the media library. Studying how they are built (layers, design system, animations) is also a good way to learn the Studio.
+The texts, contact details and visuals of these templates are fictional: replace them with your client's. Their visuals are generated illustrations that you can use in your projects; their fonts come from the catalog and are already in the media library. Studying how they are built (layers, design system, animations) is also a good way to learn the Studio.
 
 ### Saving a template
 
@@ -90,7 +90,7 @@ The texts, contact details and visuals of these templates are fictional: replace
 2. **⋯** menu (More actions) > **Save as site template…**
 3. Give it a name and, if you wish, a description.
 
-The template appears on the **Projects** screen, in the **Template** list ("Complete sites" group) and under **My site templates**, where a trash deletes it. Projects created from a template do not depend on it: deleting or changing the template does not touch them.
+The template appears on the **Projects** screen, in the **Template** list ("Complete sites" group) and under **My site templates**, where a trash icon deletes it. Projects created from a template do not depend on it: deleting or changing the template does not touch them.
 
 ### Preparing a good template
 

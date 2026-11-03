@@ -8,7 +8,7 @@ The editor is divided into five areas. The left and right panels are resized by 
 
 ## The Projects screen
 
-This is the Studio's home page. There you create a project from a **template**, open, **duplicate** or **delete** an existing project (it goes to a trash, on the server), and **import** an archive exported from another Studio. The site templates you have saved appear under "My site templates".
+This is the Studio's home page. There you create a project from a **template**, open, **duplicate** or **delete** an existing project (it is moved to the server's trash), and **import** an archive exported from another Studio. The site templates you have saved appear under "My site templates".
 
 From the editor, the **← Projects** link at the top left brings you back. The **language** button (top right) chooses the interface language; the page reloads in the chosen language. On the first visit, the Studio opens in the browser's language if it knows it (English or French), else in English; the choice made afterwards is remembered by the browser.
 
@@ -84,7 +84,7 @@ The styles set in **Desktop** form the **base**: they apply to every screen size
 - **Tablet**, up to 1023 px wide;
 - **Mobile**, up to 767 px.
 
-In front of each setting, a **dot** shows where the value comes from: **filled**, it is set at this breakpoint; **hollow**, it is inherited from a larger size. The circular arrow to the right of a set value **resets** it, that is, goes back to the inherited value. The chapter [Styling and responsive](04-styling-and-responsive.md) details the method.
+Next to each setting, a **dot** shows where the value comes from: **filled**, it is set at this breakpoint; **hollow**, it is inherited from a larger size. The circular arrow to the right of a set value **resets** it, that is, goes back to the inherited value. The chapter [Styling and responsive design](04-styling-and-responsive.md) details the method.
 
 ## Keyboard shortcuts
 
