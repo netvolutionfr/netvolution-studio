@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 import { resolveRuns, runsSchema } from '../rich.ts';
@@ -8,7 +9,7 @@ const ORDERED = ['decimal', 'lower-alpha', 'upper-roman'] as const;
 export const list = defineComponent({
   type: 'list',
   version: 1,
-  label: 'Liste',
+  label: t('components.list.name'),
   category: 'content',
   props: z.strictObject({
     marker: z.enum(['disc', 'circle', 'square', 'none', ...ORDERED]),
@@ -18,7 +19,11 @@ export const list = defineComponent({
   defaults: {
     props: {
       marker: 'disc',
-      items: [[{ text: 'Premier élément' }], [{ text: 'Deuxième élément' }], [{ text: 'Troisième élément' }]],
+      items: [
+        [{ text: 'content.list.first' }],
+        [{ text: 'content.list.second' }],
+        [{ text: 'content.list.third' }],
+      ],
     },
   },
   resolve: (props, ctx) => ({
@@ -32,18 +37,18 @@ export const list = defineComponent({
     {
       kind: 'select',
       prop: 'marker',
-      label: 'Puces',
+      label: t('components.list.fields.marker'),
       options: [
-        { value: 'disc', label: '• Disque' },
-        { value: 'circle', label: '◦ Cercle' },
-        { value: 'square', label: '▪ Carré' },
-        { value: 'none', label: 'Aucune' },
-        { value: 'decimal', label: '1. Numéros' },
-        { value: 'lower-alpha', label: 'a. Lettres' },
-        { value: 'upper-roman', label: 'I. Chiffres romains' },
+        { value: 'disc', label: t('components.list.options.marker.disc') },
+        { value: 'circle', label: t('components.list.options.marker.circle') },
+        { value: 'square', label: t('components.list.options.marker.square') },
+        { value: 'none', label: t('components.list.options.marker.none') },
+        { value: 'decimal', label: t('components.list.options.marker.decimal') },
+        { value: 'lower-alpha', label: t('components.list.options.marker.lower-alpha') },
+        { value: 'upper-roman', label: t('components.list.options.marker.upper-roman') },
       ],
     },
-    { kind: 'richTextList', prop: 'items', label: 'Éléments' },
+    { kind: 'richTextList', prop: 'items', label: t('components.list.fields.items') },
   ],
   css:
     '.ns-list{margin:0;padding-left:1.5em}.ns-list>li+li{margin-top:.35em}.ns-list>li::marker{color:currentColor}' +

@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type EditorStore, getLocale, loadSite, t } from '@ns/core';
+import { type EditorStore, getLocale, loadSite, t, tm } from '@ns/core';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.tsx';
@@ -47,7 +47,7 @@ function Root() {
     getProject(projectId)
       .then(({ doc, etag }) => {
         const result = loadSite(doc, registry);
-        if (!result.ok) throw new Error(result.diagnostics.map((d) => d.message).join('; '));
+        if (!result.ok) throw new Error(result.diagnostics.map((d) => tm(d.message)).join('; '));
         setSession({ etag, saving: false, error: null, notice: null });
         setEditor({ id: projectId, store: createStore(result.doc) });
       })

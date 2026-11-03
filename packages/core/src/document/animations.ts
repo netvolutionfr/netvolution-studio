@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MessageKey } from '../i18n/index.ts';
 
 /**
  * Declarative animations (CS-05, ADR-0012), independent of any animation library. `effect` is the
@@ -37,7 +38,7 @@ export const animationSchema = z
     stagger: z.number().int().min(0).max(2000).optional(),
   })
   .refine((a) => a.iterations !== 'infinite' || a.trigger === 'load', {
-    message: 'Répétition infinie réservée au déclencheur « chargement »',
+    message: 'schema.infiniteLoad' satisfies MessageKey,
     path: ['iterations'],
   });
 export type Animation = z.infer<typeof animationSchema>;

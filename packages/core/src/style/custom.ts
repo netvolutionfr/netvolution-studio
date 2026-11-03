@@ -1,5 +1,6 @@
 import { type CssNode, generate, parse, walk } from 'css-tree';
 import type { Asset } from '../document/schema.ts';
+import { type Message, msg } from '../i18n/index.ts';
 
 /**
  * Custom CSS (ADR-0023): the project stylesheet is parsed and published from the parser's output,
@@ -7,7 +8,7 @@ import type { Asset } from '../document/schema.ts';
  * is refused; quality pitfalls are only reported.
  */
 
-export type CssIssue = { line: number; message: string };
+export type CssIssue = { line: number; message: Message };
 export type CssCheck =
   | { ok: true; css: string; assets: string[]; warnings: CssIssue[] }
   | { ok: false; errors: CssIssue[]; warnings: CssIssue[] };
@@ -35,7 +36,8 @@ export function checkCustomCss(source: string): CssCheck {
   const ast = parse(source, {
     positions: true,
     parseCustomProperty: true,
-    onParseError: (e) => errors.push({ line: (e as { line?: number }).line ?? 1, message: e.message }),
+    onParseError: (e) =>
+      errors.push({ line: (e as { line?: number }).line ?? 1, message: msg('text', { text: e.message }) }),
   });
   const outlines: number[] = [];
   const animations: number[] = [];
@@ -45,19 +47,19 @@ export function checkCustomCss(source: string): CssCheck {
     enter(this: { atrule: { name: string } | null }, node: CssNode) {
       const line = lineOf(node);
       const named = 'name' in node && typeof node.name === 'string' ? node.name : '';
-      if (named.includes('\\')) errors.push({ line, message: 'Échappement interdit dans un nom' });
+      if (named.includes('\\')) errors.push({ line, message: msg('css.escapedName') });
       switch (node.type) {
         case 'Atrule':
           if (!AT_RULES.has(node.name.toLowerCase()))
             errors.push({
               line,
-              message: `@${node.name} interdit (admis : @media, @supports, @container, @keyframes)`,
+              message: msg('css.atRule', { name: node.name }),
             });
           else if (node.prelude && generate(node.prelude).includes('prefers-reduced-motion'))
             reducedMotion = true;
           break;
         case 'Raw':
-          errors.push({ line, message: `Syntaxe non reconnue : ${node.value.trim().slice(0, 40)}` });
+          errors.push({ line, message: msg('css.raw', { text: node.value.trim().slice(0, 40) }) });
           break;
         case 'Url': {
           const asset = ASSET_URL.exec(node.value);
@@ -65,17 +67,16 @@ export function checkCustomCss(source: string): CssCheck {
           else
             errors.push({
               line,
-              message: 'url() admis seulement vers la médiathèque : url("ns-asset:<id>")',
+              message: msg('css.url'),
             });
           break;
         }
         case 'Function':
           if (FUNCTIONS.has(node.name.toLowerCase()))
-            errors.push({ line, message: `${node.name}() interdit` });
+            errors.push({ line, message: msg('css.function', { name: node.name }) });
           break;
         case 'String':
-          if (node.value.includes('<'))
-            errors.push({ line, message: 'Caractère « < » interdit dans une chaîne' });
+          if (node.value.includes('<')) errors.push({ line, message: msg('css.lessThan') });
           break;
         case 'PseudoClassSelector':
           if (node.name === 'focus-visible') focusVisible = true;
@@ -84,16 +85,16 @@ export function checkCustomCss(source: string): CssCheck {
           if (node.name.startsWith('ns-'))
             warnings.push({
               line,
-              message: `.${node.name} est une classe interne du Studio, susceptible de changer`,
+              message: msg('css.internalClass', { name: node.name }),
             });
           break;
         case 'Declaration': {
           const property = node.property.toLowerCase();
           const value = generate(node.value).trim().toLowerCase();
-          if (property.includes('\\'))
-            errors.push({ line, message: 'Échappement interdit dans une propriété' });
-          if (PROPERTIES.has(property)) errors.push({ line, message: `${node.property} interdit` });
-          if (node.important) warnings.push({ line, message: '!important : à éviter' });
+          if (property.includes('\\')) errors.push({ line, message: msg('css.escapedProperty') });
+          if (PROPERTIES.has(property))
+            errors.push({ line, message: msg('css.property', { name: node.property }) });
+          if (node.important) warnings.push({ line, message: msg('css.important') });
           if (property === 'outline' && (value === 'none' || value === '0')) outlines.push(line);
           if (ANIMATED.test(property) && value !== 'none') animations.push(line);
           const inMedia = this.atrule?.name.toLowerCase() === 'media';
@@ -102,7 +103,7 @@ export function checkCustomCss(source: string): CssCheck {
             ((property === 'display' && value === 'none') ||
               (property === 'visibility' && value === 'hidden'))
           )
-            warnings.push({ line, message: `${property}: ${value} masque le contenu à tous les visiteurs` });
+            warnings.push({ line, message: msg('css.hidden', { declaration: `${property}: ${value}` }) });
           break;
         }
       }
@@ -112,11 +113,9 @@ export function checkCustomCss(source: string): CssCheck {
     for (const line of outlines)
       warnings.push({
         line,
-        message: 'outline supprimé sans règle :focus-visible : le focus clavier devient invisible',
+        message: msg('css.outline'),
       });
-  if (!reducedMotion)
-    for (const line of animations)
-      warnings.push({ line, message: 'Animation sans règle @media (prefers-reduced-motion: reduce)' });
+  if (!reducedMotion) for (const line of animations) warnings.push({ line, message: msg('css.motion') });
   const byLine = (a: CssIssue, b: CssIssue) => a.line - b.line;
   warnings.sort(byLine);
   const result: CssCheck = errors.length

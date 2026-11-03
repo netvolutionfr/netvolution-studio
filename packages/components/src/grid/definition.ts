@@ -1,10 +1,11 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const grid = defineComponent({
   type: 'grid',
   version: 1,
-  label: 'Grille',
+  label: t('components.grid.name'),
   category: 'layout',
   props: z.strictObject({}),
   defaults: { props: {}, style: { base: { columns: 3, gap: { value: 24, unit: 'px' } } } },

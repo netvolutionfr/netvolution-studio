@@ -1,4 +1,5 @@
 import {
+  contentText,
   type EditorStore,
   freeSlug,
   isPicture,
@@ -48,9 +49,10 @@ export function PagesPanel() {
     const root = doc.nodes[pageById(doc, doc.settings.homePageId)?.rootId ?? ''];
     // A new page starts with an empty root shaped like the home page's (container, width, padding).
     const tree = root ? { type: root.type, props: root.props, style: root.style } : { type: 'container' };
+    const text = contentText(doc.settings.lang);
     store.dispatch(
       'createPage',
-      { title: 'Nouvelle page', slug: freeSlug(doc, 'nouvelle-page'), tree },
+      { title: text('content.newPage.title'), slug: freeSlug(doc, text('content.newPage.slug')), tree },
       t('pages.add'),
     );
   };
@@ -146,7 +148,10 @@ const px = (value: number) => ({ value, unit: 'px' as const });
  */
 function createLayout(store: EditorStore, role: LayoutRole) {
   const { doc } = store.getState();
-  const name = role === 'header' ? 'Header' : 'Footer';
+  // What the Studio writes into the site follows the site language (ADR-0024).
+  const text = contentText(doc.settings.lang);
+  const name = text(role === 'header' ? 'content.layout.header' : 'content.layout.footer');
+  const siteName = doc.name || text('content.layout.siteName');
   store.begin(role === 'header' ? t('pages.createHeader') : t('pages.createFooter'));
   let menuId = doc.menus?.[0]?.id;
   if (!menuId) {
@@ -156,14 +161,14 @@ function createLayout(store: EditorStore, role: LayoutRole) {
       .slice(0, 50)
       .map((p, i) => ({
         id: `e${i + 1}`,
-        label: p.title || 'Page',
+        label: p.title || text('content.layout.page'),
         link: { kind: 'page' as const, pageId: p.id },
       }));
-    store.dispatch('setMenu', { menu: { id: menuId, name: 'Menu principal', items } });
+    store.dispatch('setMenu', { menu: { id: menuId, name: text('content.layout.menu'), items } });
   }
   const bar = (children: NodeTemplate[]): NodeTemplate => ({
     type: 'stack',
-    name: 'Barre',
+    name: text('content.layout.bar'),
     style: {
       base: {
         direction: 'row',
@@ -181,7 +186,7 @@ function createLayout(store: EditorStore, role: LayoutRole) {
   const padding = { paddingTop: px(16), paddingBottom: px(16), paddingLeft: px(24), paddingRight: px(24) };
   const nav = (label: string, collapse: string, color?: string): NodeTemplate => ({
     type: 'nav',
-    props: { menuId, label, toggle: 'Menu', collapse },
+    props: { menuId, label, toggle: text('content.nav.toggle'), collapse },
     ...(color ? { style: { base: { color } } } : {}),
   });
   const tree: NodeTemplate =
@@ -195,15 +200,15 @@ function createLayout(store: EditorStore, role: LayoutRole) {
             bar([
               {
                 type: 'button',
-                name: 'Logo',
+                name: text('content.sections.logo'),
                 props: {
-                  label: doc.name || 'Mon site',
+                  label: siteName,
                   link: { kind: 'page', pageId: doc.settings.homePageId },
                   variant: 'text',
                 },
                 style: { base: { fontSize: px(20), fontWeight: 700 } },
               },
-              nav('Navigation principale', 'mobile'),
+              nav(text('content.nav.label'), 'mobile'),
             ]),
           ],
         }
@@ -218,10 +223,10 @@ function createLayout(store: EditorStore, role: LayoutRole) {
             bar([
               {
                 type: 'text',
-                props: { content: [{ text: `© ${doc.name || 'Mon site'}` }] },
+                props: { content: [{ text: text('content.layout.copyright', { name: siteName }) }] },
                 style: { base: { color: '#e5e7eb' } },
               },
-              nav('Navigation du pied de page', 'never', '#e5e7eb'),
+              nav(text('content.layout.footerNav'), 'never', '#e5e7eb'),
             ]),
           ],
         };
@@ -471,6 +476,7 @@ function RedirectsSection() {
   const store = useStore();
   const redirects = useEditor((s) => s.doc.redirects) ?? NONE;
   const homeId = useEditor((s) => s.doc.settings.homePageId);
+  const lang = useEditor((s) => s.doc.settings.lang);
   const save = (next: Redirect[], label: string) =>
     store.dispatch('setRedirects', { redirects: next }, label);
   const edit = (i: number, patch: Partial<Redirect>, label: string) =>
@@ -522,13 +528,11 @@ function RedirectsSection() {
         size="sm"
         icon={Plus}
         onClick={() => {
+          const from = (n: number) => contentText(lang)('content.redirect.from', { n });
           let n = redirects.length + 1;
-          while (redirects.some((r) => r.from === `/ancienne-page-${n}/`)) n++;
+          while (redirects.some((r) => r.from === from(n))) n++;
           save(
-            [
-              ...redirects,
-              { from: `/ancienne-page-${n}/`, to: { kind: 'page', pageId: homeId }, permanent: true },
-            ],
+            [...redirects, { from: from(n), to: { kind: 'page', pageId: homeId }, permanent: true }],
             t('redirects.add'),
           );
         }}

@@ -1,10 +1,11 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const divider = defineComponent({
   type: 'divider',
   version: 1,
-  label: 'Séparateur',
+  label: t('components.divider.name'),
   category: 'content',
   props: z.strictObject({}),
   defaults: { props: {} },

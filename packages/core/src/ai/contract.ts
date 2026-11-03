@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { type Message, type MessageKey, tm } from '../i18n/index.ts';
 
 /**
  * Contract between the Studio and the AI providers (CS-11, ADR-0014), independent of any provider.
@@ -43,9 +44,11 @@ export type AiErrorCode =
 /** Provider failures as stable codes with a message for the user (never the provider's raw payload). */
 export class AiError extends Error {
   readonly code: AiErrorCode;
-  constructor(code: AiErrorCode, message: string) {
-    super(message);
+  readonly detail: Message;
+  constructor(code: AiErrorCode, detail: Message) {
+    super(tm(detail, 'en'));
     this.code = code;
+    this.detail = detail;
   }
 }
 
@@ -63,7 +66,10 @@ export const aiRequestSchema = z.strictObject({
     )
     .min(1)
     .max(20)
-    .refine((m) => m.reduce((n, x) => n + x.content.length, 0) <= AI_LIMITS.content, 'Contenu trop long'),
+    .refine(
+      (m) => m.reduce((n, x) => n + x.content.length, 0) <= AI_LIMITS.content,
+      'schema.aiContent' satisfies MessageKey,
+    ),
   tools: z
     .array(
       z.strictObject({
@@ -83,7 +89,7 @@ export type AiStatus = {
   provider: AiProvider['id'] | null;
   model: string | null;
   /** Why the assistant is disabled, when it is. */
-  reason?: string;
+  reason?: Message;
   limits: { maxTokens: number; perMinute: number; dailyTokens: number };
   usedToday: number;
 };

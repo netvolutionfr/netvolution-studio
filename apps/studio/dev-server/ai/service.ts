@@ -3,7 +3,15 @@
 // content. Keys stay here: neither the Studio nor the exports ever receive them.
 import { appendFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { AiError, type AiProvider, type AiRequest, type AiResponse, type AiStatus } from '@ns/core';
+import {
+  AiError,
+  type AiProvider,
+  type AiRequest,
+  type AiResponse,
+  type AiStatus,
+  type Message,
+  msg,
+} from '@ns/core';
 import { anthropicProvider } from './anthropic.ts';
 import { openAiProvider } from './openai.ts';
 import { simulatedProvider } from './simulated.ts';
@@ -11,7 +19,7 @@ import { simulatedProvider } from './simulated.ts';
 export type AiConfig = {
   provider: AiProvider | null;
   /** Why no provider is configured (shown in the Studio). */
-  reason?: string;
+  reason?: Message;
   maxTokens: number;
   perMinute: number;
   dailyTokens: number;
@@ -36,7 +44,7 @@ export function aiConfigFromEnv(env: NodeJS.ProcessEnv, logFile?: string): AiCon
     dailyTokens: int(env.NS_AI_DAILY_TOKENS, DEFAULTS.dailyTokens),
     ...(logFile ? { logFile } : {}),
   };
-  const off = (reason: string): AiConfig => ({ provider: null, reason, ...limits });
+  const off = (reason: Message): AiConfig => ({ provider: null, reason, ...limits });
   switch (env.NS_AI_PROVIDER) {
     case 'anthropic':
       return env.ANTHROPIC_API_KEY
@@ -44,7 +52,7 @@ export function aiConfigFromEnv(env: NodeJS.ProcessEnv, logFile?: string): AiCon
             provider: anthropicProvider({ apiKey: env.ANTHROPIC_API_KEY, model: env.NS_AI_MODEL }),
             ...limits,
           }
-        : off('NS_AI_PROVIDER=anthropic, mais ANTHROPIC_API_KEY est absente sur le serveur.');
+        : off(msg('ai.errors.noAnthropicKey'));
     case 'openai':
       return env.NS_AI_MODEL
         ? {
@@ -55,14 +63,14 @@ export function aiConfigFromEnv(env: NodeJS.ProcessEnv, logFile?: string): AiCon
             }),
             ...limits,
           }
-        : off('NS_AI_PROVIDER=openai, mais NS_AI_MODEL est absent.');
+        : off(msg('ai.errors.noOpenAiModel'));
     case 'simulated':
       return { provider: simulatedProvider(), ...limits };
     case undefined:
     case '':
-      return off('Aucun fournisseur configuré (NS_AI_PROVIDER) : l’assistant est désactivé.');
+      return off(msg('ai.errors.noProvider'));
     default:
-      return off(`Fournisseur inconnu : ${env.NS_AI_PROVIDER}.`);
+      return off(msg('ai.errors.unknownProvider', { provider: env.NS_AI_PROVIDER }));
   }
 }
 
@@ -95,19 +103,13 @@ export function createAiService(config: AiConfig) {
     /** One request to the provider, within the limits; failures are AiError with a stable code. */
     async complete(request: AiRequest): Promise<AiResponse> {
       const provider = config.provider;
-      if (!provider) throw new AiError('disabled', config.reason ?? 'Assistant IA désactivé.');
+      if (!provider) throw new AiError('disabled', config.reason ?? msg('ai.errors.disabled'));
       const now = Date.now();
       while (recent.length && (recent[0] as number) < now - 60_000) recent.shift();
       if (recent.length >= config.perMinute)
-        throw new AiError(
-          'rate-limit',
-          `Limite de ${config.perMinute} requêtes par minute atteinte : patientez un instant.`,
-        );
+        throw new AiError('rate-limit', msg('ai.errors.perMinute', { count: config.perMinute }));
       if (usedToday() >= config.dailyTokens)
-        throw new AiError(
-          'budget',
-          `Budget quotidien de ${config.dailyTokens} jetons atteint (NS_AI_DAILY_TOKENS).`,
-        );
+        throw new AiError('budget', msg('ai.errors.budget', { count: config.dailyTokens }));
       recent.push(now);
       const started = Date.now();
       try {
@@ -139,7 +141,7 @@ export function createAiService(config: AiConfig) {
         });
         throw error instanceof AiError
           ? error
-          : new AiError('invalid-response', 'Réponse inattendue du fournisseur.');
+          : new AiError('invalid-response', msg('ai.errors.invalidResponse'));
       }
     },
   };

@@ -1,4 +1,4 @@
-import { t } from '@ns/core';
+import { t, tm } from '@ns/core';
 import { Check, Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/index.ts';
@@ -59,7 +59,7 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
       const failed = results.find((r) => !r.ok);
       if (failed && !failed.ok) {
         store.cancel();
-        setError(failed.error.message);
+        setError(tm(failed.error.message));
       } else store.commit();
     } catch (e) {
       setError((e as Error).message);

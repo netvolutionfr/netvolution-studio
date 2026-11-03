@@ -361,7 +361,73 @@
     "insert": "Insérer",
     "insertLinked": "Insérer « {{name}} » liée",
     "insertLinkedTip": "Insérer une instance liée : les nouvelles versions pourront lui être appliquées",
-    "editComponent": "Modifier le composant « {{name}} »"
+    "editComponent": "Modifier le composant « {{name}} »",
+    "builtIn": {
+      "section": {
+        "name": "Section",
+        "description": "Bloc centré à largeur limitée, avec marges."
+      },
+      "row2": {
+        "name": "Rangée 2 colonnes",
+        "description": "Deux colonnes, empilées sur mobile."
+      },
+      "row3": {
+        "name": "Rangée 3 colonnes",
+        "description": "Trois colonnes : deux sur tablette, une sur mobile."
+      },
+      "hero": {
+        "name": "Hero",
+        "description": "Grand titre, texte, bouton et visuel côte à côte."
+      },
+      "logo": {
+        "name": "Logo",
+        "description": "Image du logo, à lier à la page d’accueil."
+      },
+      "card": {
+        "name": "Carte",
+        "description": "Icône, titre, texte et lien."
+      },
+      "cta": {
+        "name": "Appel à l’action",
+        "description": "Bandeau coloré : titre, texte et bouton."
+      },
+      "gallery": {
+        "name": "Grille d’images",
+        "description": "Grille responsive d’images légendées (composants Image modifiables un par un)."
+      },
+      "accordion": {
+        "name": "Accordéon (FAQ)",
+        "description": "Questions-réponses dépliables, sans JavaScript."
+      },
+      "tabs": {
+        "name": "Bloc d’onglets",
+        "description": "Contenus en onglets accessibles au clavier."
+      },
+      "presentation": {
+        "name": "Présentation",
+        "description": "Image et texte côte à côte, empilés sur mobile."
+      },
+      "features": {
+        "name": "Atouts",
+        "description": "Titre et trois atouts avec icône."
+      },
+      "testimonials": {
+        "name": "Témoignages",
+        "description": "Trois citations de clients avec leur nom."
+      },
+      "pricing": {
+        "name": "Tarifs",
+        "description": "Trois formules avec prix, description et bouton."
+      },
+      "team": {
+        "name": "Équipe",
+        "description": "Trois membres : photo, nom et rôle."
+      },
+      "contact": {
+        "name": "Contact",
+        "description": "Invitation à écrire et coordonnées avec icônes."
+      }
+    }
   },
   "assistant": {
     "providers": {
@@ -402,7 +468,8 @@
     "invalid": "Proposition devenue invalide : {{message}}",
     "disabled": "Assistant désactivé.",
     "enableHint": "Pour l’activer, renseignez NS_AI_PROVIDER et la clé du fournisseur dans le fichier .env du serveur (voir .env.example), puis relancez le Studio. Les clés restent sur le serveur.",
-    "limits": "Limites : {{maxTokens}} jetons par réponse, {{perMinute}} requêtes par minute, {{dailyTokens}} jetons par jour ({{usedToday}} utilisés aujourd’hui). L’IA ne publie et n’exporte jamais : chaque proposition est à valider, puis s’annule comme toute modification."
+    "limits": "Limites : {{maxTokens}} jetons par réponse, {{perMinute}} requêtes par minute, {{dailyTokens}} jetons par jour ({{usedToday}} utilisés aujourd’hui). L’IA ne publie et n’exporte jamais : chaque proposition est à valider, puis s’annule comme toute modification.",
+    "noProposal": "Aucune proposition."
   },
   "media": {
     "kinds": {
@@ -786,5 +853,625 @@
     "notFound": "Page introuvable",
     "backHome": "Retour à l'accueil",
     "noProject": "Aucun projet à prévisualiser."
+  },
+  "diagnostics": {
+    "invalidDocument": "Document JSON attendu avec un schemaVersion numérique",
+    "unsupportedVersion": "schemaVersion {{version}} non pris en charge (attendu {{oldest}} à {{latest}})",
+    "duplicateBreakpoint": "Breakpoint dupliqué : {{id}} ({{width}}px)",
+    "duplicatePage": "Page dupliquée : {{id}}",
+    "duplicateSlug": "Adresse dupliquée : /{{slug}}",
+    "homeSlug": "La page d'accueil a une adresse vide",
+    "emptySlug": "Adresse vide réservée à la page d’accueil",
+    "reservedSlug": "Adresse réservée : /{{slug}}",
+    "missingHome": "Page d'accueil inexistante : {{id}}",
+    "missingToken": "Token introuvable : {{id}}",
+    "unknownBreakpoint": "Breakpoint inconnu : {{id}}",
+    "duplicateLayout": "Identifiant de layout déjà utilisé : {{id}}",
+    "duplicateSymbol": "Identifiant de composant déjà utilisé : {{id}}",
+    "missingSymbol": "Composant partagé introuvable : {{id}}",
+    "unknownVersion": "Version {{version}} inconnue du composant {{name}}",
+    "selfContaining": "Le composant {{name}} se contient lui-même",
+    "missingHeader": "Header introuvable : {{id}}",
+    "missingFooter": "Footer introuvable : {{id}}",
+    "duplicateMenu": "Menu dupliqué : {{id}}",
+    "duplicateMenuItems": "Entrées dupliquées dans le menu {{id}}",
+    "linkMissingAsset": "Lien vers un média inexistant : {{id}}",
+    "linkMissingPage": "Lien vers une page inexistante : {{id}}",
+    "missingShareImage": "Image de partage introuvable : {{id}}",
+    "duplicateRedirect": "Redirection dupliquée : {{from}}",
+    "redirectFromPage": "{{from}} est l'adresse d'une page",
+    "redirectMissingPage": "Redirection vers une page inexistante : {{id}}",
+    "redirectMissingAsset": "Redirection vers un média inexistant : {{id}}",
+    "customCss": "CSS du projet, ligne {{line}} : {{message}}",
+    "customCssImage": "CSS du projet : image introuvable ({{id}})",
+    "idMismatch": "La clé {{key}} ne correspond pas à l'id {{id}}",
+    "unknownComponent": "Type de composant inconnu : {{type}}",
+    "missingAsset": "Média introuvable : {{id}}",
+    "assetKind": "Type de média non accepté : {{kind}}",
+    "missingMenu": "Menu introuvable : {{id}}",
+    "missingBackground": "Image de fond introuvable : {{id}}",
+    "styleNotAllowed": "{{prop}} non autorisé pour {{type}}",
+    "missingChild": "Enfant inexistant : {{id}}",
+    "childNotAllowed": "{{child}} n'est pas autorisé dans {{parent}}",
+    "cycle": "Cycle détecté : {{id}} → {{child}}",
+    "multipleParents": "{{id}} a plusieurs parents",
+    "missingRoot": "Racine inexistante : {{id}}",
+    "orphan": "Nœud non rattaché à une page, un layout ou un composant : {{id}}"
+  },
+  "css": {
+    "escapedName": "Échappement interdit dans un nom",
+    "atRule": "@{{name}} interdit (admis : @media, @supports, @container, @keyframes)",
+    "raw": "Syntaxe non reconnue : {{text}}",
+    "url": "url() admis seulement vers la médiathèque : url(\"ns-asset:<id>\")",
+    "function": "{{name}}() interdit",
+    "lessThan": "Caractère « < » interdit dans une chaîne",
+    "internalClass": ".{{name}} est une classe interne du Studio, susceptible de changer",
+    "escapedProperty": "Échappement interdit dans une propriété",
+    "property": "{{name}} interdit",
+    "important": "!important : à éviter",
+    "hidden": "{{declaration}} masque le contenu à tous les visiteurs",
+    "outline": "outline supprimé sans règle :focus-visible : le focus clavier devient invisible",
+    "motion": "Animation sans règle @media (prefers-reduced-motion: reduce)"
+  },
+  "schema": {
+    "infiniteLoad": "Répétition infinie réservée au déclencheur « chargement »",
+    "imageAlt": "Texte alternatif obligatoire (ou image décorative)",
+    "className": "classe en minuscules, chiffres et tirets, sans le préfixe ns-",
+    "fontWeights": "graisse minimale au-dessus de la maximale",
+    "lang": "code de langue attendu (fr, en-GB…)",
+    "fontName": "nom de police : lettres, chiffres, espaces, - et _",
+    "url": "URL non autorisée",
+    "nodeId": "n suivi de 8 à 32 minuscules ou chiffres attendu",
+    "slug": "slug invalide",
+    "absoluteUrl": "URL absolue attendue",
+    "path": "chemin attendu, ex. /ancienne-page/",
+    "origin": "origine attendue (https://exemple.fr)",
+    "aiContent": "Contenu trop long",
+    "videoUrl": "Adresse YouTube ou Vimeo attendue"
+  },
+  "checks": {
+    "homeUnpublished": "La page d'accueil n'est pas publiée",
+    "noSiteUrl": "URL canonique du site absente : ni sitemap ni URL absolues (canonical, Open Graph)",
+    "brokenLink": "{{where}} : lien vers « {{title}} », page non publiée (absente de l'export)",
+    "emptyLink": "{{where}} : lien non renseigné ({{href}})",
+    "page": "Page « {{title}} »",
+    "noTitle": "{{label}} : titre manquant",
+    "noDescription": "{{label}} : meta description manquante",
+    "longTitle": "{{label}} : titre SEO de plus de 60 caractères",
+    "longDescription": "{{label}} : meta description de plus de 160 caractères",
+    "h1Count_one": "{{label}} : {{count}} titre de niveau 1 (un seul attendu)",
+    "h1Count_other": "{{label}} : {{count}} titres de niveau 1 (un seul attendu)",
+    "headingSkip": "{{label}} : titre de niveau {{level}} après un niveau {{previous}}",
+    "element": "Élément {{name}}",
+    "menu": "Menu « {{name}} »",
+    "redirect": "Redirection {{from}}",
+    "symbolParam": "Composant « {{name}} » : paramètre « {{param}} » sans élément cible",
+    "absolute": "Élément {{name}} : position absolue sans parent positionné (relative)",
+    "instance": "Instance « {{name}} »",
+    "instanceOutdated": "{{name}} : version {{version}} du composant, version {{latest}} disponible",
+    "instanceModified": "{{name}} : modifiée hors de ses paramètres (écrasé à la prochaine mise à jour)",
+    "instanceIncompatible": "{{name}} : valeurs incompatibles ({{props}})",
+    "missingFile": "Fichier du média « {{name}} » introuvable",
+    "heavyBackground": "Image de fond « {{name}} » : {{size}} Mo, non optimisée à l'export (réduisez-la sous 500 Ko)"
+  },
+  "errors": {
+    "missingNode": "Nœud inexistant : {{id}}",
+    "missingParent": "Parent inexistant : {{id}}",
+    "childNotAllowed": "{{child}} interdit dans {{parent}}",
+    "unknownTypeInTemplate": "Type inconnu dans le modèle",
+    "missingMoveTarget": "Nœud ou destination inexistant",
+    "moveRoot": "La racine ne peut pas être déplacée",
+    "moveIntoItself": "Un élément ne peut pas être déplacé dans lui-même",
+    "removeRoot": "La racine ne peut pas être supprimée",
+    "duplicateRoot": "La racine ne peut pas être dupliquée",
+    "assetExists": "Média déjà présent : {{id}}",
+    "missingAsset": "Média inexistant : {{id}}",
+    "altOnImage": "Seule une image a un texte alternatif",
+    "notAFont": "Ce média n’est pas une police",
+    "assetUsed_one": "Média utilisé par {{count}} élément ou menu",
+    "assetUsed_other": "Média utilisé par {{count}} éléments ou menus",
+    "missingPage": "Page inexistante : {{id}}",
+    "removeHome": "La page d'accueil ne peut pas être supprimée",
+    "pageLinked_one": "Page liée depuis {{count}} élément",
+    "pageLinked_other": "Page liée depuis {{count}} éléments",
+    "pageInMenu": "Page présente dans un menu : retirez-la du menu d’abord",
+    "missingToken": "Token inexistant : {{id}}",
+    "tokenUsed_one": "Token utilisé par {{count}} élément ou style",
+    "tokenUsed_other": "Token utilisé par {{count}} éléments ou styles",
+    "missingLayout": "Layout inexistant : {{id}}",
+    "missingMenu": "Menu inexistant : {{id}}",
+    "menuUsed_one": "Menu affiché par {{count}} navigation",
+    "menuUsed_other": "Menu affiché par {{count}} navigations",
+    "rootToSymbol": "Une racine de page ne peut pas devenir un composant",
+    "alreadyInstance": "Cet élément est déjà une instance d’un composant",
+    "copyFailed": "Copie impossible",
+    "symbolExists": "Composant déjà présent : {{id}}",
+    "unknownTypeInSection": "Type inconnu dans la section",
+    "missingSymbol": "Composant inexistant : {{id}}",
+    "missingParam": "Paramètre inexistant",
+    "emptyDefinition": "Définition vide",
+    "skippedInstance": "« {{name}} » ({{props}})",
+    "updateIncompatible": "Mise à jour impossible : valeurs incompatibles pour {{skipped}}",
+    "notInstance": "Cet élément n’est pas une instance",
+    "symbolUsed_one": "Composant utilisé par {{count}} instance",
+    "symbolUsed_other": "Composant utilisé par {{count}} instances",
+    "operation": "Opération {{index}} ({{name}}) : {{message}}",
+    "unknownCommand": "commande inconnue",
+    "permission": "autorisation « {{permission}} » requise",
+    "deletedParam": "{{id}} : paramètre supprimé"
+  },
+  "notices": {
+    "instancesUpdated_one": "{{count}} instance mise à jour",
+    "instancesUpdated_other": "{{count}} instances mises à jour",
+    "instancesPartial_one": "{{count}} instance mise à jour ; non mises à jour (valeurs incompatibles) : {{skipped}}",
+    "instancesPartial_other": "{{count}} instances mises à jour ; non mises à jour (valeurs incompatibles) : {{skipped}}"
+  },
+  "text": "{{text}}",
+  "diff": {
+    "site": {
+      "pages": "pages",
+      "settings": "réglages du site",
+      "tokens": "design system",
+      "menus": "menus",
+      "layouts": "header et footer",
+      "symbols": "composants partagés",
+      "assets": "médiathèque",
+      "redirects": "redirections",
+      "name": "nom du site"
+    },
+    "quoted": "« {{text}} »",
+    "token": "token {{id}}",
+    "empty": "Aucun changement.",
+    "prop": "{{element}} · {{key}} : {{before}} → {{after}}",
+    "style": "{{element}} · {{key}} ({{breakpoint}}) : {{before}} → {{after}}",
+    "added_one": "{{count}} élément ajouté : {{names}}",
+    "added_other": "{{count}} éléments ajoutés : {{names}}",
+    "removed_one": "{{count}} élément supprimé : {{names}}",
+    "removed_other": "{{count}} éléments supprimés : {{names}}",
+    "other": "{{element}} · {{key}} modifié",
+    "siteChanged": "Site · {{field}} modifié",
+    "counts": "{{added}} ajout(s), {{changed}} modification(s), {{removed}} suppression(s)",
+    "countsSite": "{{added}} ajout(s), {{changed}} modification(s), {{removed}} suppression(s), site : {{fields}}"
+  },
+  "ai": {
+    "noPage": "L’assistant agit sur une page ou un header/footer.",
+    "tooLarge": "Contenu trop volumineux pour l’assistant : sélectionnez un élément plus petit.",
+    "truncated": "Réponse incomplète (limite de jetons atteinte) : proposition ignorée.",
+    "commandNotAllowed": "commande non autorisée pour l’assistant",
+    "noPublish": "l’assistant ne publie pas et ne change pas les adresses",
+    "tasks": {
+      "title": "Propose un titre plus percutant pour cet élément.",
+      "rewrite": "Reformule ce texte pour qu’il soit plus clair, sans changer son sens.",
+      "summarize": "Résume ce contenu en une ou deux phrases.",
+      "tone": "Adapte le ton rédactionnel : plus chaleureux et direct.",
+      "seo": "Propose un titre et une description SEO pour cette page.",
+      "structure": "Propose une structure de page à partir de ce brief : ",
+      "testimonials": "Ajoute une section de témoignages.",
+      "tablet": "Transforme cette grille en deux colonnes sur tablette.",
+      "spacing": "Harmonise les espacements.",
+      "sober": "Propose une variante plus sobre de cette section.",
+      "palette": "Applique la palette du site à cette composition."
+    },
+    "errors": {
+      "noAnthropicKey": "NS_AI_PROVIDER=anthropic, mais ANTHROPIC_API_KEY est absente sur le serveur.",
+      "noOpenAiModel": "NS_AI_PROVIDER=openai, mais NS_AI_MODEL est absent.",
+      "noProvider": "Aucun fournisseur configuré (NS_AI_PROVIDER) : l’assistant est désactivé.",
+      "unknownProvider": "Fournisseur inconnu : {{provider}}.",
+      "disabled": "Assistant IA désactivé.",
+      "perMinute": "Limite de {{count}} requêtes par minute atteinte : patientez un instant.",
+      "budget": "Budget quotidien de {{count}} jetons atteint (NS_AI_DAILY_TOKENS).",
+      "invalidResponse": "Réponse inattendue du fournisseur.",
+      "timeout": "Le fournisseur n’a pas répondu à temps.",
+      "unreachable": "Fournisseur injoignable (réseau).",
+      "openAiKey": "Clé d’API refusée : vérifiez OPENAI_API_KEY sur le serveur.",
+      "rateLimit": "Limite de débit du fournisseur atteinte : réessayez dans un instant.",
+      "badRequest": "Requête refusée par le fournisseur (contenu ou paramètres).",
+      "unavailable": "Fournisseur indisponible ({{status}}) : réessayez plus tard.",
+      "toolCall": "Appel d’outil illisible dans la réponse du fournisseur.",
+      "refused": "Le modèle a décliné cette demande. Reformulez-la ou modifiez le contenu concerné.",
+      "anthropicKey": "Clé d’API Anthropic refusée : vérifiez ANTHROPIC_API_KEY sur le serveur.",
+      "notConfigured": "Assistant IA non configuré."
+    }
+  },
+  "svg": {
+    "doctype": "DOCTYPE ou entité",
+    "active": "élément actif",
+    "event": "attribut d’événement (on…)",
+    "scriptUrl": "URL javascript: ou data:",
+    "href": "référence externe (href)",
+    "url": "référence externe (url())",
+    "import": "@import",
+    "notSvg": "pas un document SVG"
+  },
+  "server": {
+    "path": "Chemin refusé",
+    "tooLarge": "Contenu trop volumineux",
+    "invalidDocument": "Document invalide",
+    "header": "En-tête X-NS-Request manquant",
+    "origin": "Origine refusée",
+    "projectId": "Identifiant de projet invalide",
+    "project": "Projet introuvable",
+    "template": "Modèle introuvable",
+    "archive": "Archive Netvolution Studio attendue",
+    "media": "Média introuvable",
+    "aiRequest": "Requête d’assistant invalide : {{detail}}",
+    "aiError": "Erreur de l’assistant",
+    "font": "Police introuvable",
+    "templateId": "Identifiant de modèle invalide",
+    "builtInTemplate": "Les modèles intégrés ne peuvent pas être supprimés",
+    "export": "Export introuvable",
+    "ifMatch": "If-Match requis",
+    "conflict": "Le projet a été modifié ailleurs depuis son ouverture",
+    "siteId": "L'identifiant du site ne correspond pas à l'URL",
+    "fontCatalog": "Police absente du catalogue",
+    "format": "Format non accepté (images PNG, JPEG, WebP, AVIF, SVG ; polices WOFF2 ; fichiers PDF, ZIP, DOCX, XLSX, PPTX)",
+    "fileTooLarge": "Fichier trop volumineux",
+    "svg": "SVG refusé : {{reason}}",
+    "sniff": "Le contenu du fichier ne correspond pas à son type",
+    "dimensions": "Dimensions invalides",
+    "checks": "Contrôles avant export : erreurs bloquantes",
+    "build": "Build Astro en échec : {{detail}}",
+    "templateName": "Nom du modèle requis",
+    "route": "Route inconnue",
+    "internal": "Erreur interne",
+    "json": "JSON invalide"
+  },
+  "components": {
+    "accordionItem": {
+      "name": "Élément d’accordéon",
+      "fields": {
+        "title": "Titre",
+        "open": "Ouvert au chargement (et pour l’éditer dans le canvas)"
+      }
+    },
+    "accordion": {
+      "name": "Accordéon"
+    },
+    "button": {
+      "name": "Bouton",
+      "fields": {
+        "label": "Libellé",
+        "link": "Lien",
+        "variant": "Apparence"
+      },
+      "options": {
+        "variant": {
+          "primary": "Principal",
+          "secondary": "Secondaire",
+          "text": "Lien texte"
+        }
+      }
+    },
+    "carousel": {
+      "name": "Carrousel",
+      "fields": {
+        "images": "Images",
+        "label": "Nom accessible (« Nos réalisations »…)",
+        "ratio": "Proportion des images",
+        "perView": "Images visibles (ordinateur)",
+        "perViewTablet": "Images visibles (tablette, vide : comme ordinateur)",
+        "perViewMobile": "Images visibles (mobile, vide : comme tablette)",
+        "gap": "Espacement (px)",
+        "autoplay": "Défilement automatique (avec bouton pause)",
+        "interval": "Intervalle (secondes)"
+      },
+      "options": {
+        "ratio": {
+          "auto": "D’origine"
+        }
+      }
+    },
+    "container": {
+      "name": "Conteneur",
+      "fields": {
+        "tag": "Balise HTML"
+      }
+    },
+    "divider": {
+      "name": "Séparateur"
+    },
+    "gallery": {
+      "name": "Galerie",
+      "fields": {
+        "images": "Images",
+        "layout": "Disposition",
+        "ratio": "Proportion des vignettes",
+        "lightbox": "Agrandir au clic"
+      },
+      "options": {
+        "layout": {
+          "masonry": "Mosaïque (hauteurs naturelles)",
+          "tiles": "Vignettes (même proportion)"
+        }
+      }
+    },
+    "grid": {
+      "name": "Grille"
+    },
+    "heading": {
+      "name": "Titre",
+      "fields": {
+        "text": "Texte",
+        "level": "Niveau"
+      }
+    },
+    "icon": {
+      "name": "Icône",
+      "fields": {
+        "name": "Icône",
+        "label": "Nom accessible (vide = décorative)"
+      },
+      "names": {
+        "check": "Coche",
+        "arrow-right": "Flèche droite",
+        "phone": "Téléphone",
+        "mail": "E-mail",
+        "map-pin": "Lieu",
+        "clock": "Horloge",
+        "calendar": "Calendrier",
+        "star": "Étoile",
+        "heart": "Cœur",
+        "shield-check": "Bouclier",
+        "zap": "Éclair",
+        "users": "Personnes",
+        "download": "Téléchargement",
+        "external-link": "Lien externe",
+        "globe": "Globe",
+        "message-circle": "Message",
+        "quote": "Citation",
+        "award": "Récompense",
+        "leaf": "Feuille",
+        "sparkles": "Étincelles"
+      }
+    },
+    "image": {
+      "name": "Image",
+      "fields": {
+        "assetId": "Image",
+        "alt": "Texte alternatif",
+        "caption": "Légende (facultative)",
+        "link": "Lien",
+        "decorative": "Image décorative (ignorée par les lecteurs d’écran)",
+        "fit": "Ajustement",
+        "loading": "Chargement"
+      },
+      "options": {
+        "fit": {
+          "cover": "Remplir (recadrer)",
+          "contain": "Contenir"
+        },
+        "loading": {
+          "lazy": "Différé (hors écran)",
+          "eager": "Immédiat (image principale)"
+        }
+      }
+    },
+    "links": {
+      "name": "Liste de liens",
+      "fields": {
+        "menuId": "Menu",
+        "label": "Nom accessible",
+        "direction": "Disposition"
+      },
+      "options": {
+        "direction": {
+          "column": "En colonne",
+          "row": "En ligne"
+        }
+      }
+    },
+    "list": {
+      "name": "Liste",
+      "fields": {
+        "marker": "Puces",
+        "items": "Éléments"
+      },
+      "options": {
+        "marker": {
+          "disc": "• Disque",
+          "circle": "◦ Cercle",
+          "square": "▪ Carré",
+          "none": "Aucune",
+          "decimal": "1. Numéros",
+          "lower-alpha": "a. Lettres",
+          "upper-roman": "I. Chiffres romains"
+        }
+      }
+    },
+    "marquee": {
+      "name": "Bandeau défilant",
+      "fields": {
+        "mode": "Contenu",
+        "texts": "Textes",
+        "separator": "Séparateur entre les textes",
+        "images": "Images",
+        "height": "Hauteur des images (px)",
+        "gap": "Espacement (px)",
+        "duration": "Durée d’un tour (secondes)",
+        "direction": "Sens"
+      },
+      "options": {
+        "mode": {
+          "texts": "Textes",
+          "images": "Images (logos…)"
+        },
+        "direction": {
+          "left": "Vers la gauche",
+          "right": "Vers la droite"
+        }
+      }
+    },
+    "nav": {
+      "name": "Navigation",
+      "fields": {
+        "menuId": "Menu",
+        "label": "Nom accessible",
+        "toggle": "Libellé du bouton (mobile)",
+        "collapse": "Replier en bouton"
+      },
+      "options": {
+        "collapse": {
+          "mobile": "Sur mobile",
+          "tablet": "Sur tablette et mobile",
+          "never": "Jamais"
+        }
+      }
+    },
+    "spacer": {
+      "name": "Espaceur"
+    },
+    "stack": {
+      "name": "Pile (Flex)"
+    },
+    "tab": {
+      "name": "Onglet",
+      "fields": {
+        "title": "Titre de l’onglet"
+      }
+    },
+    "tabs": {
+      "name": "Onglets",
+      "fields": {
+        "label": "Nom accessible"
+      }
+    },
+    "text": {
+      "name": "Texte",
+      "fields": {
+        "content": "Texte"
+      }
+    },
+    "video": {
+      "name": "Vidéo",
+      "fields": {
+        "url": "Adresse YouTube ou Vimeo",
+        "title": "Titre (accessible)"
+      }
+    }
+  },
+  "content": {
+    "accordionItem": "Question",
+    "button": "En savoir plus",
+    "carousel": {
+      "label": "Carrousel",
+      "roledescription": "carrousel",
+      "slide": "diapositive",
+      "prev": "Image précédente",
+      "next": "Image suivante",
+      "pause": "Pause",
+      "play": "Lecture",
+      "position": "{{n}} sur {{count}}"
+    },
+    "list": {
+      "first": "Premier élément",
+      "second": "Deuxième élément",
+      "third": "Troisième élément",
+      "new": "Nouvel élément"
+    },
+    "marquee": {
+      "identity": "Identité",
+      "web": "Sites web",
+      "print": "Édition",
+      "motion": "Motion",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre le défilement"
+    },
+    "nav": {
+      "label": "Navigation principale",
+      "toggle": "Menu"
+    },
+    "tab": "Onglet",
+    "tabs": "Onglets",
+    "links": "Liens",
+    "video": {
+      "title": "Vidéo",
+      "empty": "{{title}} — adresse de la vidéo à renseigner"
+    },
+    "text": "Votre texte",
+    "heading": "Titre",
+    "sections": {
+      "column": "Colonne",
+      "grid": "Grille",
+      "card": "Carte",
+      "section": "Section",
+      "row2": "Rangée 2 colonnes",
+      "row3": "Rangée 3 colonnes",
+      "hero": "Hero",
+      "tagline": "Accroche",
+      "mainHeading": "Votre titre principal",
+      "offer": "Une phrase qui présente votre offre.",
+      "visual": "Visuel",
+      "logo": "Logo",
+      "cardTitle": "Titre de la carte",
+      "cardText": "Une courte description du service ou de l’avantage.",
+      "cta": "Appel à l’action",
+      "ctaHeading": "Prêt à démarrer ?",
+      "ctaText": "Parlons de votre projet.",
+      "ctaButton": "Nous contacter",
+      "gallery": "Grille d’images",
+      "caption": "Légende {{n}}",
+      "faq": "FAQ",
+      "question": "Question {{n}}",
+      "answer": "Réponse {{n}}.",
+      "tab": "Onglet {{n}}",
+      "tabContent": "Contenu de l’onglet {{n}}.",
+      "presentation": "Présentation",
+      "text": "Texte",
+      "about": "Qui sommes-nous ?",
+      "aboutText": "Présentez votre activité, votre histoire et ce qui vous distingue.",
+      "features": "Atouts",
+      "why": "Pourquoi nous choisir",
+      "fast": "Rapide",
+      "fastText": "Des pages légères, servies en statique.",
+      "secure": "Sûr",
+      "secureText": "Aucune interface d’administration exposée.",
+      "accessible": "Accessible",
+      "accessibleText": "Clavier, lecteurs d’écran et contrastes soignés.",
+      "testimonials": "Témoignages",
+      "trust": "Ils nous font confiance",
+      "quote": "« Un témoignage de client, court et concret. »",
+      "quoteAuthor": "Prénom Nom {{n}}, entreprise",
+      "pricing": "Tarifs",
+      "plans": "Nos formules",
+      "essential": "Essentiel",
+      "pro": "Pro",
+      "custom": "Sur mesure",
+      "onQuote": "Sur devis",
+      "planText": "Ce que comprend la formule, en une ou deux phrases.",
+      "choose": "Choisir",
+      "team": "Équipe",
+      "theTeam": "L’équipe",
+      "member": "Membre",
+      "memberName": "Prénom Nom {{n}}",
+      "role": "Rôle",
+      "contact": "Contact",
+      "invitation": "Invitation",
+      "talk": "Parlons de votre projet",
+      "answerTime": "Réponse sous 48 heures ouvrées.",
+      "write": "Nous écrire",
+      "details": "Coordonnées",
+      "line": "Ligne"
+    },
+    "gallery": {
+      "dialog": "Image agrandie",
+      "close": "Fermer"
+    },
+    "newPage": {
+      "title": "Nouvelle page",
+      "slug": "nouvelle-page"
+    },
+    "layout": {
+      "header": "Header",
+      "footer": "Footer",
+      "siteName": "Mon site",
+      "page": "Page",
+      "menu": "Menu principal",
+      "bar": "Barre",
+      "copyright": "© {{name}}",
+      "footerNav": "Navigation du pied de page"
+    },
+    "redirect": {
+      "from": "/ancienne-page-{{n}}/"
+    }
   }
 }

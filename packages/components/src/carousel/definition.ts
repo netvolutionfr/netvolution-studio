@@ -1,6 +1,7 @@
-import { isPicture, MEDIA_PATH } from '@ns/core';
+import { isPicture, MEDIA_PATH, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
+import { siteText } from '../rich.ts';
 
 const RATIOS = ['auto', '1/1', '4/3', '3/2', '16/9', '3/4'] as const;
 const perView = z.number().int().min(1).max(6);
@@ -14,7 +15,7 @@ const perView = z.number().int().min(1).max(6);
 export const carousel = defineComponent({
   type: 'carousel',
   version: 1,
-  label: 'Carrousel',
+  label: t('components.carousel.name'),
   category: 'media',
   props: z.strictObject({
     label: z.string().min(1).max(120),
@@ -37,7 +38,7 @@ export const carousel = defineComponent({
   }),
   defaults: {
     props: {
-      label: 'Carrousel',
+      label: 'content.carousel.label',
       images: [],
       ratio: '4/3',
       perView: 1,
@@ -48,43 +49,69 @@ export const carousel = defineComponent({
       interval: 6,
     },
   },
-  resolve: (props, { site, mediaBase = MEDIA_PATH }) => ({
-    label: props.label,
-    ratio: props.ratio.replace('/', '-'),
-    gap: props.gap,
-    autoplay: props.autoplay,
-    interval: props.interval,
-    images: props.images.flatMap((im) => {
+  resolve: (props, ctx) => {
+    const { site, mediaBase = MEDIA_PATH } = ctx;
+    const text = siteText(ctx);
+    const images = props.images.flatMap((im) => {
       const asset = site.assets[im.assetId];
-      if (!isPicture(asset)) return [];
-      return [
-        {
-          asset: asset.id,
-          src: `${mediaBase}${asset.file}`,
-          width: asset.width,
-          height: asset.height,
-          alt: im.alt,
-          caption: im.caption ?? '',
-        },
-      ];
-    }),
-  }),
+      return isPicture(asset) ? [{ im, asset }] : [];
+    });
+    return {
+      label: props.label,
+      text: {
+        carousel: text('content.carousel.roledescription'),
+        slide: text('content.carousel.slide'),
+        prev: text('content.carousel.prev'),
+        next: text('content.carousel.next'),
+        pause: text('content.carousel.pause'),
+        play: text('content.carousel.play'),
+      },
+      ratio: props.ratio.replace('/', '-'),
+      gap: props.gap,
+      autoplay: props.autoplay,
+      interval: props.interval,
+      images: images.map(({ im, asset }, i) => ({
+        asset: asset.id,
+        src: `${mediaBase}${asset.file}`,
+        width: asset.width,
+        height: asset.height,
+        alt: im.alt,
+        caption: im.caption ?? '',
+        position: text('content.carousel.position', { n: i + 1, count: images.length }),
+      })),
+    };
+  },
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'assets', prop: 'images', label: 'Images', accept: ['image', 'svg'] },
-    { kind: 'text', prop: 'label', label: 'Nom accessible (« Nos réalisations »…)' },
+    {
+      kind: 'assets',
+      prop: 'images',
+      label: t('components.carousel.fields.images'),
+      accept: ['image', 'svg'],
+    },
+    { kind: 'text', prop: 'label', label: t('components.carousel.fields.label') },
     {
       kind: 'select',
       prop: 'ratio',
-      label: 'Proportion des images',
-      options: RATIOS.map((r) => ({ value: r, label: r === 'auto' ? 'D’origine' : r.replace('/', ':') })),
+      label: t('components.carousel.fields.ratio'),
+      options: RATIOS.map((r) => ({
+        value: r,
+        label: r === 'auto' ? t('components.carousel.options.ratio.auto') : r.replace('/', ':'),
+      })),
     },
-    { kind: 'number', prop: 'perView', label: 'Images visibles (ordinateur)', min: 1, max: 6, step: 1 },
+    {
+      kind: 'number',
+      prop: 'perView',
+      label: t('components.carousel.fields.perView'),
+      min: 1,
+      max: 6,
+      step: 1,
+    },
     {
       kind: 'number',
       prop: 'perViewTablet',
-      label: 'Images visibles (tablette, vide : comme ordinateur)',
+      label: t('components.carousel.fields.perViewTablet'),
       min: 1,
       max: 6,
       step: 1,
@@ -92,14 +119,21 @@ export const carousel = defineComponent({
     {
       kind: 'number',
       prop: 'perViewMobile',
-      label: 'Images visibles (mobile, vide : comme tablette)',
+      label: t('components.carousel.fields.perViewMobile'),
       min: 1,
       max: 6,
       step: 1,
     },
-    { kind: 'number', prop: 'gap', label: 'Espacement (px)', min: 0, max: 200, step: 4 },
-    { kind: 'boolean', prop: 'autoplay', label: 'Défilement automatique (avec bouton pause)' },
-    { kind: 'number', prop: 'interval', label: 'Intervalle (secondes)', min: 3, max: 30, step: 1 },
+    { kind: 'number', prop: 'gap', label: t('components.carousel.fields.gap'), min: 0, max: 200, step: 4 },
+    { kind: 'boolean', prop: 'autoplay', label: t('components.carousel.fields.autoplay') },
+    {
+      kind: 'number',
+      prop: 'interval',
+      label: t('components.carousel.fields.interval'),
+      min: 3,
+      max: 30,
+      step: 1,
+    },
   ],
   island: true,
   breakpointCss: (props, selector, breakpoint) => {

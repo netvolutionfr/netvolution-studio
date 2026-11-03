@@ -43,16 +43,17 @@ describe('catalogs (ADR-0024)', () => {
 
   it('every English key is used by the code', () => {
     const repo = resolve(import.meta.dirname, '../../../..');
-    const sources = ['apps/studio/src', 'packages']
+    const sources = ['apps/studio/src', 'apps/studio/dev-server', 'packages']
       .flatMap((dir) =>
         readdirSync(join(repo, dir), { recursive: true, encoding: 'utf8' })
           .filter((f) => /\.tsx?$/.test(f) && !f.includes('node_modules') && !f.includes('.test.'))
           .map((f) => readFileSync(join(repo, dir, f), 'utf8')),
       )
       .join('\n');
-    const literal = new Set([...sources.matchAll(/\bt\(\s*'([\w.-]+)'/g)].map((m) => m[1]));
-    // `t(\`a.b.${x}\`)`: every key under the prefix is considered used.
-    const prefixes = [...sources.matchAll(/\bt\(\s*`([\w.-]+)\$\{/g)].map((m) => m[1] as string);
+    // Any string literal equal to a key (`t('a.b')`, `msg('a.b')`, a zod message, a table of keys).
+    const literal = new Set([...sources.matchAll(/'([a-z][\w-]*(?:\.[\w-]+)*)'/gi)].map((m) => m[1]));
+    // `t(\`a.b.${x}\`)`, `msg(\`a.b.${x}\`)`: every key under the prefix is considered used.
+    const prefixes = [...sources.matchAll(/\b(?:t|msg)\(\s*`([\w.-]+)\$\{/g)].map((m) => m[1] as string);
     const unused = Object.keys(en)
       .map((k) => k.replace(PLURAL, ''))
       .filter((k) => !literal.has(k) && !prefixes.some((p) => k.startsWith(p)));

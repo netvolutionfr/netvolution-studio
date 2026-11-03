@@ -9,6 +9,7 @@ import {
   newNodeId,
   proposalFrom,
   type Site,
+  tm,
 } from '@ns/core';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { simulatedProvider } from './simulated.ts';
@@ -43,7 +44,7 @@ const ask = async (instruction: string, selectedId: string | null = null, pageIn
     registry,
     maxTokens: 1000,
   });
-  if ('error' in request) throw new Error(request.error);
+  if ('error' in request) throw new Error(tm(request.error));
   return { request, proposal: proposalFrom(site, await simulatedProvider().complete(request), ctx) };
 };
 
@@ -72,7 +73,7 @@ describe('AI assistant (CS-08, CS-09, ADR-0014)', () => {
   it('turns editorial and design requests into checked batches (SEO, title, section, tablet)', async () => {
     const seo = await ask('Propose des métadonnées SEO.');
     expect(seo.proposal).toMatchObject({ kind: 'batch' });
-    if (seo.proposal.kind === 'batch') expect(seo.proposal.lines.join()).toContain('pages');
+    if (seo.proposal.kind === 'batch') expect(seo.proposal.lines.map((l) => tm(l)).join()).toContain('pages');
     const title = await ask('Propose un titre.');
     expect(title.proposal.kind === 'batch' && title.proposal.diff.changed[0]?.props[0]?.after).toMatch(
       /proposition simulée/,

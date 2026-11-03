@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MessageKey } from '../i18n/index.ts';
 import { entityIdSchema } from './ids.ts';
 import type { Site } from './schema.ts';
 
@@ -6,7 +7,10 @@ import type { Site } from './schema.ts';
 export const hrefSchema = z
   .string()
   .max(2000)
-  .regex(/^(?:https?:\/\/[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ().-]+|#[A-Za-z0-9_-]*)$/, 'URL non autorisée');
+  .regex(
+    /^(?:https?:\/\/[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ().-]+|#[A-Za-z0-9_-]*)$/,
+    'schema.url' satisfies MessageKey,
+  );
 
 /** External URL, or a reference to a page of the site that follows its slug (SB-03). */
 export const linkSchema = z.discriminatedUnion('kind', [

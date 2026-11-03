@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { loadSite } from '../document/load.ts';
+import { tm } from '../i18n/index.ts';
 import { sampleDoc, testRegistry } from '../test-registry.ts';
 import { instanceStatus, instancesOf } from './commands.ts';
 import { createEditorStore } from './store.ts';
@@ -62,7 +63,7 @@ describe('shared components (ADR-0011)', () => {
     s.dispatch('publishSymbol', { id: 'c-carte-service' });
     expect(instanceStatus(s.getState().doc, copy, testRegistry)?.outdated).toBe(true);
     const r = s.dispatch('updateInstances', { symbolId: 'c-carte-service' });
-    expect(r.ok && r.notice).toBe('2 instance(s) mise(s) à jour');
+    expect(r.ok && r.notice && tm(r.notice)).toBe('2 instances mises à jour');
     const doc = s.getState().doc;
     const updated = instancesOf(doc, 'c-carte-service').find((n) => n.instance?.overrides.p1 === 'Conseil');
     const texts = updated?.children.map((c) => doc.nodes[c]?.props.text);
@@ -95,7 +96,7 @@ describe('shared components (ADR-0011)', () => {
     });
     s.dispatch('publishSymbol', { id: 'c-carte-service' });
     const r = s.dispatch('updateInstances', { symbolId: 'c-carte-service' });
-    expect(r.ok ? '' : r.error.message).toMatch(
+    expect(r.ok ? '' : tm(r.error.message)).toMatch(
       /valeurs incompatibles pour « Carte » \(p2 : paramètre supprimé\)/,
     );
     expect(s.getState().doc.nodes[card]?.instance?.version).toBe(1);
@@ -110,7 +111,7 @@ describe('shared components (ADR-0011)', () => {
       index: 0,
       linked: true,
     });
-    expect(cyclic.ok ? '' : cyclic.error.message).toMatch(/se contient lui-même/);
+    expect(cyclic.ok ? '' : tm(cyclic.error.message)).toMatch(/se contient lui-même/);
     expect(s.dispatch('removeSymbol', { id: 'c-carte-service' }).ok).toBe(false);
     s.dispatch('detachInstance', { id: card });
     expect(s.getState().doc.nodes[card]).not.toHaveProperty('instance');

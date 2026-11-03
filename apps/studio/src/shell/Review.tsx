@@ -1,4 +1,4 @@
-import { t } from '@ns/core';
+import { type Message, t, tm } from '@ns/core';
 import { CircleCheck, CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Button } from '../ui/index.ts';
@@ -9,8 +9,8 @@ import { Button } from '../ui/index.ts';
  */
 export function ReviewDialog(props: {
   title: string;
-  lines: string[];
-  notice?: string | undefined;
+  lines: Message[];
+  notice?: Message | string | undefined;
   acceptLabel?: string;
   onAccept: () => void;
   onClose: () => void;
@@ -25,11 +25,13 @@ export function ReviewDialog(props: {
       onClose={props.onClose}
     >
       <h2 id="review-title">{props.title}</h2>
-      {props.notice && <p className="hint">{props.notice}</p>}
+      {props.notice && (
+        <p className="hint">{typeof props.notice === 'string' ? props.notice : tm(props.notice)}</p>
+      )}
       <ul className="review-lines" aria-label={t('review.changes')}>
         {props.lines.map((line, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: static list for this review.
-          <li key={i}>{line}</li>
+          <li key={i}>{tm(line)}</li>
         ))}
       </ul>
       <div className="dialog-actions">

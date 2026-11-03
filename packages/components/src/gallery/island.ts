@@ -3,10 +3,13 @@
 // Text only through textContent and attributes: no markup is ever injected. Idempotent.
 const ready = new WeakSet<Element>();
 
-function open(links: HTMLAnchorElement[], start: number) {
+/** Labels in the site language, written by the view on the gallery. */
+type Labels = { dialog?: string; close?: string; prev?: string; next?: string };
+
+function open(links: HTMLAnchorElement[], start: number, labels: Labels) {
   const dialog = document.createElement('dialog');
   dialog.className = 'ns-lightbox';
-  dialog.setAttribute('aria-label', 'Image agrandie');
+  dialog.setAttribute('aria-label', labels.dialog ?? '');
   const figure = document.createElement('figure');
   const img = document.createElement('img');
   const caption = document.createElement('figcaption');
@@ -18,9 +21,9 @@ function open(links: HTMLAnchorElement[], start: number) {
     b.textContent = text;
     return b;
   };
-  const close = button('Fermer', 'ns-lightbox-close', '×');
-  const prev = button('Image précédente', 'ns-lightbox-prev', '‹');
-  const next = button('Image suivante', 'ns-lightbox-next', '›');
+  const close = button(labels.close ?? '', 'ns-lightbox-close', '×');
+  const prev = button(labels.prev ?? '', 'ns-lightbox-prev', '‹');
+  const next = button(labels.next ?? '', 'ns-lightbox-next', '›');
   let index = start;
   const show = (i: number) => {
     index = (i + links.length) % links.length;
@@ -59,7 +62,7 @@ export function init(root: ParentNode = document) {
     for (const [i, link] of links.entries()) {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        open(links, i);
+        open(links, i, gallery.dataset);
       });
     }
   }

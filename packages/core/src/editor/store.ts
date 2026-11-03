@@ -1,5 +1,6 @@
-import { type Diagnostic, loadSite } from '../document/load.ts';
+import { loadSite } from '../document/load.ts';
 import { editedRoot, type Site } from '../document/schema.ts';
+import { issuesMessage, type Message, msg } from '../i18n/index.ts';
 import type { Registry } from '../registry/registry.ts';
 import { type Call, countChanges, diffSites, runBatch } from '../services/batch.ts';
 import type { Permission } from '../services/catalog.ts';
@@ -23,7 +24,7 @@ export type JournalRecord = {
   origin: 'user' | 'ai';
   label: string;
   commands: string[];
-  changes: string;
+  changes: Message;
 };
 export type HistoryEntry = {
   label: string;
@@ -122,12 +123,16 @@ export function createEditorStore(initial: Site, registry: Registry) {
         )
       : {
           ok: false,
-          error: { code: 'invalid', message: parsed.error.issues.map((i) => i.message).join('; ') },
+          error: { code: 'invalid', message: issuesMessage(parsed.error.issues) },
         };
     // ponytail: full validation after every command; switch to incremental checks if profiling shows a cost.
     if (result.ok) {
       const check = loadSite(result.doc, registry);
-      if (!check.ok) result = { ok: false, error: { code: 'invalid', message: describe(check.diagnostics) } };
+      if (!check.ok)
+        result = {
+          ok: false,
+          error: { code: 'invalid', message: msg('text', { text: check.diagnostics.map((d) => d.message) }) },
+        };
     }
     if (!result.ok) {
       set({ lastError: result.error });
@@ -245,5 +250,3 @@ function onPage(doc: Site, pageId: string) {
   const home = doc.pages.find((p) => p.id === doc.settings.homePageId) ?? doc.pages[0];
   return { pageId: home?.id ?? pageId, rootId: home?.rootId ?? '' };
 }
-
-const describe = (diagnostics: Diagnostic[]) => diagnostics.map((d) => d.message).join('; ');

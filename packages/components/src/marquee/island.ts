@@ -14,7 +14,8 @@ export function init(root: ParentNode = document) {
     toggle.addEventListener('click', () => {
       const paused = band.classList.toggle('ns-marquee-paused');
       toggle.setAttribute('aria-pressed', String(paused));
-      toggle.textContent = paused ? 'Reprendre le défilement' : 'Mettre en pause';
+      // Labels in the site language, written by the view.
+      toggle.textContent = (paused ? toggle.dataset.resume : toggle.dataset.pause) ?? '';
     });
   }
 }

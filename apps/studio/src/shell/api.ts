@@ -5,8 +5,10 @@ import {
   type Asset,
   type Check,
   type Diagnostic,
+  type Message,
   type Site,
   t,
+  tm,
 } from '@ns/core';
 
 /** Client of the development API (apps/studio/dev-server/api.ts). */
@@ -30,8 +32,9 @@ async function call(input: string, init?: RequestInit): Promise<Response> {
     throw new ApiError(0, t('api.unreachable'));
   }
   if (!res.ok) {
-    const body = (await res.json().catch(() => ({}))) as { error?: string; diagnostics?: Diagnostic[] };
-    throw new ApiError(res.status, body.error ?? t('api.error', { status: res.status }), body.diagnostics);
+    const body = (await res.json().catch(() => ({}))) as { error?: Message; diagnostics?: Diagnostic[] };
+    const message = body.error?.key ? tm(body.error) : t('api.error', { status: res.status });
+    throw new ApiError(res.status, message, body.diagnostics);
   }
   return res;
 }

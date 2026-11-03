@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MessageKey } from '../i18n/index.ts';
 import { colorSchema, isTokenRef, positiveLengthSchema, styleDeclsSchema, tokenIdSchema } from './schema.ts';
 
 const label = z.string().min(1).max(80);
@@ -18,7 +19,7 @@ export const GENERIC_FAMILIES = new Set([
 ]);
 export const familyNameSchema = z
   .string()
-  .regex(/^[A-Za-z0-9 _-]{1,60}$/, 'nom de police : lettres, chiffres, espaces, - et _');
+  .regex(/^[A-Za-z0-9 _-]{1,60}$/, 'schema.fontName' satisfies MessageKey);
 
 export const textStyleDeclsSchema = styleDeclsSchema.pick({
   fontFamily: true,

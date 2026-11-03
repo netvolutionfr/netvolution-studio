@@ -1,10 +1,11 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const stack = defineComponent({
   type: 'stack',
   version: 1,
-  label: 'Pile (Flex)',
+  label: t('components.stack.name'),
   category: 'layout',
   props: z.strictObject({}),
   defaults: { props: {} },

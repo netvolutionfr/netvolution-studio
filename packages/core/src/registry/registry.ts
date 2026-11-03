@@ -38,6 +38,7 @@ export interface ComponentDefinition<P extends Record<string, unknown> = Record<
   label: string;
   category: 'layout' | 'content' | 'media';
   props: z.ZodType<P>;
+  /** Default props; a string that is a `content.*` key is translated into the site language (ADR-0024). */
   defaults: { props: P; style?: ResponsiveStyle };
   /** Allowed child types: none, any, or an explicit list. */
   children: 'none' | 'any' | readonly string[];

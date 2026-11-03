@@ -2,14 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { loadSite } from '../document/load.ts';
 import { nodeClassName, type Site } from '../document/schema.ts';
 import { createEditorStore } from '../editor/store.ts';
+import { tm } from '../i18n/index.ts';
 import { sampleDoc, testRegistry } from '../test-registry.ts';
 import { checkCustomCss, customCss } from './custom.ts';
 
 const errors = (css: string) => {
   const r = checkCustomCss(css);
-  return r.ok ? [] : r.errors.map((e) => `${e.line}: ${e.message}`);
+  return r.ok ? [] : r.errors.map((e) => `${e.line}: ${tm(e.message)}`);
 };
-const warnings = (css: string) => checkCustomCss(css).warnings.map((w) => w.message);
+const warnings = (css: string) => checkCustomCss(css).warnings.map((w) => tm(w.message));
 
 describe('custom CSS (ADR-0023)', () => {
   it('accepts ordinary rules and publishes the parser output, comments dropped', () => {

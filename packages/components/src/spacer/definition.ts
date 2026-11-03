@@ -1,10 +1,11 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const spacer = defineComponent({
   type: 'spacer',
   version: 1,
-  label: 'Espaceur',
+  label: t('components.spacer.name'),
   category: 'layout',
   props: z.strictObject({}),
   defaults: { props: {}, style: { base: { minHeight: { value: 32, unit: 'px' } } } },

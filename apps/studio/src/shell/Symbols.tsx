@@ -3,6 +3,7 @@ import {
   type DocNode,
   instanceStatus,
   instancesOf,
+  type Message,
   newNodeId,
   nodeAtPath,
   runBatch,
@@ -10,6 +11,7 @@ import {
   type SymbolCategory,
   summarize,
   t,
+  tm,
 } from '@ns/core';
 import { Component, Link2Off, Pencil, RefreshCw, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -24,7 +26,12 @@ import { useEditor, useStore } from './store.ts';
 type Store = ReturnType<typeof useStore>;
 
 /** Pending review of an instance update: the dry run's diff, applied as one undo step if accepted. */
-type Pending = { symbolId: string; ids?: string[] | undefined; lines: string[]; notice?: string | undefined };
+type Pending = {
+  symbolId: string;
+  ids?: string[] | undefined;
+  lines: Message[];
+  notice?: Message | undefined;
+};
 
 function dryRun(store: Store, symbolId: string, ids?: string[]): Pending {
   const params = { symbolId, ...(ids ? { ids } : {}) };
@@ -258,7 +265,7 @@ export function CreateSymbolButton({ nodeId, disabled }: { nodeId: string; disab
               );
               if (!r.ok) {
                 e.preventDefault();
-                setError(r.error.message);
+                setError(tm(r.error.message));
               }
             }}
           >

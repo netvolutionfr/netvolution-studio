@@ -35,7 +35,7 @@ const assistant: Script = (request) => {
   const json = content.match(/```json\n([\s\S]*)\n```/)?.[1];
   if (!json) return echo(request);
   const ctx = JSON.parse(json) as Ctx;
-  const ask = (content.split('\n\nContexte')[0] ?? '').toLowerCase();
+  const ask = (content.split('\n\nContext')[0] ?? '').toLowerCase();
   const nodes = walk(ctx.tree);
   if (ask.includes('seo') && ctx.page)
     return {
@@ -53,7 +53,7 @@ const assistant: Script = (request) => {
         },
       ],
     };
-  if (ask.includes('témoignages')) {
+  if (/témoignages|testimonials/.test(ask)) {
     const container = nodes.find((n) => n.type === 'stack' || n.type === 'container') ?? ctx.tree;
     return {
       text: 'Une section de témoignages, ajoutée à la fin.',
@@ -81,7 +81,7 @@ const assistant: Script = (request) => {
       ],
     };
   }
-  if (ask.includes('sobre'))
+  if (/sobre|sober/.test(ask))
     return {
       text: 'Variante plus sobre : sans fond coloré, marges verticales réduites.',
       toolCalls: [
@@ -102,7 +102,7 @@ const assistant: Script = (request) => {
       ],
     };
   const grid = nodes.find((n) => n.type === 'grid');
-  if (ask.includes('tablette') && grid)
+  if (/tablette|tablet/.test(ask) && grid)
     return {
       text: 'Deux colonnes sur tablette.',
       toolCalls: [

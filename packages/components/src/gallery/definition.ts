@@ -1,6 +1,7 @@
-import { isPicture, MEDIA_PATH } from '@ns/core';
+import { isPicture, MEDIA_PATH, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
+import { siteText } from '../rich.ts';
 
 const RATIOS = ['1/1', '4/3', '3/2', '16/9', '3/4', '2/3'] as const;
 const px = (value: number) => ({ value, unit: 'px' as const });
@@ -15,7 +16,7 @@ const px = (value: number) => ({ value, unit: 'px' as const });
 export const gallery = defineComponent({
   type: 'gallery',
   version: 1,
-  label: 'Galerie',
+  label: t('components.gallery.name'),
   category: 'media',
   props: z.strictObject({
     images: z
@@ -36,14 +37,20 @@ export const gallery = defineComponent({
     style: { base: { columns: 3, gap: px(16) }, tablet: { columns: 2 }, mobile: { columns: 1 } },
   },
   // Each item keeps its media id (`asset`): the export adds the responsive variants of raster images.
-  resolve: (props, { site, mediaBase = MEDIA_PATH }) => ({
+  resolve: (props, ctx) => ({
     layout: props.layout,
+    text: {
+      dialog: siteText(ctx)('content.gallery.dialog'),
+      close: siteText(ctx)('content.gallery.close'),
+      prev: siteText(ctx)('content.carousel.prev'),
+      next: siteText(ctx)('content.carousel.next'),
+    },
     ratio: props.ratio.replace('/', '-'),
     lightbox: props.lightbox,
     images: props.images.flatMap((im) => {
-      const asset = site.assets[im.assetId];
+      const asset = ctx.site.assets[im.assetId];
       if (!isPicture(asset)) return [];
-      const src = `${mediaBase}${asset.file}`;
+      const src = `${ctx.mediaBase ?? MEDIA_PATH}${asset.file}`;
       return [
         {
           asset: asset.id,
@@ -60,23 +67,28 @@ export const gallery = defineComponent({
   children: 'none',
   styleGroups: ['spacing', 'size', 'grid', 'item', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'assets', prop: 'images', label: 'Images', accept: ['image', 'svg'] },
+    {
+      kind: 'assets',
+      prop: 'images',
+      label: t('components.gallery.fields.images'),
+      accept: ['image', 'svg'],
+    },
     {
       kind: 'select',
       prop: 'layout',
-      label: 'Disposition',
+      label: t('components.gallery.fields.layout'),
       options: [
-        { value: 'masonry', label: 'Mosaïque (hauteurs naturelles)' },
-        { value: 'tiles', label: 'Vignettes (même proportion)' },
+        { value: 'masonry', label: t('components.gallery.options.layout.masonry') },
+        { value: 'tiles', label: t('components.gallery.options.layout.tiles') },
       ],
     },
     {
       kind: 'select',
       prop: 'ratio',
-      label: 'Proportion des vignettes',
+      label: t('components.gallery.fields.ratio'),
       options: RATIOS.map((r) => ({ value: r, label: r.replace('/', ':') })),
     },
-    { kind: 'boolean', prop: 'lightbox', label: 'Agrandir au clic' },
+    { kind: 'boolean', prop: 'lightbox', label: t('components.gallery.fields.lightbox') },
   ],
   island: true,
   css:

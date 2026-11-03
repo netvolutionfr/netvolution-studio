@@ -1,3 +1,4 @@
+import { issueMessage, type Message, msg } from '../i18n/index.ts';
 import { fieldAssets, type Registry } from '../registry/registry.ts';
 import { checkCustomCss } from '../style/custom.ts';
 import { backgroundAssets, STYLE_GROUPS, type StyleProperty } from '../style/schema.ts';
@@ -35,7 +36,7 @@ export type DiagnosticCode =
 
 export type Diagnostic = {
   code: DiagnosticCode;
-  message: string;
+  message: Message;
   path: (string | number)[];
   nodeId?: string;
 };
@@ -46,14 +47,12 @@ export type LoadResult = { ok: true; doc: Site } | { ok: false; diagnostics: Dia
 export function loadSite(input: unknown, registry: Registry): LoadResult {
   const version = (input as { schemaVersion?: unknown } | null)?.schemaVersion;
   if (typeof input !== 'object' || input === null || typeof version !== 'number') {
-    return fail('invalid-document', 'Document JSON attendu avec un schemaVersion numérique', [
-      'schemaVersion',
-    ]);
+    return fail('invalid-document', msg('diagnostics.invalidDocument'), ['schemaVersion']);
   }
   if (!Number.isInteger(version) || version < OLDEST_VERSION || version > SCHEMA_VERSION) {
     return fail(
       'unsupported-version',
-      `schemaVersion ${version} non pris en charge (attendu ${OLDEST_VERSION} à ${SCHEMA_VERSION})`,
+      msg('diagnostics.unsupportedVersion', { version, oldest: OLDEST_VERSION, latest: SCHEMA_VERSION }),
       ['schemaVersion'],
     );
   }
@@ -63,7 +62,7 @@ export function loadSite(input: unknown, registry: Registry): LoadResult {
       ok: false,
       diagnostics: parsed.error.issues.map((i) => ({
         code: 'schema',
-        message: i.message,
+        message: issueMessage(i.message),
         path: i.path.map((p) => (typeof p === 'symbol' ? String(p) : p)),
       })),
     };
@@ -77,20 +76,23 @@ export const serializeSite = (doc: Site) => `${JSON.stringify(doc, null, 2)}\n`;
 /** Slug segments that would collide with generated files or routes of the export. */
 const RESERVED_FIRST = new Set(['404', 'media']);
 
-function fail(code: DiagnosticCode, message: string, path: Diagnostic['path']): LoadResult {
+function fail(code: DiagnosticCode, message: Message, path: Diagnostic['path']): LoadResult {
   return { ok: false, diagnostics: [{ code, message, path }] };
 }
 
 function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   const out: Diagnostic[] = [];
-  const add = (code: DiagnosticCode, message: string, path: Diagnostic['path'], nodeId?: string) =>
+  const add = (code: DiagnosticCode, message: Message, path: Diagnostic['path'], nodeId?: string) =>
     out.push(nodeId ? { code, message, path, nodeId } : { code, message, path });
 
   const bpIds = new Set<string>();
   const widths = new Set<number>();
   doc.breakpoints.forEach((bp, i) => {
     if (bpIds.has(bp.id) || widths.has(bp.maxWidth)) {
-      add('duplicate-breakpoint', `Breakpoint dupliqué : ${bp.id} (${bp.maxWidth}px)`, ['breakpoints', i]);
+      add('duplicate-breakpoint', msg('diagnostics.duplicateBreakpoint', { id: bp.id, width: bp.maxWidth }), [
+        'breakpoints',
+        i,
+      ]);
     }
     bpIds.add(bp.id);
     widths.add(bp.maxWidth);
@@ -100,24 +102,25 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   const slugs = new Set<string>();
   doc.pages.forEach((page, i) => {
     const path = ['pages', i];
-    if (pageIds.has(page.id)) add('duplicate-page', `Page dupliquée : ${page.id}`, [...path, 'id']);
+    if (pageIds.has(page.id))
+      add('duplicate-page', msg('diagnostics.duplicatePage', { id: page.id }), [...path, 'id']);
     pageIds.add(page.id);
-    if (slugs.has(page.slug)) add('duplicate-slug', `Adresse dupliquée : /${page.slug}`, [...path, 'slug']);
+    if (slugs.has(page.slug))
+      add('duplicate-slug', msg('diagnostics.duplicateSlug', { slug: page.slug }), [...path, 'slug']);
     slugs.add(page.slug);
     const home = page.id === doc.settings.homePageId;
     const segments = page.slug.split('/');
     if (home !== (page.slug === '')) {
-      add(
-        'invalid-slug',
-        home ? "La page d'accueil a une adresse vide" : 'Adresse vide réservée à la page d’accueil',
-        [...path, 'slug'],
-      );
+      add('invalid-slug', home ? msg('diagnostics.homeSlug') : msg('diagnostics.emptySlug'), [
+        ...path,
+        'slug',
+      ]);
     } else if (RESERVED_FIRST.has(segments[0] as string) || segments.includes('index')) {
-      add('invalid-slug', `Adresse réservée : /${page.slug}`, [...path, 'slug']);
+      add('invalid-slug', msg('diagnostics.reservedSlug', { slug: page.slug }), [...path, 'slug']);
     }
   });
   if (!pageIds.has(doc.settings.homePageId)) {
-    add('missing-page', `Page d'accueil inexistante : ${doc.settings.homePageId}`, [
+    add('missing-page', msg('diagnostics.missingHome', { id: doc.settings.homePageId }), [
       'settings',
       'homePageId',
     ]);
@@ -127,13 +130,13 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   const checkRefs = (decls: Record<string, unknown>, path: Diagnostic['path'], nodeId?: string) => {
     for (const ref of tokenRefs(decls)) {
       if (!tokens[ref.kind][ref.id])
-        add('missing-token', `Token introuvable : ${ref.id}`, [...path, ref.prop], nodeId);
+        add('missing-token', msg('diagnostics.missingToken', { id: ref.id }), [...path, ref.prop], nodeId);
     }
   };
   const checkBreakpoints = (keys: string[], path: Diagnostic['path']) => {
     for (const bp of keys) {
       if (bp !== 'base' && !bpIds.has(bp))
-        add('unknown-breakpoint', `Breakpoint inconnu : ${bp}`, [...path, bp]);
+        add('unknown-breakpoint', msg('diagnostics.unknownBreakpoint', { id: bp }), [...path, bp]);
     }
   };
   for (const [id, size] of Object.entries(tokens.sizes))
@@ -148,7 +151,7 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   const layoutRoles = new Map<string, string>();
   (doc.layouts ?? []).forEach((l, i) => {
     if (pageIds.has(l.id) || layoutRoles.has(l.id))
-      add('duplicate-id', `Identifiant de layout déjà utilisé : ${l.id}`, ['layouts', i, 'id']);
+      add('duplicate-id', msg('diagnostics.duplicateLayout', { id: l.id }), ['layouts', i, 'id']);
     layoutRoles.set(l.id, l.role);
   });
   const symbols = new Map((doc.symbols ?? []).map((sym) => [sym.id, sym]));
@@ -158,7 +161,7 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
       layoutRoles.has(sym.id) ||
       (doc.symbols ?? []).findIndex((x) => x.id === sym.id) !== i
     )
-      add('duplicate-id', `Identifiant de composant déjà utilisé : ${sym.id}`, ['symbols', i, 'id']);
+      add('duplicate-id', msg('diagnostics.duplicateSymbol', { id: sym.id }), ['symbols', i, 'id']);
     // A parameter whose target changed is a warning of checkSite: editing a definition stays possible.
   });
   // Instances: existing definition, known version, and no definition containing itself (ADR-0011).
@@ -174,11 +177,16 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
     if (!ref) continue;
     const sym = symbols.get(ref.symbolId);
     if (!sym)
-      add('missing-node', `Composant partagé introuvable : ${ref.symbolId}`, ['nodes', key, 'instance'], key);
+      add(
+        'missing-node',
+        msg('diagnostics.missingSymbol', { id: ref.symbolId }),
+        ['nodes', key, 'instance'],
+        key,
+      );
     else if (ref.version > sym.version)
       add(
         'invalid-props',
-        `Version ${ref.version} inconnue du composant ${sym.name}`,
+        msg('diagnostics.unknownVersion', { version: ref.version, name: sym.name }),
         ['nodes', key, 'instance'],
         key,
       );
@@ -192,17 +200,18 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   };
   (doc.symbols ?? []).forEach((sym, i) => {
     if ([...(uses.get(sym.id) ?? [])].some((u) => reaches(u, sym.id)))
-      add('cycle', `Le composant ${sym.name} se contient lui-même`, ['symbols', i]);
+      add('cycle', msg('diagnostics.selfContaining', { name: sym.name }), ['symbols', i]);
   });
 
   const checkChoice = (choice: Site['settings']['defaultLayouts'], path: Diagnostic['path']) => {
     for (const role of ['header', 'footer'] as const) {
       const id = choice?.[role];
       if (id && layoutRoles.get(id) !== role)
-        add('missing-layout', `${role === 'header' ? 'Header' : 'Footer'} introuvable : ${id}`, [
-          ...path,
-          role,
-        ]);
+        add(
+          'missing-layout',
+          msg(role === 'header' ? 'diagnostics.missingHeader' : 'diagnostics.missingFooter', { id }),
+          [...path, role],
+        );
     }
   };
   checkChoice(doc.settings.defaultLayouts, ['settings', 'defaultLayouts']);
@@ -212,77 +221,96 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
 
   const menuIds = new Set<string>();
   (doc.menus ?? []).forEach((menu, i) => {
-    if (menuIds.has(menu.id)) add('duplicate-id', `Menu dupliqué : ${menu.id}`, ['menus', i, 'id']);
+    if (menuIds.has(menu.id))
+      add('duplicate-id', msg('diagnostics.duplicateMenu', { id: menu.id }), ['menus', i, 'id']);
     menuIds.add(menu.id);
     const itemIds = menu.items.flatMap((item) => [item.id, ...(item.children ?? []).map((c) => c.id)]);
     if (new Set(itemIds).size !== itemIds.length)
-      add('duplicate-id', `Entrées dupliquées dans le menu ${menu.id}`, ['menus', i, 'items']);
+      add('duplicate-id', msg('diagnostics.duplicateMenuItems', { id: menu.id }), ['menus', i, 'items']);
     for (const assetId of assetLinkTargets(menu.items)) {
       if (!doc.assets[assetId])
-        add('missing-asset', `Lien vers un média inexistant : ${assetId}`, ['menus', i, 'items']);
+        add('missing-asset', msg('diagnostics.linkMissingAsset', { id: assetId }), ['menus', i, 'items']);
     }
     for (const pageId of pageLinkTargets(menu.items)) {
       if (!pageIds.has(pageId))
-        add('missing-page', `Lien vers une page inexistante : ${pageId}`, ['menus', i, 'items']);
+        add('missing-page', msg('diagnostics.linkMissingPage', { id: pageId }), ['menus', i, 'items']);
     }
   });
 
   doc.pages.forEach((p, i) => {
     const image = p.seo?.image;
     if (image && !isPicture(doc.assets[image]))
-      add('missing-asset', `Image de partage introuvable : ${image}`, ['pages', i, 'seo', 'image']);
+      add('missing-asset', msg('diagnostics.missingShareImage', { id: image }), ['pages', i, 'seo', 'image']);
   });
   const paths = new Set(doc.pages.map((p) => pagePath(p.slug)));
   const froms = new Set<string>();
   (doc.redirects ?? []).forEach((r, i) => {
     const from = r.from.endsWith('/') ? r.from : `${r.from}/`;
-    if (froms.has(from)) add('duplicate-id', `Redirection dupliquée : ${r.from}`, ['redirects', i, 'from']);
+    if (froms.has(from))
+      add('duplicate-id', msg('diagnostics.duplicateRedirect', { from: r.from }), ['redirects', i, 'from']);
     froms.add(from);
-    if (paths.has(from)) add('invalid-slug', `${r.from} est l'adresse d'une page`, ['redirects', i, 'from']);
+    if (paths.has(from))
+      add('invalid-slug', msg('diagnostics.redirectFromPage', { from: r.from }), ['redirects', i, 'from']);
     for (const target of pageLinkTargets(r.to))
       if (!pageIds.has(target))
-        add('missing-page', `Redirection vers une page inexistante : ${target}`, ['redirects', i, 'to']);
+        add('missing-page', msg('diagnostics.redirectMissingPage', { id: target }), ['redirects', i, 'to']);
     for (const target of assetLinkTargets(r.to))
       if (!doc.assets[target])
-        add('missing-asset', `Redirection vers un média inexistant : ${target}`, ['redirects', i, 'to']);
+        add('missing-asset', msg('diagnostics.redirectMissingAsset', { id: target }), ['redirects', i, 'to']);
   });
 
   if (doc.customCss) {
     const css = checkCustomCss(doc.customCss);
     if (!css.ok)
       for (const e of css.errors)
-        add('invalid-css', `CSS du projet, ligne ${e.line} : ${e.message}`, ['customCss']);
+        add('invalid-css', msg('diagnostics.customCss', { line: e.line, message: e.message }), ['customCss']);
     else
       for (const id of css.assets)
         if (!isPicture(doc.assets[id]))
-          add('missing-asset', `CSS du projet : image introuvable (${id})`, ['customCss']);
+          add('missing-asset', msg('diagnostics.customCssImage', { id }), ['customCss']);
   }
 
   for (const [key, asset] of Object.entries(doc.assets)) {
     if (asset.id !== key)
-      add('node-id-mismatch', `La clé ${key} ne correspond pas à l'id ${asset.id}`, ['assets', key]);
+      add('node-id-mismatch', msg('diagnostics.idMismatch', { key, id: asset.id }), ['assets', key]);
   }
 
   for (const [key, node] of Object.entries(doc.nodes)) {
     const path = ['nodes', key];
     if (node.id !== key)
-      add('node-id-mismatch', `La clé ${key} ne correspond pas à l'id ${node.id}`, path, key);
+      add('node-id-mismatch', msg('diagnostics.idMismatch', { key, id: node.id }), path, key);
     const def = registry.get(node.type);
     if (!def) {
-      add('unknown-component', `Type de composant inconnu : ${node.type}`, [...path, 'type'], key);
+      add(
+        'unknown-component',
+        msg('diagnostics.unknownComponent', { type: node.type }),
+        [...path, 'type'],
+        key,
+      );
       continue;
     }
     const props = def.props.safeParse(node.props);
     if (!props.success) {
       for (const i of props.error.issues) {
-        add('invalid-props', i.message, [...path, 'props', ...i.path.map(String)], key);
+        add('invalid-props', issueMessage(i.message), [...path, 'props', ...i.path.map(String)], key);
       }
     }
     for (const ref of fieldAssets(def, node.props)) {
       const asset = doc.assets[ref.id];
-      if (!asset) add('missing-asset', `Média introuvable : ${ref.id}`, [...path, 'props', ref.prop], key);
+      if (!asset)
+        add(
+          'missing-asset',
+          msg('diagnostics.missingAsset', { id: ref.id }),
+          [...path, 'props', ref.prop],
+          key,
+        );
       else if (!ref.accept.includes(asset.kind))
-        add('missing-asset', `Type de média non accepté : ${asset.kind}`, [...path, 'props', ref.prop], key);
+        add(
+          'missing-asset',
+          msg('diagnostics.assetKind', { kind: asset.kind }),
+          [...path, 'props', ref.prop],
+          key,
+        );
     }
     for (const f of def.fields) {
       const ref = node.props[f.prop];
@@ -292,33 +320,43 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
         ref !== undefined &&
         !(typeof ref === 'string' && menuIds.has(ref))
       ) {
-        add('missing-menu', `Menu introuvable : ${String(ref)}`, [...path, 'props', f.prop], key);
+        add(
+          'missing-menu',
+          msg('diagnostics.missingMenu', { id: String(ref) }),
+          [...path, 'props', f.prop],
+          key,
+        );
       }
     }
     for (const assetId of assetLinkTargets(node.props)) {
       if (!doc.assets[assetId])
-        add('missing-asset', `Lien vers un média inexistant : ${assetId}`, [...path, 'props'], key);
+        add('missing-asset', msg('diagnostics.linkMissingAsset', { id: assetId }), [...path, 'props'], key);
     }
     for (const pageId of pageLinkTargets(node.props)) {
       if (!pageIds.has(pageId))
-        add('missing-page', `Lien vers une page inexistante : ${pageId}`, [...path, 'props'], key);
+        add('missing-page', msg('diagnostics.linkMissingPage', { id: pageId }), [...path, 'props'], key);
     }
     const allowed = new Set<string>(
       def.styleGroups.flatMap((g) => STYLE_GROUPS[g] as readonly StyleProperty[]),
     );
     for (const assetId of backgroundAssets(node.style)) {
       if (!isPicture(doc.assets[assetId]))
-        add('missing-asset', `Image de fond introuvable : ${assetId}`, [...path, 'style'], key);
+        add('missing-asset', msg('diagnostics.missingBackground', { id: assetId }), [...path, 'style'], key);
     }
     for (const [bp, decls] of Object.entries(node.style)) {
       if (bp !== 'base' && !bpIds.has(bp))
-        add('unknown-breakpoint', `Breakpoint inconnu : ${bp}`, [...path, 'style', bp], key);
+        add(
+          'unknown-breakpoint',
+          msg('diagnostics.unknownBreakpoint', { id: bp }),
+          [...path, 'style', bp],
+          key,
+        );
       checkRefs(decls, [...path, 'style', bp], key);
       for (const prop of Object.keys(decls)) {
         if (!allowed.has(prop)) {
           add(
             'style-not-allowed',
-            `${prop} non autorisé pour ${node.type}`,
+            msg('diagnostics.styleNotAllowed', { prop, type: node.type }),
             [...path, 'style', bp, prop],
             key,
           );
@@ -327,11 +365,12 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
     }
     node.children.forEach((childId, i) => {
       const child = doc.nodes[childId];
-      if (!child) add('missing-node', `Enfant inexistant : ${childId}`, [...path, 'children', i], key);
+      if (!child)
+        add('missing-node', msg('diagnostics.missingChild', { id: childId }), [...path, 'children', i], key);
       else if (registry.get(child.type) && !registry.canContain(node.type, child.type)) {
         add(
           'child-not-allowed',
-          `${child.type} n'est pas autorisé dans ${node.type}`,
+          msg('diagnostics.childNotAllowed', { child: child.type, parent: node.type }),
           [...path, 'children', i],
           key,
         );
@@ -347,9 +386,14 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
     onPath.add(id);
     for (const childId of doc.nodes[id]?.children ?? []) {
       if (onPath.has(childId)) {
-        add('cycle', `Cycle détecté : ${id} → ${childId}`, ['nodes', id, 'children'], id);
+        add('cycle', msg('diagnostics.cycle', { id, child: childId }), ['nodes', id, 'children'], id);
       } else if (parents.has(childId) || roots.has(childId)) {
-        add('multiple-parents', `${childId} a plusieurs parents`, ['nodes', id, 'children'], childId);
+        add(
+          'multiple-parents',
+          msg('diagnostics.multipleParents', { id: childId }),
+          ['nodes', id, 'children'],
+          childId,
+        );
       } else if (doc.nodes[childId]) {
         parents.set(childId, id);
         walk(childId);
@@ -365,9 +409,14 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   for (const [list, owners] of rooted) {
     owners.forEach(({ rootId }, i) => {
       if (!doc.nodes[rootId]) {
-        add('missing-root', `Racine inexistante : ${rootId}`, [list, i, 'rootId']);
+        add('missing-root', msg('diagnostics.missingRoot', { id: rootId }), [list, i, 'rootId']);
       } else if (roots.has(rootId) || parents.has(rootId)) {
-        add('multiple-parents', `${rootId} a plusieurs parents`, [list, i, 'rootId'], rootId);
+        add(
+          'multiple-parents',
+          msg('diagnostics.multipleParents', { id: rootId }),
+          [list, i, 'rootId'],
+          rootId,
+        );
       } else {
         roots.add(rootId);
         walk(rootId);
@@ -376,12 +425,7 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   }
   for (const id of Object.keys(doc.nodes)) {
     if (!roots.has(id) && !parents.has(id))
-      add(
-        'orphan-node',
-        `Nœud non rattaché à une page, un layout ou un composant : ${id}`,
-        ['nodes', id],
-        id,
-      );
+      add('orphan-node', msg('diagnostics.orphan', { id }), ['nodes', id], id);
   }
   return out;
 }

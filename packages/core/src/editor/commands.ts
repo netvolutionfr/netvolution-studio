@@ -24,8 +24,9 @@ import {
   slugSchema,
   subtree,
 } from '../document/schema.ts';
+import { localizeContent, type Message, msg } from '../i18n/index.ts';
 import { fieldAssets, type Registry } from '../registry/registry.ts';
-import { CUSTOM_CSS_MAX, checkCustomCss, customCssAssets } from '../style/custom.ts';
+import { type CssIssue, CUSTOM_CSS_MAX, checkCustomCss, customCssAssets } from '../style/custom.ts';
 import {
   backgroundAssets,
   type ResponsiveStyle,
@@ -36,11 +37,11 @@ import {
 import { EMPTY_TOKENS, TOKEN_KINDS, type TokenKind, tokenRefs } from '../style/tokens.ts';
 
 export type CommandContext = { registry: Registry; newId: (doc: Site) => string };
-export type CommandError = { code: 'not-found' | 'not-allowed' | 'invalid'; message: string };
+export type CommandError = { code: 'not-found' | 'not-allowed' | 'invalid'; message: Message };
 export type CommandResult =
   /** `created`: new node ids (the first is selected); `page`: page to show. */
   /** `notice`: information for the user (e.g. instances left out of an update). */
-  | { ok: true; doc: Site; created?: string[]; page?: string; notice?: string }
+  | { ok: true; doc: Site; created?: string[]; page?: string; notice?: Message }
   | { ok: false; error: CommandError };
 
 export interface Command<P> {
@@ -50,7 +51,7 @@ export interface Command<P> {
   apply(doc: Site, params: P, ctx: CommandContext): CommandResult;
 }
 
-const fail = (code: CommandError['code'], message: string): CommandResult => ({
+const fail = (code: CommandError['code'], message: Message): CommandResult => ({
   ok: false,
   error: { code, message },
 });
@@ -80,7 +81,7 @@ export const updateNodeProps: Command<{ id: string; props: Record<string, unknow
   params: z.strictObject({ id: nodeIdSchema, props: z.record(z.string(), z.unknown()) }),
   apply(doc, { id, props }) {
     const node = doc.nodes[id];
-    if (!node) return fail('not-found', `Nœud inexistant : ${id}`);
+    if (!node) return fail('not-found', msg('errors.missingNode', { id }));
     return {
       ok: true,
       doc: withNodes(doc, { [id]: { ...node, props: { ...node.props, ...(props as DocNode['props']) } } }),
@@ -103,9 +104,9 @@ export const updateNodeStyle: Command<{
   }),
   apply(doc, { id, breakpoint, set, unset }) {
     const node = doc.nodes[id];
-    if (!node) return fail('not-found', `Nœud inexistant : ${id}`);
+    if (!node) return fail('not-found', msg('errors.missingNode', { id }));
     if (breakpoint !== 'base' && !doc.breakpoints.some((b) => b.id === breakpoint)) {
-      return fail('invalid', `Breakpoint inconnu : ${breakpoint}`);
+      return fail('invalid', msg('diagnostics.unknownBreakpoint', { id: breakpoint }));
     }
     const decls: Record<string, unknown> = { ...node.style[breakpoint], ...set };
     for (const key of unset ?? []) delete decls[key];
@@ -167,8 +168,8 @@ export function buildTree(
     const node: DocNode = {
       id,
       type: t.type,
-      ...(t.name ? { name: t.name } : {}),
-      props: structuredClone({ ...def.defaults.props, ...t.props }) as DocNode['props'],
+      ...(t.name ? { name: localizeContent(t.name, doc.settings.lang) } : {}),
+      props: localizeContent({ ...def.defaults.props, ...t.props }, doc.settings.lang) as DocNode['props'],
       style: structuredClone(t.style ?? def.defaults.style ?? {}),
       children: [],
       ...(t.instance ? { instance: structuredClone(t.instance) } : {}),
@@ -193,11 +194,11 @@ export const insertTree: Command<{ parentId: string; index: number; tree: NodeTe
   }),
   apply(doc, { parentId, index, tree }, ctx) {
     const parent = doc.nodes[parentId];
-    if (!parent) return fail('not-found', `Parent inexistant : ${parentId}`);
+    if (!parent) return fail('not-found', msg('errors.missingParent', { id: parentId }));
     if (!ctx.registry.canContain(parent.type, tree.type))
-      return fail('not-allowed', `${tree.type} interdit dans ${parent.type}`);
+      return fail('not-allowed', msg('errors.childNotAllowed', { child: tree.type, parent: parent.type }));
     const built = buildTree(doc, tree, ctx);
-    if (!built) return fail('not-found', 'Type inconnu dans le modèle');
+    if (!built) return fail('not-found', msg('errors.unknownTypeInTemplate'));
     // Nesting inside the template is checked by the full validation run after every command.
     const next = withNodes(built.doc, {
       [parentId]: { ...parent, children: insertAt(parent.children, index, built.id) },
@@ -220,13 +221,13 @@ export const moveNode: Command<{ id: string; parentId: string; index: number }> 
     const node = doc.nodes[id];
     const target = doc.nodes[parentId];
     const source = parentOf(doc, id);
-    if (!node || !target) return fail('not-found', 'Nœud ou destination inexistant');
-    if (!source) return fail('not-allowed', 'La racine ne peut pas être déplacée');
+    if (!node || !target) return fail('not-found', msg('errors.missingMoveTarget'));
+    if (!source) return fail('not-allowed', msg('errors.moveRoot'));
     if (id === parentId || descendants(doc, id).includes(parentId)) {
-      return fail('not-allowed', 'Un élément ne peut pas être déplacé dans lui-même');
+      return fail('not-allowed', msg('errors.moveIntoItself'));
     }
     if (!ctx.registry.canContain(target.type, node.type))
-      return fail('not-allowed', `${node.type} interdit dans ${target.type}`);
+      return fail('not-allowed', msg('errors.childNotAllowed', { child: node.type, parent: target.type }));
     const without = source.children.filter((c) => c !== id);
     if (source.id === parentId) {
       return {
@@ -249,8 +250,8 @@ export const removeNode: Command<{ id: string }> = {
   params: z.strictObject({ id: nodeIdSchema }),
   apply(doc, { id }) {
     const parent = parentOf(doc, id);
-    if (!doc.nodes[id]) return fail('not-found', `Nœud inexistant : ${id}`);
-    if (!parent) return fail('not-allowed', 'La racine ne peut pas être supprimée');
+    if (!doc.nodes[id]) return fail('not-found', msg('errors.missingNode', { id }));
+    if (!parent) return fail('not-allowed', msg('errors.removeRoot'));
     const nodes = {
       ...doc.nodes,
       [parent.id]: { ...parent, children: parent.children.filter((c) => c !== id) },
@@ -265,8 +266,8 @@ export const duplicateNode: Command<{ id: string }> = {
   params: z.strictObject({ id: nodeIdSchema }),
   apply(doc, { id }, ctx) {
     const parent = parentOf(doc, id);
-    if (!doc.nodes[id]) return fail('not-found', `Nœud inexistant : ${id}`);
-    if (!parent) return fail('not-allowed', 'La racine ne peut pas être dupliquée');
+    if (!doc.nodes[id]) return fail('not-found', msg('errors.missingNode', { id }));
+    if (!parent) return fail('not-allowed', msg('errors.duplicateRoot'));
     let next = doc;
     const added: Record<string, DocNode> = {};
     const copy = (sourceId: string): string => {
@@ -292,7 +293,7 @@ export const renameNode: Command<{ id: string; name: string }> = {
   params: z.strictObject({ id: nodeIdSchema, name: z.string().max(120) }),
   apply(doc, { id, name }) {
     const node = doc.nodes[id];
-    if (!node) return fail('not-found', `Nœud inexistant : ${id}`);
+    if (!node) return fail('not-found', msg('errors.missingNode', { id }));
     const { name: _old, ...rest } = node;
     return { ok: true, doc: withNodes(doc, { [id]: name.trim() ? { ...rest, name: name.trim() } : rest }) };
   },
@@ -302,7 +303,7 @@ export const addAsset: Command<{ asset: Asset }> = {
   name: 'addAsset',
   params: z.strictObject({ asset: assetSchema }),
   apply(doc, { asset }) {
-    if (doc.assets[asset.id]) return fail('invalid', `Média déjà présent : ${asset.id}`);
+    if (doc.assets[asset.id]) return fail('invalid', msg('errors.assetExists', { id: asset.id }));
     return { ok: true, doc: { ...doc, assets: { ...doc.assets, [asset.id]: asset } } };
   },
 };
@@ -345,10 +346,9 @@ export const updateAsset: Command<{
   }),
   apply(doc, { id, name, alt, tags, font }) {
     const asset = doc.assets[id];
-    if (!asset) return fail('not-found', `Média inexistant : ${id}`);
-    if (alt !== undefined && !isPicture(asset))
-      return fail('invalid', 'Seule une image a un texte alternatif');
-    if (font !== undefined && asset.kind !== 'font') return fail('invalid', 'Ce média n’est pas une police');
+    if (!asset) return fail('not-found', msg('errors.missingAsset', { id }));
+    if (alt !== undefined && !isPicture(asset)) return fail('invalid', msg('errors.altOnImage'));
+    if (font !== undefined && asset.kind !== 'font') return fail('invalid', msg('errors.notAFont'));
     const next = {
       ...asset,
       ...font,
@@ -366,9 +366,9 @@ export const removeAsset: Command<{ id: string }> = {
   name: 'removeAsset',
   params: z.strictObject({ id: z.string() }),
   apply(doc, { id }, ctx) {
-    if (!doc.assets[id]) return fail('not-found', `Média inexistant : ${id}`);
+    if (!doc.assets[id]) return fail('not-found', msg('errors.missingAsset', { id }));
     const used = assetReferences(doc, ctx.registry, id).length;
-    if (used) return fail('not-allowed', `Média utilisé par ${used} élément(s) ou menu(s)`);
+    if (used) return fail('not-allowed', msg('errors.assetUsed', { count: used }));
     const { [id]: _, ...assets } = doc.assets;
     return { ok: true, doc: { ...doc, assets } };
   },
@@ -412,7 +412,7 @@ export const createPage: Command<{
   }),
   apply(doc, { title, slug, tree, index }, ctx) {
     const built = buildTree(doc, tree, ctx);
-    if (!built) return fail('not-found', 'Type inconnu dans le modèle');
+    if (!built) return fail('not-found', msg('errors.unknownTypeInTemplate'));
     const page: Page = { id: newPageId(doc), title, slug, rootId: built.id, publish: true };
     const pages = [...doc.pages];
     pages.splice(index ?? pages.length, 0, page);
@@ -438,7 +438,7 @@ export const updatePage: Command<{
   }),
   apply(doc, { id, seo, ...patch }) {
     const page = findPage(doc, id);
-    if (!page) return fail('not-found', `Page inexistante : ${id}`);
+    if (!page) return fail('not-found', msg('errors.missingPage', { id }));
     const defined = Object.fromEntries(Object.entries(patch).filter(([, v]) => v !== undefined));
     const { seo: current, ...rest } = { ...page, ...defined };
     const next = seo === null ? rest : { ...rest, ...((seo ?? current) && { seo: (seo ?? current) as Seo }) };
@@ -452,7 +452,7 @@ export const duplicatePage: Command<{ id: string }> = {
   apply(doc, { id }, ctx) {
     const page = findPage(doc, id);
     const tree = page && toTemplate(doc, page.rootId);
-    if (!page || !tree) return fail('not-found', `Page inexistante : ${id}`);
+    if (!page || !tree) return fail('not-found', msg('errors.missingPage', { id }));
     return createPage.apply(
       doc,
       {
@@ -471,14 +471,12 @@ export const removePage: Command<{ id: string }> = {
   params: z.strictObject({ id: entityIdSchema }),
   apply(doc, { id }) {
     const page = findPage(doc, id);
-    if (!page) return fail('not-found', `Page inexistante : ${id}`);
-    if (id === doc.settings.homePageId)
-      return fail('not-allowed', "La page d'accueil ne peut pas être supprimée");
+    if (!page) return fail('not-found', msg('errors.missingPage', { id }));
+    if (id === doc.settings.homePageId) return fail('not-allowed', msg('errors.removeHome'));
     const gone = new Set(subtree(doc, page.rootId));
     const linked = pageReferences(doc, id).filter((n) => !gone.has(n));
-    if (linked.length) return fail('not-allowed', `Page liée depuis ${linked.length} élément(s)`);
-    if (pageLinkTargets(doc.menus ?? []).includes(id))
-      return fail('not-allowed', 'Page présente dans un menu : retirez-la du menu d’abord');
+    if (linked.length) return fail('not-allowed', msg('errors.pageLinked', { count: linked.length }));
+    if (pageLinkTargets(doc.menus ?? []).includes(id)) return fail('not-allowed', msg('errors.pageInMenu'));
     const nodes = { ...doc.nodes };
     for (const n of gone) delete nodes[n];
     return { ok: true, doc: { ...doc, nodes, pages: doc.pages.filter((p) => p.id !== id) } };
@@ -490,7 +488,7 @@ export const movePage: Command<{ id: string; index: number }> = {
   params: z.strictObject({ id: entityIdSchema, index: z.number().int().min(0) }),
   apply(doc, { id, index }) {
     const page = findPage(doc, id);
-    if (!page) return fail('not-found', `Page inexistante : ${id}`);
+    if (!page) return fail('not-found', msg('errors.missingPage', { id }));
     const pages = doc.pages.filter((p) => p !== page);
     pages.splice(Math.min(index, pages.length), 0, page);
     return { ok: true, doc: { ...doc, pages } };
@@ -504,7 +502,7 @@ export const setHomePage: Command<{ id: string }> = {
   apply(doc, { id }) {
     const page = findPage(doc, id);
     const former = findPage(doc, doc.settings.homePageId);
-    if (!page || !former) return fail('not-found', `Page inexistante : ${id}`);
+    if (!page || !former) return fail('not-found', msg('errors.missingPage', { id }));
     if (page === former) return { ok: true, doc };
     const swapped = withPage(withPage(doc, { ...former, slug: page.slug }), { ...page, slug: '' });
     return { ok: true, doc: { ...swapped, settings: { ...doc.settings, homePageId: id } } };
@@ -561,9 +559,9 @@ export const removeToken: Command<{ kind: TokenKind; id: string }> = {
   params: z.strictObject({ kind: z.enum(TOKEN_KINDS), id: tokenIdSchema }),
   apply(doc, { kind, id }) {
     const tokens = doc.tokens ?? EMPTY_TOKENS;
-    if (!tokens[kind][id]) return fail('not-found', `Token inexistant : ${id}`);
+    if (!tokens[kind][id]) return fail('not-found', msg('errors.missingToken', { id }));
     const refs = tokenReferences(doc, kind, id);
-    if (refs.length) return fail('not-allowed', `Token utilisé par ${refs.length} élément(s) ou style(s)`);
+    if (refs.length) return fail('not-allowed', msg('errors.tokenUsed', { count: refs.length }));
     const { [id]: _, ...rest } = tokens[kind];
     return { ok: true, doc: { ...doc, tokens: { ...tokens, [kind]: rest } } };
   },
@@ -579,7 +577,7 @@ export const createLayout: Command<{ role: Layout['role']; name: string; tree: N
   }),
   apply(doc, { role, name, tree }, ctx) {
     const built = buildTree(doc, tree, ctx);
-    if (!built) return fail('not-found', 'Type inconnu dans le modèle');
+    if (!built) return fail('not-found', msg('errors.unknownTypeInTemplate'));
     const taken = new Set([...doc.pages.map((p) => p.id), ...(doc.layouts ?? []).map((l) => l.id)]);
     let id: string = role;
     for (let i = 2; taken.has(id); i++) id = `${role}-${i}`;
@@ -603,7 +601,7 @@ export const removeLayout: Command<{ id: string }> = {
   params: z.strictObject({ id: entityIdSchema }),
   apply(doc, { id }) {
     const layout = doc.layouts?.find((l) => l.id === id);
-    if (!layout) return fail('not-found', `Layout inexistant : ${id}`);
+    if (!layout) return fail('not-found', msg('errors.missingLayout', { id }));
     const nodes = { ...doc.nodes };
     for (const n of subtree(doc, layout.rootId)) delete nodes[n];
     const clear = <T extends { header?: string | null | undefined; footer?: string | null | undefined }>(
@@ -628,7 +626,7 @@ export const setPageLayout: Command<{ id: string; role: Layout['role']; show: bo
   params: z.strictObject({ id: entityIdSchema, role: z.enum(['header', 'footer']), show: z.boolean() }),
   apply(doc, { id, role, show }) {
     const page = findPage(doc, id);
-    if (!page) return fail('not-found', `Page inexistante : ${id}`);
+    if (!page) return fail('not-found', msg('errors.missingPage', { id }));
     const { [role]: _, ...rest } = page.layouts ?? {};
     const layouts = show ? rest : { ...rest, [role]: null };
     const { layouts: __, ...base } = page;
@@ -655,11 +653,11 @@ export const removeMenu: Command<{ id: string }> = {
   name: 'removeMenu',
   params: z.strictObject({ id: entityIdSchema }),
   apply(doc, { id }, ctx) {
-    if (!doc.menus?.some((m) => m.id === id)) return fail('not-found', `Menu inexistant : ${id}`);
+    if (!doc.menus?.some((m) => m.id === id)) return fail('not-found', msg('errors.missingMenu', { id }));
     const users = Object.values(doc.nodes).filter((n) =>
       ctx.registry.get(n.type)?.fields.some((f) => f.kind === 'menu' && n.props[f.prop] === id),
     );
-    if (users.length) return fail('not-allowed', `Menu affiché par ${users.length} navigation(s)`);
+    if (users.length) return fail('not-allowed', msg('errors.menuUsed', { count: users.length }));
     return { ok: true, doc: { ...doc, menus: doc.menus.filter((m) => m.id !== id) } };
   },
 };
@@ -737,14 +735,14 @@ function applyOverrides(
   registry: Registry,
 ) {
   let next = doc;
-  const rejected: string[] = [];
+  const rejected: Message[] = [];
   for (const [paramId, value] of Object.entries(overrides)) {
     const param = sym.params.find((p) => p.id === paramId);
     const target = param && nodeAtPath(next, rootId, param.path);
     const def = target && registry.get(target.type);
     const props = target && param ? { ...target.props, [param.prop]: value } : null;
     if (!param || !target || !def || !props || !def.props.safeParse(props).success) {
-      rejected.push(param ? param.label : `${paramId} : paramètre supprimé`);
+      rejected.push(param ? msg('text', { text: param.label }) : msg('errors.deletedParam', { id: paramId }));
       continue;
     }
     next = withNodes(next, { [target.id]: { ...target, props: props as DocNode['props'] } });
@@ -782,13 +780,12 @@ export const createSymbol: Command<{
   params: z.strictObject({ nodeId: nodeIdSchema, ...symbolMeta }),
   apply(doc, { nodeId, name, category, description }, ctx) {
     const node = doc.nodes[nodeId];
-    if (!node) return fail('not-found', `Nœud inexistant : ${nodeId}`);
-    if (!parentOf(doc, nodeId))
-      return fail('not-allowed', 'Une racine de page ne peut pas devenir un composant');
-    if (node.instance) return fail('not-allowed', 'Cet élément est déjà une instance d’un composant');
+    if (!node) return fail('not-found', msg('errors.missingNode', { id: nodeId }));
+    if (!parentOf(doc, nodeId)) return fail('not-allowed', msg('errors.rootToSymbol'));
+    if (node.instance) return fail('not-allowed', msg('errors.alreadyInstance'));
     const tpl = toTemplate(doc, nodeId);
     const built = tpl && buildTree(doc, tpl, ctx);
-    if (!built) return fail('invalid', 'Copie impossible');
+    if (!built) return fail('invalid', msg('errors.copyFailed'));
     const taken = new Set([...doc.pages, ...(doc.layouts ?? []), ...(doc.symbols ?? [])].map((x) => x.id));
     const base = `c-${
       name
@@ -832,9 +829,9 @@ export const importSymbol: Command<{
     tree: nodeTemplateSchema,
   }),
   apply(doc, { id, tree, ...meta }, ctx) {
-    if (findSymbol(doc, id)) return fail('invalid', `Composant déjà présent : ${id}`);
+    if (findSymbol(doc, id)) return fail('invalid', msg('errors.symbolExists', { id }));
     const built = buildTree(doc, tree, ctx);
-    if (!built) return fail('not-found', 'Type inconnu dans la section');
+    if (!built) return fail('not-found', msg('errors.unknownTypeInSection'));
     const sym: SiteSymbol = {
       id,
       ...meta,
@@ -857,7 +854,7 @@ export const insertSymbol: Command<{ symbolId: string; parentId: string; index: 
   apply(doc, { symbolId, parentId, index, linked }, ctx) {
     const sym = findSymbol(doc, symbolId);
     const tpl = sym && toTemplate(doc, sym.rootId);
-    if (!sym || !tpl) return fail('not-found', `Composant inexistant : ${symbolId}`);
+    if (!sym || !tpl) return fail('not-found', msg('errors.missingSymbol', { id: symbolId }));
     const tree = linked ? { ...tpl, instance: { symbolId, version: sym.version, overrides: {} } } : tpl;
     return insertTree.apply(doc, { parentId, index, tree }, ctx);
   },
@@ -872,7 +869,7 @@ export const setOverride: Command<{ id: string; paramId: string; value: unknown 
     const sym = node?.instance && findSymbol(doc, node.instance.symbolId);
     const param = sym?.params.find((p) => p.id === paramId);
     const target = param && nodeAtPath(doc, id, param.path);
-    if (!node?.instance || !param || !target) return fail('not-found', 'Paramètre inexistant');
+    if (!node?.instance || !param || !target) return fail('not-found', msg('errors.missingParam'));
     const root = doc.nodes[id] as DocNode;
     const instance = {
       ...node.instance,
@@ -904,7 +901,7 @@ export const updateSymbol: Command<{
   }) as never,
   apply(doc, { id, ...patch }) {
     const sym = findSymbol(doc, id);
-    if (!sym) return fail('not-found', `Composant inexistant : ${id}`);
+    if (!sym) return fail('not-found', msg('errors.missingSymbol', { id }));
     const defined = Object.fromEntries(Object.entries(patch).filter(([, v]) => v !== undefined));
     return { ok: true, doc: withSymbol(doc, { ...sym, ...defined }) };
   },
@@ -916,7 +913,7 @@ export const publishSymbol: Command<{ id: string }> = {
   params: z.strictObject({ id: entityIdSchema }),
   apply(doc, { id }) {
     const sym = findSymbol(doc, id);
-    if (!sym) return fail('not-found', `Composant inexistant : ${id}`);
+    if (!sym) return fail('not-found', msg('errors.missingSymbol', { id }));
     return { ok: true, doc: withSymbol(doc, { ...sym, version: sym.version + 1 }) };
   },
 };
@@ -930,12 +927,12 @@ export const updateInstances: Command<{ symbolId: string; ids?: string[] | undef
   params: z.strictObject({ symbolId: entityIdSchema, ids: z.array(nodeIdSchema).optional() }),
   apply(doc, { symbolId, ids }, ctx) {
     const sym = findSymbol(doc, symbolId);
-    if (!sym) return fail('not-found', `Composant inexistant : ${symbolId}`);
+    if (!sym) return fail('not-found', msg('errors.missingSymbol', { id: symbolId }));
     const tpl = toTemplate(doc, sym.rootId);
-    if (!tpl) return fail('not-found', 'Définition vide');
+    if (!tpl) return fail('not-found', msg('errors.emptyDefinition'));
     const targets = instancesOf(doc, symbolId).filter((n) => !ids || ids.includes(n.id));
     let next = doc;
-    const skipped: string[] = [];
+    const skipped: Message[] = [];
     let updated = 0;
     for (const old of targets) {
       const parent = parentOf(next, old.id);
@@ -949,7 +946,7 @@ export const updateInstances: Command<{ symbolId: string; ids?: string[] | undef
         ctx.registry,
       );
       if (rejected.length) {
-        skipped.push(`« ${old.name ?? sym.name} » (${rejected.join(', ')})`);
+        skipped.push(msg('errors.skippedInstance', { name: old.name ?? sym.name, props: rejected }));
         continue;
       }
       const nodes = { ...withValues.nodes };
@@ -968,14 +965,13 @@ export const updateInstances: Command<{ symbolId: string; ids?: string[] | undef
       next = { ...withValues, nodes };
       updated++;
     }
-    if (!updated && skipped.length)
-      return fail('invalid', `Mise à jour impossible : valeurs incompatibles pour ${skipped.join(' ; ')}`);
+    if (!updated && skipped.length) return fail('invalid', msg('errors.updateIncompatible', { skipped }));
     return {
       ok: true,
       doc: next,
       notice: skipped.length
-        ? `${updated} instance(s) mise(s) à jour ; non mises à jour (valeurs incompatibles) : ${skipped.join(' ; ')}`
-        : `${updated} instance(s) mise(s) à jour`,
+        ? msg('notices.instancesPartial', { count: updated, skipped })
+        : msg('notices.instancesUpdated', { count: updated }),
     };
   },
 };
@@ -986,7 +982,7 @@ export const detachInstance: Command<{ id: string }> = {
   params: z.strictObject({ id: nodeIdSchema }),
   apply(doc, { id }) {
     const node = doc.nodes[id];
-    if (!node?.instance) return fail('not-found', 'Cet élément n’est pas une instance');
+    if (!node?.instance) return fail('not-found', msg('errors.notInstance'));
     const { instance: _, ...rest } = node;
     return { ok: true, doc: withNodes(doc, { [id]: rest }) };
   },
@@ -998,9 +994,9 @@ export const removeSymbol: Command<{ id: string }> = {
   params: z.strictObject({ id: entityIdSchema }),
   apply(doc, { id }) {
     const sym = findSymbol(doc, id);
-    if (!sym) return fail('not-found', `Composant inexistant : ${id}`);
+    if (!sym) return fail('not-found', msg('errors.missingSymbol', { id }));
     const used = instancesOf(doc, id).length;
-    if (used) return fail('not-allowed', `Composant utilisé par ${used} instance(s)`);
+    if (used) return fail('not-allowed', msg('errors.symbolUsed', { count: used }));
     const nodes = { ...doc.nodes };
     for (const n of subtree(doc, sym.rootId)) delete nodes[n];
     return { ok: true, doc: { ...doc, nodes, symbols: (doc.symbols ?? []).filter((x) => x !== sym) } };
@@ -1013,7 +1009,7 @@ export const setAnimations: Command<{ id: string; animations: Animation[] }> = {
   params: z.strictObject({ id: nodeIdSchema, animations: z.array(animationSchema).max(5) }),
   apply(doc, { id, animations }) {
     const node = doc.nodes[id];
-    if (!node) return fail('not-found', `Nœud inexistant : ${id}`);
+    if (!node) return fail('not-found', msg('errors.missingNode', { id }));
     const { animations: _, ...rest } = node;
     return { ok: true, doc: withNodes(doc, { [id]: animations.length ? { ...rest, animations } : rest }) };
   },
@@ -1028,8 +1024,8 @@ export const setProjectCss: Command<{ css: string }> = {
     if (!css.trim()) return { ok: true, doc: rest };
     const check = checkCustomCss(css);
     if (!check.ok) {
-      const e = check.errors[0];
-      return fail('invalid', `CSS du projet, ligne ${e?.line} : ${e?.message}`);
+      const e = check.errors[0] as CssIssue;
+      return fail('invalid', msg('diagnostics.customCss', { line: e.line, message: e.message }));
     }
     return { ok: true, doc: { ...rest, customCss: css } };
   },
@@ -1041,7 +1037,7 @@ export const setNodeClasses: Command<{ id: string; classes: string[] }> = {
   params: z.strictObject({ id: nodeIdSchema, classes: z.array(customClassSchema).max(8) }),
   apply(doc, { id, classes }) {
     const node = doc.nodes[id];
-    if (!node) return fail('not-found', `Nœud inexistant : ${id}`);
+    if (!node) return fail('not-found', msg('errors.missingNode', { id }));
     const { classes: _, ...rest } = node;
     const unique = [...new Set(classes)];
     return { ok: true, doc: withNodes(doc, { [id]: unique.length ? { ...rest, classes: unique } : rest }) };

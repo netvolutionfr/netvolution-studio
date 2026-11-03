@@ -1,4 +1,4 @@
-import { type Diagnostic, formatDate, t } from '@ns/core';
+import { type Diagnostic, formatDate, t, tm } from '@ns/core';
 import { CopyPlus, Plus, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -154,7 +154,7 @@ export function Projects() {
               {error.diagnostics.slice(0, 5).map((d) => (
                 <span key={`${d.code}-${d.path.join('.')}`}>
                   <br />
-                  <code>{d.code}</code> {d.path.join('.')} — {d.message}
+                  <code>{d.code}</code> {d.path.join('.')} — {tm(d.message)}
                 </span>
               ))}
             </span>

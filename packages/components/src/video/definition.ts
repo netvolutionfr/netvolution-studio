@@ -1,5 +1,7 @@
+import { type MessageKey, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
+import { siteText } from '../rich.ts';
 
 const YOUTUBE =
   /^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})(?:[&?#][^\s<>"]*)?$/;
@@ -30,19 +32,23 @@ function source(url: string) {
 export const video = defineComponent({
   type: 'video',
   version: 1,
-  label: 'Vidéo',
+  label: t('components.video.name'),
   category: 'media',
   props: z.strictObject({
-    url: z.string().refine((u) => u === '' || source(u) !== null, 'Adresse YouTube ou Vimeo attendue'),
+    url: z.string().refine((u) => u === '' || source(u) !== null, 'schema.videoUrl' satisfies MessageKey),
     title: z.string().min(1).max(200),
   }),
-  defaults: { props: { url: '', title: 'Vidéo' } },
-  resolve: (props) => ({ title: props.title, ...(source(props.url) ?? { href: null, embed: null }) }),
+  defaults: { props: { url: '', title: 'content.video.title' } },
+  resolve: (props, ctx) => ({
+    title: props.title,
+    empty: siteText(ctx)('content.video.empty', { title: props.title }),
+    ...(source(props.url) ?? { href: null, embed: null }),
+  }),
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'text', prop: 'url', label: 'Adresse YouTube ou Vimeo' },
-    { kind: 'text', prop: 'title', label: 'Titre (accessible)' },
+    { kind: 'text', prop: 'url', label: t('components.video.fields.url') },
+    { kind: 'text', prop: 'title', label: t('components.video.fields.title') },
   ],
   display: 'block',
   island: true,

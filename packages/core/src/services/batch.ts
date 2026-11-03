@@ -1,6 +1,7 @@
 import { loadSite } from '../document/load.ts';
 import type { DocNode, Site } from '../document/schema.ts';
 import { type CommandContext, type CommandError, type CommandName, commands } from '../editor/commands.ts';
+import { issuesMessage, type Message, type MessageKey, msg } from '../i18n/index.ts';
 import { PERMISSIONS, type Permission, permissionOf } from './catalog.ts';
 
 /** One call of a batch: a command name and its parameters, as given by a user, the AI or an automation. */
@@ -27,7 +28,7 @@ export type BatchResult =
   | {
       ok: true;
       site: Site;
-      results: { name: string; created?: string[] | undefined; notice?: string | undefined }[];
+      results: { name: string; created?: string[] | undefined; notice?: Message | undefined }[];
       diff: SiteDiff;
     }
   | { ok: false; index: number; error: CommandError };
@@ -50,24 +51,24 @@ export function runBatch(
   let doc = site;
   const results: Extract<BatchResult, { ok: true }>['results'] = [];
   for (const [index, call] of calls.entries()) {
-    const fail = (code: CommandError['code'], message: string): BatchResult => ({
+    const fail = (code: CommandError['code'], message: Message): BatchResult => ({
       ok: false,
       index,
-      error: { code, message: `Opération ${index + 1} (${call.name}) : ${message}` },
+      error: { code, message: msg('errors.operation', { index: index + 1, name: call.name, message }) },
     });
-    if (!Object.hasOwn(commands, call.name)) return fail('invalid', 'commande inconnue');
+    if (!Object.hasOwn(commands, call.name)) return fail('invalid', msg('errors.unknownCommand'));
     const name = call.name as CommandName;
     if (!permissions.has(permissionOf(name)))
-      return fail('not-allowed', `autorisation « ${permissionOf(name)} » requise`);
+      return fail('not-allowed', msg('errors.permission', { permission: permissionOf(name) }));
     const command = commands[name];
     const parsed = command.params.safeParse(call.params);
-    if (!parsed.success) return fail('invalid', parsed.error.issues.map((i) => i.message).join('; '));
+    if (!parsed.success) return fail('invalid', issuesMessage(parsed.error.issues));
     const result = (
       command.apply as (d: Site, p: unknown, c: CommandContext) => ReturnType<typeof command.apply>
     )(doc, parsed.data, ctx);
     if (!result.ok) return fail(result.error.code, result.error.message);
     const check = loadSite(result.doc, ctx.registry);
-    if (!check.ok) return fail('invalid', check.diagnostics.map((d) => d.message).join('; '));
+    if (!check.ok) return fail('invalid', msg('text', { text: check.diagnostics.map((d) => d.message) }));
     doc = result.doc;
     results.push({ name, created: result.created, notice: result.notice });
   }
@@ -126,27 +127,29 @@ export function diffSites(before: Site, after: Site): SiteDiff {
   };
 }
 
-const SITE_LABELS: Record<string, string> = {
-  pages: 'pages',
-  settings: 'réglages du site',
-  tokens: 'design system',
-  menus: 'menus',
-  layouts: 'header et footer',
-  symbols: 'composants partagés',
-  assets: 'médiathèque',
-  redirects: 'redirections',
-  name: 'nom du site',
-};
+const SITE_FIELDS = new Set([
+  'pages',
+  'settings',
+  'tokens',
+  'menus',
+  'layouts',
+  'symbols',
+  'assets',
+  'redirects',
+  'name',
+]);
+const siteLabel = (key: string): Message =>
+  SITE_FIELDS.has(key) ? msg(`diff.site.${key}` as MessageKey) : msg('text', { text: key });
 const label = (n: NodeRef) => n.name ?? n.type;
 /** A value for a human: lengths, tokens and short texts; anything else is abbreviated. */
-export function formatValue(v: unknown): string {
+export function formatValue(v: unknown): Message | string {
   if (v === undefined) return '—';
-  if (typeof v === 'string') return `« ${v.length > 60 ? `${v.slice(0, 57)}…` : v} »`;
+  if (typeof v === 'string') return msg('diff.quoted', { text: v.length > 60 ? `${v.slice(0, 57)}…` : v });
   if (typeof v === 'number' || typeof v === 'boolean') return String(v);
   if (v && typeof v === 'object') {
     const o = v as Record<string, unknown>;
     if (typeof o.value === 'number' && typeof o.unit === 'string') return `${o.value}${o.unit}`;
-    if (typeof o.token === 'string') return `token ${o.token}`;
+    if (typeof o.token === 'string') return msg('diff.token', { id: o.token });
     if (Array.isArray(v) && v.every((x) => x && typeof x === 'object' && 'text' in x))
       return formatValue(v.map((x) => (x as { text: string }).text).join(''));
   }
@@ -154,28 +157,40 @@ export function formatValue(v: unknown): string {
   return json.length > 60 ? `${json.slice(0, 57)}…` : json;
 }
 
-/** The diff in sentences (French), for proposal reviews and update previews. */
-export function summarize(diff: SiteDiff): string[] {
-  if (diff.empty) return ['Aucun changement.'];
+/** The diff in sentences, for proposal reviews and update previews. */
+export function summarize(diff: SiteDiff): Message[] {
+  if (diff.empty) return [msg('diff.empty')];
+  const value = (key: string, before: unknown, after: unknown, element: NodeRef, breakpoint?: string) =>
+    msg(breakpoint ? 'diff.style' : 'diff.prop', {
+      element: label(element),
+      key,
+      ...(breakpoint && { breakpoint }),
+      before: formatValue(before),
+      after: formatValue(after),
+    });
   return [
     ...(diff.added.length
-      ? [`${diff.added.length} élément(s) ajouté(s) : ${diff.added.map(label).join(', ')}`]
+      ? [msg('diff.added', { count: diff.added.length, names: diff.added.map(label).join(', ') })]
       : []),
     ...(diff.removed.length
-      ? [`${diff.removed.length} élément(s) supprimé(s) : ${diff.removed.map(label).join(', ')}`]
+      ? [msg('diff.removed', { count: diff.removed.length, names: diff.removed.map(label).join(', ') })]
       : []),
     ...diff.changed.flatMap((c) => [
-      ...c.props.map((p) => `${label(c)} · ${p.key} : ${formatValue(p.before)} → ${formatValue(p.after)}`),
-      ...c.style.map(
-        (s) =>
-          `${label(c)} · ${s.key} (${s.breakpoint}) : ${formatValue(s.before)} → ${formatValue(s.after)}`,
-      ),
-      ...c.other.filter((o) => o !== 'children' || !c.props.length).map((o) => `${label(c)} · ${o} modifié`),
+      ...c.props.map((p) => value(p.key, p.before, p.after, c)),
+      ...c.style.map((s) => value(s.key, s.before, s.after, c, s.breakpoint)),
+      ...c.other
+        .filter((o) => o !== 'children' || !c.props.length)
+        .map((o) => msg('diff.other', { element: label(c), key: o })),
     ]),
-    ...diff.site.map((s) => `Site · ${SITE_LABELS[s.key] ?? s.key} modifié`),
+    ...diff.site.map((s) => msg('diff.siteChanged', { field: siteLabel(s.key) })),
   ];
 }
 
 /** Counts only, without any content: what the operation journal keeps (CS-09, CS-11). */
-export const countChanges = (diff: SiteDiff) =>
-  `${diff.added.length} ajout(s), ${diff.changed.length} modification(s), ${diff.removed.length} suppression(s)${diff.site.length ? `, site : ${diff.site.map((s) => SITE_LABELS[s.key] ?? s.key).join(', ')}` : ''}`;
+export const countChanges = (diff: SiteDiff): Message =>
+  msg(diff.site.length ? 'diff.countsSite' : 'diff.counts', {
+    added: diff.added.length,
+    changed: diff.changed.length,
+    removed: diff.removed.length,
+    ...(diff.site.length && { fields: diff.site.map((s) => siteLabel(s.key)) }),
+  });

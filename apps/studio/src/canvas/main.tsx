@@ -9,6 +9,7 @@ import {
   type Rect,
   type Site,
   shellMessageSchema,
+  tm,
   toCss,
 } from '@ns/core';
 import { flushSync } from 'react-dom';
@@ -92,7 +93,8 @@ addEventListener('message', (event) => {
   }
   const result = loadSite(message.data.doc, registry);
   if (!result.ok) {
-    post({ type: 'error', diagnostics: result.diagnostics });
+    // Translated here: the canvas shares the interface language of the Studio.
+    post({ type: 'error', diagnostics: result.diagnostics.map((d) => ({ ...d, message: tm(d.message) })) });
     return;
   }
   const { pageId, mediaBase } = message.data;
