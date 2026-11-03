@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, t } from './index.ts';
+import { browserLocale, getLocale, LOCALES, t } from './index.ts';
 
 type Tree = { [key: string]: string | Tree };
 const flatten = (tree: Tree, prefix = ''): Record<string, string> =>
@@ -73,6 +73,14 @@ describe('t', () => {
     expect(t('projects.pageCount', { count: 0 }, 'en')).toBe('0 pages');
     expect(t('projects.pageCount', { count: 1 }, 'en')).toBe('1 page');
     expect(t('projects.pageCount', { count: 5 }, 'fr')).toBe('5 pages');
+  });
+
+  it('defaults to the first browser language with a catalog, else English', () => {
+    expect(browserLocale(['fr-CA', 'en'])).toBe('fr');
+    expect(browserLocale(['de-DE', 'en-GB'])).toBe('en');
+    expect(browserLocale(['de-DE'])).toBeUndefined();
+    // Outside a browser (Node: navigator.languages is the system's), the same rule; here, no stored choice.
+    expect(getLocale()).toBe(browserLocale() ?? 'en');
   });
 
   it('only accepts keys of the English catalog', () => {

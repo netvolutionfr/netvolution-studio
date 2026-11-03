@@ -19,7 +19,12 @@ const app = await serve(join(repo, 'apps/studio/dist'), {
   }),
 });
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+const page = await browser.newPage({
+  locale: 'fr-FR',
+  viewport: { width: 1440, height: 900 },
+  deviceScaleFactor: 1,
+});
 const shot = async (name: string) => {
   await page.waitForTimeout(250);
   await page.screenshot({ path: join(repo, 'docs/ui', `${prefix}-${name}.png`) });

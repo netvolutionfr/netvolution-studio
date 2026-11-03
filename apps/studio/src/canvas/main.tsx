@@ -99,6 +99,8 @@ addEventListener('message', (event) => {
   }
   const { pageId, mediaBase } = message.data;
   doc = result.doc;
+  // The site's language, as in the export (hyphenation, quotes): not the interface's.
+  document.documentElement.lang = doc.settings.lang;
   style.textContent =
     toCss(result.doc, registry, pageRoots(result.doc, pageId), mediaBase) +
     customCss(result.doc, mediaBase ?? MEDIA_PATH);

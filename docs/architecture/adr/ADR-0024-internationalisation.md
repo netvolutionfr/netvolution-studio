@@ -115,3 +115,10 @@ Deux publics à servir : les graphistes français qui utilisent le Studio aujour
 - Le format choisi (texte source → traduction, plutôt qu'une clé par texte) garde la source des modèles lisible ; il se prête aussi aux plateformes de traduction (format JSON simple). Contrepartie : corriger une phrase française oblige à reporter la correction en clé dans chaque dictionnaire, ce que le test signale.
 - **Liste des modèles** : l'API renvoie la langue de chaque modèle ; l'écran Projets l'indique quand elle diffère de celle de l'interface (`Intl.DisplayNames`).
 - Atelier Nord (archive JSON, pas écrit en code) et les pages de départ (`fixtures/`) restent en français.
+
+## Addendum du 03/11/2026 — lot 4
+
+- **Langue par défaut de l'interface** : le choix retenu dans le navigateur, sinon la première langue du navigateur qui a un catalogue (`navigator.languages`, `fr-CA` → `fr`), sinon l'anglais (`browserLocale`, `getLocale`). Les pages du Studio déclarent `lang="en"` avant que le script ne fixe la langue réelle.
+- **Canvas** : `<html lang>` du canvas suit la langue du **site**, comme l'aperçu et l'export, et non celle de l'interface. Le banc de fidélité a relevé l'écart (`-webkit-locale`, qui agit sur la césure et les guillemets).
+- **Tests unitaires** : en anglais, la langue par défaut hors navigateur.
+- **Écart avec la décision 9 (tests e2e en anglais)** : les scénarios de bout en bout, les démonstrations et les captures du guide ouvrent un navigateur réglé en français (`locale: 'fr-FR'`) et gardent leurs sélecteurs français (~350). Les réécrire en anglais n'apporterait pas de couverture supplémentaire : la complétude et la cohérence des catalogues sont vérifiées par les tests unitaires, et le guide reste en français jusqu'au lot 6. Un parcours vérifie la langue par défaut (navigateur anglais, allemand, français) et le parcours du lot 1 vérifie le passage à l'anglais. À revoir au lot 6, si les captures du guide anglais demandent des scénarios en anglais.

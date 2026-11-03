@@ -28,7 +28,8 @@ const app = await serve(join(repo, 'apps/studio/dist'), {
   }),
 });
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+const page = await browser.newPage({ locale: 'fr-FR', viewport: { width: 1440, height: 900 } });
 page.on('dialog', (d) => void d.accept());
 const canvas = page.frameLocator('iframe[title="Aperçu de la page"]');
 const library = page.locator('.library');
