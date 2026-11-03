@@ -142,6 +142,8 @@ export type Media = {
 
 export type TemplateSpec = {
   id: string;
+  /** Site language (`settings.lang`); French by default. */
+  lang?: string;
   name: string;
   description: string;
   siteUrl: string;
@@ -166,6 +168,7 @@ type CatalogFont = {
 
 /** Builds the template archive (format of « Exporter l'archive »), validated like any site. */
 export function buildTemplate(spec: TemplateSpec) {
+  const lang = spec.lang ?? 'fr';
   const nodes: Site['nodes'] = {};
   let next = 0;
   const add = (t: T): string => {
@@ -178,8 +181,7 @@ export function buildTemplate(spec: TemplateSpec) {
       id,
       type: t.type,
       ...(t.name && { name: t.name }),
-      // ponytail: the built-in templates are French (lang: 'fr' below) until their English versions (ADR-0024, lot 3).
-      props: localizeContent({ ...def.defaults.props, ...t.props }, 'fr'),
+      props: localizeContent({ ...def.defaults.props, ...t.props }, lang),
       style: t.style ?? {},
       children,
       ...(t.anim && { animations: t.anim }),
@@ -242,13 +244,13 @@ export function buildTemplate(spec: TemplateSpec) {
     id: spec.id,
     name: spec.name,
     settings: {
-      lang: 'fr',
+      lang,
       homePageId: pages[0]?.id,
       siteUrl: spec.siteUrl,
       defaultLayouts: { header: 'header', footer: 'footer' },
     },
     breakpoints: [
-      { id: 'tablet', label: 'Tablette', maxWidth: 1023 },
+      { id: 'tablet', label: lang === 'fr' ? 'Tablette' : 'Tablet', maxWidth: 1023 },
       { id: 'mobile', label: 'Mobile', maxWidth: 767 },
     ],
     pages,
@@ -277,4 +279,83 @@ export function buildTemplate(spec: TemplateSpec) {
     },
     warnings: checks.map((c) => tm(c.message)),
   };
+}
+
+/** Keys whose string values are texts of the site (never ids, enums, styles or markup). */
+const TEXT_KEYS = new Set([
+  'text',
+  'label',
+  'title',
+  'alt',
+  'caption',
+  'name',
+  'toggle',
+  'description',
+  'separator',
+]);
+
+/**
+ * Another language version of a template (ADR-0024): every text of the spec (contents, layer names,
+ * page titles, addresses and descriptions, menus, media, tokens) through `dict`, from the French source.
+ * A text missing from `dict` is an error, so a translation cannot silently stay partial.
+ */
+export function translateSpec(spec: TemplateSpec, lang: string, dict: Record<string, string>): TemplateSpec {
+  const missing = new Set<string>();
+  const tr = (text: string) => {
+    if (!/\p{L}/u.test(text)) return text;
+    const out = dict[text];
+    if (out === undefined) missing.add(text);
+    return out ?? text;
+  };
+  const texts = (v: unknown, key?: string): unknown => {
+    if (typeof v === 'string') return key && TEXT_KEYS.has(key) ? tr(v) : v;
+    if (Array.isArray(v)) return v.map((x) => texts(x, key));
+    if (v && typeof v === 'object')
+      return Object.fromEntries(
+        Object.entries(v).map(([k, x]) => [
+          k,
+          texts(x, k === 'items' || k === 'content' || k === 'texts' ? key : k),
+        ]),
+      );
+    return v;
+  };
+  const tree = (t: T): T => {
+    const { name, ...props } = (t.props ?? {}) as Record<string, unknown>;
+    return {
+      ...t,
+      ...(t.name && { name: tr(t.name) }),
+      // An icon's `name` is the icon, not a text.
+      ...(t.props && {
+        props:
+          t.type === 'icon'
+            ? { ...(texts(props) as object), name }
+            : (texts(t.props) as Record<string, unknown>),
+      }),
+      ...(t.children && { children: t.children.map(tree) }),
+    };
+  };
+  const out: TemplateSpec = {
+    ...spec,
+    id: `${spec.id}-${lang}`,
+    lang,
+    name: tr(spec.name),
+    description: tr(spec.description),
+    tokens: texts(spec.tokens) as Tokens,
+    media: spec.media.map((m) => ({ ...m, name: tr(m.name), alt: m.alt && tr(m.alt) })),
+    menus: texts(spec.menus) as Site['menus'],
+    header: tree(spec.header),
+    footer: tree(spec.footer),
+    pages: spec.pages.map((pg) => ({
+      ...pg,
+      title: tr(pg.title),
+      slug: pg.slug && pg.slug.split('/').map(tr).join('/'),
+      description: tr(pg.description),
+      tree: tree(pg.tree),
+    })),
+  };
+  if (missing.size)
+    throw new Error(
+      `${spec.id} (${lang}): ${missing.size} untranslated texts:\n${JSON.stringify([...missing], null, 1)}`,
+    );
+  return out;
 }

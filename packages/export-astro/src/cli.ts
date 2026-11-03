@@ -6,7 +6,7 @@ import { exportProject } from './write.ts';
 
 const [input, outDir] = process.argv.slice(2);
 if (!input || !outDir) {
-  console.error('Usage: npm run export -- <document.json> <dossier-de-sortie>');
+  console.error('Usage: npm run export -- <document.json> <output-folder>');
   process.exit(2);
 }
 const result = loadSite(JSON.parse(await readFile(input, 'utf8')), registry);
@@ -19,5 +19,5 @@ const files = await exportProject(result.doc, registry, outDir, {
   mediaDirs: [join(dirname(input), 'media')],
 });
 console.log(
-  `Projet Astro exporté dans ${outDir} (${files.length} fichiers). Ensuite : cd ${outDir} && npm ci && npm run build`,
+  `Astro project exported to ${outDir} (${files.length} files). Next: cd ${outDir} && npm ci && npm run build`,
 );

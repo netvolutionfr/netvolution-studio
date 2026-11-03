@@ -339,6 +339,7 @@ export function createApi(options: ApiOptions) {
             name: archive.template?.name ?? site?.name ?? id,
             description: archive.template?.description ?? '',
             pages: site?.pages?.length ?? 0,
+            ...(site?.settings?.lang && { lang: site.settings.lang }),
           });
         }
       }

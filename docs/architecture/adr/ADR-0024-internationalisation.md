@@ -107,3 +107,11 @@ Deux publics à servir : les graphistes français qui utilisent le Studio aujour
 - **Assistant IA** : prompt système en anglais ; le contexte transmet la langue du site et celle de l'interface (`interfaceLang`), et demande d'y répondre. Les consignes rapides sont des clés `ai.tasks.*`. Les descriptions des commandes (outils de l'IA, futurs clients MCP) sont écrites en anglais dans le code, sans catalogue : elles s'adressent à des programmes.
 - **Pluriels** : les formes « élément(s) » des messages du cœur sont devenues de vrais pluriels.
 - Environ 1 170 clés au total.
+
+## Addendum du 03/11/2026 — lot 3
+
+- **Export** : `README.md`, `MEDIA.md`, `redirects/README.md`, les commentaires des fichiers générés et les messages de la ligne de commande sont en anglais, écrits directement dans le code (ils s'adressent aux développeurs). La page 404 est générée dans la langue du site (`content.notFound.*`).
+- **Modèles écrits en code** : la source reste en français (`templates/*.ts`). Une version dans une autre langue est produite par `translateSpec(spec, lang, dictionnaire)` : le dictionnaire `templates/translations/<id>.<lang>.json` associe chaque texte français à sa traduction (contenus, noms de calques, titres, adresses et descriptions des pages, menus, médias, tokens). Un texte absent du dictionnaire fait échouer la construction : une traduction ne peut pas rester partielle sans qu'on le voie. `npm run templates:build` écrit `templates/<id>-<lang>.json` ; un test vérifie que ces fichiers sont à jour.
+- Le format choisi (texte source → traduction, plutôt qu'une clé par texte) garde la source des modèles lisible ; il se prête aussi aux plateformes de traduction (format JSON simple). Contrepartie : corriger une phrase française oblige à reporter la correction en clé dans chaque dictionnaire, ce que le test signale.
+- **Liste des modèles** : l'API renvoie la langue de chaque modèle ; l'écran Projets l'indique quand elle diffère de celle de l'interface (`Intl.DisplayNames`).
+- Atelier Nord (archive JSON, pas écrit en code) et les pages de départ (`fixtures/`) restent en français.
