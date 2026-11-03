@@ -1,370 +1,369 @@
-# Jalon 1 — Visual Editor
+# Milestone 1 — Visual Editor
 
-**Document :** `docs/specifications/01-visual-editor.md`  
-**Version :** 0.1  
-**Dépendance :** `00-foundations.md`
+**Document:** `docs/specifications/01-visual-editor.md`  
+**Version:** 0.1  
+**Depends on:** `00-foundations.md`
 
-## 1. Objectif
+## 1. Goal
 
-Développer un éditeur web capable de créer une page HTML structurée à partir de composants visuels et de l'exporter en projet Astro autonome.
+Develop a web editor able to create a structured HTML page from visual components and export it as a standalone Astro project.
 
-À la fin de ce jalon, un concepteur doit pouvoir :
+At the end of this milestone, a designer must be able to:
 
-1. Ouvrir un document.
-2. Ajouter et organiser des composants.
-3. Modifier visuellement leurs propriétés.
-4. Visualiser immédiatement les changements.
-5. Annuler et rétablir ses opérations.
-6. Enregistrer et recharger son travail.
-7. Exporter un projet Astro compilable.
-8. Vérifier la fidélité entre l'aperçu et le résultat exporté.
+1. Open a document.
+2. Add and organize components.
+3. Change their properties visually.
+4. See the changes immediately.
+5. Undo and redo their operations.
+6. Save and reload their work.
+7. Export an Astro project that builds.
+8. Check the fidelity between the preview and the exported result.
 
-## 2. Périmètre fonctionnel
+## 2. Functional scope
 
-### VE-01 — Interface de l'éditeur
+### VE-01 — Editor interface
 
-L'application présente :
+The application presents:
 
-- Barre supérieure : nom du document, sauvegarde, annuler/refaire, aperçu, export.
-- Panneau gauche : bibliothèque de composants et arborescence.
-- Canvas central : représentation visuelle de la page.
-- Panneau droit : inspecteur des propriétés du composant sélectionné.
-- Sélecteur de dimensions d'aperçu.
+- Top bar: document name, save, undo/redo, preview, export.
+- Left panel: component library and tree.
+- Central canvas: visual representation of the page.
+- Right panel: inspector of the properties of the selected component.
+- Preview size selector.
 
-Les panneaux doivent pouvoir défiler indépendamment du canvas.
+Panels must scroll independently of the canvas.
 
-Le graphiste peut modifier les principales dimensions de son espace de travail.
+The designer can change the main dimensions of their workspace.
 
-**Acceptation :**
-- L'utilisateur sélectionne un composant depuis le canvas ou l'arborescence.
-- La sélection est synchronisée entre les panneaux.
-- L'inspecteur affiche les propriétés appropriées.
-- Le site reste prévisualisable sans les contrôles de l'éditeur.
+**Acceptance:**
+- The user selects a component from the canvas or the tree.
+- The selection is synchronized between the panels.
+- The inspector shows the appropriate properties.
+- The site remains previewable without the editor's controls.
 
-### VE-02 — Modèle documentaire
+### VE-02 — Document model
 
-Implémenter un arbre de composants conforme aux invariants du document de fondations.
+Implement a tree of components that complies with the invariants of the foundations document.
 
-Il doit gérer :
+It must handle:
 
-- Identifiants uniques.
-- Types de composants.
-- Propriétés.
-- Enfants autorisés.
+- Unique ids.
+- Component types.
+- Properties.
+- Allowed children.
 - Styles.
-- Métadonnées minimales.
-- Version du schéma.
+- Minimal metadata.
+- Schema version.
 
-Le modèle ne doit pas contenir d'éléments React, de références au DOM ou d'objets non sérialisables.
+The model must not contain React elements, DOM references or non-serializable objects.
 
-**Acceptation :**
-- Un document est validé avant chargement.
-- Les références et types inconnus provoquent un diagnostic contrôlé.
-- Une sérialisation suivie d'une désérialisation conserve le document.
-- Les versions de schéma non prises en charge sont refusées explicitement.
+**Acceptance:**
+- A document is validated before loading.
+- Unknown references and types cause a controlled diagnostic.
+- Serializing then deserializing preserves the document.
+- Unsupported schema versions are refused explicitly.
 
-### VE-03 — Registre de composants
+### VE-03 — Component registry
 
-Définir une API d'enregistrement comprenant :
+Define a registration API including:
 
-- Identifiant de type.
-- Nom et catégorie.
-- Propriétés autorisées.
-- Valeurs par défaut.
-- Règles d'imbrication.
-- Configuration de l'inspecteur.
-- Règles de rendu.
-- Éventuelles dépendances de styles ou scripts.
+- Type id.
+- Name and category.
+- Allowed properties.
+- Default values.
+- Nesting rules.
+- Inspector configuration.
+- Rendering rules.
+- Possible style or script dependencies.
 
-Le registre doit pouvoir être enrichi sans modifier les composants fondamentaux de l'éditeur.
+It must be possible to extend the registry without changing the editor's fundamental components.
 
-### VE-04 — Premiers composants
+### VE-04 — First components
 
-Implémenter :
+Implement:
 
-| Composant | Fonctions essentielles |
+| Component | Essential features |
 |---|---|
-| Container | Structure, largeur, fond, marges, padding |
-| Stack / Flex | Direction, alignement, distribution, gap |
-| Grid | Colonnes, gap, placement des enfants |
-| Heading | Niveau sémantique, texte, typographie |
-| Text | Paragraphe et contenu riche limité |
-| Image | Source, alt, dimensions, ajustement |
-| Button | Libellé, lien, apparence |
-| Spacer / Divider | Espacement ou séparation |
+| Container | Structure, width, background, margins, padding |
+| Stack / Flex | Direction, alignment, distribution, gap |
+| Grid | Columns, gap, placement of children |
+| Heading | Semantic level, text, typography |
+| Text | Paragraph and limited rich content |
+| Image | Source, alt, dimensions, fit |
+| Button | Label, link, appearance |
+| Spacer / Divider | Spacing or separation |
 
-Les sections, rangées et colonnes familières de Tatsu peuvent être proposées comme des presets de conteneurs.
+Tatsu's familiar sections, rows and columns can be offered as container presets.
 
-Les éléments structurants ne doivent pas nécessairement reproduire sa hiérarchie stricte.
+Structuring elements do not have to reproduce its strict hierarchy.
 
-### VE-05 — Composition visuelle
+### VE-05 — Visual composition
 
-Permettre :
+Allow:
 
-- Ajout depuis la bibliothèque.
-- Sélection.
-- Suppression.
+- Adding from the library.
+- Selection.
+- Deletion.
 - Duplication.
-- Réorganisation.
-- Déplacement par glisser-déposer.
-- Insertion dans un conteneur compatible.
-- Copie/collage de composants à l'intérieur du document.
+- Reordering.
+- Moving by drag and drop.
+- Insertion into a compatible container.
+- Copying and pasting components within the document.
 
-Les destinations interdites doivent être signalées avant la modification.
+Forbidden destinations must be signaled before the change.
 
-Ne jamais permettre de cycle dans l'arbre.
+Never allow a cycle in the tree.
 
-Les mouvements doivent conserver les identifiants existants.
+Moves must keep the existing ids.
 
-### VE-06 — Inspecteur de propriétés
+### VE-06 — Property inspector
 
-L'inspecteur est généré depuis les schémas des composants.
+The inspector is generated from the component schemas.
 
-Types de contrôles initiaux :
+Initial control types:
 
-- Texte.
-- Nombre.
-- Booléen.
-- Sélection.
-- Couleur.
-- Dimensions avec unité.
-- Espacements.
-- Typographie.
-- Alignements.
-- Sélection d'image.
-- Lien.
+- Text.
+- Number.
+- Boolean.
+- Select.
+- Color.
+- Dimensions with a unit.
+- Spacing.
+- Typography.
+- Alignment.
+- Image picker.
+- Link.
 
-Organiser les propriétés en groupes :
+Organize the properties in groups:
 
 - Content.
 - Layout.
 - Style.
 - Advanced.
 
-Les propriétés communes doivent être mutualisées.
+Common properties must be shared.
 
-Un champ invalide ne doit pas corrompre le document.
+An invalid field must not corrupt the document.
 
-### VE-07 — Mise à jour et aperçu
+### VE-07 — Update and preview
 
-La modification d'une propriété actualise visuellement l'élément concerné.
+Changing a property visually updates the element concerned.
 
-Le canvas doit utiliser le véritable rendu web, idéalement isolé de l'interface.
+The canvas must use the real web rendering, ideally isolated from the interface.
 
-L'éditeur peut ajouter des overlays de sélection, mais ceux-ci ne doivent pas faire partie des éléments exportés.
+The editor can add selection overlays, but they must not be part of the exported elements.
 
-Le rendu doit utiliser un contrat partagé avec l'exporteur.
+Rendering must use a contract shared with the exporter.
 
-Si la prévisualisation nécessite un service de rendu Astro, ce service doit être documenté, isolé et conçu pour éviter une reconstruction intégrale à chaque frappe.
+If the preview needs an Astro rendering service, the service must be documented, isolated and designed to avoid a full rebuild on every keystroke.
 
-### VE-08 — Responsive initial
+### VE-08 — Initial responsive
 
-Proposer :
+Offer:
 
 - Desktop.
 - Tablet.
 - Mobile.
-- Largeur personnalisée.
+- Custom width.
 
-Permettre des variantes par breakpoint sur au minimum :
+Allow variants per breakpoint on at least:
 
-- Espacements.
-- Direction Flex.
-- Colonnes Grid.
-- Alignement.
-- Tailles typographiques.
-- Visibilité.
+- Spacing.
+- Flex direction.
+- Grid columns.
+- Alignment.
+- Font sizes.
+- Visibility.
 
-Les valeurs non définies à un breakpoint héritent selon une règle explicite documentée.
+Values not set at a breakpoint inherit according to an explicit, documented rule.
 
-L'éditeur ne doit pas limiter le nombre de breakpoints possibles dans le modèle interne, même si l'interface n'en expose que quelques-uns.
+The editor must not limit the number of possible breakpoints in the internal model, even if the interface only exposes a few.
 
-### VE-09 — Historique et transactions
+### VE-09 — History and transactions
 
-Implémenter :
+Implement:
 
 - Undo.
 - Redo.
-- Regroupement des modifications continues.
-- Réinitialisation de l'historique après chargement.
-- Indication des modifications non enregistrées.
+- Grouping of continuous changes.
+- History reset after loading.
+- Indication of unsaved changes.
 
-Un déplacement de slider doit produire une transaction logique, pas des dizaines d'étapes d'annulation.
+Dragging a slider must produce one logical transaction, not dozens of undo steps.
 
-### VE-10 — Persistance
+### VE-10 — Persistence
 
-Premier adaptateur de stockage :
+First storage adapter:
 
-- Export JSON du document.
-- Import JSON validé.
-- Sauvegarde dans un environnement de développement contrôlé.
+- JSON export of the document.
+- Validated JSON import.
+- Saving in a controlled development environment.
 
-Un backend de persistance minimal ou un mécanisme d'enregistrement navigateur peut être utilisé pour le prototype.
+A minimal persistence backend or a browser storage mechanism can be used for the prototype.
 
-Le choix définitif d'une base de données est hors périmètre.
+The final choice of a database is out of scope.
 
-Les échecs de sauvegarde doivent être visibles et ne doivent jamais entraîner silencieusement la perte des modifications.
+Save failures must be visible and must never silently lose changes.
 
-### VE-11 — Export Astro
+### VE-11 — Astro export
 
-Produire un projet comprenant :
+Produce a project including:
 
 - `package.json`.
-- Configuration Astro.
+- Astro configuration.
 - Pages.
-- Composants nécessaires.
+- Needed components.
 - CSS.
 - Assets.
-- Instructions de compilation.
+- Build instructions.
 
-Le générateur peut utiliser des composants Astro partagés, à condition de produire des sources compréhensibles et autonomes.
+The generator can use shared Astro components, provided it produces understandable, standalone sources.
 
-Ne pas incorporer les contrôles de l'éditeur dans l'export.
+Do not include the editor's controls in the export.
 
-**Critères d'acceptation :**
+**Acceptance criteria:**
 
-- Le projet s'installe à partir du lockfile fourni.
-- La commande de build réussit.
-- Une page HTML est générée.
-- Les styles et médias sont accessibles.
-- Aucun accès au Studio n'est requis pour afficher la page.
-- Le code produit ne nécessite pas WordPress.
+- The project installs from the provided lockfile.
+- The build command succeeds.
+- An HTML page is generated.
+- Styles and media are reachable.
+- No access to the Studio is needed to display the page.
+- The produced code does not need WordPress.
 
-### VE-12 — Fidélité visuelle
+### VE-12 — Visual fidelity
 
-Établir un jeu de documents de référence comprenant :
+Establish a set of reference documents including:
 
-- Typographie simple.
-- Composition Flex.
-- Composition Grid.
+- Simple typography.
+- Flex composition.
+- Grid composition.
 - Images.
-- Espacements.
-- Variantes responsive.
-- Composants imbriqués.
+- Spacing.
+- Responsive variants.
+- Nested components.
 
-Comparer la prévisualisation et la page construite à viewport, navigateur, polices et données identiques.
+Compare the preview and the built page with identical viewport, browser, fonts and data.
 
-Les écarts doivent être mesurés et documentés.
+Differences must be measured and documented.
 
-## 3. Hors périmètre
+## 3. Out of scope
 
-- Gestion de plusieurs sites.
-- Navigation multipage.
-- CMS éditorial.
-- Comptes utilisateurs.
-- Collaboration temps réel.
-- Historique partagé.
-- Animations complexes.
+- Managing several sites.
+- Multi-page navigation.
+- Editorial CMS.
+- User accounts.
+- Real-time collaboration.
+- Shared history.
+- Complex animations.
 - Timeline.
-- IA générative.
-- Plugins tiers.
-- Formulaires dynamiques.
-- Publication sur serveur distant.
+- Generative AI.
+- Third-party plugins.
+- Dynamic forms.
+- Publishing to a remote server.
 
-## 4. Contraintes techniques
+## 4. Technical constraints
 
-- TypeScript strict.
-- React moderne.
-- Modèle documentaire indépendant de React.
-- Validation des documents aux frontières.
-- Absence de mutation directe incontrôlée de l'arbre.
-- Rendu HTML sémantique.
-- Styles typés et contrôlés.
-- Pas de JavaScript personnalisé arbitraire dans les composants.
-- Dépendances documentées.
+- Strict TypeScript.
+- Modern React.
+- Document model independent of React.
+- Document validation at the boundaries.
+- No uncontrolled direct mutation of the tree.
+- Semantic HTML rendering.
+- Typed, controlled styles.
+- No arbitrary custom JavaScript in components.
+- Documented dependencies.
 
-## 5. Plan de développement agentique
+## 5. Agentic development plan
 
-### Lot VE-A — Initialisation
+### Batch VE-A — Initialization
 
-- Structure du projet.
-- Outillage TypeScript.
-- Lint et formatage.
-- Tests unitaires.
-- Environnement de développement.
-- Première application React.
+- Project structure.
+- TypeScript tooling.
+- Lint and formatting.
+- Unit tests.
+- Development environment.
+- First React application.
 
-**Livrable :** application initiale exécutable.
+**Deliverable:** initial runnable application.
 
-### Lot VE-B — Document Model
+### Batch VE-B — Document Model
 
-- Schémas.
+- Schemas.
 - Types.
 - Validation.
-- Sérialisation.
-- Commandes élémentaires.
+- Serialization.
+- Elementary commands.
 - Tests.
 
-**Livrable :** moteur documentaire testable sans interface graphique.
+**Deliverable:** document engine testable without a graphical interface.
 
-### Lot VE-C — Registry & Renderer
+### Batch VE-C — Registry & Renderer
 
-- Contrat des composants.
-- Registre initial.
-- Composants fondamentaux.
-- Moteur de styles.
-- Rendu de référence.
+- Component contract.
+- Initial registry.
+- Fundamental components.
+- Style engine.
+- Reference rendering.
 
-**Livrable :** document affiché à partir de JSON.
+**Deliverable:** document displayed from JSON.
 
-### Lot VE-D — Editor Shell
+### Batch VE-D — Editor Shell
 
-- Panneaux.
+- Panels.
 - Canvas.
-- Sélection.
-- Arborescence.
-- Inspecteur initial.
+- Selection.
+- Tree.
+- Initial inspector.
 
-**Livrable :** propriétés modifiables visuellement.
+**Deliverable:** properties editable visually.
 
-### Lot VE-E — Composition
+### Batch VE-E — Composition
 
 - Insertion.
 - Drag & drop.
 - Duplication.
-- Suppression.
+- Deletion.
 - Undo/redo.
 - Responsive.
 
-**Livrable :** véritable page éditable.
+**Deliverable:** a real editable page.
 
-### Lot VE-F — Persistance & Export
+### Batch VE-F — Persistence & Export
 
-- Sauvegarde/chargement.
-- Génération Astro.
-- Compilation isolée.
-- Tests de fidélité.
+- Save/load.
+- Astro generation.
+- Isolated build.
+- Fidelity tests.
 
-**Livrable :** page Astro exportée depuis l'éditeur.
+**Deliverable:** Astro page exported from the editor.
 
-Les lots sont séquentiels au niveau des contrats, mais des sous-tâches peuvent être parallélisées après stabilisation des interfaces.
+The batches are sequential as far as contracts go, but subtasks can run in parallel once the interfaces are stable.
 
-## 6. Démonstration de fin de jalon
+## 6. End-of-milestone demonstration
 
-Créer une page comprenant :
+Create a page including:
 
-- Une section hero.
-- Un titre et un paragraphe.
-- Un bouton.
-- Une image.
-- Une grille de trois cartes.
-- Une disposition mobile adaptée.
+- A hero section.
+- A heading and a paragraph.
+- A button.
+- An image.
+- A grid of three cards.
+- An adapted mobile layout.
 
-Modifier son design, enregistrer, fermer/recharger, puis exporter.
+Change its design, save, close/reload, then export.
 
-Exécuter le projet Astro indépendamment du Studio.
+Run the Astro project independently of the Studio.
 
 ## 7. Definition of Done
 
-- Scénario démontrable de bout en bout.
-- Export Astro autonome.
-- Composants fondamentaux opérationnels.
-- Sélection et manipulation visuelles.
-- Historique fiable.
-- Sauvegarde/chargement.
-- Tests du modèle documentaire.
-- Tests de rendu et d'export.
-- Contrôles d'accessibilité de base.
-- Documentation des limites.
-- Aucun blocage empêchant le jalon 2.
-
+- Scenario demonstrable end to end.
+- Standalone Astro export.
+- Fundamental components working.
+- Visual selection and manipulation.
+- Reliable history.
+- Save/load.
+- Document model tests.
+- Rendering and export tests.
+- Basic accessibility checks.
+- Documented limitations.
+- Nothing blocking milestone 2.

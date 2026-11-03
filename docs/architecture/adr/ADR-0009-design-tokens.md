@@ -1,59 +1,58 @@
 # ADR-0009 — Design tokens
 
-**Statut :** Accepté le 30/10/2026 (mise en œuvre de l'étude jalon 2 §4.3, tranche 3) · **Date :** 30/10/2026 · **Réf. :** SB-05, ADR-0007
+**Status:** Accepted on 10/30/2026 (implementation of the milestone 2 study §4.3, slice 3) · **Date:** 10/30/2026 · **Ref.:** SB-05, ADR-0007
 
-## Contexte
+## Context
 
-SB-05 demande des couleurs nommées, une typographie (familles, styles de titres et de texte, graisses, tailles,
-interlignes, variantes responsive), une échelle d'espacement, des rayons et des largeurs maximales. Un token modifié
-doit se répercuter sur tous les composants qui le référencent, et les valeurs personnalisées doivent rester
-possibles. Le rendu doit rester identique entre le canvas et l'export (ADR-0002).
+SB-05 asks for named colors, typography (families, heading and text styles, weights, sizes, line heights,
+responsive variants), a spacing scale, radii and maximum widths. A changed token must apply to every component that
+references it, and custom values must remain possible. Rendering must stay identical between the canvas and the
+export (ADR-0002).
 
-## Décision
+## Decision
 
-1. **Champ optionnel `tokens` de la v2** (pas de migration) :
-   - `colors` : `{ label, value: #hex }` ;
-   - `sizes` : `{ label, group: spacing | radius | width | font, value: { base, [breakpoint]? } }` ;
-   - `fonts` : `{ label, stack: string[] }` ;
-   - `textStyles` : `{ label, style: { base?, [breakpoint]? } }`, chacun limité à `fontFamily`, `fontSize`,
-     `fontWeight` et `lineHeight`.
+1. **Optional `tokens` field of v2** (no migration):
+   - `colors`: `{ label, value: #hex }`;
+   - `sizes`: `{ label, group: spacing | radius | width | font, value: { base, [breakpoint]? } }`;
+   - `fonts`: `{ label, stack: string[] }`;
+   - `textStyles`: `{ label, style: { base?, [breakpoint]? } }`, each limited to `fontFamily`, `fontSize`,
+     `fontWeight` and `lineHeight`.
 
-   Les ids de tokens suivent `^[a-z][a-z0-9-]{0,31}$` et ne changent pas : renommer un token ne modifie que son
-   libellé.
-2. **Référence = `{ token: id }`** à la place d'une valeur littérale :
-   - les couleurs (`color`, `backgroundColor`) référencent `colors` ;
-   - les longueurs référencent `sizes` ;
-   - deux nouvelles propriétés de style, `fontFamily` et `textStyle`, référencent `fonts` et `textStyles`.
+   Token ids follow `^[a-z][a-z0-9-]{0,31}$` and never change: renaming a token only changes its label.
+2. **Reference = `{ token: id }`** instead of a literal value:
+   - colors (`color`, `backgroundColor`) reference `colors`;
+   - lengths reference `sizes`;
+   - two new style properties, `fontFamily` and `textStyle`, reference `fonts` and `textStyles`.
 
-   `loadSite` refuse une référence vers un token absent (`missing-token`) ou vers un breakpoint inconnu.
-3. **Tout passe par des variables CSS.** `toCss` émet `:root { --ns-color-<id>; --ns-size-<id>; --ns-font-<id>;
-   --ns-text-<id>-<propriété> }`, puis redéfinit les valeurs responsives dans les mêmes `@media (max-width)` que
-   les nœuds. Une référence produit `var(--ns-…)`. Modifier un token change donc une variable, sans réécrire les
-   nœuds.
-4. **Styles de texte sans classe supplémentaire.** Un nœud dont le style contient `textStyle` reçoit, dans sa
-   propre règle et avant ses propriétés locales, les déclarations `font-*: var(--ns-text-<id>-…)`. Les valeurs
-   locales l'emportent par l'ordre de la cascade. Les vues React ne changent pas, et l'export non plus.
-5. **Styles par défaut des éléments.** Les styles de texte d'id `body` et `h1`…`h6` s'appliquent aussi aux
-   éléments correspondants (`body{…}`, `h1{…}`). Une classe de nœud reste prioritaire.
-6. **Polices** :
-   - le Studio n'accepte que les piles de familles (polices système ou installées) ; chaque nom doit respecter
-     `^[A-Za-z0-9 _-]{1,60}$` et est entouré de guillemets à l'émission, sauf les familles génériques ;
-   - aucun appel à un service tiers ;
-   - les fichiers de police (`@font-face`) arriveront avec la médiathèque (tranche 5).
-7. **Commandes** : `setToken { kind, id, value }` crée ou remplace un token, `removeToken { kind, id }` le supprime.
-   La suppression d'un token référencé est refusée avec le nombre de références.
+   `loadSite` refuses a reference to a missing token (`missing-token`) or to an unknown breakpoint.
+3. **Everything goes through CSS variables.** `toCss` emits `:root { --ns-color-<id>; --ns-size-<id>; --ns-font-<id>;
+   --ns-text-<id>-<property> }`, then redefines the responsive values in the same `@media (max-width)` as the
+   nodes. A reference produces `var(--ns-…)`. Changing a token therefore changes a variable, without rewriting the
+   nodes.
+4. **Text styles without an extra class.** A node whose style contains `textStyle` receives, in its own rule and
+   before its local properties, the `font-*: var(--ns-text-<id>-…)` declarations. Local values win by cascade
+   order. The React views do not change, and neither does the export.
+5. **Default styles of elements.** The text styles with ids `body` and `h1`…`h6` also apply to the matching
+   elements (`body{…}`, `h1{…}`). A node class stays a priority.
+6. **Fonts**:
+   - the Studio only accepts family stacks (system or installed fonts); each name must match
+     `^[A-Za-z0-9 _-]{1,60}$` and is quoted on emission, except generic families;
+   - no call to a third-party service;
+   - font files (`@font-face`) will come with the media library (slice 5).
+7. **Commands**: `setToken { kind, id, value }` creates or replaces a token, `removeToken { kind, id }` deletes it.
+   Deleting a referenced token is refused with the number of references.
 
 ## Alternatives
 
-- **Remplacer les valeurs dans les nœuds** à la modification : CSS sans variables, mais modifier un token réécrit
-  tout le site et l'historique, et l'export perd la notion de token.
-- **Classe `ns-text-<id>` ajoutée par la vue** : sélecteur plus lisible, mais il faut modifier toutes les vues
-  textuelles et leur contrat d'export.
-- **Tokens libres (`--var` arbitraire)** : plus souple, mais c'est une porte d'injection CSS, et l'inspecteur ne
-  saurait plus quelles valeurs proposer.
+- **Replacing the values in the nodes** on change: CSS without variables, but changing a token rewrites the whole
+  site and the history, and the export loses the notion of token.
+- **An `ns-text-<id>` class added by the view**: a more readable selector, but every text view and its export
+  contract must change.
+- **Free tokens (arbitrary `--var`)**: more flexible, but a door to CSS injection, and the inspector would no longer
+  know which values to offer.
 
-## Conséquences
+## Consequences
 
-- Le CSS exporté contient un bloc `:root` lisible, que reprend la documentation de l'export.
-- Ombres et création de breakpoints ne sont pas couvertes ici : il n'existe pas de propriété d'ombre, et les
-  breakpoints restent ceux des modèles. Ces points sont reportés et documentés dans les limites.
+- The exported CSS contains a readable `:root` block, which the export documentation repeats.
+- Shadows and creating breakpoints are not covered here: there is no shadow property, and the breakpoints remain
+  those of the templates. These points are postponed and documented in the limitations.

@@ -8,6 +8,7 @@ export default defineConfig({
       'apps/*/dev-server/**/*.test.ts',
       'apps/*/*.test.ts',
       'templates/*.test.ts',
+      'tests/*.test.ts',
     ],
     exclude: ['**/template/**'],
   },

@@ -1,9 +1,9 @@
-name: Vérifier, construire et déployer
+name: Check, build and deploy
 
-# Sécurité de la chaîne (ADR-0015) : actions épinglées par commit (mises à jour par Dependabot), droits
-# minimaux par job, Node LTS au dernier correctif à chaque exécution, audit des dépendances, clé d'hôte SSH
-# vérifiée, déploiements sérialisés. Dépôt public : seul un tag de version (v*) déploie, après approbation
-# sur l'environnement production ; un push sur main ne fait que vérifier et construire l'image.
+# Supply-chain security (ADR-0015): actions pinned by commit (updated by Dependabot), least privilege
+# per job, Node LTS at the latest patch on each run, dependency audit, SSH host key checked, deployments
+# serialized. Public repository: only a version tag (v*) deploys, after approval on the production
+# environment; a push to main only checks and builds the image.
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # 26 : LTS active (image de production) ; 24 : LTS de maintenance (postes de développement).
+        # 26: active LTS (production image); 24: maintenance LTS (development machines).
         node: [26, 24]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -38,7 +38,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
-      - name: Audit des dépendances d'exécution
+      - name: Audit runtime dependencies
         run: npm audit --omit=dev --audit-level=high
       - run: npm run check
 
@@ -71,7 +71,7 @@ jobs:
         with:
           context: .
           push: true
-          # Image de base revérifiée à chaque build (correctifs Alpine appliqués dans le Dockerfile).
+          # Base image checked again on each build (Alpine patches applied in the Dockerfile).
           pull: true
           provenance: true
           sbom: true
@@ -82,7 +82,7 @@ jobs:
 
   deploy:
     needs: build-and-push
-    # Tags de version seulement ; désactivé tant que le serveur n'est pas configuré (DEPLOY_PATH absente).
+    # Version tags only; disabled until the server is configured (no DEPLOY_PATH).
     if: startsWith(github.ref, 'refs/tags/v') && vars.DEPLOY_PATH != ''
     runs-on: ubuntu-latest
     environment: production
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Copier compose.yaml sur le serveur
+      - name: Copy compose.yaml to the server
         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -102,7 +102,7 @@ jobs:
           fingerprint: ${{ secrets.SSH_FINGERPRINT }}
           source: compose.yaml
           target: ${{ vars.DEPLOY_PATH }}
-      - name: Déployer l'image de ce commit
+      - name: Deploy the image of this commit
         uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
         env:
           GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
@@ -118,15 +118,15 @@ jobs:
           script: |
             set -eu
             cd "$DEPLOY_PATH"
-            # Configuration Docker jetable : le compte SSH garde ses propres identifiants ghcr.io
-            # (autres images), qu'un login/logout dans ~/.docker écraserait puis effacerait.
+            # Throwaway Docker configuration: the SSH account keeps its own ghcr.io credentials
+            # (other images), which a login/logout in ~/.docker would overwrite then erase.
             export DOCKER_CONFIG="$(mktemp -d)"
             trap 'rm -rf "$DOCKER_CONFIG"' EXIT
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
             export IMAGE_TAG
             docker compose pull
             docker compose up -d --remove-orphans
-            # Attendre que le conteneur soit sain, sinon échouer (retour arrière : voir deploy/README.md).
+            # Wait for the container to be healthy, else fail (rollback: see deploy/README.md).
             for i in $(seq 1 30); do
               [ "$(docker inspect -f '{{.State.Health.Status}}' netvolution-studio)" = healthy ] && break
               sleep 2

@@ -55,7 +55,7 @@ for (const width of [1280, 1024, 768, 375]) {
     + Math.abs(a.styles.length - b.styles.length);
   const pixels = shots['/'].equals(shots['/preview/']);
   if (!html || styleDiffs || !pixels) failures++;
-  console.log(`${width}px  DOM identique: ${html}  éléments à style/box différent: ${styleDiffs}/${a.styles.length}  pixels identiques: ${pixels}`);
+  console.log(`${width}px  identical DOM: ${html}  elements with different style/box: ${styleDiffs}/${a.styles.length}  identical pixels: ${pixels}`);
   await page.close();
 }
 console.log(`<script> dans l'export statique: ${scripts}`);

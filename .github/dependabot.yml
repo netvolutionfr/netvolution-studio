@@ -1,5 +1,5 @@
-# Mises à jour de sécurité et de version (ADR-0015) : actions (épinglées par commit), image Node du
-# Dockerfile, dépendances npm. Chaque proposition passe par la CI (pull request) avant fusion.
+# Security and version updates (ADR-0015): actions (pinned by commit), Node image of the
+# Dockerfile, npm dependencies. Each proposal goes through the CI (pull request) before merging.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -22,6 +22,6 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
-      # Types de la version minimale supportée (engines: node >=24) : pas de montée majeure.
+      # Types of the minimum supported version (engines: node >=24): no major upgrade.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]

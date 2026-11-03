@@ -1,93 +1,94 @@
-# Design system du Studio
+# Studio design system
 
-**Portée :** interface de l'éditeur uniquement (`apps/studio/src/ui/`, `apps/studio/src/shell/`). Les sites exportés et le canvas n'en dépendent pas, ce que vérifie `apps/studio/src/isolation.test.ts`. Décision : [ADR-0006](../architecture/adr/ADR-0006-design-system-studio.md).
+**Scope:** the editor interface only (`apps/studio/src/ui/`, `apps/studio/src/shell/`). Exported sites and the canvas do not depend on it, which `apps/studio/src/isolation.test.ts` checks. Decision: [ADR-0006](../architecture/adr/ADR-0006-studio-design-system.md).
 
-## 1. Audit initial (29/10/2026)
+## 1. Initial audit (10/29/2026)
 
-| Zone | Constat |
+| Area | Finding |
 |---|---|
-| Styles | Un seul `shell.css` (456 lignes, 80 règles) avec 8 variables de couleur seulement, et des couleurs en dur dans le canvas. Thème clair implicite, pas de thème sombre. Pas d'échelle typographique ni d'espacements. |
-| Barre d'outils | Boutons texte (Enregistrer, Importer JSON, Exporter JSON, Exporter Astro, Annuler, Rétablir, Aperçu, Desktop, Tablette, Mobile) sur une ou deux lignes. Notifications intercalées dans la barre. |
-| Bibliothèque | Boutons texte en ligne, sans icône. |
-| Arborescence | Libellé suivi du type en texte ; chevrons ▾/▸ en caractères. |
-| Inspecteur | Libellés au-dessus de chaque contrôle (peu dense), actions en boutons texte, sections non repliables. Textes « défini · réinitialiser » / « hérité » à côté des libellés. Selects pour tous les choix. |
-| Texte enrichi | Boutons « Gras », « Italique », « Lien », « Retirer le lien » en texte. |
-| États | Hover, focus et disabled minimaux ; pas de sélection marquée dans les contrôles groupés. |
+| Styles | A single `shell.css` (456 lines, 80 rules) with only 8 color variables, and hard-coded colors in the canvas. Implicit light theme, no dark theme. No typographic or spacing scale. |
+| Toolbar | Text buttons (Save, Import JSON, Export JSON, Export Astro, Undo, Redo, Preview, Desktop, Tablet, Mobile) on one or two lines. Notifications inserted into the bar. |
+| Library | Inline text buttons, without icons. |
+| Tree | Label followed by the type as text; ▾/▸ chevrons as characters. |
+| Inspector | Labels above each control (not dense), actions as text buttons, sections not collapsible. "set · reset" / "inherited" texts next to the labels. Selects for every choice. |
+| Rich text | "Bold", "Italic", "Link", "Remove link" buttons as text. |
+| States | Minimal hover, focus and disabled; no marked selection in grouped controls. |
 
-Captures avant/après : voir §5.
+Before/after screenshots: see §5.
 
 ## 2. Tokens (`ui/tokens.css`)
 
-Les composants n'utilisent que des tokens sémantiques. Un thème se résume donc à un bloc d'override : `:root` pour le sombre (défaut), `:root[data-theme='light']` pour le clair.
+Components use semantic tokens only. A theme is therefore one override block: `:root` for dark (the default), `:root[data-theme='light']` for light.
 
-| Famille | Tokens |
+| Family | Tokens |
 |---|---|
-| Surfaces | `--bg-app` (fond du canvas), `--bg-panel`, `--bg-elevated` (menus, tuiles), `--bg-hover`, `--bg-active`, `--bg-input` |
-| Traits | `--border`, `--border-strong` |
-| Texte | `--text`, `--text-muted`, `--text-subtle` (contraste ≥ 4,5:1 sur les surfaces de panneau) |
-| Accent | `--accent` et `--accent-fg` (surfaces pleines, ≥ 4,5:1), `--accent-text` (texte sur panneau), `--accent-soft` (sélection) |
-| États | `--danger`, `--danger-bg`, `--success`, `--warning`, `--focus-ring` |
+| Surfaces | `--bg-app` (canvas background), `--bg-panel`, `--bg-elevated` (menus, tiles), `--bg-hover`, `--bg-active`, `--bg-input` |
+| Lines | `--border`, `--border-strong` |
+| Text | `--text`, `--text-muted`, `--text-subtle` (contrast ≥ 4.5:1 on panel surfaces) |
+| Accent | `--accent` and `--accent-fg` (solid surfaces, ≥ 4.5:1), `--accent-text` (text on a panel), `--accent-soft` (selection) |
+| States | `--danger`, `--danger-bg`, `--success`, `--warning`, `--focus-ring` |
 | Canvas | `--overlay-hover`, `--overlay-selected` |
-| Typographie | `--font-ui` (polices système), `--font-mono` ; tailles `--text-xs` 11, `--text-sm` 12, `--text-md` 13, `--text-lg` 14 ; `--leading` 1,4 ; graisses 500 / 600 |
-| Espacements | Grille de 4 px avec demi-pas : `--space-1` 2 … `--space-7` 24 |
+| Typography | `--font-ui` (system fonts), `--font-mono`; sizes `--text-xs` 11, `--text-sm` 12, `--text-md` 13, `--text-lg` 14; `--leading` 1.4; weights 500 / 600 |
+| Spacing | 4 px grid with half steps: `--space-1` 2 … `--space-7` 24 |
 | Dimensions | `--control-h` 28, `--control-h-sm` 24, `--toolbar-h` 44 |
-| Rayons | `--radius-sm` 4, `--radius-md` 6, `--radius-lg` 8 |
-| Ombres | `--shadow-popover`, `--shadow-frame` |
-| Mouvement | `--transition` 120 ms, ramené à 0 avec `prefers-reduced-motion`. Les transitions sont aussi coupées pendant un changement de thème (`.no-transitions`). |
+| Radii | `--radius-sm` 4, `--radius-md` 6, `--radius-lg` 8 |
+| Shadows | `--shadow-popover`, `--shadow-frame` |
+| Motion | `--transition` 120 ms, brought to 0 with `prefers-reduced-motion`. Transitions are also cut during a theme change (`.no-transitions`). |
 
 ## 3. Primitives (`ui/`)
 
-| Primitive | Rôle | Comportement |
+| Primitive | Role | Behavior |
 |---|---|---|
-| `Button` | Bouton texte, variantes `default`, `ghost`, `primary`, `danger`, tailles `sm`/`md`, icône optionnelle | Natif `<button>` |
-| `IconButton` | Bouton icône seule | `label` obligatoire : nom accessible et infobulle (avec raccourci) |
-| `Tip` | Infobulle | Radix Tooltip : survol **et** focus clavier, Échap |
-| `Segmented` | Choix unique compact (largeur d'aperçu, direction, alignement du texte) | Radix ToggleGroup : sémantique radio, flèches (focus itinérant asynchrone) ; infobulle native `title` |
-| `Menu` | Menu déroulant à déclencheur icône | Radix DropdownMenu : flèches, recherche par frappe, Échap, retour du focus |
-| `Section` | Section repliable de l'inspecteur | `<details>`/`<summary>` natifs |
-| `Field` | Ligne d'inspecteur : libellé à gauche, contrôle, action | Pastille d'état « défini / hérité » avec alternative textuelle ; variante empilée |
-| `icons.ts` | Icône par type de composant et par composition | `lucide-react`, `aria-hidden` |
+| `Button` | Text button, `default`, `ghost`, `primary`, `danger` variants, `sm`/`md` sizes, optional icon | Native `<button>` |
+| `IconButton` | Icon-only button | `label` required: accessible name and tooltip (with shortcut) |
+| `Tip` | Tooltip | Radix Tooltip: hover **and** keyboard focus, Escape |
+| `Segmented` | Compact single choice (preview width, direction, text alignment) | Radix ToggleGroup: radio semantics, arrows (asynchronous roving focus); native `title` tooltip |
+| `Menu` | Drop-down menu with an icon trigger | Radix DropdownMenu: arrows, type-ahead, Escape, focus return |
+| `Section` | Collapsible inspector section | Native `<details>`/`<summary>` |
+| `Field` | Inspector row: label on the left, control, action | "set / inherited" status dot with a text alternative; stacked variant |
+| `icons.ts` | Icon per component type and per composition | `lucide-react`, `aria-hidden` |
 
-**Règles d'usage**
+**Usage rules**
 
-- Pas de couleur en dur dans `shell.css`. Seul `#ffffff` est admis, pour le fond de la page et le texte du libellé d'overlay, qui reposent sur le site lui-même ; un test le vérifie.
-- Une action sans texte visible passe par `IconButton`, pour qu'elle ait toujours un nom et une infobulle.
-- Le nom accessible d'un contrôle avec texte visible doit contenir ce texte (WCAG 2.5.3, vérifié par axe).
-- Pas d'infobulle Radix sur un élément qui porte déjà un `data-state` Radix (items de ToggleGroup) : les attributs entrent en collision.
-- Nouvelle primitive : seulement si elle sert à au moins deux endroits, ou si elle apporte un comportement accessible.
+- No hard-coded color in `shell.css`. Only `#ffffff` is allowed, for the page background and the text of the overlay label, which sit on the site itself; a test checks it.
+- An action without visible text goes through `IconButton`, so that it always has a name and a tooltip.
+- The accessible name of a control with visible text must contain that text (WCAG 2.5.3, checked by axe).
+- No Radix tooltip on an element that already carries a Radix `data-state` (ToggleGroup items): the attributes collide.
+- No hard-coded text: labels go through `t()` (ADR-0024).
+- New primitive: only if it serves at least two places, or brings an accessible behavior.
 
-## 4. Vérifications
+## 4. Checks (at the time of the audit)
 
-| Vérification | Résultat |
+| Check | Result |
 |---|---|
-| `npm run check` | 71 tests unitaires, dont l'isolation : canvas sans UI ni icônes ni Radix, gabarit d'export et composants inchangés, tokens confinés |
-| `npm run test:e2e` | 26/26 ; s'y ajoutent l'infobulle avec raccourci, le contrôle segmenté au clavier et le thème clair audité par axe |
-| Accessibilité | axe (WCAG 2.1 AA, violations graves) : 0 en thème sombre comme en thème clair |
-| `npm run test:fidelity` | 20/20 identiques : rendu et export non affectés |
-| `npm run demo` | Réussie |
-| Bundle | Les icônes et Radix ne sont que dans le bundle du shell (`index-*.js` : 159 Ko, 51 Ko gzip, contre 20 Ko avant). Le bundle du canvas n'a pas changé. |
+| `npm run check` | 71 unit tests, including isolation: canvas without UI, icons or Radix, export template and components unchanged, tokens confined |
+| `npm run test:e2e` | 26/26; added: tooltip with shortcut, segmented control with the keyboard and light theme audited by axe |
+| Accessibility | axe (WCAG 2.1 AA, serious violations): 0 in dark as in light theme |
+| `npm run test:fidelity` | 20/20 identical: rendering and export unaffected |
+| `npm run demo` | Succeeded |
+| Bundle | Icons and Radix are only in the shell bundle (`index-*.js`: 159 KB, 51 KB gzip, against 20 KB before). The canvas bundle did not change. |
 
-Problèmes trouvés en cours de route :
+Problems found along the way:
 
-- Contraste du libellé d'overlay : `--overlay-selected` assombri.
-- Transitions de couleur captées par axe pendant le changement de thème : coupées pendant la bascule.
-- Collision `data-state` entre Tooltip et ToggleGroup, qui annulait l'état sélectionné visuel.
-- Champ texte écrasé en disposition empilée.
-- Tuiles de composition tronquées.
+- Contrast of the overlay label: `--overlay-selected` darkened.
+- Color transitions caught by axe during the theme change: cut during the switch.
+- `data-state` collision between Tooltip and ToggleGroup, which canceled the visual selected state.
+- Text field squashed in the stacked layout.
+- Composition tiles truncated.
 
-## 5. Captures (1440 × 900, `node tests/e2e/screens.ts <préfixe>`)
+## 5. Screenshots (1440 × 900, `node tests/e2e/screens.ts <prefix>`)
 
-| État | Avant | Après |
+| State | Before | After |
 |---|---|---|
-| Titre sélectionné | ![](avant-1-titre.png) | ![](apres-1-titre.png) |
-| Conteneur (layout) | ![](avant-2-layout.png) | ![](apres-2-layout.png) |
-| Mobile, texte enrichi | ![](avant-3-mobile-texte.png) | ![](apres-3-mobile-texte.png) |
-| Glisser-déposer | ![](avant-4-glisser.png) | ![](apres-4-glisser.png) |
-| Thème clair | — | ![](apres-5-theme-clair.png) |
+| Heading selected | ![](avant-1-titre.png) | ![](apres-1-titre.png) |
+| Container (layout) | ![](avant-2-layout.png) | ![](apres-2-layout.png) |
+| Mobile, rich text | ![](avant-3-mobile-texte.png) | ![](apres-3-mobile-texte.png) |
+| Drag and drop | ![](avant-4-glisser.png) | ![](apres-4-glisser.png) |
+| Light theme | — | ![](apres-5-theme-clair.png) |
 
-## 6. Limites et suites
+## 6. Limits and next steps
 
-- **Selects natifs** stylés, rendus par le système une fois ouverts. Un Radix Select n'apporterait qu'une cohérence visuelle, au prix d'une dépendance de plus.
-- **Thème** non synchronisé avec `prefers-color-scheme` : choix explicite, mémorisé.
-- **Champ couleur.** Le sélecteur natif n'affiche ni alpha ni palette ; la palette viendra avec les design tokens du jalon 2.
-- **Espacements** en grille de champs. Un widget « boîte » façon Figma reste possible.
+- **Native selects**, styled, rendered by the system once open. A Radix Select would only bring visual consistency, at the cost of one more dependency.
+- **Theme** not synchronized with `prefers-color-scheme`: an explicit, remembered choice.
+- **Color field.** The native picker shows neither alpha nor palette; token colors are offered next to it.
+- **Spacing** as a grid of fields. A Figma-like "box" widget remains possible.

@@ -1,375 +1,374 @@
-# Jalon 2 — Site Builder
+# Milestone 2 — Site Builder
 
-**Document :** `docs/specifications/02-site-builder.md`  
-**Version :** 0.1  
-**Dépendances :** `00-foundations.md`, `01-visual-editor.md`
+**Document:** `docs/specifications/02-site-builder.md`  
+**Version:** 0.1  
+**Depends on:** `00-foundations.md`, `01-visual-editor.md`
 
-## 1. Objectif
+## 1. Goal
 
-Étendre Visual Editor pour permettre la création et l'export d'un site vitrine multipage complet.
+Extend the Visual Editor to create and export a complete multi-page showcase site.
 
-Le concepteur doit pouvoir gérer la structure, l'identité graphique, les ressources et la navigation depuis une seule application.
+The designer must be able to manage the structure, the visual identity, the resources and the navigation from a single application.
 
-À l'issue du jalon, le produit doit permettre de réaliser un véritable site client.
+At the end of the milestone, the product must make it possible to build a real client site.
 
-## 2. Périmètre fonctionnel
+## 2. Functional scope
 
-### SB-01 — Gestion des projets
+### SB-01 — Project management
 
-Permettre de :
+Make it possible to:
 
-- Créer un projet.
-- Le nommer.
-- L'ouvrir.
-- Le dupliquer.
-- Le supprimer avec confirmation.
-- Enregistrer les modifications.
-- Définir sa langue et son URL canonique de référence.
+- Create a project.
+- Name it.
+- Open it.
+- Duplicate it.
+- Delete it with confirmation.
+- Save the changes.
+- Set its language and its reference canonical URL.
 
-Chaque projet possède un identifiant stable.
+Each project has a stable id.
 
-Les projets doivent être isolés dans leur stockage, y compris leurs ressources.
+Projects must be isolated in their storage, including their resources.
 
-L'environnement de développement peut rester mono-utilisateur. L'architecture doit néanmoins permettre l'introduction ultérieure des comptes et des organisations.
+The development environment can stay single-user. The architecture must nevertheless allow accounts and organizations to be introduced later.
 
-### SB-02 — Gestion des pages
+### SB-02 — Page management
 
-Créer une interface de gestion des pages comprenant :
+Create a page management interface including:
 
-- Ajout.
-- Renommage.
-- Duplication.
-- Suppression.
-- Réorganisation.
-- Définition de la page d'accueil.
-- Gestion des slugs.
-- Pages publiables ou exclues de l'export.
-- Métadonnées de base.
+- Adding.
+- Renaming.
+- Duplicating.
+- Deleting.
+- Reordering.
+- Setting the home page.
+- Managing slugs.
+- Pages published or excluded from the export.
+- Basic metadata.
 
-La structure des URL doit être indépendante des libellés visibles.
+The URL structure must be independent of the visible labels.
 
-Une modification de slug doit signaler les éventuels liens internes concernés.
+Changing a slug must signal the internal links concerned.
 
-Ne pas créer automatiquement une hiérarchie d'URL à partir des menus : structure des pages et structure de navigation sont distinctes.
+Do not automatically create a URL hierarchy from the menus: page structure and navigation structure are separate.
 
 ### SB-03 — Navigation
 
-Créer un éditeur de menus.
+Create a menu editor.
 
-Fonctions :
+Features:
 
-- Plusieurs menus nommés.
-- Entrées liées à une page.
-- Entrées liées à une URL externe.
-- Libellés personnalisés.
-- Réorganisation.
-- Sous-menus à profondeur limitée dans le premier rendu.
-- États actif et courant.
-- Navigation responsive.
+- Several named menus.
+- Items linked to a page.
+- Items linked to an external URL.
+- Custom labels.
+- Reordering.
+- Submenus with a limited depth in the first rendering.
+- Active and current states.
+- Responsive navigation.
 
-Une page peut exister sans figurer dans un menu.
+A page can exist without being in a menu.
 
-Une page peut apparaître dans plusieurs menus.
+A page can appear in several menus.
 
-Les liens internes doivent utiliser des références aux pages plutôt que de simples URL copiées.
+Internal links must use page references rather than copied URLs.
 
-### SB-04 — Header et footer
+### SB-04 — Header and footer
 
-Permettre de concevoir des compositions partagées.
+Make it possible to design shared compositions.
 
-Le header doit notamment accepter :
+The header must accept in particular:
 
 - Logo.
 - Navigation.
-- Boutons.
-- Conteneurs et compositions.
-- Variantes responsive.
+- Buttons.
+- Containers and compositions.
+- Responsive variants.
 
-Le footer doit accepter :
+The footer must accept:
 
-- Texte.
+- Text.
 - Images.
-- Liens.
+- Links.
 - Menus.
-- Colonnes et composants standards.
+- Columns and standard components.
 
-La modification d'un header ou footer partagé doit se répercuter sur toutes les pages auxquelles il est appliqué.
+Changing a shared header or footer must apply to every page it is applied to.
 
-Le modèle doit permettre plusieurs variantes, même si la première interface peut se limiter à un header et un footer principaux.
+The model must allow several variants, even if the first interface can be limited to one main header and footer.
 
 ### SB-05 — Design System
 
-Créer un espace de configuration globale.
+Create a global configuration space.
 
-#### Couleurs
+#### Colors
 
-- Couleurs nommées.
-- Palette principale.
-- Variables globales.
-- Références depuis les composants.
+- Named colors.
+- Main palette.
+- Global variables.
+- References from components.
 
-#### Typographie
+#### Typography
 
-- Familles de polices.
-- Styles de titres.
-- Texte courant.
-- Graisses.
-- Tailles.
-- Interlignes.
-- Espacements.
-- Variantes responsive.
+- Font families.
+- Heading styles.
+- Body text.
+- Weights.
+- Sizes.
+- Line heights.
+- Letter spacing.
+- Responsive variants.
 
-#### Espacements
+#### Spacing
 
-- Échelle d'espacement.
-- Valeurs réutilisables.
-- Valeurs personnalisées autorisées.
+- Spacing scale.
+- Reusable values.
+- Custom values allowed.
 
-#### Autres tokens
+#### Other tokens
 
-- Rayons.
-- Ombres.
-- Largeurs maximales.
+- Radii.
+- Shadows.
+- Maximum widths.
 - Breakpoints.
 
-La modification d'un token doit se répercuter sur les composants qui le référencent.
+Changing a token must apply to the components that reference it.
 
-Les valeurs personnalisées doivent rester possibles.
+Custom values must remain possible.
 
-### SB-06 — Médiathèque
+### SB-06 — Media library
 
-Permettre :
+Allow:
 
-- Import d'images.
-- Import de SVG valides et sûrs.
-- Import de fichiers téléchargeables.
-- Organisation et recherche.
-- Prévisualisation.
-- Métadonnées.
-- Texte alternatif.
-- Détection des ressources manquantes.
-- Réutilisation sur plusieurs pages.
+- Importing images.
+- Importing valid, safe SVGs.
+- Importing downloadable files.
+- Organization and search.
+- Preview.
+- Metadata.
+- Alternative text.
+- Detection of missing resources.
+- Reuse on several pages.
 
-Les composants référencent les médias par identifiant stable.
+Components reference media by stable id.
 
-Le système doit prévoir l'optimisation des images à l'export :
+The system must plan image optimization at export:
 
-- Formats adaptés.
-- Dimensions appropriées.
-- Variantes responsive lorsque pertinent.
-- Lazy-loading pour les images non prioritaires.
-- Préservation des médias originaux dans les données du projet.
+- Suitable formats.
+- Appropriate dimensions.
+- Responsive variants when relevant.
+- Lazy loading for non-priority images.
+- Original media preserved in the project data.
 
-Le traitement des SVG et fichiers importés doit respecter une politique de sécurité explicite.
+Handling of imported SVGs and files must follow an explicit security policy.
 
-### SB-07 — Composants enrichis
+### SB-07 — Richer components
 
-Étendre la bibliothèque pour couvrir les besoins courants d'un site vitrine :
+Extend the library to cover the usual needs of a showcase site:
 
 - Logo.
 - Navigation.
-- Liste de liens.
-- Cartes.
-- Galerie simple.
-- Vidéo intégrée.
-- Icônes.
+- Link list.
+- Cards.
+- Simple gallery.
+- Embedded video.
+- Icons.
 - Call to action.
-- Accordéon accessible.
-- Onglets accessibles.
+- Accessible accordion.
+- Accessible tabs.
 
-Les fonctionnalités interactives doivent charger uniquement le JavaScript nécessaire.
+Interactive features must load only the JavaScript they need.
 
-Un module de formulaire peut proposer son apparence, mais sa soumission vers un backend n'est pas exigée dans ce jalon.
+A form module can offer its appearance, but submitting to a backend is not required in this milestone.
 
-### SB-08 — SEO et paramètres des pages
+### SB-08 — SEO and page settings
 
-Chaque page doit accepter :
+Each page must accept:
 
-- Titre SEO.
+- SEO title.
 - Meta description.
 - Canonical.
-- Statut d'indexation.
-- Image de partage.
-- Données Open Graph pertinentes.
+- Indexing status.
+- Sharing image.
+- Relevant Open Graph data.
 
-L'export doit générer :
+The export must generate:
 
 - Sitemap.
 - Robots.txt.
-- HTML sémantique.
-- Métadonnées.
-- Pages d'erreur nécessaires, notamment 404.
+- Semantic HTML.
+- Metadata.
+- The necessary error pages, notably 404.
 
-Les redirections doivent être représentables dans le modèle et exportables sous forme de configuration documentée compatible avec la cible, sans prétendre qu'un fichier statique impose à lui seul des redirections HTTP.
+Redirects must be representable in the model and exportable as documented configuration compatible with the target, without claiming that a static file can enforce HTTP redirects on its own.
 
-### SB-09 — Prévisualisation du site
+### SB-09 — Site preview
 
-Permettre de naviguer dans l'ensemble du site avant export.
+Make it possible to browse the whole site before exporting.
 
-La prévisualisation doit gérer :
+The preview must handle:
 
-- Liens internes.
+- Internal links.
 - Menus.
-- Pages communes.
+- Shared pages.
 - Header/footer.
-- Styles globaux.
+- Global styles.
 - Assets.
-- Comportement responsive.
+- Responsive behavior.
 
-L'utilisateur doit pouvoir ouvrir une prévisualisation sans les outils d'édition.
+The user must be able to open a preview without the editing tools.
 
-### SB-10 — Export complet Astro
+### SB-10 — Complete Astro export
 
-L'export doit produire un projet Astro standard avec :
+The export must produce a standard Astro project with:
 
-- Toutes les pages exportables.
-- Les composants utilisés.
-- Le design system.
-- La navigation.
-- Les layouts partagés.
-- Les médias.
-- Les métadonnées.
-- Le sitemap et les fichiers nécessaires.
-- Les dépendances et versions figées.
-- Une documentation d'installation.
+- Every exportable page.
+- The components used.
+- The design system.
+- The navigation.
+- The shared layouts.
+- The media.
+- The metadata.
+- The sitemap and the necessary files.
+- Pinned dependencies and versions.
+- Installation documentation.
 
-Prévoir deux livrables distincts :
+Plan two separate deliverables:
 
-1. **Sources Astro**, modifiables et compilables.
-2. **Build statique**, directement hébergeable.
+1. **Astro sources**, editable and buildable.
+2. **Static build**, directly hostable.
 
-Il ne faut pas dépendre d'un service Netvolution pour compiler ou servir le site.
+Building or serving the site must not depend on a Netvolution service.
 
-### SB-11 — Contrôles avant export
+### SB-11 — Checks before export
 
-Exécuter au minimum :
+Run at least:
 
-- Validation du modèle.
-- Détection des liens internes cassés.
-- Détection des médias manquants.
-- Contrôle des slugs dupliqués.
-- Contrôle des métadonnées essentielles.
-- Contrôles automatisables d'accessibilité.
-- Contrôles des ressources et dépendances.
-- Build Astro.
+- Model validation.
+- Detection of broken internal links.
+- Detection of missing media.
+- Check of duplicate slugs.
+- Check of essential metadata.
+- Automatable accessibility checks.
+- Checks of resources and dependencies.
+- Astro build.
 
-Distinguer les erreurs bloquantes des avertissements.
+Distinguish blocking errors from warnings.
 
-### SB-12 — Réversibilité
+### SB-12 — Reversibility
 
-Le projet exporté doit être compréhensible par un développeur connaissant Astro, sans connaissance préalable du fonctionnement interne de Netvolution Studio.
+The exported project must be understandable by a developer who knows Astro, without prior knowledge of the inner workings of Netvolution Studio.
 
-Inclure :
+Include:
 
 - README.
-- Scripts de build.
-- Versions des outils.
-- Inventaire des médias.
-- Structure documentée.
-- Instructions de déploiement sur un serveur web standard.
+- Build scripts.
+- Tool versions.
+- Media inventory.
+- Documented structure.
+- Deployment instructions for a standard web server.
 
-Le format documentaire source doit également pouvoir être exporté pour archivage et réimport dans une version compatible du Studio.
+The source document format must also be exportable for archiving and re-import into a compatible version of the Studio.
 
-La réimportation arbitraire de code Astro modifié par un tiers n'est pas exigée.
+Arbitrary re-import of Astro code modified by a third party is not required.
 
-## 3. Sécurité et performance
+## 3. Security and performance
 
-Le site généré :
+The generated site:
 
-- Ne doit comporter aucune interface d'administration.
-- Ne doit exposer aucune API d'édition.
-- Ne doit dépendre d'aucune base de données pour l'affichage des pages statiques.
-- Ne doit embarquer aucun secret.
-- Ne doit pas charger globalement des bibliothèques inutilisées.
-- Doit pouvoir fonctionner avec JavaScript désactivé pour les contenus et la navigation de base.
+- Must contain no administration interface.
+- Must expose no editing API.
+- Must not depend on any database to display static pages.
+- Must embed no secret.
+- Must not load unused libraries globally.
+- Must work with JavaScript disabled for content and basic navigation.
 
-Les interactions nécessitant JavaScript doivent dégrader leur comportement de façon documentée.
+Interactions that need JavaScript must degrade in a documented way.
 
-Le site doit être testable avec Lighthouse et des outils d'accessibilité automatisés.
+The site must be testable with Lighthouse and automated accessibility tools.
 
-Les seuils chiffrés de performance seront définis sur des pages de référence et un environnement de mesure stable, avant validation du jalon.
+Numeric performance thresholds will be defined on reference pages and a stable measurement environment, before validating the milestone.
 
-## 4. Hors périmètre
+## 4. Out of scope
 
-- Administration éditoriale multi-utilisateur.
-- Authentification visiteurs.
+- Multi-user editorial administration.
+- Visitor authentication.
 - E-commerce.
-- Base de données publique.
-- Blog dynamique alimenté par CMS.
-- Traduction multilingue complète.
-- Formulaires avec backend intégré.
-- Déploiement automatique vers tous les hébergeurs.
-- Collaboration temps réel.
-- Animations complexes.
-- Assistance IA.
+- Public database.
+- Dynamic CMS-fed blog.
+- Complete multilingual translation.
+- Forms with an integrated backend.
+- Automatic deployment to every host.
+- Real-time collaboration.
+- Complex animations.
+- AI assistance.
 
-## 5. Plan de développement agentique
+## 5. Agentic development plan
 
-### Lot SB-A — Site Model
+### Batch SB-A — Site Model
 
-Gestion des projets, pages, slugs et références.
+Management of projects, pages, slugs and references.
 
-### Lot SB-B — Navigation
+### Batch SB-B — Navigation
 
-Menus, liens internes et composants de navigation.
+Menus, internal links and navigation components.
 
-### Lot SB-C — Shared Layouts
+### Batch SB-C — Shared Layouts
 
-Headers, footers et compositions partagées.
+Headers, footers and shared compositions.
 
-### Lot SB-D — Design System
+### Batch SB-D — Design System
 
-Couleurs, typographie, espacements et tokens.
+Colors, typography, spacing and tokens.
 
-### Lot SB-E — Assets
+### Batch SB-E — Assets
 
-Médiathèque, référencement et optimisation.
+Media library, references and optimization.
 
-### Lot SB-F — SEO & Validation
+### Batch SB-F — SEO & Validation
 
-Métadonnées, fichiers SEO, diagnostics et règles d'export.
+Metadata, SEO files, diagnostics and export rules.
 
-### Lot SB-G — Full Site Export
+### Batch SB-G — Full Site Export
 
-Génération multipage, build statique, documentation et tests d'autonomie.
+Multi-page generation, static build, documentation and standalone tests.
 
-## 6. Démonstration de fin de jalon
+## 6. End-of-milestone demonstration
 
-Créer un site vitrine fictif comprenant :
+Create a fictional showcase site including:
 
-- Accueil.
-- Présentation.
+- Home.
+- About.
 - Services.
-- Réalisations.
+- Work.
 - Contact.
 
-Le site doit avoir :
+The site must have:
 
-- Une identité graphique commune.
-- Un header responsive.
-- Un footer partagé.
-- Une navigation fonctionnelle.
-- Plusieurs mises en page.
-- Une galerie.
-- Des médias optimisés.
-- Des métadonnées SEO.
-- Une page 404.
+- A shared visual identity.
+- A responsive header.
+- A shared footer.
+- Working navigation.
+- Several layouts.
+- A gallery.
+- Optimized media.
+- SEO metadata.
+- A 404 page.
 
-Exporter les sources et le build statique.
+Export the sources and the static build.
 
-Construire les sources dans un environnement vierge, puis servir le build sans démarrer Netvolution Studio.
+Build the sources in a clean environment, then serve the build without starting Netvolution Studio.
 
 ## 7. Definition of Done
 
-- Création d'un site multipage sans intervention dans le code.
-- Navigation et liens fonctionnels.
-- Compositions partagées.
-- Design system opérationnel.
-- Médiathèque.
-- Prévisualisation complète.
-- Contrôles d'export.
-- Build Astro autonome.
-- Documentation de déploiement.
-- Tests de non-régression.
-- Site démonstrateur exploitable.
-
+- Creation of a multi-page site without touching code.
+- Working navigation and links.
+- Shared compositions.
+- Working design system.
+- Media library.
+- Complete preview.
+- Export checks.
+- Standalone Astro build.
+- Deployment documentation.
+- Non-regression tests.
+- Usable demonstration site.

@@ -2,7 +2,7 @@
 
 **Statut :** décisions validées le 30/10/2026 (§10) ; ADR-0011 à ADR-0014 acceptés
 **Date :** 30/10/2026
-**Sources :** `CLAUDE.md`, `docs/specifications/00`, `03`, `docs/architecture/jalon-2-tranche-8.md`, `docs/limitations.md`, code du jalon 2
+**Sources :** `CLAUDE.md`, `docs/specifications/00`, `03`, `docs/history/reports/jalon-2-tranche-8.md`, `docs/limitations.md`, code du jalon 2
 
 Conventions : **[R]** recommandation, **[O]** décision ouverte, **[F]** fait vérifié dans le dépôt, **[H]** hypothèse à vérifier.
 

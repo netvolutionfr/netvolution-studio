@@ -218,7 +218,7 @@ export function Canvas(props: {
             transform: scale < 1 ? `scale(${scale})` : undefined,
           }}
         >
-          {/* allow-same-origin is required by the Vite dev server (R3, see docs/architecture/tranche-2.md);
+          {/* allow-same-origin is required by the Vite dev server (R3, see docs/history/reports/tranche-2.md);
             the sandbox still blocks navigation, popups and forms. */}
           <iframe
             ref={frame}

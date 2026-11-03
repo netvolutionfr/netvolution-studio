@@ -1,335 +1,334 @@
-# Jalon 3 — Creative Studio
+# Milestone 3 — Creative Studio
 
-**Document :** `docs/specifications/03-creative-studio.md`  
-**Version :** 0.1  
-**Dépendances :** `00-foundations.md`, `01-visual-editor.md`, `02-site-builder.md`
+**Document:** `docs/specifications/03-creative-studio.md`  
+**Version:** 0.1  
+**Depends on:** `00-foundations.md`, `01-visual-editor.md`, `02-site-builder.md`
 
-## 1. Objectif
+## 1. Goal
 
-Améliorer la productivité et la liberté créative du Studio, sans sacrifier la qualité, la simplicité ou la portabilité des sites générés.
+Improve the productivity and creative freedom of the Studio, without sacrificing the quality, simplicity or portability of the generated sites.
 
-Le jalon introduit :
+The milestone introduces:
 
-- Bibliothèques de sections et compositions.
-- Templates de sites.
-- Composants réutilisables.
-- Contrôles de composition avancés.
-- Animations et interactions déclaratives.
-- Première assistance IA.
-- Automatisation des opérations de création.
+- Libraries of sections and compositions.
+- Site templates.
+- Reusable components.
+- Advanced composition controls.
+- Declarative animations and interactions.
+- First AI assistance.
+- Automation of creation operations.
 
-Le système doit rester accessible à un graphiste ne souhaitant pas programmer.
+The system must remain accessible to a designer who does not want to program.
 
-## 2. Périmètre fonctionnel
+## 2. Functional scope
 
-### CS-01 — Bibliothèque de sections
+### CS-01 — Section library
 
-Permettre de créer et enregistrer des compositions réutilisables :
+Make it possible to create and save reusable compositions:
 
 - Hero.
-- Présentation.
+- About.
 - Features.
-- Grilles.
-- Témoignages.
-- Tarifs.
-- Équipe.
-- Galerie.
+- Grids.
+- Testimonials.
+- Pricing.
+- Team.
+- Gallery.
 - Call to action.
-- Contact visuel.
+- Visual contact.
 
-Chaque composition doit comporter :
+Each composition must have:
 
-- Un identifiant.
-- Un nom.
-- Une catégorie.
-- Une description.
-- Une vignette.
-- Une définition documentaire.
-- Des paramètres personnalisables.
-- Une version.
+- An id.
+- A name.
+- A category.
+- A description.
+- A thumbnail.
+- A document definition.
+- Customizable parameters.
+- A version.
 
-L'insertion d'une composition doit créer une instance indépendante par défaut.
+Inserting a composition must create an independent instance by default.
 
-### CS-02 — Templates de site
+### CS-02 — Site templates
 
-Permettre de créer un site à partir d'un modèle comprenant :
+Make it possible to create a site from a template including:
 
 - Pages.
 - Navigation.
 - Header/footer.
 - Design tokens.
 - Compositions.
-- Médias de démonstration redistribuables.
+- Redistributable demo media.
 
-L'utilisateur doit pouvoir remplacer progressivement les contenus et le design.
+The user must be able to replace the content and the design gradually.
 
-Les modèles ne doivent pas dépendre d'un thème WordPress ou d'un service externe Netvolution.
+Templates must not depend on a WordPress theme or an external Netvolution service.
 
-### CS-03 — Composants réutilisables
+### CS-03 — Reusable components
 
-Introduire des composants réutilisables avec propriétés paramétrables.
+Introduce reusable components with configurable properties.
 
-Distinguer :
+Distinguish:
 
-- Copie indépendante.
-- Instance liée à une définition partagée.
+- Independent copy.
+- Instance linked to a shared definition.
 
-Une modification d'un composant partagé doit pouvoir être propagée à ses instances de manière contrôlée.
+A change to a shared component must be propagatable to its instances in a controlled way.
 
-Les modifications incompatibles doivent être signalées.
+Incompatible changes must be signaled.
 
-Les références entre composants ne doivent jamais produire de dépendances circulaires.
+References between components must never produce circular dependencies.
 
-### CS-04 — Outils de composition avancés
+### CS-04 — Advanced composition tools
 
-S'inspirer des capacités utiles des environnements de design modernes :
+Take inspiration from the useful capabilities of modern design environments:
 
-- Alignement.
+- Alignment.
 - Distribution.
 - Guides.
-- Repères visuels.
-- Ajustements directs.
-- Redimensionnement.
-- Gestion des contraintes.
-- Positionnement relatif et, lorsque justifié, absolu.
-- Gestion du débordement.
-- Superposition des éléments.
-- Transformations visuelles.
+- Visual markers.
+- Direct adjustments.
+- Resizing.
+- Constraint management.
+- Relative positioning and, when justified, absolute.
+- Overflow management.
+- Overlapping elements.
+- Visual transforms.
 
-Les opérations doivent se traduire en règles web compréhensibles et responsive.
+Operations must translate into understandable, responsive web rules.
 
-Ne pas adopter un modèle où tous les éléments sont positionnés absolument, au risque de produire des pages fragiles.
+Do not adopt a model where every element is absolutely positioned, at the risk of producing fragile pages.
 
-La composition structurée reste le mode normal.
+Structured composition remains the normal mode.
 
-### CS-05 — Animations déclaratives
+### CS-05 — Declarative animations
 
-Créer un modèle d'animation indépendant de toute bibliothèque particulière.
+Create an animation model independent of any particular library.
 
-Déclencheurs initiaux :
+Initial triggers:
 
-- Chargement de page.
-- Entrée dans le viewport.
+- Page load.
+- Entering the viewport.
 - Hover.
 - Focus.
-- Clic lorsque pertinent.
+- Click when relevant.
 
-Effets initiaux :
+Initial effects:
 
-- Opacité.
+- Opacity.
 - Translation.
-- Échelle.
+- Scale.
 - Rotation.
-- Combinaisons simples.
+- Simple combinations.
 
-Paramètres :
+Parameters:
 
-- Durée.
-- Délai.
+- Duration.
+- Delay.
 - Easing.
 - Direction.
-- Répétition.
-- Stagger pour les groupes.
+- Repetition.
+- Stagger for groups.
 
-Les animations doivent être modifiables depuis l'inspecteur.
+Animations must be editable from the inspector.
 
-### CS-06 — Moteur d'animation
+### CS-06 — Animation engine
 
-Privilégier :
+Prefer:
 
-1. CSS natif et Web Animations API lorsque suffisants.
-2. Motion pour les effets nécessitant une bibliothèque.
-3. D'autres moteurs uniquement après validation technique et juridique.
+1. Native CSS and the Web Animations API when sufficient.
+2. Motion for the effects that need a library.
+3. Other engines only after technical and legal validation.
 
-L'utilisation de GSAP doit être précédée d'une vérification explicite de la licence applicable à un produit de type visual website builder.
+Using GSAP must be preceded by an explicit check of the license applicable to a visual website builder product.
 
-Le modèle documentaire ne doit pas dépendre des noms de fonctions d'une bibliothèque d'animation.
+The document model must not depend on the function names of an animation library.
 
-L'export doit inclure uniquement le runtime nécessaire.
+The export must include only the runtime it needs.
 
-### CS-07 — Prévisualisation des animations
+### CS-07 — Animation preview
 
-Permettre :
+Allow:
 
-- Activation et désactivation.
-- Relecture d'un effet.
-- Modification des paramètres.
-- Observation du comportement responsive.
-- Désactivation ou adaptation lorsque l'utilisateur préfère réduire les animations.
+- Turning on and off.
+- Replaying an effect.
+- Changing the parameters.
+- Observing the responsive behavior.
+- Disabling or adapting when the user prefers reduced motion.
 
-Les animations déclenchées par le scroll doivent être reproductibles en aperçu.
+Scroll-triggered animations must be reproducible in the preview.
 
-Les contrôles de l'éditeur ne doivent pas être animés par le moteur d'animation du site.
+The editor's controls must not be animated by the site's animation engine.
 
-### CS-08 — Assistance IA éditoriale
+### CS-08 — Editorial AI assistance
 
-Premières fonctionnalités :
+First features:
 
-- Proposer un titre.
-- Reformuler un texte.
-- Résumer un contenu.
-- Adapter un ton rédactionnel.
-- Proposer des métadonnées SEO.
-- Proposer une structure de page à partir d'un brief.
+- Suggest a heading.
+- Rephrase a text.
+- Summarize content.
+- Adapt the tone.
+- Suggest SEO metadata.
+- Suggest a page structure from a brief.
 
-Le système doit rendre visibles les changements proposés avant leur application.
+The system must make the proposed changes visible before they are applied.
 
-L'IA ne publie pas automatiquement.
+The AI does not publish automatically.
 
-Les contenus générés doivent être validés par l'utilisateur.
+Generated content must be approved by the user.
 
-### CS-09 — Assistance IA au design
+### CS-09 — Design AI assistance
 
-Permettre de soumettre des demandes telles que :
+Make it possible to submit requests such as:
 
-- « Ajoute une section de témoignages. »
-- « Transforme cette grille en deux colonnes sur tablette. »
-- « Harmonise les espacements. »
-- « Propose une variante plus sobre du hero. »
-- « Applique la palette du site à cette composition. »
+- "Add a testimonials section."
+- "Turn this grid into two columns on tablet."
+- "Make the spacing consistent."
+- "Suggest a more sober variant of the hero."
+- "Apply the site palette to this composition."
 
-L'IA doit produire des opérations structurées validées par le moteur documentaire.
+The AI must produce structured operations validated by the document engine.
 
-Ne pas autoriser un modèle à modifier directement les fichiers sources ou les données internes de manière incontrôlée.
+Do not let a model change the source files or the internal data directly in an uncontrolled way.
 
-Prévoir :
+Plan:
 
-- Prévisualisation des propositions.
-- Diff lisible.
-- Acceptation ou rejet.
+- Preview of the proposals.
+- Readable diff.
+- Acceptance or rejection.
 - Undo.
-- Journalisation des opérations.
+- Logging of the operations.
 
-### CS-10 — Interface d'automatisation
+### CS-10 — Automation interface
 
-Exposer les commandes métier via une couche de services interne.
+Expose the business commands through an internal services layer.
 
-Prévoir des contrats compatibles avec un futur serveur MCP.
+Plan contracts compatible with a future MCP server.
 
-Les commandes doivent définir :
+Commands must define:
 
-- Paramètres.
+- Parameters.
 - Validation.
-- Autorisations requises.
-- Effets.
-- Résultat.
-- Erreurs.
-- Capacité d'annulation éventuelle.
+- Required permissions.
+- Effects.
+- Result.
+- Errors.
+- Possible undo capability.
 
-Le premier jalon IA n'exige pas de serveur MCP public accessible sur Internet.
+The first AI milestone does not require a public MCP server reachable on the Internet.
 
-### CS-11 — Abstraction des fournisseurs IA
+### CS-11 — Abstraction of AI providers
 
-L'intégration ne doit pas dépendre d'un unique fournisseur.
+The integration must not depend on a single provider.
 
-Prévoir :
+Plan:
 
-- Interface de fournisseur.
-- Configuration des modèles.
-- Gestion des erreurs.
-- Limites de consommation.
-- Journalisation technique sans exposition inutile de contenus sensibles.
-- Possibilité de désactiver l'IA.
+- Provider interface.
+- Model configuration.
+- Error handling.
+- Consumption limits.
+- Technical logging without needless exposure of sensitive content.
+- Ability to disable AI.
 
-Les clés API doivent rester côté serveur.
+API keys must stay on the server.
 
-Les contenus envoyés aux modèles externes doivent être explicitement délimités et soumis à une politique de confidentialité.
+Content sent to external models must be explicitly delimited and subject to a confidentiality policy.
 
-### CS-12 — Qualité et accessibilité
+### CS-12 — Quality and accessibility
 
-Les fonctionnalités créatives doivent préserver :
+Creative features must preserve:
 
-- HTML sémantique.
-- Navigation clavier.
-- Focus visible.
-- Responsive.
-- Respect de `prefers-reduced-motion`.
-- Performances acceptables.
-- Absence de dépendances inutiles.
+- Semantic HTML.
+- Keyboard navigation.
+- Visible focus.
+- Responsive behavior.
+- Respect of `prefers-reduced-motion`.
+- Acceptable performance.
+- No needless dependencies.
 
-Les effets ne doivent pas empêcher l'accès au contenu.
+Effects must not prevent access to content.
 
-Les contrôles automatisés ne remplacent pas une validation humaine d'accessibilité.
+Automated checks do not replace a human accessibility review.
 
-## 3. Hors périmètre
+## 3. Out of scope
 
-- Génération libre de JavaScript exécutable.
-- Marketplace publique.
-- Collaboration simultanée.
-- Synchronisation Figma bidirectionnelle.
-- Import universel de maquettes Figma.
-- Génération automatique de sites complexes sans validation humaine.
-- Création d'un moteur de rendu graphique propriétaire.
-- Hébergement de modèles IA.
-- Gestion éditoriale multi-utilisateur complète.
-- Publication automatique par les agents.
+- Free generation of executable JavaScript.
+- Public marketplace.
+- Simultaneous collaboration.
+- Two-way Figma synchronization.
+- Universal import of Figma mockups.
+- Automatic generation of complex sites without human approval.
+- Creating a proprietary graphics rendering engine.
+- Hosting AI models.
+- Complete multi-user editorial management.
+- Automatic publishing by agents.
 
-## 4. Plan de développement agentique
+## 4. Agentic development plan
 
-### Lot CS-A — Library
+### Batch CS-A — Library
 
-Bibliothèque de sections, modèles et vignettes.
+Section library, templates and thumbnails.
 
-### Lot CS-B — Reusable Components
+### Batch CS-B — Reusable Components
 
-Instances liées, paramètres, versions, propagation.
+Linked instances, parameters, versions, propagation.
 
-### Lot CS-C — Advanced Layout
+### Batch CS-C — Advanced Layout
 
-Guides, contraintes, alignements et transformations.
+Guides, constraints, alignment and transforms.
 
-### Lot CS-D — Animation Model
+### Batch CS-D — Animation Model
 
-Schémas, déclencheurs, effets, validation.
+Schemas, triggers, effects, validation.
 
-### Lot CS-E — Animation Runtime
+### Batch CS-E — Animation Runtime
 
-Rendu, prévisualisation, export et accessibilité.
+Rendering, preview, export and accessibility.
 
-### Lot CS-F — AI Commands
+### Batch CS-F — AI Commands
 
-API de commandes, validation, transactions et prévisualisation.
+Command API, validation, transactions and preview.
 
-### Lot CS-G — AI Provider
+### Batch CS-G — AI Provider
 
-Intégration d'un fournisseur configurable, gestion des secrets et des erreurs.
+Integration of a configurable provider, handling of secrets and errors.
 
-### Lot CS-H — AI Features
+### Batch CS-H — AI Features
 
-Assistance rédactionnelle et transformations de compositions.
+Editorial assistance and composition transformations.
 
-### Lot CS-I — Quality & Export
+### Batch CS-I — Quality & Export
 
-Tests de régression, performances, sécurité et export autonome.
+Regression, performance and security tests, standalone export.
 
-## 5. Scénario de démonstration
+## 5. Demonstration scenario
 
-Partir d'un site créé au jalon 2.
+Start from a site created in milestone 2.
 
-1. Insérer une section hero depuis la bibliothèque.
-2. Modifier ses paramètres et couleurs.
-3. Enregistrer une composition personnalisée.
-4. Réutiliser cette composition sur une autre page.
-5. Ajouter une animation d'entrée.
-6. Vérifier le comportement mobile.
-7. Demander à l'IA de proposer une variante.
-8. Examiner les modifications proposées.
-9. Accepter la proposition.
-10. Annuler puis rétablir l'opération.
-11. Exporter le site Astro.
-12. Vérifier le fonctionnement et les performances du site exporté.
+1. Insert a hero section from the library.
+2. Change its parameters and colors.
+3. Save a custom composition.
+4. Reuse this composition on another page.
+5. Add an entrance animation.
+6. Check the mobile behavior.
+7. Ask the AI to suggest a variant.
+8. Review the proposed changes.
+9. Accept the proposal.
+10. Undo then redo the operation.
+11. Export the Astro site.
+12. Check that the exported site works and performs well.
 
 ## 6. Definition of Done
 
-- Bibliothèques de sections et templates fonctionnelles.
-- Composants réutilisables et versionnés.
-- Composition avancée sans rupture du responsive.
-- Animations déclaratives fonctionnelles.
-- Respect du reduced motion.
-- Assistance IA opérationnelle sur des commandes structurées.
-- Validation humaine des modifications IA.
-- Export Astro autonome.
-- Absence de secret dans les exports.
-- Tests et documentation.
-- Démonstration complète reproductible.
-
+- Working section libraries and templates.
+- Reusable, versioned components.
+- Advanced composition without breaking responsive behavior.
+- Working declarative animations.
+- Reduced motion respected.
+- AI assistance working on structured commands.
+- Human approval of AI changes.
+- Standalone Astro export.
+- No secret in the exports.
+- Tests and documentation.
+- Complete reproducible demonstration.

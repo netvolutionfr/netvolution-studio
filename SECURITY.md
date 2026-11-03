@@ -1,11 +1,11 @@
-# Sécurité
+# Security
 
-## Signaler une faille
+## Reporting a vulnerability
 
-Ne publiez pas de ticket public. Utilisez le signalement privé de GitHub : onglet **Security** du dépôt → **Report a vulnerability**. Nous accusons réception et indiquons la suite donnée.
+Do not open a public issue. Use GitHub's private reporting: **Security** tab of the repository → **Report a vulnerability**. We acknowledge receipt and tell you what happens next.
 
-## Avant d'héberger le Studio
+## Before hosting the Studio
 
-Le Studio n'a pas d'authentification : toute personne qui l'atteint a tous les droits sur les projets. Placez-le derrière un proxy qui fournit HTTPS et une authentification éprouvée, et gardez son port sur `127.0.0.1` (voir [deploy/README.md](deploy/README.md) et [docs/limitations.md](docs/limitations.md)).
+The Studio has no authentication: anyone who reaches it has full rights over the projects. Put it behind a proxy that provides HTTPS and proven authentication, and keep its port on `127.0.0.1` (see [deploy/README.md](deploy/README.md) and [docs/limitations.md](docs/limitations.md)).
 
-Les sites exportés sont statiques et ne dépendent pas du Studio.
+Exported sites are static and do not depend on the Studio.

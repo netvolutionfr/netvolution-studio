@@ -2,7 +2,7 @@
 
 **Statut :** ADR-0007 et ADR-0008 acceptés le 30/10/2026
 **Date :** 30/10/2026
-**Sources :** `CLAUDE.md`, `docs/specifications/00`, `02`, `docs/architecture/tranche-5.md`, `docs/limitations.md`, code du jalon 1
+**Sources :** `CLAUDE.md`, `docs/specifications/00`, `02`, `docs/history/reports/tranche-5.md`, `docs/limitations.md`, code du jalon 1
 
 Conventions : **[R]** recommandation, **[O]** décision ouverte, **[F]** fait vérifié dans le dépôt,
 **[H]** hypothèse à vérifier.
