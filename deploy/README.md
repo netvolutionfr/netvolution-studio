@@ -67,17 +67,26 @@ Recommandé dans Settings :
   - déploiements sérialisés.
 - **Fin de vie** : Node 24 sort du support en avril 2028 et Node 26 en avril 2029. On passe à la LTS suivante quand Dependabot la propose, après le passage de la CI.
 
-## 3. À chaque push sur `main`
+## 3. Vérifier, construire, publier une version
 
-1. **check** : `npm ci`, typecheck, lint, tests unitaires (aussi sur chaque pull request).
-2. **build-and-push** : image Docker poussée sur GHCR, étiquetée `latest` et avec le hash du commit.
-3. **deploy** : `compose.yaml` copié sur le serveur, puis `docker compose pull && up -d` avec l'image **de ce commit**. Le job échoue si le conteneur n'est pas sain en une minute.
+1. **check** : `npm ci`, typecheck, lint, tests unitaires, sur chaque pull request et chaque push.
+2. **build-and-push** (push sur `main` ou tag `v*`) : image Docker poussée sur GHCR, étiquetée avec le hash du commit, `latest` pour `main` et le numéro de version pour un tag.
+3. **deploy** (tag `v*` seulement) : attend l'approbation sur l'environnement `production`, puis copie `compose.yaml` sur le serveur et lance `docker compose pull && up -d` avec l'image **de ce commit**. Le job échoue si le conteneur n'est pas sain en une minute.
 
-Déploiement manuel : onglet Actions → « Vérifier, construire et déployer » → *Run workflow*.
+Le dépôt est public : une fusion sur `main`, même d'un contributeur, ne part jamais en production. Pour livrer :
+
+```sh
+git switch main && git pull
+git tag -a v1.2.0 -m "v1.2.0" && git push origin v1.2.0
+```
+
+puis approuver le déploiement (onglet Actions → l'exécution du tag → *Review deployments*).
+
+L'environnement `production` exige l'approbation du mainteneur et n'accepte que les tags `v*` (Settings → Environments).
 
 ## Exploitation
 
-- **Revenir à une version** : `cd "$DEPLOY_PATH" && IMAGE_TAG=<hash du commit> docker compose up -d`.
+- **Revenir à une version** : relancer le workflow sur le tag voulu (Actions → « Vérifier, construire et déployer » → *Run workflow*, choisir le tag), ou sur le serveur `cd "$DEPLOY_PATH" && IMAGE_TAG=<hash du commit> docker compose up -d`.
 - **Journaux** : `docker logs -f netvolution-studio`. Appels IA sans contenu dans `data/ai-log.jsonl`.
 - **Sauvegardes** : le dossier `data/` (projets, médias, modèles, exports, corbeille), à inclure dans les sauvegardes du serveur. Les exports sont régénérables et peuvent en être exclus (`data/exports/`).
 - **Récupérer un export** : liens « Télécharger (.tar.gz) » dans la boîte d'export du Studio.
