@@ -1,4 +1,4 @@
-import { formatDate, t } from '@ns/core';
+import { formatDate, t, tm } from '@ns/core';
 import { useEditor } from './store.ts';
 
 const time = (iso: string) => formatDate(iso, { timeStyle: 'medium' });
@@ -20,7 +20,7 @@ export function Journal() {
               </span>
             </span>
             <strong>{r.label}</strong>
-            <span className="hint">{r.changes}</span>
+            <span className="hint">{tm(r.changes)}</span>
             <code className="journal-commands">{[...new Set(r.commands)].join(', ')}</code>
           </li>
         ))}

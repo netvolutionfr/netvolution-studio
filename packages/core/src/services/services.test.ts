@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { commands, newNodeId } from '../editor/commands.ts';
 import { createEditorStore } from '../editor/store.ts';
+import { tm } from '../i18n/index.ts';
 import { sampleDoc, testRegistry } from '../test-registry.ts';
 import { runBatch, summarize } from './batch.ts';
 import { commandCatalog } from './catalog.ts';
@@ -35,7 +36,7 @@ describe('batches', () => {
     const site = sampleDoc();
     const snapshot = JSON.stringify(site);
     const r = runBatch(site, calls, ctx);
-    if (!r.ok) throw new Error(r.error.message);
+    if (!r.ok) throw new Error(tm(r.error.message));
     expect(JSON.stringify(site)).toBe(snapshot);
     expect(r.diff.added).toEqual([{ id: r.results[0]?.created?.[0], type: 'label' }]);
     const label = r.diff.changed.find((c) => c.id === 'nlabel001');
@@ -43,8 +44,8 @@ describe('batches', () => {
     expect(label?.style).toEqual([
       { breakpoint: 'mobile', key: 'fontSize', before: undefined, after: px(16) },
     ]);
-    expect(summarize(r.diff)).toEqual([
-      '1 élément(s) ajouté(s) : label',
+    expect(summarize(r.diff).map((m) => tm(m))).toEqual([
+      '1 élément ajouté : label',
       'box · children modifié',
       'label · text : « Hello » → « Bonjour »',
       'label · fontSize (mobile) : — → 16px',
@@ -58,7 +59,7 @@ describe('batches', () => {
     ];
     const r = runBatch(sampleDoc(), bad, ctx);
     expect(r.ok ? -1 : r.index).toBe(2);
-    expect(r.ok ? '' : r.error.message).toMatch(/^Opération 3 \(updateNodeProps\)/);
+    expect(r.ok ? '' : tm(r.error.message)).toMatch(/^Opération 3 \(updateNodeProps\)/);
     expect(runBatch(sampleDoc(), [{ name: 'eval', params: {} }], ctx)).toMatchObject({
       ok: false,
       error: { code: 'invalid' },
@@ -67,7 +68,7 @@ describe('batches', () => {
 
   it('are refused beyond the caller’s permissions', () => {
     const r = runBatch(sampleDoc(), calls.slice(1), ctx, new Set(['content']));
-    expect(r.ok ? '' : r.error.message).toMatch(
+    expect(r.ok ? '' : tm(r.error.message)).toMatch(
       /Opération 2 \(updateNodeStyle\) : autorisation « design » requise/,
     );
   });
@@ -82,8 +83,8 @@ describe('batches', () => {
       origin: 'ai',
       label: 'Proposition',
       commands: ['insertNode', 'updateNodeProps', 'updateNodeStyle'],
-      changes: '1 ajout(s), 2 modification(s), 0 suppression(s)',
     });
+    expect(entry && tm(entry.changes)).toBe('1 ajout(s), 2 modification(s), 0 suppression(s)');
     expect(JSON.stringify(entry)).not.toContain('Bonjour');
     s.undo();
     expect(s.getState().doc).toBe(initial);

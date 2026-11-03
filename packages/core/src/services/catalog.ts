@@ -20,188 +20,190 @@ export type Effect =
 
 type Meta = { description: string; permission: Permission; effects: Effect[] };
 
-/** What each command does, the permission it requires and what it changes. Every command is undoable. */
+/**
+ * What each command does (in English: read by the AI and future MCP clients, ADR-0024), the permission it
+ * requires and what it changes. Every command is undoable.
+ */
 const META: Record<CommandName, Meta> = {
   updateNodeProps: {
-    description: 'Modifie des propriétés de contenu d’un élément (texte, lien, média…).',
+    description: 'Changes content properties of an element (text, link, media…).',
     permission: 'content',
     effects: ['nodes'],
   },
   renameNode: {
-    description: 'Renomme un élément dans l’arborescence.',
+    description: 'Renames an element in the tree.',
     permission: 'content',
     effects: ['nodes'],
   },
   setOverride: {
-    description: 'Donne une valeur propre à un paramètre d’une instance de composant partagé.',
+    description: 'Gives its own value to a parameter of a shared component instance.',
     permission: 'content',
     effects: ['nodes'],
   },
   updateNodeStyle: {
-    description: 'Définit ou retire des propriétés de style d’un élément, pour un breakpoint.',
+    description: 'Sets or removes style properties of an element, for one breakpoint.',
     permission: 'design',
     effects: ['nodes'],
   },
   setNodeClasses: {
-    description: 'Remplace les classes CSS personnalisées d’un élément (crochets de la feuille du projet).',
+    description: 'Replaces the custom CSS classes of an element (hooks of the project stylesheet).',
     permission: 'design',
     effects: ['nodes'],
   },
   setProjectCss: {
-    description: 'Remplace la feuille de style du projet ; refusée si l’analyseur la rejette (ADR-0023).',
+    description: 'Replaces the project stylesheet; refused if the parser rejects it (ADR-0023).',
     permission: 'design',
     effects: ['site'],
   },
   setAnimations: {
-    description: 'Remplace les animations déclaratives d’un élément.',
+    description: 'Replaces the declarative animations of an element.',
     permission: 'design',
     effects: ['nodes'],
   },
   setToken: {
-    description: 'Crée ou remplace un design token (couleur, taille, police, style de texte).',
+    description: 'Creates or replaces a design token (color, size, font, text style).',
     permission: 'design',
     effects: ['tokens'],
   },
   removeToken: {
-    description: 'Supprime un design token inutilisé.',
+    description: 'Deletes an unused design token.',
     permission: 'design',
     effects: ['tokens'],
   },
   insertNode: {
-    description: 'Insère un composant avec ses valeurs par défaut.',
+    description: 'Inserts a component with its default values.',
     permission: 'structure',
     effects: ['nodes'],
   },
   insertTree: {
-    description: 'Insère un arbre de composants (section, composition).',
+    description: 'Inserts a tree of components (section, composition).',
     permission: 'structure',
     effects: ['nodes'],
   },
   moveNode: {
-    description: 'Déplace un élément vers un autre parent ou une autre position.',
+    description: 'Moves an element to another parent or position.',
     permission: 'structure',
     effects: ['nodes'],
   },
   removeNode: {
-    description: 'Supprime un élément et ses enfants.',
+    description: 'Deletes an element and its children.',
     permission: 'structure',
     effects: ['nodes'],
   },
   duplicateNode: {
-    description: 'Duplique un élément après lui-même.',
+    description: 'Duplicates an element after itself.',
     permission: 'structure',
     effects: ['nodes'],
   },
   createSymbol: {
-    description: 'Fait d’un élément un composant partagé dont il devient la première instance.',
+    description: 'Turns an element into a shared component, of which it becomes the first instance.',
     permission: 'structure',
     effects: ['symbols', 'nodes'],
   },
   importSymbol: {
-    description: 'Ajoute une section de la bibliothèque comme composant partagé du site.',
+    description: 'Adds a library section as a shared component of the site.',
     permission: 'structure',
     effects: ['symbols', 'nodes'],
   },
   insertSymbol: {
-    description: 'Insère un composant partagé, lié ou en copie indépendante.',
+    description: 'Inserts a shared component, linked or as an independent copy.',
     permission: 'structure',
     effects: ['nodes'],
   },
   updateSymbol: {
-    description: 'Modifie le nom, la catégorie, la description ou les paramètres d’un composant partagé.',
+    description: 'Changes the name, category, description or parameters of a shared component.',
     permission: 'structure',
     effects: ['symbols'],
   },
   publishSymbol: {
-    description: 'Publie la version suivante d’un composant partagé.',
+    description: 'Publishes the next version of a shared component.',
     permission: 'structure',
     effects: ['symbols'],
   },
   updateInstances: {
-    description:
-      'Met à jour les instances d’un composant vers sa dernière version, en conservant leurs valeurs propres.',
+    description: 'Updates the instances of a component to its latest version, keeping their own values.',
     permission: 'structure',
     effects: ['nodes'],
   },
   detachInstance: {
-    description: 'Transforme une instance en copie indépendante.',
+    description: 'Turns an instance into an independent copy.',
     permission: 'structure',
     effects: ['nodes'],
   },
   removeSymbol: {
-    description: 'Supprime un composant partagé sans instance.',
+    description: 'Deletes a shared component without instances.',
     permission: 'structure',
     effects: ['symbols', 'nodes'],
   },
   createLayout: {
-    description: 'Crée un header ou un footer partagé.',
+    description: 'Creates a shared header or footer.',
     permission: 'structure',
     effects: ['layouts', 'nodes', 'site'],
   },
   removeLayout: {
-    description: 'Supprime un header ou un footer partagé.',
+    description: 'Deletes a shared header or footer.',
     permission: 'structure',
     effects: ['layouts', 'nodes', 'pages', 'site'],
   },
   setMenu: {
-    description: 'Crée ou remplace un menu de navigation.',
+    description: 'Creates or replaces a navigation menu.',
     permission: 'structure',
     effects: ['menus'],
   },
   removeMenu: {
-    description: 'Supprime un menu qu’aucune navigation n’affiche.',
+    description: 'Deletes a menu that no navigation shows.',
     permission: 'structure',
     effects: ['menus'],
   },
   createPage: {
-    description: 'Crée une page avec son adresse et son contenu initial.',
+    description: 'Creates a page with its address and initial content.',
     permission: 'pages',
     effects: ['pages', 'nodes'],
   },
   updatePage: {
-    description: 'Modifie le titre, l’adresse, la publication ou les métadonnées SEO d’une page.',
+    description: 'Changes the title, address, publication or SEO metadata of a page.',
     permission: 'pages',
     effects: ['pages'],
   },
   duplicatePage: {
-    description: 'Duplique une page et son contenu.',
+    description: 'Duplicates a page and its content.',
     permission: 'pages',
     effects: ['pages', 'nodes'],
   },
   removePage: {
-    description: 'Supprime une page qu’aucun lien ni menu ne vise.',
+    description: 'Deletes a page that no link or menu targets.',
     permission: 'pages',
     effects: ['pages', 'nodes'],
   },
-  movePage: { description: 'Change l’ordre d’une page.', permission: 'pages', effects: ['pages'] },
-  setHomePage: { description: 'Désigne la page d’accueil.', permission: 'pages', effects: ['pages', 'site'] },
+  movePage: { description: 'Changes the order of a page.', permission: 'pages', effects: ['pages'] },
+  setHomePage: { description: 'Sets the home page.', permission: 'pages', effects: ['pages', 'site'] },
   setPageLayout: {
-    description: 'Affiche ou masque le header ou le footer d’une page.',
+    description: 'Shows or hides the header or footer of a page.',
     permission: 'pages',
     effects: ['pages'],
   },
   setRedirects: {
-    description: 'Remplace les redirections du site.',
+    description: 'Replaces the redirects of the site.',
     permission: 'pages',
     effects: ['redirects'],
   },
   updateSite: {
-    description: 'Modifie le nom, la langue ou l’URL canonique du site.',
+    description: 'Changes the name, language or canonical URL of the site.',
     permission: 'site',
     effects: ['site'],
   },
   addAsset: {
-    description: 'Ajoute à la médiathèque un média déjà envoyé au serveur.',
+    description: 'Adds to the media library a file already uploaded to the server.',
     permission: 'site',
     effects: ['assets'],
   },
   updateAsset: {
-    description: 'Modifie le nom, le texte alternatif par défaut ou les tags d’un média.',
+    description: 'Changes the name, default alternative text or tags of a media file.',
     permission: 'site',
     effects: ['assets'],
   },
   removeAsset: {
-    description: 'Retire de la médiathèque un média inutilisé.',
+    description: 'Removes an unused media file from the media library.',
     permission: 'site',
     effects: ['assets'],
   },

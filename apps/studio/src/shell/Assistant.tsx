@@ -8,6 +8,7 @@ import {
   type Proposal,
   proposalFrom,
   t,
+  tm,
 } from '@ns/core';
 import { Sparkles } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
@@ -15,20 +16,6 @@ import { Button } from '../ui/index.ts';
 import { aiComplete, aiStatus } from './api.ts';
 import { ReviewDialog } from './Review.tsx';
 import { useEditor, useStore } from './store.ts';
-
-const TASKS = [
-  'title',
-  'rewrite',
-  'summarize',
-  'tone',
-  'seo',
-  'structure',
-  'testimonials',
-  'tablet',
-  'spacing',
-  'sober',
-  'palette',
-] as const satisfies readonly (keyof typeof AI_TASKS)[];
 
 /**
  * AI assistant panel (CS-08, CS-09, ADR-0014): an instruction on the selection (or the page), sent
@@ -73,7 +60,7 @@ export function Assistant() {
       registry,
       maxTokens: status?.limits.maxTokens ?? 4000,
     });
-    if ('error' in request) return setError(request.error);
+    if ('error' in request) return setError(tm(request.error));
     setBusy(true);
     try {
       const response = await aiComplete(request);
@@ -102,8 +89,8 @@ export function Assistant() {
           </p>
           <fieldset className="assistant-tasks">
             <legend className="field-label">{t('assistant.taskExamples')}</legend>
-            {TASKS.map((key) => (
-              <Button key={key} size="sm" onClick={() => setInstruction(AI_TASKS[key])}>
+            {AI_TASKS.map((key) => (
+              <Button key={key} size="sm" onClick={() => setInstruction(t(`ai.tasks.${key}`))}>
                 {t(`assistant.tasks.${key}`)}
               </Button>
             ))}
@@ -142,7 +129,7 @@ export function Assistant() {
                 <p className="field-error">{t('assistant.refused', { message: proposal.message })}</p>
               ) : proposal.kind === 'text' ? (
                 <p>
-                  <strong>{t('assistant.suggestion')}</strong> {proposal.text}
+                  <strong>{t('assistant.suggestion')}</strong> {proposal.text || t('assistant.noProposal')}
                 </p>
               ) : (
                 <>
@@ -178,7 +165,7 @@ export function Assistant() {
       ) : (
         <>
           <p role="status">
-            <strong>{t('assistant.disabled')}</strong> {status.reason}
+            <strong>{t('assistant.disabled')}</strong> {status.reason && tm(status.reason)}
           </p>
           <p className="hint">{t('assistant.enableHint')}</p>
         </>

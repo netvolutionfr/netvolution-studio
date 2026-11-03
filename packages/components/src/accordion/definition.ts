@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
@@ -5,7 +6,7 @@ import { defineComponent } from '../define.ts';
 export const accordion = defineComponent({
   type: 'accordion',
   version: 1,
-  label: 'Accordéon',
+  label: t('components.accordion.name'),
   category: 'layout',
   props: z.strictObject({}),
   defaults: { props: {} },

@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
@@ -8,17 +9,17 @@ import { defineComponent } from '../define.ts';
 export const tabs = defineComponent({
   type: 'tabs',
   version: 1,
-  label: 'Onglets',
+  label: t('components.tabs.name'),
   category: 'layout',
   props: z.strictObject({ label: z.string().min(1).max(80) }),
-  defaults: { props: { label: 'Onglets' } },
+  defaults: { props: { label: 'content.tabs' } },
   resolve: (props, { site }, node) => ({
     label: props.label,
     tabs: node.children.map((id) => ({ id, title: String(site.nodes[id]?.props.title ?? '') })),
   }),
   children: ['tab'],
   styleGroups: ['spacing', 'size', 'item', 'visibility', 'position', 'effects'],
-  fields: [{ kind: 'text', prop: 'label', label: 'Nom accessible' }],
+  fields: [{ kind: 'text', prop: 'label', label: t('components.tabs.fields.label') }],
   display: 'block',
   island: true,
   css:

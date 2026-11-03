@@ -1,5 +1,8 @@
-import { colorSchema, linkHref, linkSchema, type RenderContext } from '@ns/core';
+import { colorSchema, contentText, linkHref, linkSchema, type RenderContext } from '@ns/core';
 import { z } from 'zod';
+
+/** Texts a component writes into the site (accessible names, buttons), in the site language (ADR-0024). */
+export const siteText = (ctx: RenderContext) => contentText(ctx.site.settings.lang);
 
 /**
  * A run of rich text (ADR-0020): bold, italic, a literal color, a validated link. Line breaks are

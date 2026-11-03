@@ -50,7 +50,9 @@
 
 ## Langues (ADR-0024)
 
-- **Interface traduite en partie.** Le shell du Studio (barres, panneaux, dialogues, messages) passe par les catalogues `packages/core/src/i18n/locales/` ; le français reste la langue par défaut. Restent en français, quelle que soit la langue choisie : les noms des composants et des sections, les champs de l'inspecteur propres à chaque composant, les messages de validation et de contrôle avant export, les consignes et le prompt de l'assistant IA, le contenu par défaut d'un élément inséré (header, footer, nouvelle page, redirection), l'export (README, page 404). Ce sont les lots 2 et 3.
+- **Interface et contenu généré traduits ; export et modèles encore en français.** Le Studio, les composants, les messages du cœur et du serveur passent par les catalogues `packages/core/src/i18n/locales/` ; le français reste la langue par défaut de l'interface. Le contenu que le Studio écrit dans un site (texte par défaut d'un élément, sections, header et footer, nouvelle page, textes accessibles du carrousel, de la galerie et du bandeau) suit la langue du site (`settings.lang`), l'anglais si elle n'a pas de catalogue. Restent en français : l'export (README, page 404, commentaires générés) et les modèles de site écrits en code (lot 3).
+- **Assistant simulé** (démonstrations et tests) : il reconnaît les consignes en français et en anglais, mais ses réponses et le contenu qu'il propose restent en français.
+- **Messages des schémas** : les messages propres à zod (types, longueurs) restent en anglais, quelle que soit la langue ; seuls les messages écrits pour le Studio sont traduits.
 - **Changement de langue** par rechargement de la page ; le choix est retenu dans le navigateur (`localStorage`), pas côté serveur.
 - **Langues écrites de droite à gauche** non prises en charge.
 

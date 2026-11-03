@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { registry } from '@ns/components/definitions';
-import { loadSite } from '@ns/core';
+import { loadSite, tm } from '@ns/core';
 import { exportProject } from './write.ts';
 
 const [input, outDir] = process.argv.slice(2);
@@ -11,7 +11,7 @@ if (!input || !outDir) {
 }
 const result = loadSite(JSON.parse(await readFile(input, 'utf8')), registry);
 if (!result.ok) {
-  for (const d of result.diagnostics) console.error(`${d.code} ${d.path.join('.')}: ${d.message}`);
+  for (const d of result.diagnostics) console.error(`${d.code} ${d.path.join('.')}: ${tm(d.message)}`);
   process.exit(1);
 }
 // Media are read from media/ next to the document (fixtures/media, or a project folder).

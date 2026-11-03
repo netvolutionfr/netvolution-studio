@@ -1,11 +1,11 @@
-import { isPicture, linkHref, linkSchema, MEDIA_PATH } from '@ns/core';
+import { isPicture, linkHref, linkSchema, MEDIA_PATH, type MessageKey, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const image = defineComponent({
   type: 'image',
   version: 1,
-  label: 'Image',
+  label: t('components.image.name'),
   category: 'media',
   props: z
     .strictObject({
@@ -19,7 +19,7 @@ export const image = defineComponent({
       caption: z.string().max(300).optional(),
     })
     .refine((p) => !p.assetId || p.decorative || p.alt.trim().length > 0, {
-      message: 'Texte alternatif obligatoire (ou image décorative)',
+      message: 'schema.imageAlt' satisfies MessageKey,
       path: ['alt'],
     }),
   defaults: {
@@ -52,27 +52,27 @@ export const image = defineComponent({
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'background', 'visibility', 'position', 'effects', 'media'],
   fields: [
-    { kind: 'asset', prop: 'assetId', label: 'Image', accept: ['image', 'svg'] },
-    { kind: 'text', prop: 'alt', label: 'Texte alternatif' },
-    { kind: 'text', prop: 'caption', label: 'Légende (facultative)' },
-    { kind: 'link', prop: 'link', label: 'Lien', optional: true },
-    { kind: 'boolean', prop: 'decorative', label: 'Image décorative (ignorée par les lecteurs d’écran)' },
+    { kind: 'asset', prop: 'assetId', label: t('components.image.fields.assetId'), accept: ['image', 'svg'] },
+    { kind: 'text', prop: 'alt', label: t('components.image.fields.alt') },
+    { kind: 'text', prop: 'caption', label: t('components.image.fields.caption') },
+    { kind: 'link', prop: 'link', label: t('components.image.fields.link'), optional: true },
+    { kind: 'boolean', prop: 'decorative', label: t('components.image.fields.decorative') },
     {
       kind: 'select',
       prop: 'fit',
-      label: 'Ajustement',
+      label: t('components.image.fields.fit'),
       options: [
-        { value: 'cover', label: 'Remplir (recadrer)' },
-        { value: 'contain', label: 'Contenir' },
+        { value: 'cover', label: t('components.image.options.fit.cover') },
+        { value: 'contain', label: t('components.image.options.fit.contain') },
       ],
     },
     {
       kind: 'select',
       prop: 'loading',
-      label: 'Chargement',
+      label: t('components.image.fields.loading'),
       options: [
-        { value: 'lazy', label: 'Différé (hors écran)' },
-        { value: 'eager', label: 'Immédiat (image principale)' },
+        { value: 'lazy', label: t('components.image.options.loading.lazy') },
+        { value: 'eager', label: t('components.image.options.loading.eager') },
       ],
     },
   ],

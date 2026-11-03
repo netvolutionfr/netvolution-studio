@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
@@ -5,15 +6,15 @@ import { defineComponent } from '../define.ts';
 export const accordionItem = defineComponent({
   type: 'accordion-item',
   version: 1,
-  label: 'Élément d’accordéon',
+  label: t('components.accordionItem.name'),
   category: 'layout',
   props: z.strictObject({ title: z.string().min(1).max(200), open: z.boolean() }),
-  defaults: { props: { title: 'Question', open: false } },
+  defaults: { props: { title: 'content.accordionItem', open: false } },
   children: 'any',
   styleGroups: ['spacing', 'item', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'text', prop: 'title', label: 'Titre' },
-    { kind: 'boolean', prop: 'open', label: 'Ouvert au chargement (et pour l’éditer dans le canvas)' },
+    { kind: 'text', prop: 'title', label: t('components.accordionItem.fields.title') },
+    { kind: 'boolean', prop: 'open', label: t('components.accordionItem.fields.open') },
   ],
   display: 'block',
   css:

@@ -16,6 +16,8 @@ export type MarqueeImage = {
   srcSet?: string;
 };
 export type MarqueeProps = {
+  /** Labels of the pause button, in the site language. */
+  text: { pause: string; resume: string };
   mode: 'texts' | 'images';
   texts: Inline[][];
   separator: string;
@@ -37,7 +39,7 @@ function Run({ run }: { run: Inline }) {
 }
 
 export default function Marquee(p: { className: string; props: MarqueeProps; children?: ReactNode }) {
-  const { mode, texts, separator, images, height, gap, duration, direction } = p.props;
+  const { mode, text, texts, separator, images, height, gap, duration, direction } = p.props;
   // Validated numbers only, as CSS variables of the component's stylesheet.
   const style = {
     '--ns-marquee-duration': `${duration}s`,
@@ -75,8 +77,15 @@ export default function Marquee(p: { className: string; props: MarqueeProps; chi
         ));
   return (
     <div className={`${p.className} ns-marquee ns-marquee-${direction}`} data-ns-marquee="" style={style}>
-      <button type="button" className="ns-marquee-toggle" aria-pressed="false" hidden>
-        Mettre en pause
+      <button
+        type="button"
+        className="ns-marquee-toggle"
+        aria-pressed="false"
+        data-pause={text.pause}
+        data-resume={text.resume}
+        hidden
+      >
+        {text.pause}
       </button>
       <div className="ns-marquee-track">
         <ul className="ns-marquee-group">{items(false)}</ul>

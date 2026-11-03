@@ -1,4 +1,4 @@
-import { type Asset, type DocNode, isPicture, t } from '@ns/core';
+import { type Asset, type DocNode, isPicture, t, tm } from '@ns/core';
 import { ImagePlus } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Button } from '../ui/index.ts';
@@ -49,7 +49,7 @@ export function AssetField({
         : store.dispatch('updateNodeProps', { id: node.id, props }, label);
     if (!set?.ok) {
       store.cancel();
-      setError(set && !set.ok ? set.error.message : t('assetField.refused'));
+      setError(set && !set.ok ? tm(set.error.message) : t('assetField.refused'));
       return;
     }
     store.commit();

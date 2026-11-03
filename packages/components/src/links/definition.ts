@@ -1,4 +1,4 @@
-import { entityIdSchema } from '@ns/core';
+import { entityIdSchema, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 import { navItems } from '../nav/definition.ts';
@@ -7,14 +7,14 @@ import { navItems } from '../nav/definition.ts';
 export const links = defineComponent({
   type: 'links',
   version: 1,
-  label: 'Liste de liens',
+  label: t('components.links.name'),
   category: 'content',
   props: z.strictObject({
     menuId: entityIdSchema.nullable(),
     label: z.string().min(1).max(80),
     direction: z.enum(['column', 'row']),
   }),
-  defaults: { props: { menuId: null, label: 'Liens', direction: 'column' } },
+  defaults: { props: { menuId: null, label: 'content.links', direction: 'column' } },
   resolve: (props, ctx) => {
     const menu = ctx.site.menus?.find((m) => m.id === props.menuId);
     return {
@@ -26,15 +26,15 @@ export const links = defineComponent({
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'menu', prop: 'menuId', label: 'Menu' },
-    { kind: 'text', prop: 'label', label: 'Nom accessible' },
+    { kind: 'menu', prop: 'menuId', label: t('components.links.fields.menuId') },
+    { kind: 'text', prop: 'label', label: t('components.links.fields.label') },
     {
       kind: 'select',
       prop: 'direction',
-      label: 'Disposition',
+      label: t('components.links.fields.direction'),
       options: [
-        { value: 'column', label: 'En colonne' },
-        { value: 'row', label: 'En ligne' },
+        { value: 'column', label: t('components.links.options.direction.column') },
+        { value: 'row', label: t('components.links.options.direction.row') },
       ],
     },
   ],

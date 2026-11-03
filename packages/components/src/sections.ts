@@ -1,12 +1,17 @@
-import type { NodeTemplate, SymbolCategory } from '@ns/core';
+import { type ContentRef, type NodeTemplate, contentRef as ref, type SymbolCategory, t } from '@ns/core';
 
 const px = (value: number) => ({ value, unit: 'px' as const });
-const column: NodeTemplate = { type: 'stack', name: 'Colonne', style: { base: { gap: px(16) } } };
+const column: NodeTemplate = {
+  type: 'stack',
+  name: 'content.sections.column',
+  style: { base: { gap: px(16) } },
+};
 
 /**
  * Built-in section library (CS-01, ADR-0011): familiar compositions of generic components (VE-04,
  * CLAUDE §7). Inserted as an independent copy by default, or as a linked instance once added to the
- * site as a shared component.
+ * site as a shared component. Names and descriptions follow the interface language; the content
+ * (`content.sections.*` keys, ADR-0024) follows the site language, translated on insertion.
  */
 export type LibrarySection = {
   id: string;
@@ -17,19 +22,19 @@ export type LibrarySection = {
   tree: NodeTemplate;
 };
 
-const heading = (text: string, level = 2, size = 32): NodeTemplate => ({
+const heading = (text: string | ContentRef, level = 2, size = 32): NodeTemplate => ({
   type: 'heading',
   props: { level, text },
   style: { base: { fontSize: px(size) } },
 });
-const paragraph = (text: string, style?: NodeTemplate['style']): NodeTemplate => ({
+const paragraph = (text: string | ContentRef, style?: NodeTemplate['style']): NodeTemplate => ({
   type: 'text',
   props: { content: [{ text }] },
   ...(style ? { style } : {}),
 });
 const grid3 = (children: NodeTemplate[]): NodeTemplate => ({
   type: 'grid',
-  name: 'Grille',
+  name: 'content.sections.grid',
   style: { base: { columns: 3, gap: px(24) }, tablet: { columns: 2 }, mobile: { columns: 1 } },
   children,
 });
@@ -44,7 +49,7 @@ const block = (name: string, children: NodeTemplate[]): NodeTemplate => ({
 });
 const card = (children: NodeTemplate[]): NodeTemplate => ({
   type: 'stack',
-  name: 'Carte',
+  name: 'content.sections.card',
   style: {
     base: {
       gap: px(12),
@@ -58,7 +63,7 @@ const card = (children: NodeTemplate[]): NodeTemplate => ({
   },
   children,
 });
-const image = (caption?: string): NodeTemplate => ({
+const image = (caption?: ContentRef): NodeTemplate => ({
   type: 'image',
   props: {
     assetId: null,
@@ -74,12 +79,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'section',
     category: 'structure',
-    description: 'Bloc centré à largeur limitée, avec marges.',
+    description: t('sections.builtIn.section.description'),
     version: 1,
-    name: 'Section',
+    name: t('sections.builtIn.section.name'),
     tree: {
       type: 'container',
-      name: 'Section',
+      name: 'content.sections.section',
       props: { tag: 'section' },
       style: {
         base: {
@@ -98,12 +103,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'row-2',
     category: 'structure',
-    description: 'Deux colonnes, empilées sur mobile.',
+    description: t('sections.builtIn.row2.description'),
     version: 1,
-    name: 'Rangée 2 colonnes',
+    name: t('sections.builtIn.row2.name'),
     tree: {
       type: 'grid',
-      name: 'Rangée 2 colonnes',
+      name: 'content.sections.row2',
       style: {
         base: { columns: 2, gap: px(32), paddingTop: px(32), paddingBottom: px(32) },
         mobile: { columns: 1 },
@@ -114,12 +119,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'row-3',
     category: 'structure',
-    description: 'Trois colonnes : deux sur tablette, une sur mobile.',
+    description: t('sections.builtIn.row3.description'),
     version: 1,
-    name: 'Rangée 3 colonnes',
+    name: t('sections.builtIn.row3.name'),
     tree: {
       type: 'grid',
-      name: 'Rangée 3 colonnes',
+      name: 'content.sections.row3',
       style: {
         base: { columns: 3, gap: px(24), paddingTop: px(32), paddingBottom: px(32) },
         tablet: { columns: 2 },
@@ -131,12 +136,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'hero',
     category: 'hero',
-    description: 'Grand titre, texte, bouton et visuel côte à côte.',
+    description: t('sections.builtIn.hero.description'),
     version: 1,
-    name: 'Hero',
+    name: t('sections.builtIn.hero.name'),
     tree: {
       type: 'stack',
-      name: 'Hero',
+      name: 'content.sections.hero',
       style: {
         base: { direction: 'row', align: 'center', gap: px(48), paddingTop: px(80), paddingBottom: px(80) },
         mobile: {
@@ -150,31 +155,35 @@ export const sections: LibrarySection[] = [
       children: [
         {
           type: 'stack',
-          name: 'Accroche',
+          name: 'content.sections.tagline',
           style: { base: { grow: 1, basis: px(0), gap: px(16) } },
           children: [
             {
               type: 'heading',
-              props: { level: 1, text: 'Votre titre principal' },
+              props: { level: 1, text: 'content.sections.mainHeading' },
               style: { base: { fontSize: px(48) } },
             },
-            { type: 'text', props: { content: [{ text: 'Une phrase qui présente votre offre.' }] } },
+            { type: 'text', props: { content: [{ text: 'content.sections.offer' }] } },
             { type: 'button' },
           ],
         },
-        { type: 'spacer', name: 'Visuel', style: { base: { grow: 1, basis: px(0), minHeight: px(240) } } },
+        {
+          type: 'spacer',
+          name: 'content.sections.visual',
+          style: { base: { grow: 1, basis: px(0), minHeight: px(240) } },
+        },
       ],
     },
   },
   {
     id: 'logo',
     category: 'elements',
-    description: 'Image du logo, à lier à la page d’accueil.',
+    description: t('sections.builtIn.logo.description'),
     version: 1,
-    name: 'Logo',
+    name: t('sections.builtIn.logo.name'),
     tree: {
       type: 'image',
-      name: 'Logo',
+      name: 'content.sections.logo',
       props: { assetId: null, alt: '', decorative: false, fit: 'contain', loading: 'eager' },
       style: { base: { maxWidth: px(180) } },
     },
@@ -182,12 +191,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'card',
     category: 'features',
-    description: 'Icône, titre, texte et lien.',
+    description: t('sections.builtIn.card.description'),
     version: 1,
-    name: 'Carte',
+    name: t('sections.builtIn.card.name'),
     tree: {
       type: 'stack',
-      name: 'Carte',
+      name: 'content.sections.card',
       style: {
         base: {
           gap: px(12),
@@ -203,16 +212,16 @@ export const sections: LibrarySection[] = [
         { type: 'icon', props: { name: 'sparkles', label: '' } },
         {
           type: 'heading',
-          props: { level: 3, text: 'Titre de la carte' },
+          props: { level: 3, text: 'content.sections.cardTitle' },
           style: { base: { fontSize: px(22) } },
         },
         {
           type: 'text',
-          props: { content: [{ text: 'Une courte description du service ou de l’avantage.' }] },
+          props: { content: [{ text: 'content.sections.cardText' }] },
         },
         {
           type: 'button',
-          props: { label: 'En savoir plus', link: { kind: 'url', href: '#' }, variant: 'text' },
+          props: { label: 'content.button', link: { kind: 'url', href: '#' }, variant: 'text' },
         },
       ],
     },
@@ -220,12 +229,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'cta',
     category: 'cta',
-    description: 'Bandeau coloré : titre, texte et bouton.',
+    description: t('sections.builtIn.cta.description'),
     version: 1,
-    name: 'Appel à l’action',
+    name: t('sections.builtIn.cta.name'),
     tree: {
       type: 'stack',
-      name: 'Appel à l’action',
+      name: 'content.sections.cta',
       style: {
         base: {
           align: 'center',
@@ -241,17 +250,21 @@ export const sections: LibrarySection[] = [
       children: [
         {
           type: 'heading',
-          props: { level: 2, text: 'Prêt à démarrer ?' },
+          props: { level: 2, text: 'content.sections.ctaHeading' },
           style: { base: { fontSize: px(32), color: '#ffffff', textAlign: 'center' } },
         },
         {
           type: 'text',
-          props: { content: [{ text: 'Parlons de votre projet.' }] },
+          props: { content: [{ text: 'content.sections.ctaText' }] },
           style: { base: { color: '#ffffff', textAlign: 'center' } },
         },
         {
           type: 'button',
-          props: { label: 'Nous contacter', link: { kind: 'url', href: '#' }, variant: 'primary' },
+          props: {
+            label: 'content.sections.ctaButton',
+            link: { kind: 'url', href: '#' },
+            variant: 'primary',
+          },
           style: { base: { alignSelf: 'center' } },
         },
       ],
@@ -260,12 +273,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'gallery',
     category: 'gallery',
-    description: 'Grille responsive d’images légendées (composants Image modifiables un par un).',
+    description: t('sections.builtIn.gallery.description'),
     version: 1,
-    name: 'Grille d’images',
+    name: t('sections.builtIn.gallery.name'),
     tree: {
       type: 'grid',
-      name: 'Grille d’images',
+      name: 'content.sections.gallery',
       style: {
         base: { columns: 3, gap: px(16), paddingTop: px(24) },
         tablet: { columns: 2 },
@@ -279,7 +292,7 @@ export const sections: LibrarySection[] = [
           decorative: false,
           fit: 'cover',
           loading: 'lazy',
-          caption: `Légende ${i}`,
+          caption: ref('content.sections.caption', { n: i }),
         },
       })),
     },
@@ -287,43 +300,47 @@ export const sections: LibrarySection[] = [
   {
     id: 'accordion',
     category: 'elements',
-    description: 'Questions-réponses dépliables, sans JavaScript.',
+    description: t('sections.builtIn.accordion.description'),
     version: 1,
-    name: 'Accordéon (FAQ)',
+    name: t('sections.builtIn.accordion.name'),
     tree: {
       type: 'accordion',
-      name: 'FAQ',
+      name: 'content.sections.faq',
       children: [1, 2].map((i) => ({
         type: 'accordion-item',
-        props: { title: `Question ${i}`, open: i === 1 },
-        children: [{ type: 'text', props: { content: [{ text: `Réponse ${i}.` }] } }],
+        props: { title: ref('content.sections.question', { n: i }), open: i === 1 },
+        children: [
+          { type: 'text', props: { content: [{ text: ref('content.sections.answer', { n: i }) }] } },
+        ],
       })),
     },
   },
   {
     id: 'tabs',
     category: 'elements',
-    description: 'Contenus en onglets accessibles au clavier.',
+    description: t('sections.builtIn.tabs.description'),
     version: 1,
-    name: 'Bloc d’onglets',
+    name: t('sections.builtIn.tabs.name'),
     tree: {
       type: 'tabs',
       children: [1, 2].map((i) => ({
         type: 'tab',
-        props: { title: `Onglet ${i}` },
-        children: [{ type: 'text', props: { content: [{ text: `Contenu de l’onglet ${i}.` }] } }],
+        props: { title: ref('content.sections.tab', { n: i }) },
+        children: [
+          { type: 'text', props: { content: [{ text: ref('content.sections.tabContent', { n: i }) }] } },
+        ],
       })),
     },
   },
   {
     id: 'presentation',
     category: 'presentation',
-    description: 'Image et texte côte à côte, empilés sur mobile.',
+    description: t('sections.builtIn.presentation.description'),
     version: 1,
-    name: 'Présentation',
+    name: t('sections.builtIn.presentation.name'),
     tree: {
       type: 'grid',
-      name: 'Présentation',
+      name: 'content.sections.presentation',
       style: {
         base: { columns: 2, gap: px(48), align: 'center', paddingTop: px(64), paddingBottom: px(64) },
         mobile: { columns: 1, gap: px(24), paddingTop: px(40), paddingBottom: px(40) },
@@ -332,14 +349,14 @@ export const sections: LibrarySection[] = [
         image(),
         {
           type: 'stack',
-          name: 'Texte',
+          name: 'content.sections.text',
           style: { base: { gap: px(16) } },
           children: [
-            heading('Qui sommes-nous ?'),
-            paragraph('Présentez votre activité, votre histoire et ce qui vous distingue.'),
+            heading('content.sections.about'),
+            paragraph('content.sections.aboutText'),
             {
               type: 'button',
-              props: { label: 'En savoir plus', link: { kind: 'url', href: '#' }, variant: 'secondary' },
+              props: { label: 'content.button', link: { kind: 'url', href: '#' }, variant: 'secondary' },
             },
           ],
         },
@@ -349,16 +366,16 @@ export const sections: LibrarySection[] = [
   {
     id: 'features',
     category: 'features',
-    description: 'Titre et trois atouts avec icône.',
+    description: t('sections.builtIn.features.description'),
     version: 1,
-    name: 'Atouts',
-    tree: block('Atouts', [
-      heading('Pourquoi nous choisir'),
+    name: t('sections.builtIn.features.name'),
+    tree: block('content.sections.features', [
+      heading('content.sections.why'),
       grid3(
         [
-          ['zap', 'Rapide', 'Des pages légères, servies en statique.'],
-          ['shield-check', 'Sûr', 'Aucune interface d’administration exposée.'],
-          ['heart', 'Accessible', 'Clavier, lecteurs d’écran et contrastes soignés.'],
+          ['zap', 'content.sections.fast', 'content.sections.fastText'],
+          ['shield-check', 'content.sections.secure', 'content.sections.secureText'],
+          ['heart', 'content.sections.accessible', 'content.sections.accessibleText'],
         ].map(([icon, title, text]) =>
           card([
             { type: 'icon', props: { name: icon, label: '' } },
@@ -372,11 +389,11 @@ export const sections: LibrarySection[] = [
   {
     id: 'testimonials',
     category: 'testimonials',
-    description: 'Trois citations de clients avec leur nom.',
+    description: t('sections.builtIn.testimonials.description'),
     version: 1,
-    name: 'Témoignages',
-    tree: block('Témoignages', [
-      heading('Ils nous font confiance'),
+    name: t('sections.builtIn.testimonials.name'),
+    tree: block('content.sections.testimonials', [
+      heading('content.sections.trust'),
       grid3(
         [1, 2, 3].map((i) =>
           card([
@@ -385,8 +402,8 @@ export const sections: LibrarySection[] = [
               props: { name: 'quote', label: '' },
               style: { base: { fontSize: px(28), color: '#6b7280' } },
             },
-            paragraph(`« Un témoignage de client, court et concret. »`, { base: { fontSize: px(18) } }),
-            paragraph(`Prénom Nom ${i}, entreprise`, { base: { fontWeight: 600 } }),
+            paragraph('content.sections.quote', { base: { fontSize: px(18) } }),
+            paragraph(ref('content.sections.quoteAuthor', { n: i }), { base: { fontWeight: 600 } }),
           ]),
         ),
       ),
@@ -395,24 +412,28 @@ export const sections: LibrarySection[] = [
   {
     id: 'pricing',
     category: 'pricing',
-    description: 'Trois formules avec prix, description et bouton.',
+    description: t('sections.builtIn.pricing.description'),
     version: 1,
-    name: 'Tarifs',
-    tree: block('Tarifs', [
-      heading('Nos formules'),
+    name: t('sections.builtIn.pricing.name'),
+    tree: block('content.sections.pricing', [
+      heading('content.sections.plans'),
       grid3(
         [
-          ['Essentiel', '490 €'],
-          ['Pro', '990 €'],
-          ['Sur mesure', 'Sur devis'],
+          ['content.sections.essential', '490 €'],
+          ['content.sections.pro', '990 €'],
+          ['content.sections.custom', 'content.sections.onQuote'],
         ].map(([name, price]) =>
           card([
             heading(name as string, 3, 22),
             { type: 'heading', props: { level: 4, text: price }, style: { base: { fontSize: px(36) } } },
-            paragraph('Ce que comprend la formule, en une ou deux phrases.'),
+            paragraph('content.sections.planText'),
             {
               type: 'button',
-              props: { label: 'Choisir', link: { kind: 'url', href: '#' }, variant: 'primary' },
+              props: {
+                label: 'content.sections.choose',
+                link: { kind: 'url', href: '#' },
+                variant: 'primary',
+              },
             },
           ]),
         ),
@@ -422,20 +443,20 @@ export const sections: LibrarySection[] = [
   {
     id: 'team',
     category: 'team',
-    description: 'Trois membres : photo, nom et rôle.',
+    description: t('sections.builtIn.team.description'),
     version: 1,
-    name: 'Équipe',
-    tree: block('Équipe', [
-      heading('L’équipe'),
+    name: t('sections.builtIn.team.name'),
+    tree: block('content.sections.team', [
+      heading('content.sections.theTeam'),
       grid3(
         [1, 2, 3].map((i) => ({
           type: 'stack',
-          name: 'Membre',
+          name: 'content.sections.member',
           style: { base: { gap: px(8) } },
           children: [
             image(),
-            heading(`Prénom Nom ${i}`, 3, 20),
-            paragraph('Rôle', { base: { color: '#4b5563' } }),
+            heading(ref('content.sections.memberName', { n: i }), 3, 20),
+            paragraph('content.sections.role', { base: { color: '#4b5563' } }),
           ],
         })),
       ),
@@ -444,12 +465,12 @@ export const sections: LibrarySection[] = [
   {
     id: 'contact',
     category: 'contact',
-    description: 'Invitation à écrire et coordonnées avec icônes.',
+    description: t('sections.builtIn.contact.description'),
     version: 1,
-    name: 'Contact',
+    name: t('sections.builtIn.contact.name'),
     tree: {
       type: 'grid',
-      name: 'Contact',
+      name: 'content.sections.contact',
       style: {
         base: { columns: 2, gap: px(48), paddingTop: px(64), paddingBottom: px(64) },
         mobile: { columns: 1, gap: px(24), paddingTop: px(40), paddingBottom: px(40) },
@@ -457,15 +478,15 @@ export const sections: LibrarySection[] = [
       children: [
         {
           type: 'stack',
-          name: 'Invitation',
+          name: 'content.sections.invitation',
           style: { base: { gap: px(16) } },
           children: [
-            heading('Parlons de votre projet'),
-            paragraph('Réponse sous 48 heures ouvrées.'),
+            heading('content.sections.talk'),
+            paragraph('content.sections.answerTime'),
             {
               type: 'button',
               props: {
-                label: 'Nous écrire',
+                label: 'content.sections.write',
                 link: { kind: 'url', href: 'mailto:contact@exemple.fr' },
                 variant: 'primary',
               },
@@ -474,7 +495,7 @@ export const sections: LibrarySection[] = [
         },
         {
           type: 'stack',
-          name: 'Coordonnées',
+          name: 'content.sections.details',
           style: { base: { gap: px(12) } },
           children: [
             ['phone', '01 23 45 67 89'],
@@ -482,7 +503,7 @@ export const sections: LibrarySection[] = [
             ['map-pin', '12 rue des Arts, Lille'],
           ].map(([icon, text]) => ({
             type: 'stack',
-            name: 'Ligne',
+            name: 'content.sections.line',
             style: { base: { direction: 'row', align: 'center', gap: px(12) } },
             children: [
               { type: 'icon', props: { name: icon, label: '' }, style: { base: { fontSize: px(20) } } },

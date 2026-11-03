@@ -2,7 +2,7 @@ import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { AiError, AiRequest } from '@ns/core';
+import { type AiError, type AiRequest, tm } from '@ns/core';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { anthropicProvider } from './anthropic.ts';
 import { openAiProvider } from './openai.ts';
@@ -167,7 +167,7 @@ describe('AI service', () => {
   it('is disabled without a provider or a key, and never reports a key', () => {
     expect(aiConfigFromEnv({}).provider).toBeNull();
     const missing = aiConfigFromEnv({ NS_AI_PROVIDER: 'anthropic' });
-    expect([missing.provider, missing.reason]).toEqual([
+    expect([missing.provider, missing.reason && tm(missing.reason)]).toEqual([
       null,
       expect.stringMatching(/ANTHROPIC_API_KEY est absente/),
     ]);

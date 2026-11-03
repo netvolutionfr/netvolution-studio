@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { loadSite } from '../document/load.ts';
 import type { Site } from '../document/schema.ts';
 import { createEditorStore } from '../editor/store.ts';
+import { tm } from '../i18n/index.ts';
 import { sampleDoc, testRegistry } from '../test-registry.ts';
 import { BASE_CSS, toCss } from './css.ts';
 import { CSS_LAYERS } from './custom.ts';
@@ -78,7 +79,7 @@ describe('design tokens', () => {
       s.dispatch('setToken', { kind: 'colors', id: 'primary', value: { label: 'x', value: 'red' } }).ok,
     ).toBe(false);
     const removed = s.dispatch('removeToken', { kind: 'colors', id: 'primary' });
-    expect(removed.ok ? '' : removed.error.message).toMatch(/utilisé par 1/);
+    expect(removed.ok ? '' : tm(removed.error.message)).toMatch(/utilisé par 1/);
     expect(s.dispatch('removeToken', { kind: 'fonts', id: 'brand' }).ok).toBe(false); // used by the h1 text style
     s.dispatch('updateNodeStyle', { id: 'nlabel001', breakpoint: 'base', unset: ['color'] });
     expect(s.dispatch('removeToken', { kind: 'colors', id: 'primary' }).ok).toBe(true);

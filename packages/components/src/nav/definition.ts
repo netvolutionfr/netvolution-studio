@@ -1,4 +1,4 @@
-import { entityIdSchema, linkHref, type MenuItem, type RenderContext } from '@ns/core';
+import { entityIdSchema, linkHref, type MenuItem, type RenderContext, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 import type { NavItem } from './view.tsx';
@@ -26,7 +26,7 @@ export function navItems(list: readonly MenuItem[], ctx: RenderContext): NavItem
 export const nav = defineComponent({
   type: 'nav',
   version: 1,
-  label: 'Navigation',
+  label: t('components.nav.name'),
   category: 'content',
   props: z.strictObject({
     menuId: entityIdSchema.nullable(),
@@ -34,7 +34,14 @@ export const nav = defineComponent({
     toggle: z.string().min(1).max(40),
     collapse: z.enum(['never', 'tablet', 'mobile']),
   }),
-  defaults: { props: { menuId: null, label: 'Navigation principale', toggle: 'Menu', collapse: 'mobile' } },
+  defaults: {
+    props: {
+      menuId: null,
+      label: 'content.nav.label',
+      toggle: 'content.nav.toggle',
+      collapse: 'mobile',
+    },
+  },
   resolve: (props, ctx) => {
     const menu = ctx.site.menus?.find((m) => m.id === props.menuId);
     return { label: props.label, toggle: props.toggle, items: menu ? navItems(menu.items, ctx) : [] };
@@ -42,17 +49,17 @@ export const nav = defineComponent({
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'menu', prop: 'menuId', label: 'Menu' },
-    { kind: 'text', prop: 'label', label: 'Nom accessible' },
-    { kind: 'text', prop: 'toggle', label: 'Libellé du bouton (mobile)' },
+    { kind: 'menu', prop: 'menuId', label: t('components.nav.fields.menuId') },
+    { kind: 'text', prop: 'label', label: t('components.nav.fields.label') },
+    { kind: 'text', prop: 'toggle', label: t('components.nav.fields.toggle') },
     {
       kind: 'select',
       prop: 'collapse',
-      label: 'Replier en bouton',
+      label: t('components.nav.fields.collapse'),
       options: [
-        { value: 'mobile', label: 'Sur mobile' },
-        { value: 'tablet', label: 'Sur tablette et mobile' },
-        { value: 'never', label: 'Jamais' },
+        { value: 'mobile', label: t('components.nav.options.collapse.mobile') },
+        { value: 'tablet', label: t('components.nav.options.collapse.tablet') },
+        { value: 'never', label: t('components.nav.options.collapse.never') },
       ],
     },
   ],

@@ -47,7 +47,8 @@ export function init(root: ParentNode = document, options: { autoplay?: boolean 
     pause?.addEventListener('click', () => {
       stopped = !stopped;
       pause.setAttribute('aria-pressed', String(stopped));
-      pause.textContent = stopped ? 'Lecture' : 'Pause';
+      // Labels in the site language, written by the view.
+      pause.textContent = (stopped ? pause.dataset.play : pause.dataset.pause) ?? '';
     });
   }
 }

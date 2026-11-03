@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 import { ICONS } from './icons.ts';
@@ -12,7 +13,7 @@ const names = Object.keys(ICONS) as [keyof typeof ICONS, ...(keyof typeof ICONS)
 export const icon = defineComponent({
   type: 'icon',
   version: 1,
-  label: 'Icône',
+  label: t('components.icon.name'),
   category: 'content',
   props: z.strictObject({ name: z.enum(names), label: z.string().max(80) }),
   defaults: { props: { name: 'check', label: '' }, style: { base: { fontSize: { value: 32, unit: 'px' } } } },
@@ -23,10 +24,10 @@ export const icon = defineComponent({
     {
       kind: 'select',
       prop: 'name',
-      label: 'Icône',
-      options: names.map((n) => ({ value: n, label: ICONS[n].label })),
+      label: t('components.icon.fields.name'),
+      options: names.map((n) => ({ value: n, label: t(`components.icon.names.${n}`) })),
     },
-    { kind: 'text', prop: 'label', label: 'Nom accessible (vide = décorative)' },
+    { kind: 'text', prop: 'label', label: t('components.icon.fields.label') },
   ],
   display: 'inline-block',
   css: '.ns-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}',

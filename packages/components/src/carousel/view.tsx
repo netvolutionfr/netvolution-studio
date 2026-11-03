@@ -7,11 +7,15 @@ export type CarouselImage = {
   height: number;
   alt: string;
   caption: string;
+  /** « 2 of 5 », in the site language. */
+  position: string;
   /** Responsive variants, added by the exported page (astro:assets); absent in the Studio. */
   srcSet?: string;
 };
 export type CarouselProps = {
   label: string;
+  /** Generated texts, in the site language. */
+  text: { carousel: string; slide: string; prev: string; next: string; pause: string; play: string };
   ratio: string;
   gap: number;
   autoplay: boolean;
@@ -20,14 +24,14 @@ export type CarouselProps = {
 };
 
 export default function Carousel(p: { className: string; props: CarouselProps; children?: ReactNode }) {
-  const { label, ratio, gap, autoplay, interval, images } = p.props;
+  const { label, text, ratio, gap, autoplay, interval, images } = p.props;
   if (!images.length)
     return <div aria-hidden="true" className={`ns-carousel ns-carousel-empty ${p.className}`} />;
   const style = { '--ns-carousel-gap': `${gap}px` } as CSSProperties;
   return (
     <section
       className={`${p.className} ns-carousel ns-carousel-r-${ratio}`}
-      aria-roledescription="carrousel"
+      aria-roledescription={text.carousel}
       aria-label={label}
       data-ns-carousel=""
       data-autoplay={autoplay ? interval : undefined}
@@ -42,8 +46,8 @@ export default function Carousel(p: { className: string; props: CarouselProps; c
             key={i}
             className="ns-carousel-slide"
             role="group"
-            aria-roledescription="diapositive"
-            aria-label={`${i + 1} sur ${images.length}`}
+            aria-roledescription={text.slide}
+            aria-label={im.position}
           >
             <img
               src={im.src}
@@ -60,15 +64,21 @@ export default function Carousel(p: { className: string; props: CarouselProps; c
         ))}
       </div>
       <div className="ns-carousel-controls" hidden>
-        <button type="button" className="ns-carousel-prev" aria-label="Image précédente">
+        <button type="button" className="ns-carousel-prev" aria-label={text.prev}>
           ‹
         </button>
         {autoplay && (
-          <button type="button" className="ns-carousel-pause" aria-pressed="false">
-            Pause
+          <button
+            type="button"
+            className="ns-carousel-pause"
+            aria-pressed="false"
+            data-pause={text.pause}
+            data-play={text.play}
+          >
+            {text.pause}
           </button>
         )}
-        <button type="button" className="ns-carousel-next" aria-label="Image suivante">
+        <button type="button" className="ns-carousel-next" aria-label={text.next}>
           ›
         </button>
       </div>

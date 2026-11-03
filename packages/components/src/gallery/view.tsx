@@ -16,17 +16,23 @@ export type GalleryProps = {
   layout: 'masonry' | 'tiles';
   ratio: string;
   lightbox: boolean;
+  /** Labels of the lightbox (island), in the site language. */
+  text: { dialog: string; close: string; prev: string; next: string };
   images: GalleryImage[];
 };
 
 export default function Gallery(p: { className: string; props: GalleryProps; children?: ReactNode }) {
-  const { layout, ratio, lightbox, images } = p.props;
+  const { layout, ratio, lightbox, text, images } = p.props;
   if (!images.length)
     return <div aria-hidden="true" className={`ns-gallery ns-gallery-empty ${p.className}`} />;
   return (
     <div
       className={`ns-gallery ns-gallery-${layout} ns-gallery-r-${ratio} ${p.className}`}
       data-ns-gallery={lightbox ? '' : undefined}
+      data-dialog={lightbox ? text.dialog : undefined}
+      data-close={lightbox ? text.close : undefined}
+      data-prev={lightbox ? text.prev : undefined}
+      data-next={lightbox ? text.next : undefined}
     >
       {images.map((im, i) => {
         const img = (

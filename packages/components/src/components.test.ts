@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { checkSite, createEditorStore, loadSite, pageRoots, type Site, toCss } from '@ns/core';
+import { checkSite, createEditorStore, loadSite, pageRoots, type Site, tm, toCss } from '@ns/core';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -71,7 +71,26 @@ describe('built-in components', () => {
   it.each(sections.map((p) => [p.id, p] as const))('section %s inserts a valid subtree', (_id, preset) => {
     const store = createEditorStore(load('typography.json'), registry);
     const r = store.dispatch('insertTree', { parentId: 'nroot00001', index: 0, tree: preset.tree });
-    expect(r.ok ? 'ok' : r.error.message).toBe('ok');
+    expect(r.ok ? 'ok' : tm(r.error.message)).toBe('ok');
+  });
+
+  it('inserts its texts and layer names in the site language (ADR-0024)', () => {
+    const texts = (lang: string) => {
+      const site = load('typography.json');
+      site.settings.lang = lang;
+      const store = createEditorStore(site, registry);
+      const tree = sections.find((x) => x.id === 'tabs')?.tree ?? { type: 'tabs' };
+      const r = store.dispatch('insertTree', { parentId: 'nroot00001', index: 0, tree });
+      const ids = r.ok ? (r.created ?? []) : [];
+      store.dispatch('insertNode', { parentId: 'nroot00001', index: 0, type: 'button' });
+      const doc = store.getState().doc;
+      return JSON.stringify([...ids, ...Object.keys(doc.nodes)].map((id) => doc.nodes[id]?.props));
+    };
+    expect(texts('fr')).toContain('Contenu de l’onglet 2.');
+    expect(texts('fr')).toContain('En savoir plus');
+    expect(texts('en')).toContain('Content of tab 2.');
+    expect(texts('en')).toContain('Learn more');
+    expect(texts('en')).not.toContain('content.');
   });
 
   it('core does not depend on React', () => {
@@ -284,7 +303,9 @@ describe('media library (SB-06)', () => {
     expect(html).toContain('href="/media/apdftarif1.pdf"');
     image.props = { ...image.props, assetId: 'apdftarif1' };
     const refused = loadSite(site, registry);
-    expect(refused.ok ? '' : refused.diagnostics[0]?.message).toMatch(/Type de média non accepté/);
+    expect(refused.ok ? '' : refused.diagnostics.map((d) => tm(d.message)).join()).toMatch(
+      /Type de média non accepté/,
+    );
   });
 
   it('metadata edits; removal refused while the media is used', () => {
@@ -300,7 +321,7 @@ describe('media library (SB-06)', () => {
     expect(store.dispatch('updateAsset', { id: 'apdftarif1', alt: 'x' }).ok).toBe(false);
     expect(store.dispatch('updateAsset', { id: 'apdftarif1', tags: ['ok', ''] }).ok).toBe(false);
     const used = store.dispatch('removeAsset', { id: 'afixture001' });
-    expect(used.ok ? '' : used.error.message).toMatch(/utilisé par 2/);
+    expect(used.ok ? '' : tm(used.error.message)).toMatch(/utilisé par 2/);
     expect(store.dispatch('removeAsset', { id: 'apdftarif1' }).ok).toBe(true);
   });
 });
@@ -381,7 +402,7 @@ describe('gallery (ADR-0021)', () => {
     if (!r.ok) throw new Error(JSON.stringify(r.diagnostics));
     const html = renderToStaticMarkup(createElement(DocumentView, { site: r.doc, pageId: 'home' }));
     expect(html).toContain(
-      '<div class="ns-gallery ns-gallery-masonry ns-gallery-r-4-3 ns-ngallerytst" data-ns-gallery="">',
+      '<div class="ns-gallery ns-gallery-masonry ns-gallery-r-4-3 ns-ngallerytst" data-ns-gallery="" data-dialog="Image agrandie" data-close="Fermer"',
     );
     expect(html).toContain(
       '<figure class="ns-gallery-item"><a class="ns-gallery-link" href="/media/afixture001.png"><img src="/media/afixture001.png" alt="Projet" width="640" height="400" loading="lazy" decoding="async"/></a><figcaption>Légende</figcaption></figure>',
@@ -434,8 +455,10 @@ describe('gallery (ADR-0021)', () => {
 });
 
 describe('marquee and carousel (ADR-0022)', () => {
-  const page = () => {
-    const r = loadSite(load('composition.json'), registry);
+  const page = (lang?: string) => {
+    const site = load('composition.json');
+    if (lang) site.settings.lang = lang;
+    const r = loadSite(site, registry);
     if (!r.ok) throw new Error(JSON.stringify(r.diagnostics));
     return {
       html: renderToStaticMarkup(createElement(DocumentView, { site: r.doc, pageId: 'home' })),
@@ -448,7 +471,7 @@ describe('marquee and carousel (ADR-0022)', () => {
     const marquee = html.split('ns-nmarquee01')[1] ?? '';
     expect(marquee).toContain('data-ns-marquee=""');
     expect(marquee).toContain(
-      '<button type="button" class="ns-marquee-toggle" aria-pressed="false" hidden="">',
+      '<button type="button" class="ns-marquee-toggle" aria-pressed="false" data-pause="Mettre en pause" data-resume="Reprendre le défilement" hidden="">',
     );
     expect(marquee.match(/class="ns-marquee-group"/g)).toHaveLength(2);
     expect(marquee).toContain('<ul class="ns-marquee-group" aria-hidden="true">');
@@ -468,6 +491,15 @@ describe('marquee and carousel (ADR-0022)', () => {
     expect(carousel).not.toContain('ns-carousel-pause');
     expect(css).toContain('.ns-ncarous001{--ns-per-view:3}');
     expect(css).toMatch(/@media \(max-width:767px\)\{[^@]*\.ns-ncarous001\{--ns-per-view:1\}/);
+  });
+
+  it('writes its generated texts in the site language (ADR-0024)', () => {
+    const { html } = page('en-GB');
+    expect(html).toContain('aria-roledescription="carousel"');
+    expect(html).toContain('aria-roledescription="slide" aria-label="1 of 4"');
+    expect(html).toContain('data-pause="Pause" data-resume="Resume scrolling"');
+    // Without a catalog for the site language, English.
+    expect(page('de').html).toContain('aria-label="Previous image"');
   });
 
   it('refuses unknown media and out-of-range settings', () => {

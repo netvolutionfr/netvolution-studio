@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MessageKey } from '../i18n/index.ts';
 import { CUSTOM_CSS_MAX } from '../style/custom.ts';
 import { styleDeclsSchema } from '../style/schema.ts';
 import { familyNameSchema, tokensSchema } from '../style/tokens.ts';
@@ -21,9 +22,7 @@ const jsonSchema: z.ZodType<Json> = z.lazy(() =>
 );
 
 /** Stable, unique, and safe to use as a CSS class suffix. */
-export const nodeIdSchema = z
-  .string()
-  .regex(/^n[a-z0-9]{8,32}$/, 'expected n + 8-32 lowercase alphanumerics');
+export const nodeIdSchema = z.string().regex(/^n[a-z0-9]{8,32}$/, 'schema.nodeId' satisfies MessageKey);
 
 export const breakpointSchema = z.strictObject({
   id: z
@@ -49,7 +48,7 @@ export type Instance = z.infer<typeof instanceSchema>;
 
 export const customClassSchema = z
   .string()
-  .regex(/^(?!ns-)[a-z][a-z0-9-]{0,39}$/, 'classe en minuscules, chiffres et tirets, sans le préfixe ns-');
+  .regex(/^(?!ns-)[a-z][a-z0-9-]{0,39}$/, 'schema.className' satisfies MessageKey);
 
 export const nodeSchema = z.strictObject({
   id: nodeIdSchema,
@@ -111,7 +110,7 @@ export const assetSchema = z.discriminatedUnion('kind', [
     /** A single weight, or the range of a variable font. */
     weight: z
       .strictObject({ min: fontWeight, max: fontWeight })
-      .refine((w) => w.min <= w.max, 'graisse minimale au-dessus de la maximale'),
+      .refine((w) => w.min <= w.max, 'schema.fontWeights' satisfies MessageKey),
     style: z.enum(['normal', 'italic']),
     /** Licence and author of the font, reproduced in the export. */
     license: z.string().max(500).optional(),
@@ -131,7 +130,10 @@ export { entityIdSchema } from './ids.ts';
 export const slugSchema = z
   .string()
   .max(200)
-  .regex(/^(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*)?$/, 'slug invalide');
+  .regex(
+    /^(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*)?$/,
+    'schema.slug' satisfies MessageKey,
+  );
 
 /** Header and footer choice: absent = site default, null = none, else a layout id. */
 export const layoutChoiceSchema = z.strictObject({
@@ -159,7 +161,7 @@ export const seoSchema = z.strictObject({
   canonical: z
     .string()
     .max(500)
-    .regex(/^https?:\/\/[^\s<>"]+$/, 'URL absolue attendue')
+    .regex(/^https?:\/\/[^\s<>"]+$/, 'schema.absoluteUrl' satisfies MessageKey)
     .optional(),
   /** false: `noindex`, and left out of the sitemap. */
   index: z.boolean().optional(),
@@ -176,7 +178,7 @@ export const redirectSchema = z.strictObject({
   from: z
     .string()
     .max(300)
-    .regex(/^\/(?:[a-z0-9._~-]+\/)*(?:[a-z0-9._~-]+)?$/i, 'chemin attendu, ex. /ancienne-page/'),
+    .regex(/^\/(?:[a-z0-9._~-]+\/)*(?:[a-z0-9._~-]+)?$/i, 'schema.path' satisfies MessageKey),
   to: linkSchema,
   permanent: z.boolean(),
 });
@@ -249,13 +251,13 @@ export const siteSchema = z.strictObject({
   id: entityIdSchema,
   name: z.string().max(200),
   settings: z.strictObject({
-    lang: z.string().regex(/^[a-z]{2,3}(?:-[A-Z]{2})?$/, 'code de langue attendu (fr, en-GB…)'),
+    lang: z.string().regex(/^[a-z]{2,3}(?:-[A-Z]{2})?$/, 'schema.lang' satisfies MessageKey),
     homePageId: entityIdSchema,
     /** Canonical origin of the published site (SB-01), e.g. https://example.com. */
     siteUrl: z
       .string()
       .max(200)
-      .regex(/^https?:\/\/[a-z0-9.-]+(?::\d{1,5})?$/, 'origine attendue (https://exemple.fr)')
+      .regex(/^https?:\/\/[a-z0-9.-]+(?::\d{1,5})?$/, 'schema.origin' satisfies MessageKey)
       .optional(),
     /** Header and footer of pages that do not choose their own. */
     defaultLayouts: layoutChoiceSchema.optional(),

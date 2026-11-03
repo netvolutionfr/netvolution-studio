@@ -1,10 +1,11 @@
+import { t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const container = defineComponent({
   type: 'container',
   version: 1,
-  label: 'Conteneur',
+  label: t('components.container.name'),
   category: 'layout',
   props: z.strictObject({ tag: z.enum(['section', 'div', 'main', 'header', 'footer', 'article', 'aside']) }),
   defaults: { props: { tag: 'section' } },
@@ -14,10 +15,10 @@ export const container = defineComponent({
     {
       kind: 'select',
       prop: 'tag',
-      label: 'Balise HTML',
-      options: ['section', 'div', 'main', 'header', 'footer', 'article', 'aside'].map((t) => ({
-        value: t,
-        label: `<${t}>`,
+      label: t('components.container.fields.tag'),
+      options: ['section', 'div', 'main', 'header', 'footer', 'article', 'aside'].map((tag) => ({
+        value: tag,
+        label: `<${tag}>`,
       })),
     },
   ],

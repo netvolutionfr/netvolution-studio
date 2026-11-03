@@ -14,8 +14,11 @@ import {
   aiRequestSchema,
   checkSite,
   commandCatalog,
+  issueMessage,
   loadSite,
   MEDIA_PATH,
+  type Message,
+  msg,
   type Site,
   serializeSite,
 } from '@ns/core';
@@ -64,9 +67,12 @@ const run = promisify(execFile);
 class HttpError extends Error {
   readonly status: number;
   readonly details: unknown;
-  constructor(status: number, message: string, details?: unknown) {
-    super(message);
+  /** Sent to the Studio, which translates it (ADR-0024). */
+  readonly detail: Message;
+  constructor(status: number, detail: Message, details?: unknown) {
+    super(detail.key);
     this.status = status;
+    this.detail = detail;
     this.details = details;
   }
 }
@@ -77,7 +83,7 @@ const etagOf = (content: string | Buffer) =>
 function inside(root: string, ...parts: string[]) {
   const base = resolve(root);
   const target = resolve(base, ...parts);
-  if (!target.startsWith(base + sep)) throw new HttpError(400, 'Chemin refusé');
+  if (!target.startsWith(base + sep)) throw new HttpError(400, msg('server.path'));
   return target;
 }
 
@@ -92,7 +98,7 @@ async function body(req: IncomingMessage, limit: number): Promise<Buffer> {
   let size = 0;
   for await (const chunk of req) {
     size += (chunk as Buffer).length;
-    if (size > limit) throw new HttpError(413, 'Contenu trop volumineux');
+    if (size > limit) throw new HttpError(413, msg('server.tooLarge'));
     chunks.push(chunk as Buffer);
   }
   return Buffer.concat(chunks);
@@ -102,13 +108,13 @@ async function jsonBody(req: IncomingMessage, limit = MAX_DOC) {
   try {
     return JSON.parse((await body(req, limit)).toString('utf8')) as unknown;
   } catch (e) {
-    throw e instanceof HttpError ? e : new HttpError(400, 'JSON invalide');
+    throw e instanceof HttpError ? e : new HttpError(400, msg('server.json'));
   }
 }
 
 function validDocument(input: unknown) {
   const result = loadSite(input, registry);
-  if (!result.ok) throw new HttpError(422, 'Document invalide', result.diagnostics);
+  if (!result.ok) throw new HttpError(422, msg('server.invalidDocument'), result.diagnostics);
   return result.doc;
 }
 
@@ -118,9 +124,9 @@ function validDocument(input: unknown) {
  */
 function checkOrigin(req: IncomingMessage) {
   if (req.method === 'GET' || req.method === 'HEAD') return;
-  if (req.headers['x-ns-request'] !== '1') throw new HttpError(403, 'En-tête X-NS-Request manquant');
+  if (req.headers['x-ns-request'] !== '1') throw new HttpError(403, msg('server.header'));
   const origin = req.headers.origin;
-  if (origin && new URL(origin).host !== req.headers.host) throw new HttpError(403, 'Origine refusée');
+  if (origin && new URL(origin).host !== req.headers.host) throw new HttpError(403, msg('server.origin'));
 }
 
 const randomId = (prefix: string, length: number) =>
@@ -131,12 +137,12 @@ export function createApi(options: ApiOptions) {
   const trashDir = join(options.dataDir, 'trash');
   const ready = Promise.all([mkdir(projectsDir, { recursive: true }), mkdir(trashDir, { recursive: true })]);
   const projectDir = (id: string) => {
-    if (!PROJECT_ID.test(id)) throw new HttpError(400, 'Identifiant de projet invalide');
+    if (!PROJECT_ID.test(id)) throw new HttpError(400, msg('server.projectId'));
     return inside(projectsDir, id);
   };
   const readSite = async (id: string) => {
     const content = await readFile(join(projectDir(id), 'site.json'), 'utf8').catch(() => null);
-    if (content === null) throw new HttpError(404, 'Projet introuvable');
+    if (content === null) throw new HttpError(404, msg('server.project'));
     return content;
   };
   const writeSite = async (dir: string, site: Site) => {
@@ -154,7 +160,7 @@ export function createApi(options: ApiOptions) {
   const ai = createAiService(
     options.ai ?? {
       provider: null,
-      reason: 'Assistant IA non configuré.',
+      reason: msg('ai.errors.notConfigured'),
       maxTokens: 4000,
       perMinute: 10,
       dailyTokens: 200_000,
@@ -171,7 +177,7 @@ export function createApi(options: ApiOptions) {
       const content = await readFile(path, 'utf8').catch(() => null);
       if (content !== null) return { path, builtIn, archive: JSON.parse(content) as unknown };
     }
-    throw new HttpError(404, 'Modèle introuvable');
+    throw new HttpError(404, msg('server.template'));
   };
 
   /** Source site and media files of a project (SB-12 archive, CS-02 template). */
@@ -189,7 +195,7 @@ export function createApi(options: ApiOptions) {
   const importArchive = async (input: unknown, name = '') => {
     const archive = input as Archive;
     if (archive?.format !== ARCHIVE_FORMAT || typeof archive.media !== 'object' || archive.media === null) {
-      throw new HttpError(400, 'Archive Netvolution Studio attendue');
+      throw new HttpError(400, msg('server.archive'));
     }
     const id = await newProjectId();
     const site = { ...validDocument(archive.site), id, ...(name && { name }) };
@@ -232,9 +238,9 @@ export function createApi(options: ApiOptions) {
     const media = new RegExp(`^${MEDIA_PATH}([^/]+)/([^/]+)$`).exec(url.pathname);
     if (media && req.method === 'GET') {
       const [, id, file] = media as unknown as [string, string, string];
-      if (!MEDIA_FILE.test(file)) throw new HttpError(404, 'Média introuvable');
+      if (!MEDIA_FILE.test(file)) throw new HttpError(404, msg('server.media'));
       const content = await readFile(inside(projectDir(id), 'media', file)).catch(() => null);
-      if (!content) throw new HttpError(404, 'Média introuvable');
+      if (!content) throw new HttpError(404, msg('server.media'));
       const mime = EXT_TYPE[file.split('.').pop() as string] ?? 'application/octet-stream';
       const kind = MEDIA_TYPES[mime]?.kind;
       res.writeHead(200, {
@@ -267,11 +273,14 @@ export function createApi(options: ApiOptions) {
     if (url.pathname === '/api/ai/complete' && req.method === 'POST') {
       const parsed = aiRequestSchema.safeParse(await jsonBody(req));
       if (!parsed.success)
-        throw new HttpError(400, `Requête d’assistant invalide : ${parsed.error.issues[0]?.message}`);
+        throw new HttpError(
+          400,
+          msg('server.aiRequest', { detail: issueMessage(parsed.error.issues[0]?.message ?? '') }),
+        );
       try {
         send(200, await ai.complete(parsed.data));
       } catch (error) {
-        const e = error instanceof AiError ? error : new AiError('invalid-response', 'Erreur de l’assistant');
+        const e = error instanceof AiError ? error : new AiError('invalid-response', msg('server.aiError'));
         const statuses: Record<string, number> = {
           disabled: 503,
           'rate-limit': 429,
@@ -280,7 +289,7 @@ export function createApi(options: ApiOptions) {
           refused: 422,
           timeout: 504,
         };
-        throw new HttpError(statuses[e.code] ?? 502, e.message, [{ code: e.code }]);
+        throw new HttpError(statuses[e.code] ?? 502, e.detail, [{ code: e.code }]);
       }
       return true;
     }
@@ -299,7 +308,7 @@ export function createApi(options: ApiOptions) {
       const content = await readFile(inside(options.fontsDir, 'files', fontFile[1] as string)).catch(
         () => null,
       );
-      if (!content) throw new HttpError(404, 'Police introuvable');
+      if (!content) throw new HttpError(404, msg('server.font'));
       res.writeHead(200, {
         'content-type': 'font/woff2',
         'x-content-type-options': 'nosniff',
@@ -339,7 +348,7 @@ export function createApi(options: ApiOptions) {
     const template = /^\/api\/templates\/([^/]+)(\/projects)?$/.exec(url.pathname);
     if (template) {
       const id = decodeURIComponent(template[1] as string);
-      if (!TEMPLATE_ID.test(id)) throw new HttpError(400, 'Identifiant de modèle invalide');
+      if (!TEMPLATE_ID.test(id)) throw new HttpError(400, msg('server.templateId'));
       const found = await findTemplate(id);
       // POST /api/templates/:id/projects { name? } — a new project from the template.
       if (template[2] && req.method === 'POST') {
@@ -352,7 +361,7 @@ export function createApi(options: ApiOptions) {
         return true;
       }
       if (!template[2] && req.method === 'DELETE') {
-        if (found.builtIn) throw new HttpError(403, 'Les modèles intégrés ne peuvent pas être supprimés');
+        if (found.builtIn) throw new HttpError(403, msg('server.builtInTemplate'));
         await rename(found.path, inside(trashDir, `template-${id}-${Date.now()}.json`));
         send(200, {});
         return true;
@@ -412,7 +421,7 @@ export function createApi(options: ApiOptions) {
     if (exported && req.method === 'GET') {
       const name = exported[1] as string;
       if (!(await stat(inside(options.exportsDir, name)).catch(() => null))?.isDirectory())
-        throw new HttpError(404, 'Export introuvable');
+        throw new HttpError(404, msg('server.export'));
       const excluded = ['node_modules', '.astro', ...(exported[2] ? [] : [`${name}/dist`])];
       const tar = spawn('tar', [
         '-czf',
@@ -447,13 +456,13 @@ export function createApi(options: ApiOptions) {
       if (action === 'PUT ') {
         // Optimistic concurrency: update only the version last read (ETag).
         const ifMatch = req.headers['if-match'];
-        if (!ifMatch) throw new HttpError(428, 'If-Match requis');
+        if (!ifMatch) throw new HttpError(428, msg('server.ifMatch'));
         const current = await readSite(id);
         if (ifMatch !== etagOf(current)) {
-          throw new HttpError(412, 'Le projet a été modifié ailleurs depuis son ouverture');
+          throw new HttpError(412, msg('server.conflict'));
         }
         const site = validDocument(await jsonBody(req));
-        if (site.id !== id) throw new HttpError(400, "L'identifiant du site ne correspond pas à l'URL");
+        if (site.id !== id) throw new HttpError(400, msg('server.siteId'));
         const etag = await writeSite(dir, site);
         send(200, { etag }, { etag });
         return true;
@@ -480,7 +489,7 @@ export function createApi(options: ApiOptions) {
         await readSite(id);
         const { font: fontId } = (await jsonBody(req)) as { font?: unknown };
         const font = (await catalog()).find((f) => f.id === fontId);
-        if (!font || !options.fontsDir) throw new HttpError(404, 'Police absente du catalogue');
+        if (!font || !options.fontsDir) throw new HttpError(404, msg('server.fontCatalog'));
         await mkdir(join(dir, 'media'), { recursive: true });
         const assets: Asset[] = [];
         for (const f of font.files) {
@@ -526,18 +535,15 @@ export function createApi(options: ApiOptions) {
         const mime = (req.headers['content-type'] ?? '').split(';')[0]?.trim() ?? '';
         const type = MEDIA_TYPES[mime];
         if (!type) {
-          throw new HttpError(
-            415,
-            'Format non accepté (images PNG, JPEG, WebP, AVIF, SVG ; polices WOFF2 ; fichiers PDF, ZIP, DOCX, XLSX, PPTX)',
-          );
+          throw new HttpError(415, msg('server.format'));
         }
         const content = await body(req, MAX_UPLOAD);
-        if (content.length > type.max) throw new HttpError(413, 'Fichier trop volumineux');
+        if (content.length > type.max) throw new HttpError(413, msg('server.fileTooLarge'));
         if (type.kind === 'svg') {
           const reason = checkSvg(content.toString('utf8'));
-          if (reason) throw new HttpError(415, `SVG refusé : ${reason}`);
+          if (reason) throw new HttpError(415, msg('server.svg', { reason: msg(reason) }));
         } else if (!type.sniff(content)) {
-          throw new HttpError(415, 'Le contenu du fichier ne correspond pas à son type');
+          throw new HttpError(415, msg('server.sniff'));
         }
         const assetId = randomId('a', 10);
         const file = `${assetId}.${type.ext}`;
@@ -562,7 +568,7 @@ export function createApi(options: ApiOptions) {
           const width = Number(url.searchParams.get('width'));
           const height = Number(url.searchParams.get('height'));
           if (![width, height].every((n) => Number.isInteger(n) && n > 0 && n <= 20000)) {
-            throw new HttpError(400, 'Dimensions invalides');
+            throw new HttpError(400, msg('server.dimensions'));
           }
           const alt = cleanName(url.searchParams.get('alt')).slice(0, 300);
           asset =
@@ -585,9 +591,9 @@ export function createApi(options: ApiOptions) {
         const present = new Set(await readdir(join(dir, 'media')).catch(() => []));
         const { site, checks } = checkSite(input.site, registry, present);
         if (!site || checks.some((c) => c.severity === 'error')) {
-          throw new HttpError(422, 'Contrôles avant export : erreurs bloquantes', checks);
+          throw new HttpError(422, msg('server.checks'), checks);
         }
-        if (site.id !== id) throw new HttpError(400, "L'identifiant du site ne correspond pas à l'URL");
+        if (site.id !== id) throw new HttpError(400, msg('server.siteId'));
         const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
         const outDir = inside(options.exportsDir, `${id}-${stamp}`);
         const files = await exportProject(site, registry, outDir, { mediaDirs: [join(dir, 'media')] });
@@ -598,7 +604,10 @@ export function createApi(options: ApiOptions) {
             await run('npm', ['run', 'build'], { cwd: outDir, timeout: 10 * 60_000 });
           } catch (e) {
             const err = e as { stderr?: string; message: string };
-            throw new HttpError(500, `Build Astro en échec : ${(err.stderr || err.message).slice(-600)}`);
+            throw new HttpError(
+              500,
+              msg('server.build', { detail: (err.stderr || err.message).slice(-600) }),
+            );
           }
           staticDir = inside(options.exportsDir, `${id}-${stamp}-statique`);
           await cp(join(outDir, 'dist'), staticDir, { recursive: true });
@@ -629,7 +638,7 @@ export function createApi(options: ApiOptions) {
       if (action === 'POST /template') {
         const input = (await jsonBody(req)) as { name?: unknown; description?: unknown };
         const name = typeof input.name === 'string' ? input.name.trim().slice(0, 200) : '';
-        if (!name) throw new HttpError(400, 'Nom du modèle requis');
+        if (!name) throw new HttpError(400, msg('server.templateName'));
         const description =
           typeof input.description === 'string' ? input.description.trim().slice(0, 300) : '';
         const templateId = randomId('t', 10);
@@ -643,7 +652,7 @@ export function createApi(options: ApiOptions) {
       }
     }
 
-    throw new HttpError(404, 'Route inconnue');
+    throw new HttpError(404, msg('server.route'));
   }
 
   /** Connect-style middleware (Vite dev and preview servers, tests). */
@@ -656,7 +665,7 @@ export function createApi(options: ApiOptions) {
         res.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
         res.end(
           JSON.stringify({
-            error: e instanceof HttpError ? e.message : 'Erreur interne',
+            error: e instanceof HttpError ? e.detail : msg('server.internal'),
             ...(e instanceof HttpError && e.details ? { diagnostics: e.details } : {}),
           }),
         );

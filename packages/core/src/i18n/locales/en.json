@@ -361,7 +361,73 @@
     "insert": "Insert",
     "insertLinked": "Insert “{{name}}” linked",
     "insertLinkedTip": "Insert a linked instance: new versions can be applied to it",
-    "editComponent": "Edit the component “{{name}}”"
+    "editComponent": "Edit the component “{{name}}”",
+    "builtIn": {
+      "section": {
+        "name": "Section",
+        "description": "Centered block of limited width, with margins."
+      },
+      "row2": {
+        "name": "Row, 2 columns",
+        "description": "Two columns, stacked on mobile."
+      },
+      "row3": {
+        "name": "Row, 3 columns",
+        "description": "Three columns: two on tablet, one on mobile."
+      },
+      "hero": {
+        "name": "Hero",
+        "description": "Large heading, text, button and visual side by side."
+      },
+      "logo": {
+        "name": "Logo",
+        "description": "Logo image, to link to the home page."
+      },
+      "card": {
+        "name": "Card",
+        "description": "Icon, heading, text and link."
+      },
+      "cta": {
+        "name": "Call to action",
+        "description": "Colored band: heading, text and button."
+      },
+      "gallery": {
+        "name": "Image grid",
+        "description": "Responsive grid of captioned images (Image components editable one by one)."
+      },
+      "accordion": {
+        "name": "Accordion (FAQ)",
+        "description": "Expandable questions and answers, without JavaScript."
+      },
+      "tabs": {
+        "name": "Tab block",
+        "description": "Contents in tabs, keyboard accessible."
+      },
+      "presentation": {
+        "name": "About",
+        "description": "Image and text side by side, stacked on mobile."
+      },
+      "features": {
+        "name": "Features",
+        "description": "Heading and three features with an icon."
+      },
+      "testimonials": {
+        "name": "Testimonials",
+        "description": "Three customer quotes with their name."
+      },
+      "pricing": {
+        "name": "Pricing",
+        "description": "Three plans with price, description and button."
+      },
+      "team": {
+        "name": "Team",
+        "description": "Three members: photo, name and role."
+      },
+      "contact": {
+        "name": "Contact",
+        "description": "Invitation to write and contact details with icons."
+      }
+    }
   },
   "assistant": {
     "providers": {
@@ -402,7 +468,8 @@
     "invalid": "Proposal no longer valid: {{message}}",
     "disabled": "Assistant disabled.",
     "enableHint": "To enable it, set NS_AI_PROVIDER and the provider key in the server's .env file (see .env.example), then restart the Studio. Keys stay on the server.",
-    "limits": "Limits: {{maxTokens}} tokens per response, {{perMinute}} requests per minute, {{dailyTokens}} tokens per day ({{usedToday}} used today). The AI never publishes or exports: every proposal must be approved, and can be undone like any change."
+    "limits": "Limits: {{maxTokens}} tokens per response, {{perMinute}} requests per minute, {{dailyTokens}} tokens per day ({{usedToday}} used today). The AI never publishes or exports: every proposal must be approved, and can be undone like any change.",
+    "noProposal": "No proposal."
   },
   "media": {
     "kinds": {
@@ -786,5 +853,625 @@
     "notFound": "Page not found",
     "backHome": "Back to the home page",
     "noProject": "No project to preview."
+  },
+  "diagnostics": {
+    "invalidDocument": "JSON document with a numeric schemaVersion expected",
+    "unsupportedVersion": "schemaVersion {{version}} not supported (expected {{oldest}} to {{latest}})",
+    "duplicateBreakpoint": "Duplicate breakpoint: {{id}} ({{width}}px)",
+    "duplicatePage": "Duplicate page: {{id}}",
+    "duplicateSlug": "Duplicate address: /{{slug}}",
+    "homeSlug": "The home page has an empty address",
+    "emptySlug": "Empty address reserved for the home page",
+    "reservedSlug": "Reserved address: /{{slug}}",
+    "missingHome": "Home page does not exist: {{id}}",
+    "missingToken": "Token not found: {{id}}",
+    "unknownBreakpoint": "Unknown breakpoint: {{id}}",
+    "duplicateLayout": "Layout id already used: {{id}}",
+    "duplicateSymbol": "Component id already used: {{id}}",
+    "missingSymbol": "Shared component not found: {{id}}",
+    "unknownVersion": "Version {{version}} unknown to component {{name}}",
+    "selfContaining": "Component {{name}} contains itself",
+    "missingHeader": "Header not found: {{id}}",
+    "missingFooter": "Footer not found: {{id}}",
+    "duplicateMenu": "Duplicate menu: {{id}}",
+    "duplicateMenuItems": "Duplicate items in menu {{id}}",
+    "linkMissingAsset": "Link to a media file that does not exist: {{id}}",
+    "linkMissingPage": "Link to a page that does not exist: {{id}}",
+    "missingShareImage": "Share image not found: {{id}}",
+    "duplicateRedirect": "Duplicate redirect: {{from}}",
+    "redirectFromPage": "{{from}} is the address of a page",
+    "redirectMissingPage": "Redirect to a page that does not exist: {{id}}",
+    "redirectMissingAsset": "Redirect to a media file that does not exist: {{id}}",
+    "customCss": "Project CSS, line {{line}}: {{message}}",
+    "customCssImage": "Project CSS: image not found ({{id}})",
+    "idMismatch": "Key {{key}} does not match id {{id}}",
+    "unknownComponent": "Unknown component type: {{type}}",
+    "missingAsset": "Media file not found: {{id}}",
+    "assetKind": "Media type not accepted: {{kind}}",
+    "missingMenu": "Menu not found: {{id}}",
+    "missingBackground": "Background image not found: {{id}}",
+    "styleNotAllowed": "{{prop}} not allowed for {{type}}",
+    "missingChild": "Child does not exist: {{id}}",
+    "childNotAllowed": "{{child}} is not allowed in {{parent}}",
+    "cycle": "Cycle detected: {{id}} → {{child}}",
+    "multipleParents": "{{id}} has several parents",
+    "missingRoot": "Root does not exist: {{id}}",
+    "orphan": "Node not attached to a page, layout or component: {{id}}"
+  },
+  "css": {
+    "escapedName": "Escape not allowed in a name",
+    "atRule": "@{{name}} not allowed (allowed: @media, @supports, @container, @keyframes)",
+    "raw": "Unrecognized syntax: {{text}}",
+    "url": "url() only allowed to the media library: url(\"ns-asset:<id>\")",
+    "function": "{{name}}() not allowed",
+    "lessThan": "Character “<” not allowed in a string",
+    "internalClass": ".{{name}} is an internal class of the Studio, likely to change",
+    "escapedProperty": "Escape not allowed in a property",
+    "property": "{{name}} not allowed",
+    "important": "!important: avoid it",
+    "hidden": "{{declaration}} hides the content from every visitor",
+    "outline": "outline removed without a :focus-visible rule: keyboard focus becomes invisible",
+    "motion": "Animation without a @media (prefers-reduced-motion: reduce) rule"
+  },
+  "schema": {
+    "infiniteLoad": "Infinite repeat reserved for the “load” trigger",
+    "imageAlt": "Alternative text required (or decorative image)",
+    "className": "class in lowercase letters, digits and hyphens, without the ns- prefix",
+    "fontWeights": "minimum weight above the maximum",
+    "lang": "language code expected (fr, en-GB…)",
+    "fontName": "font name: letters, digits, spaces, - and _",
+    "url": "URL not allowed",
+    "nodeId": "expected n + 8-32 lowercase alphanumerics",
+    "slug": "invalid slug",
+    "absoluteUrl": "absolute URL expected",
+    "path": "path expected, e.g. /old-page/",
+    "origin": "origin expected (https://example.org)",
+    "aiContent": "Content too long",
+    "videoUrl": "YouTube or Vimeo address expected"
+  },
+  "checks": {
+    "homeUnpublished": "The home page is not published",
+    "noSiteUrl": "No canonical site URL: no sitemap and no absolute URLs (canonical, Open Graph)",
+    "brokenLink": "{{where}}: link to “{{title}}”, an unpublished page (missing from the export)",
+    "emptyLink": "{{where}}: link not filled in ({{href}})",
+    "page": "Page “{{title}}”",
+    "noTitle": "{{label}}: missing title",
+    "noDescription": "{{label}}: missing meta description",
+    "longTitle": "{{label}}: SEO title longer than 60 characters",
+    "longDescription": "{{label}}: meta description longer than 160 characters",
+    "h1Count_one": "{{label}}: {{count}} level 1 heading (exactly one expected)",
+    "h1Count_other": "{{label}}: {{count}} level 1 headings (exactly one expected)",
+    "headingSkip": "{{label}}: level {{level}} heading after a level {{previous}}",
+    "element": "Element {{name}}",
+    "menu": "Menu “{{name}}”",
+    "redirect": "Redirect {{from}}",
+    "symbolParam": "Component “{{name}}”: parameter “{{param}}” has no target element",
+    "absolute": "Element {{name}}: absolute position without a positioned parent (relative)",
+    "instance": "Instance “{{name}}”",
+    "instanceOutdated": "{{name}}: version {{version}} of the component, version {{latest}} available",
+    "instanceModified": "{{name}}: modified outside its parameters (overwritten at the next update)",
+    "instanceIncompatible": "{{name}}: incompatible values ({{props}})",
+    "missingFile": "File of media “{{name}}” not found",
+    "heavyBackground": "Background image “{{name}}”: {{size}} MB, not optimized at export (reduce it below 500 KB)"
+  },
+  "errors": {
+    "missingNode": "Node does not exist: {{id}}",
+    "missingParent": "Parent does not exist: {{id}}",
+    "childNotAllowed": "{{child}} not allowed in {{parent}}",
+    "unknownTypeInTemplate": "Unknown type in the template",
+    "missingMoveTarget": "Node or destination does not exist",
+    "moveRoot": "The root cannot be moved",
+    "moveIntoItself": "An element cannot be moved into itself",
+    "removeRoot": "The root cannot be deleted",
+    "duplicateRoot": "The root cannot be duplicated",
+    "assetExists": "Media file already present: {{id}}",
+    "missingAsset": "Media file does not exist: {{id}}",
+    "altOnImage": "Only an image has an alternative text",
+    "notAFont": "This media file is not a font",
+    "assetUsed_one": "Media file used by {{count}} element or menu",
+    "assetUsed_other": "Media file used by {{count}} elements or menus",
+    "missingPage": "Page does not exist: {{id}}",
+    "removeHome": "The home page cannot be deleted",
+    "pageLinked_one": "Page linked from {{count}} element",
+    "pageLinked_other": "Page linked from {{count}} elements",
+    "pageInMenu": "Page present in a menu: remove it from the menu first",
+    "missingToken": "Token does not exist: {{id}}",
+    "tokenUsed_one": "Token used by {{count}} element or style",
+    "tokenUsed_other": "Token used by {{count}} elements or styles",
+    "missingLayout": "Layout does not exist: {{id}}",
+    "missingMenu": "Menu does not exist: {{id}}",
+    "menuUsed_one": "Menu shown by {{count}} navigation",
+    "menuUsed_other": "Menu shown by {{count}} navigations",
+    "rootToSymbol": "A page root cannot become a component",
+    "alreadyInstance": "This element is already an instance of a component",
+    "copyFailed": "Copy failed",
+    "symbolExists": "Component already present: {{id}}",
+    "unknownTypeInSection": "Unknown type in the section",
+    "missingSymbol": "Component does not exist: {{id}}",
+    "missingParam": "Parameter does not exist",
+    "emptyDefinition": "Empty definition",
+    "skippedInstance": "“{{name}}” ({{props}})",
+    "updateIncompatible": "Update impossible: incompatible values for {{skipped}}",
+    "notInstance": "This element is not an instance",
+    "symbolUsed_one": "Component used by {{count}} instance",
+    "symbolUsed_other": "Component used by {{count}} instances",
+    "operation": "Operation {{index}} ({{name}}): {{message}}",
+    "unknownCommand": "unknown command",
+    "permission": "“{{permission}}” permission required",
+    "deletedParam": "{{id}}: deleted parameter"
+  },
+  "notices": {
+    "instancesUpdated_one": "{{count}} instance updated",
+    "instancesUpdated_other": "{{count}} instances updated",
+    "instancesPartial_one": "{{count}} instance updated; not updated (incompatible values): {{skipped}}",
+    "instancesPartial_other": "{{count}} instances updated; not updated (incompatible values): {{skipped}}"
+  },
+  "text": "{{text}}",
+  "diff": {
+    "site": {
+      "pages": "pages",
+      "settings": "site settings",
+      "tokens": "design system",
+      "menus": "menus",
+      "layouts": "header and footer",
+      "symbols": "shared components",
+      "assets": "media library",
+      "redirects": "redirects",
+      "name": "site name"
+    },
+    "quoted": "“{{text}}”",
+    "token": "token {{id}}",
+    "empty": "No change.",
+    "prop": "{{element}} · {{key}}: {{before}} → {{after}}",
+    "style": "{{element}} · {{key}} ({{breakpoint}}): {{before}} → {{after}}",
+    "added_one": "{{count}} element added: {{names}}",
+    "added_other": "{{count}} elements added: {{names}}",
+    "removed_one": "{{count}} element removed: {{names}}",
+    "removed_other": "{{count}} elements removed: {{names}}",
+    "other": "{{element}} · {{key}} changed",
+    "siteChanged": "Site · {{field}} changed",
+    "counts": "{{added}} addition(s), {{changed}} change(s), {{removed}} removal(s)",
+    "countsSite": "{{added}} addition(s), {{changed}} change(s), {{removed}} removal(s), site: {{fields}}"
+  },
+  "ai": {
+    "noPage": "The assistant acts on a page or a header/footer.",
+    "tooLarge": "Content too large for the assistant: select a smaller element.",
+    "truncated": "Incomplete answer (token limit reached): proposal ignored.",
+    "commandNotAllowed": "command not allowed for the assistant",
+    "noPublish": "the assistant does not publish and does not change addresses",
+    "tasks": {
+      "title": "Suggest a punchier heading for this element.",
+      "rewrite": "Rephrase this text to make it clearer, without changing its meaning.",
+      "summarize": "Summarize this content in one or two sentences.",
+      "tone": "Adapt the tone: warmer and more direct.",
+      "seo": "Suggest an SEO title and description for this page.",
+      "structure": "Suggest a page structure from this brief: ",
+      "testimonials": "Add a testimonials section.",
+      "tablet": "Turn this grid into two columns on tablet.",
+      "spacing": "Make the spacing consistent.",
+      "sober": "Suggest a more sober variant of this section.",
+      "palette": "Apply the site palette to this composition."
+    },
+    "errors": {
+      "noAnthropicKey": "NS_AI_PROVIDER=anthropic, but ANTHROPIC_API_KEY is missing on the server.",
+      "noOpenAiModel": "NS_AI_PROVIDER=openai, but NS_AI_MODEL is missing.",
+      "noProvider": "No provider configured (NS_AI_PROVIDER): the assistant is disabled.",
+      "unknownProvider": "Unknown provider: {{provider}}.",
+      "disabled": "AI assistant disabled.",
+      "perMinute": "Limit of {{count}} requests per minute reached: wait a moment.",
+      "budget": "Daily budget of {{count}} tokens reached (NS_AI_DAILY_TOKENS).",
+      "invalidResponse": "Unexpected answer from the provider.",
+      "timeout": "The provider did not answer in time.",
+      "unreachable": "Provider unreachable (network).",
+      "openAiKey": "API key refused: check OPENAI_API_KEY on the server.",
+      "rateLimit": "Provider rate limit reached: try again in a moment.",
+      "badRequest": "Request refused by the provider (content or parameters).",
+      "unavailable": "Provider unavailable ({{status}}): try again later.",
+      "toolCall": "Unreadable tool call in the provider answer.",
+      "refused": "The model declined this request. Rephrase it or change the content concerned.",
+      "anthropicKey": "Anthropic API key refused: check ANTHROPIC_API_KEY on the server.",
+      "notConfigured": "AI assistant not configured."
+    }
+  },
+  "svg": {
+    "doctype": "DOCTYPE or entity",
+    "active": "active element",
+    "event": "event attribute (on…)",
+    "scriptUrl": "javascript: or data: URL",
+    "href": "external reference (href)",
+    "url": "external reference (url())",
+    "import": "@import",
+    "notSvg": "not an SVG document"
+  },
+  "server": {
+    "path": "Path refused",
+    "tooLarge": "Content too large",
+    "invalidDocument": "Invalid document",
+    "header": "Missing X-NS-Request header",
+    "origin": "Origin refused",
+    "projectId": "Invalid project id",
+    "project": "Project not found",
+    "template": "Template not found",
+    "archive": "Netvolution Studio archive expected",
+    "media": "Media file not found",
+    "aiRequest": "Invalid assistant request: {{detail}}",
+    "aiError": "Assistant error",
+    "font": "Font not found",
+    "templateId": "Invalid template id",
+    "builtInTemplate": "Built-in templates cannot be deleted",
+    "export": "Export not found",
+    "ifMatch": "If-Match required",
+    "conflict": "The project was changed elsewhere since it was opened",
+    "siteId": "The site id does not match the URL",
+    "fontCatalog": "Font missing from the catalog",
+    "format": "Format not accepted (PNG, JPEG, WebP, AVIF, SVG images; WOFF2 fonts; PDF, ZIP, DOCX, XLSX, PPTX files)",
+    "fileTooLarge": "File too large",
+    "svg": "SVG refused: {{reason}}",
+    "sniff": "The file content does not match its type",
+    "dimensions": "Invalid dimensions",
+    "checks": "Checks before export: blocking errors",
+    "build": "Astro build failed: {{detail}}",
+    "templateName": "Template name required",
+    "route": "Unknown route",
+    "internal": "Internal error",
+    "json": "Invalid JSON"
+  },
+  "components": {
+    "accordionItem": {
+      "name": "Accordion item",
+      "fields": {
+        "title": "Title",
+        "open": "Open on load (and to edit it in the canvas)"
+      }
+    },
+    "accordion": {
+      "name": "Accordion"
+    },
+    "button": {
+      "name": "Button",
+      "fields": {
+        "label": "Label",
+        "link": "Link",
+        "variant": "Appearance"
+      },
+      "options": {
+        "variant": {
+          "primary": "Primary",
+          "secondary": "Secondary",
+          "text": "Text link"
+        }
+      }
+    },
+    "carousel": {
+      "name": "Carousel",
+      "fields": {
+        "images": "Images",
+        "label": "Accessible name (“Our work”…)",
+        "ratio": "Image ratio",
+        "perView": "Visible images (desktop)",
+        "perViewTablet": "Visible images (tablet, empty: as desktop)",
+        "perViewMobile": "Visible images (mobile, empty: as tablet)",
+        "gap": "Spacing (px)",
+        "autoplay": "Autoplay (with a pause button)",
+        "interval": "Interval (seconds)"
+      },
+      "options": {
+        "ratio": {
+          "auto": "Original"
+        }
+      }
+    },
+    "container": {
+      "name": "Container",
+      "fields": {
+        "tag": "HTML tag"
+      }
+    },
+    "divider": {
+      "name": "Divider"
+    },
+    "gallery": {
+      "name": "Gallery",
+      "fields": {
+        "images": "Images",
+        "layout": "Layout",
+        "ratio": "Tile ratio",
+        "lightbox": "Enlarge on click"
+      },
+      "options": {
+        "layout": {
+          "masonry": "Masonry (natural heights)",
+          "tiles": "Tiles (same ratio)"
+        }
+      }
+    },
+    "grid": {
+      "name": "Grid"
+    },
+    "heading": {
+      "name": "Heading",
+      "fields": {
+        "text": "Text",
+        "level": "Level"
+      }
+    },
+    "icon": {
+      "name": "Icon",
+      "fields": {
+        "name": "Icon",
+        "label": "Accessible name (empty = decorative)"
+      },
+      "names": {
+        "check": "Check",
+        "arrow-right": "Right arrow",
+        "phone": "Phone",
+        "mail": "Email",
+        "map-pin": "Place",
+        "clock": "Clock",
+        "calendar": "Calendar",
+        "star": "Star",
+        "heart": "Heart",
+        "shield-check": "Shield",
+        "zap": "Lightning",
+        "users": "People",
+        "download": "Download",
+        "external-link": "External link",
+        "globe": "Globe",
+        "message-circle": "Message",
+        "quote": "Quote",
+        "award": "Award",
+        "leaf": "Leaf",
+        "sparkles": "Sparkles"
+      }
+    },
+    "image": {
+      "name": "Image",
+      "fields": {
+        "assetId": "Image",
+        "alt": "Alternative text",
+        "caption": "Caption (optional)",
+        "link": "Link",
+        "decorative": "Decorative image (ignored by screen readers)",
+        "fit": "Fit",
+        "loading": "Loading"
+      },
+      "options": {
+        "fit": {
+          "cover": "Fill (crop)",
+          "contain": "Contain"
+        },
+        "loading": {
+          "lazy": "Deferred (off screen)",
+          "eager": "Immediate (main image)"
+        }
+      }
+    },
+    "links": {
+      "name": "Link list",
+      "fields": {
+        "menuId": "Menu",
+        "label": "Accessible name",
+        "direction": "Layout"
+      },
+      "options": {
+        "direction": {
+          "column": "In a column",
+          "row": "In a row"
+        }
+      }
+    },
+    "list": {
+      "name": "List",
+      "fields": {
+        "marker": "Bullets",
+        "items": "Items"
+      },
+      "options": {
+        "marker": {
+          "disc": "• Disc",
+          "circle": "◦ Circle",
+          "square": "▪ Square",
+          "none": "None",
+          "decimal": "1. Numbers",
+          "lower-alpha": "a. Letters",
+          "upper-roman": "I. Roman numerals"
+        }
+      }
+    },
+    "marquee": {
+      "name": "Marquee",
+      "fields": {
+        "mode": "Content",
+        "texts": "Texts",
+        "separator": "Separator between the texts",
+        "images": "Images",
+        "height": "Image height (px)",
+        "gap": "Spacing (px)",
+        "duration": "Duration of one loop (seconds)",
+        "direction": "Direction"
+      },
+      "options": {
+        "mode": {
+          "texts": "Texts",
+          "images": "Images (logos…)"
+        },
+        "direction": {
+          "left": "To the left",
+          "right": "To the right"
+        }
+      }
+    },
+    "nav": {
+      "name": "Navigation",
+      "fields": {
+        "menuId": "Menu",
+        "label": "Accessible name",
+        "toggle": "Button label (mobile)",
+        "collapse": "Collapse into a button"
+      },
+      "options": {
+        "collapse": {
+          "mobile": "On mobile",
+          "tablet": "On tablet and mobile",
+          "never": "Never"
+        }
+      }
+    },
+    "spacer": {
+      "name": "Spacer"
+    },
+    "stack": {
+      "name": "Stack (Flex)"
+    },
+    "tab": {
+      "name": "Tab",
+      "fields": {
+        "title": "Tab title"
+      }
+    },
+    "tabs": {
+      "name": "Tabs",
+      "fields": {
+        "label": "Accessible name"
+      }
+    },
+    "text": {
+      "name": "Text",
+      "fields": {
+        "content": "Text"
+      }
+    },
+    "video": {
+      "name": "Video",
+      "fields": {
+        "url": "YouTube or Vimeo address",
+        "title": "Title (accessible)"
+      }
+    }
+  },
+  "content": {
+    "accordionItem": "Question",
+    "button": "Learn more",
+    "carousel": {
+      "label": "Carousel",
+      "roledescription": "carousel",
+      "slide": "slide",
+      "prev": "Previous image",
+      "next": "Next image",
+      "pause": "Pause",
+      "play": "Play",
+      "position": "{{n}} of {{count}}"
+    },
+    "list": {
+      "first": "First item",
+      "second": "Second item",
+      "third": "Third item",
+      "new": "New item"
+    },
+    "marquee": {
+      "identity": "Identity",
+      "web": "Websites",
+      "print": "Print",
+      "motion": "Motion",
+      "pause": "Pause",
+      "resume": "Resume scrolling"
+    },
+    "nav": {
+      "label": "Main navigation",
+      "toggle": "Menu"
+    },
+    "tab": "Tab",
+    "tabs": "Tabs",
+    "links": "Links",
+    "video": {
+      "title": "Video",
+      "empty": "{{title}} — video address to fill in"
+    },
+    "text": "Your text",
+    "heading": "Heading",
+    "sections": {
+      "column": "Column",
+      "grid": "Grid",
+      "card": "Card",
+      "section": "Section",
+      "row2": "Row, 2 columns",
+      "row3": "Row, 3 columns",
+      "hero": "Hero",
+      "tagline": "Tagline",
+      "mainHeading": "Your main heading",
+      "offer": "A sentence that presents your offer.",
+      "visual": "Visual",
+      "logo": "Logo",
+      "cardTitle": "Card title",
+      "cardText": "A short description of the service or benefit.",
+      "cta": "Call to action",
+      "ctaHeading": "Ready to start?",
+      "ctaText": "Let’s talk about your project.",
+      "ctaButton": "Contact us",
+      "gallery": "Image grid",
+      "caption": "Caption {{n}}",
+      "faq": "FAQ",
+      "question": "Question {{n}}",
+      "answer": "Answer {{n}}.",
+      "tab": "Tab {{n}}",
+      "tabContent": "Content of tab {{n}}.",
+      "presentation": "About",
+      "text": "Text",
+      "about": "Who are we?",
+      "aboutText": "Present your business, your story and what sets you apart.",
+      "features": "Features",
+      "why": "Why choose us",
+      "fast": "Fast",
+      "fastText": "Light pages, served as static files.",
+      "secure": "Secure",
+      "secureText": "No exposed administration interface.",
+      "accessible": "Accessible",
+      "accessibleText": "Keyboard, screen readers and careful contrast.",
+      "testimonials": "Testimonials",
+      "trust": "They trust us",
+      "quote": "“A customer testimonial, short and concrete.”",
+      "quoteAuthor": "First Last {{n}}, company",
+      "pricing": "Pricing",
+      "plans": "Our plans",
+      "essential": "Essential",
+      "pro": "Pro",
+      "custom": "Custom",
+      "onQuote": "On quote",
+      "planText": "What the plan includes, in one or two sentences.",
+      "choose": "Choose",
+      "team": "Team",
+      "theTeam": "The team",
+      "member": "Member",
+      "memberName": "First Last {{n}}",
+      "role": "Role",
+      "contact": "Contact",
+      "invitation": "Invitation",
+      "talk": "Let’s talk about your project",
+      "answerTime": "Answer within 2 business days.",
+      "write": "Write to us",
+      "details": "Contact details",
+      "line": "Line"
+    },
+    "gallery": {
+      "dialog": "Enlarged image",
+      "close": "Close"
+    },
+    "newPage": {
+      "title": "New page",
+      "slug": "new-page"
+    },
+    "layout": {
+      "header": "Header",
+      "footer": "Footer",
+      "siteName": "My site",
+      "page": "Page",
+      "menu": "Main menu",
+      "bar": "Bar",
+      "copyright": "© {{name}}",
+      "footerNav": "Footer navigation"
+    },
+    "redirect": {
+      "from": "/old-page-{{n}}/"
+    }
   }
 }

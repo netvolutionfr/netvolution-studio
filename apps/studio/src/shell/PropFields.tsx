@@ -1,4 +1,4 @@
-import { type CommandResult, type DocNode, type Link, type PropField, t } from '@ns/core';
+import { type CommandResult, contentText, type DocNode, type Link, type PropField, t } from '@ns/core';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -245,6 +245,7 @@ function ListItemsField(props: {
   onChange: (v: Inline[][]) => CommandResult;
 }) {
   const items = props.value;
+  const lang = useEditor((s) => s.doc.settings.lang);
   const move = (i: number, to: number) => {
     const next = [...items];
     const [item] = next.splice(i, 1);
@@ -288,7 +289,11 @@ function ListItemsField(props: {
           </div>
         </div>
       ))}
-      <Button size="sm" icon={Plus} onClick={() => props.onChange([...items, [{ text: 'Nouvel élément' }]])}>
+      <Button
+        size="sm"
+        icon={Plus}
+        onClick={() => props.onChange([...items, [{ text: contentText(lang)('content.list.new') }]])}
+      >
         {t('listField.add')}
       </Button>
     </fieldset>

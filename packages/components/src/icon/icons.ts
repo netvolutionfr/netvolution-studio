@@ -3,7 +3,6 @@
 // attributes only, rendered by the icon view; documents reference icons by name, never by markup.
 export const ICONS = {
   check: {
-    label: 'Coche',
     node: [
       [
         'path',
@@ -14,7 +13,6 @@ export const ICONS = {
     ],
   },
   'arrow-right': {
-    label: 'Flèche droite',
     node: [
       [
         'path',
@@ -31,7 +29,6 @@ export const ICONS = {
     ],
   },
   phone: {
-    label: 'Téléphone',
     node: [
       [
         'path',
@@ -42,7 +39,6 @@ export const ICONS = {
     ],
   },
   mail: {
-    label: 'E-mail',
     node: [
       [
         'path',
@@ -63,7 +59,6 @@ export const ICONS = {
     ],
   },
   'map-pin': {
-    label: 'Lieu',
     node: [
       [
         'path',
@@ -82,7 +77,6 @@ export const ICONS = {
     ],
   },
   clock: {
-    label: 'Horloge',
     node: [
       [
         'circle',
@@ -101,7 +95,6 @@ export const ICONS = {
     ],
   },
   calendar: {
-    label: 'Calendrier',
     node: [
       [
         'path',
@@ -134,7 +127,6 @@ export const ICONS = {
     ],
   },
   star: {
-    label: 'Étoile',
     node: [
       [
         'path',
@@ -145,7 +137,6 @@ export const ICONS = {
     ],
   },
   heart: {
-    label: 'Cœur',
     node: [
       [
         'path',
@@ -156,7 +147,6 @@ export const ICONS = {
     ],
   },
   'shield-check': {
-    label: 'Bouclier',
     node: [
       [
         'path',
@@ -173,7 +163,6 @@ export const ICONS = {
     ],
   },
   zap: {
-    label: 'Éclair',
     node: [
       [
         'path',
@@ -184,7 +173,6 @@ export const ICONS = {
     ],
   },
   users: {
-    label: 'Personnes',
     node: [
       [
         'path',
@@ -215,7 +203,6 @@ export const ICONS = {
     ],
   },
   download: {
-    label: 'Téléchargement',
     node: [
       [
         'path',
@@ -238,7 +225,6 @@ export const ICONS = {
     ],
   },
   'external-link': {
-    label: 'Lien externe',
     node: [
       [
         'path',
@@ -261,7 +247,6 @@ export const ICONS = {
     ],
   },
   globe: {
-    label: 'Globe',
     node: [
       [
         'circle',
@@ -286,7 +271,6 @@ export const ICONS = {
     ],
   },
   'message-circle': {
-    label: 'Message',
     node: [
       [
         'path',
@@ -297,7 +281,6 @@ export const ICONS = {
     ],
   },
   quote: {
-    label: 'Citation',
     node: [
       [
         'path',
@@ -314,7 +297,6 @@ export const ICONS = {
     ],
   },
   award: {
-    label: 'Récompense',
     node: [
       [
         'path',
@@ -333,7 +315,6 @@ export const ICONS = {
     ],
   },
   leaf: {
-    label: 'Feuille',
     node: [
       [
         'path',
@@ -350,7 +331,6 @@ export const ICONS = {
     ],
   },
   sparkles: {
-    label: 'Étincelles',
     node: [
       [
         'path',
@@ -380,7 +360,4 @@ export const ICONS = {
       ],
     ],
   },
-} as const satisfies Record<
-  string,
-  { label: string; node: readonly (readonly [string, Record<string, string>])[] }
->;
+} as const satisfies Record<string, { node: readonly (readonly [string, Record<string, string>])[] }>;

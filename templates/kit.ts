@@ -9,10 +9,12 @@ import {
   type Asset,
   checkSite,
   loadSite,
+  localizeContent,
   type ResponsiveStyle,
   type Site,
   type StyleDecls,
   type Tokens,
+  tm,
 } from '@ns/core';
 
 const repo = join(import.meta.dirname, '..');
@@ -176,7 +178,8 @@ export function buildTemplate(spec: TemplateSpec) {
       id,
       type: t.type,
       ...(t.name && { name: t.name }),
-      props: { ...def.defaults.props, ...t.props },
+      // ponytail: the built-in templates are French (lang: 'fr' below) until their English versions (ADR-0024, lot 3).
+      props: localizeContent({ ...def.defaults.props, ...t.props }, 'fr'),
       style: t.style ?? {},
       children,
       ...(t.anim && { animations: t.anim }),
@@ -263,7 +266,7 @@ export function buildTemplate(spec: TemplateSpec) {
   if (!loaded.ok) throw new Error(`${spec.id} invalide :\n${JSON.stringify(loaded.diagnostics, null, 2)}`);
   const { checks } = checkSite(loaded.doc, registry, new Set(Object.keys(media)));
   const errors = checks.filter((c) => c.severity === 'error');
-  if (errors.length) throw new Error(`${spec.id} : ${errors.map((c) => c.message).join(' ; ')}`);
+  if (errors.length) throw new Error(`${spec.id} : ${errors.map((c) => tm(c.message)).join(' ; ')}`);
   return {
     archive: {
       format: 'ns.archive',
@@ -272,6 +275,6 @@ export function buildTemplate(spec: TemplateSpec) {
       media,
       template: { name: spec.name, description: spec.description },
     },
-    warnings: checks.map((c) => c.message),
+    warnings: checks.map((c) => tm(c.message)),
   };
 }

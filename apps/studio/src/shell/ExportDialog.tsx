@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type Check, checkSite, t } from '@ns/core';
+import { type Check, checkSite, t, tm } from '@ns/core';
 import { CircleAlert, PackageOpen, TriangleAlert } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/index.ts';
@@ -62,10 +62,10 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
           <Icon aria-hidden="true" size={14} />
           {c.pageId || c.path[0] === 'nodes' ? (
             <button type="button" className="checks-link" onClick={() => goTo(c)}>
-              {c.message}
+              {tm(c.message)}
             </button>
           ) : (
-            <span>{c.message}</span>
+            <span>{tm(c.message)}</span>
           )}
         </li>
       ))}

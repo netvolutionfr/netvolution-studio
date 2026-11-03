@@ -1,6 +1,6 @@
 // Media import policy (SB-06, ADR-0010): whitelisted types, content checked against the
 // declared type, SVG accepted only when it passes a strict check (refusal, never rewriting).
-import type { AssetKind } from '@ns/core';
+import type { AssetKind, MessageKey } from '@ns/core';
 
 type Kind = { kind: AssetKind; ext: string; sniff: (b: Buffer) => boolean; max: number };
 const MB = 1024 * 1024;
@@ -85,21 +85,21 @@ const decodeEntities = (s: string) =>
     .replace(/&#(\d+);?/g, (_, d: string) => String.fromCodePoint(Number(d) % 0x110000));
 
 /** Refused constructs, checked on the raw text and on its numeric-entity-decoded form. */
-const FORBIDDEN: [RegExp, string][] = [
-  [/<!DOCTYPE|<!ENTITY/i, 'DOCTYPE ou entité'],
-  [/<\s*(script|foreignObject|iframe|embed|object|audio|video|handler|listener)\b/i, 'élément actif'],
-  [/\son[a-z]+\s*=/i, 'attribut d’événement (on…)'],
-  [/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:|vbscript\s*:|data\s*:/i, 'URL javascript: ou data:'],
+const FORBIDDEN: [RegExp, MessageKey][] = [
+  [/<!DOCTYPE|<!ENTITY/i, 'svg.doctype'],
+  [/<\s*(script|foreignObject|iframe|embed|object|audio|video|handler|listener)\b/i, 'svg.active'],
+  [/\son[a-z]+\s*=/i, 'svg.event'],
+  [/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:|vbscript\s*:|data\s*:/i, 'svg.scriptUrl'],
   // A quote may only be followed by '#': references must stay inside the document.
-  [/(?:^|\s)(?:xlink:)?href\s*=\s*(?:["']\s*)?[^#"'\s]/i, 'référence externe (href)'],
-  [/url\(\s*(?:["']\s*)?[^#"'\s)]/i, 'référence externe (url())'],
-  [/@import/i, '@import'],
+  [/(?:^|\s)(?:xlink:)?href\s*=\s*(?:["']\s*)?[^#"'\s]/i, 'svg.href'],
+  [/url\(\s*(?:["']\s*)?[^#"'\s)]/i, 'svg.url'],
+  [/@import/i, 'svg.import'],
 ];
 
 /** Null when the SVG is acceptable, else the reason of the refusal. */
-export function checkSvg(text: string): string | null {
+export function checkSvg(text: string): MessageKey | null {
   const body = text.replace(/^﻿/, '');
-  if (!/^\s*(<\?xml[^>]*\?>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(body)) return 'pas un document SVG';
+  if (!/^\s*(<\?xml[^>]*\?>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(body)) return 'svg.notSvg';
   for (const variant of [body, decodeEntities(body)]) {
     for (const [pattern, reason] of FORBIDDEN) if (pattern.test(variant)) return reason;
   }

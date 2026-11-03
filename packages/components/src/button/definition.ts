@@ -1,11 +1,11 @@
-import { linkHref, linkSchema } from '@ns/core';
+import { linkHref, linkSchema, t } from '@ns/core';
 import { z } from 'zod';
 import { defineComponent } from '../define.ts';
 
 export const button = defineComponent({
   type: 'button',
   version: 1,
-  label: 'Bouton',
+  label: t('components.button.name'),
   category: 'content',
   props: z.strictObject({
     label: z.string().min(1).max(120),
@@ -13,7 +13,7 @@ export const button = defineComponent({
     variant: z.enum(['primary', 'secondary', 'text']),
   }),
   defaults: {
-    props: { label: 'En savoir plus', link: { kind: 'url', href: '#' }, variant: 'primary' },
+    props: { label: 'content.button', link: { kind: 'url', href: '#' }, variant: 'primary' },
     style: { base: { alignSelf: 'start' } },
   },
   // Page link → href of the page's current slug.
@@ -25,16 +25,16 @@ export const button = defineComponent({
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'background', 'visibility', 'position', 'effects'],
   fields: [
-    { kind: 'text', prop: 'label', label: 'Libellé' },
-    { kind: 'link', prop: 'link', label: 'Lien' },
+    { kind: 'text', prop: 'label', label: t('components.button.fields.label') },
+    { kind: 'link', prop: 'link', label: t('components.button.fields.link') },
     {
       kind: 'select',
       prop: 'variant',
-      label: 'Apparence',
+      label: t('components.button.fields.variant'),
       options: [
-        { value: 'primary', label: 'Principal' },
-        { value: 'secondary', label: 'Secondaire' },
-        { value: 'text', label: 'Lien texte' },
+        { value: 'primary', label: t('components.button.options.variant.primary') },
+        { value: 'secondary', label: t('components.button.options.variant.secondary') },
+        { value: 'text', label: t('components.button.options.variant.text') },
       ],
     },
   ],

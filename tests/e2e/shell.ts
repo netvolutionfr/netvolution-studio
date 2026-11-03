@@ -800,8 +800,8 @@ await check(
     // The review shows the diff and what is left out before anything changes.
     const review = page.getByRole('dialog', { name: 'Mettre à jour les instances' });
     const message = (await review.textContent()) ?? '';
-    expect(/1 instance\(s\) mise\(s\) à jour.*valeurs incompatibles/s.test(message), message);
-    expect(message.includes('élément(s) supprimé(s)'), `diff : ${message}`);
+    expect(/1 instance mise à jour.*valeurs incompatibles/s.test(message), message);
+    expect(message.includes('éléments supprimés'), `diff : ${message}`);
     await review.getByRole('button', { name: 'Mettre à jour' }).click();
     // Every operation is journaled, without content.
     await page.getByRole('button', { name: 'Journal des opérations' }).click();
@@ -1011,7 +1011,7 @@ await check(
     expect(await undo.isDisabled(), 'rejet : aucune entrée d’historique');
     await page.getByRole('button', { name: 'Section témoignages' }).click();
     await page.getByRole('button', { name: 'Proposer' }).click();
-    expect(((await proposal.textContent()) ?? '').includes('3 élément(s) ajouté(s)'), 'diff des ajouts');
+    expect(((await proposal.textContent()) ?? '').includes('3 éléments ajoutés'), 'diff des ajouts');
     await proposal.getByRole('button', { name: 'Accepter' }).click();
     const added = canvas.getByRole('heading', { name: 'Ils nous font confiance' });
     await added.waitFor({ timeout: 2000 });
