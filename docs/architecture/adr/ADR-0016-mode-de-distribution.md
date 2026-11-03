@@ -34,6 +34,6 @@ Besoins exprimés le 30/10/2026 :
 ## Conséquences
 
 - Pas de comptes ni de rôles dans le Studio. Les deux utilisateurs ont chacun un mot de passe nginx (bcrypt) et tous les droits.
-- Une mise à jour est livrée à chaque push sur `main` : une seule version en service.
+- Une mise à jour est livrée à chaque tag de version (`v*`), après approbation : une seule version en service. (Depuis l'ouverture du dépôt sous Apache-2.0, le 03/11/2026 ; auparavant à chaque push sur `main`.)
 - Disponibilité et sauvegardes : celles du serveur web4.
 - À revoir si des clients ou d'autres utilisateurs doivent accéder au Studio, ou si un besoin hors ligne apparaît.

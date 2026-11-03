@@ -73,7 +73,7 @@ cd ../site-grid && npm ci && npm run build          # build du site exporté, ho
 
 > **Le Studio n'a pas d'authentification.** Toute personne qui atteint son adresse a tous les droits sur les projets. Ne l'exposez jamais tel quel sur Internet : placez-le derrière un proxy qui fournit HTTPS et une authentification éprouvée (mot de passe nginx, Authelia, Cloudflare Access…).
 
-Le Studio peut être hébergé dans un conteneur Docker derrière nginx (HTTPS et mot de passe), déployé par GitHub Actions à chaque push sur `main` : voir [deploy/README.md](deploy/README.md) et l'[ADR-0015](docs/architecture/adr/ADR-0015-hebergement-docker.md). En local : `docker build -t netvolution-studio . && docker run -p 127.0.0.1:8080:8080 -v "$PWD/data:/data" netvolution-studio`.
+Le Studio peut être hébergé dans un conteneur Docker derrière nginx (HTTPS et mot de passe), déployé par GitHub Actions à chaque tag de version (`v*`), après approbation : voir [deploy/README.md](deploy/README.md) et l'[ADR-0015](docs/architecture/adr/ADR-0015-hebergement-docker.md). En local : `docker build -t netvolution-studio . && docker run -p 127.0.0.1:8080:8080 -v "$PWD/data:/data" netvolution-studio`.
 
 ## Documentation
 
