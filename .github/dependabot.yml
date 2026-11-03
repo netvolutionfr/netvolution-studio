@@ -21,3 +21,7 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Types de la version minimale supportée (engines: node >=24) : pas de montée majeure.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
