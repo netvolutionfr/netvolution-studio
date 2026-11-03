@@ -9,7 +9,7 @@
 - **Export**: a readable, documented Astro project, and the static site ready to go online (HTML, CSS, optimized images, `sitemap.xml`, `robots.txt`, 404 page).
 - **Languages**: interface in English and French, following the browser; the content the Studio writes into a site follows the site's language ([ADR-0024](docs/architecture/adr/ADR-0024-internationalization.md)). A new language is one JSON catalog.
 
-The [user guide](docs/guide/index.md), in French for now, walks designers through the Studio step by step; the Studio also serves it at `/guide/`.
+The [user guide](docs/guide/index.md) walks designers through the Studio step by step, in English and [French](docs/guide/fr/index.md); the Studio also serves it at `/guide/`.
 
 ## Principles
 
@@ -105,7 +105,7 @@ server {
 
 ## Putting an exported site online
 
-The Studio does not publish the site itself: it exports files, which you upload to any host. Nothing runs on the server and no link to the Studio remains. The details, for designers, are in the guide's [publishing chapter](docs/guide/11-publier-et-livrer.md) (French).
+The Studio does not publish the site itself: it exports files, which you upload to any host. Nothing runs on the server and no link to the Studio remains. The details, for designers, are in the guide's [publishing chapter](docs/guide/11-publish-and-deliver.md).
 
 1. **Export**: in the Studio, **⋯** menu > **Export site (Astro)…**, tick **Also build the static site**, then **Export**. Fix the blocking errors of the checks before export first.
 2. **Download** the static site archive (`.tar.gz`) and extract it. It contains the site ready to serve: HTML, CSS, images, `sitemap.xml`, `robots.txt`, `404.html`.
@@ -165,7 +165,7 @@ prototypes/             throwaway prototypes
 
 ## Documentation
 
-- [User guide](docs/guide/index.md) (French) · [Known limitations](docs/limitations.md)
+- [User guide](docs/guide/index.md) ([French](docs/guide/fr/index.md)) · [Known limitations](docs/limitations.md)
 - Specifications: [Foundations](docs/specifications/00-foundations.md) · [Milestone 1](docs/specifications/01-visual-editor.md) · [Milestone 2](docs/specifications/02-site-builder.md) · [Milestone 3](docs/specifications/03-creative-studio.md)
 - [Architecture decisions (ADRs)](docs/architecture/adr/) · [Studio design system](docs/ui/README.md)
 - [History](docs/history/README.md): milestone reports, architecture studies and research (French)

@@ -2,24 +2,34 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const dir = join(import.meta.dirname, '../../docs/guide');
-const chapters = readdirSync(dir).filter((f) => f.endsWith('.md'));
+// English at the root, French in fr/ (ADR-0024): the same chapters, under the same file names.
+const root = join(import.meta.dirname, '../../docs/guide');
+const languages = { en: root, fr: join(root, 'fr') };
+const chaptersOf = (dir: string) => readdirSync(dir).filter((f) => f.endsWith('.md'));
 const config = readFileSync(join(import.meta.dirname, 'astro.config.mjs'), 'utf8');
 
 describe('user guide (Starlight)', () => {
-  it('has a title per chapter and lists every chapter in the sidebar', () => {
-    for (const file of chapters) {
-      expect(readFileSync(join(dir, file), 'utf8'), file).toMatch(/^---\ntitle: .+\n---\n/);
-      if (file !== 'index.md') expect(config, file).toContain(`'${file.slice(0, -3)}'`);
-    }
+  it('has the same chapters in every language', () => {
+    expect(chaptersOf(languages.fr)).toEqual(chaptersOf(languages.en));
   });
 
-  it('has no broken link to a chapter or an image', () => {
-    for (const file of chapters) {
-      const md = readFileSync(join(dir, file), 'utf8');
-      for (const [, target] of md.matchAll(/\]\(([^)\s#:]+)(?:#[^)]*)?\)/g))
-        if (!target?.startsWith('/'))
-          expect(existsSync(join(dir, target ?? '')), `${file} → ${target}`).toBe(true);
-    }
-  });
+  for (const [lang, dir] of Object.entries(languages)) {
+    const chapters = chaptersOf(dir);
+
+    it(`${lang}: has a title per chapter and lists every chapter in the sidebar`, () => {
+      for (const file of chapters) {
+        expect(readFileSync(join(dir, file), 'utf8'), file).toMatch(/^---\ntitle: .+\n---\n/);
+        if (file !== 'index.md') expect(config, file).toContain(`'${file.slice(0, -3)}'`);
+      }
+    });
+
+    it(`${lang}: has no broken link to a chapter or an image`, () => {
+      for (const file of chapters) {
+        const md = readFileSync(join(dir, file), 'utf8');
+        for (const [, target] of md.matchAll(/\]\(([^)\s#:]+)(?:#[^)]*)?\)/g))
+          if (!target?.startsWith('/'))
+            expect(existsSync(join(dir, target ?? '')), `${file} → ${target}`).toBe(true);
+      }
+    });
+  }
 });

@@ -1,38 +1,38 @@
 ---
-title: "Guide d’utilisation"
+title: "User guide"
 ---
 
-Ce guide accompagne les graphistes et intégrateurs qui créent des sites vitrines avec Netvolution Studio. Il part de ce que vous connaissez déjà si vous avez travaillé avec Tatsu ou Elementor, et vous fait produire un vrai site dès le premier chapitre.
+This guide is for the designers and front-end developers who build showcase websites with Netvolution Studio. It starts from what you already know if you have worked with Tatsu or Elementor, and has you produce a real site from the first chapter.
 
-Le guide est consultable dans le Studio : bouton **?** de la barre d’outils, ou lien « guide d’utilisation » de l’écran Projets.
+The guide is available in the Studio: the **?** button of the toolbar, or the "user guide" link of the Projects screen. It also exists [in French](/guide/fr/).
 
-## Pour commencer
+## Getting started
 
-0. [Bienvenue](00-bienvenue.md) : ce qu’est le Studio et ce qui change par rapport à un page builder WordPress.
-1. [Prise en main en 20 minutes](01-prise-en-main.md) : un site complet, du modèle à l’export.
-2. [L’interface](02-interface.md) : chaque zone de l’écran, les raccourcis.
+0. [Welcome](00-welcome.md): what the Studio is and what changes compared with a WordPress page builder.
+1. [Getting started in 20 minutes](01-getting-started.md): a complete site, from the template to the export.
+2. [The interface](02-interface.md): each area of the screen, the shortcuts.
 
-## Créer un site
+## Building a site
 
-3. [Construire une page](03-construire-une-page.md) : conteneurs, piles et grilles, compositions, composants.
-4. [Mise en forme et responsive](04-mise-en-forme-et-responsive.md) : styles, Flexbox et Grid, desktop, tablette et mobile.
-5. [Le design system du site](05-design-system.md) : couleurs, tailles, polices, styles de texte et CSS du projet.
-6. [Le site](06-le-site.md) : pages et adresses, header et footer, menus, référencement, redirections.
-7. [Les médias](07-les-medias.md) : médiathèque, textes alternatifs, optimisation des images.
+3. [Building a page](03-building-a-page.md): containers, stacks and grids, compositions, components.
+4. [Styling and responsive](04-styling-and-responsive.md): styles, Flexbox and Grid, desktop, tablet and mobile.
+5. [The site's design system](05-design-system.md): colors, sizes, fonts, text styles and project CSS.
+6. [The site](06-the-site.md): pages and addresses, header and footer, menus, search engines, redirects.
+7. [Media](07-media.md): media library, alternative texts, image optimization.
 
-## Aller plus loin
+## Going further
 
-8. [Réutiliser](08-reutiliser.md) : sections de la bibliothèque, composants réutilisables, modèles de site.
-9. [Animations](09-animations.md) : entrée au défilement, survol, mouvement réduit.
-10. [L’assistant IA](10-assistant-ia.md) : demander, examiner, accepter.
+8. [Reuse](08-reuse.md): library sections, reusable components, site templates.
+9. [Animations](09-animations.md): on scroll, on hover, reduced motion.
+10. [The AI assistant](10-ai-assistant.md): ask, review, accept.
 
-## Publier
+## Publishing
 
-11. [Publier et livrer](11-publier-et-livrer.md) : contrôles, export, mise en ligne, mise à jour, transmission à un développeur.
+11. [Publish and deliver](11-publish-and-deliver.md): checks, export, going online, updates, handing over to a developer.
 
-## Annexes
+## Appendices
 
-- [A. Correspondances Tatsu / Elementor → Studio](annexe-a-correspondances.md)
-- [B. Limites actuelles et contournements](annexe-b-limites.md)
-- [C. Bonnes pratiques : accessibilité, référencement, performance](annexe-c-bonnes-pratiques.md)
-- [D. Dépannage, FAQ et glossaire](annexe-d-depannage.md)
+- [A. Tatsu / Elementor → Studio equivalences](appendix-a-equivalences.md)
+- [B. Current limits and workarounds](appendix-b-limits.md)
+- [C. Good practices: accessibility, search engines, performance](appendix-c-good-practices.md)
+- [D. Troubleshooting, FAQ and glossary](appendix-d-troubleshooting.md)

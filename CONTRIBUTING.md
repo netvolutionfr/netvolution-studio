@@ -28,7 +28,7 @@ Every pull request must pass `npm run check` (typecheck, Biome lint and format, 
 | Rendering, styles, a component's view or island | `npm run test:fidelity` (preview ↔ export must stay identical) |
 | Commands, the site model, the export | `npm run demo`, `npm run demo:site`, `npm run demo:creative` |
 | A site template (`templates/*.ts`) | `npm run templates:build`, then `npm run templates:check` |
-| Something visible in the Studio | the user guide (`docs/guide/`) and `npm run guide:screenshots` |
+| Something visible in the Studio | the user guide, in English (`docs/guide/`) and French (`docs/guide/fr/`), and `npm run guide:screenshots` |
 
 Do not report a check as passing when it was not run.
 

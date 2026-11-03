@@ -81,7 +81,7 @@ Toujours avec rien de sélectionné, la section **Site** de l’inspecteur règl
 
 Quand un site existant est refait, ses anciennes adresses doivent mener aux nouvelles pages, pour les visiteurs comme pour Google. La section **Redirections** les liste : une **Ancienne adresse** (`/nos-services/`), une destination **Vers** (une page du site ou une adresse) et la case **Permanente (301)**, à cocher pour un déménagement définitif.
 
-Un site statique ne peut pas imposer une vraie redirection 301 à lui seul : l’export fournit une page qui redirige, plus les fichiers de configuration pour l’hébergeur. Le chapitre [Publier et livrer](11-publier-et-livrer.md) explique quoi en faire.
+Un site statique ne peut pas imposer une vraie redirection 301 à lui seul : l’export fournit une page qui redirige, plus les fichiers de configuration pour l’hébergeur. Le chapitre [Publier et livrer](11-publish-and-deliver.md) explique quoi en faire.
 
 ## Vérifier le site comme un visiteur
 

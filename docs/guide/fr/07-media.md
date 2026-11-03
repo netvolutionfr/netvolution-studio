@@ -66,13 +66,13 @@ Un carrousel cache la plupart de ses images : pour un contenu important, une gal
 - Une image qui contient du texte : reprenez le texte.
 - Une image purement décorative : cochez **Image décorative** plutôt que d’écrire un texte vide de sens.
 
-Une image de la médiathèque peut aussi servir d’**image de fond** à une boîte (chapitre [Mise en forme](04-mise-en-forme-et-responsive.md)) : elle est alors publiée sans optimisation, préparez-la en conséquence.
+Une image de la médiathèque peut aussi servir d’**image de fond** à une boîte (chapitre [Mise en forme](04-styling-and-responsive.md)) : elle est alors publiée sans optimisation, préparez-la en conséquence.
 
 ## La médiathèque
 
 Le bouton **Médiathèque** (icône d’images) de la barre d’outils ouvre le panneau du projet.
 
-![La médiathèque du modèle Atelier Nord](images/mediatheque.png)
+![La médiathèque du modèle Atelier Nord](images/media-library.png)
 
 - **Importer** : un ou plusieurs fichiers d’un coup (images, SVG, documents).
 - **Rechercher** : par nom, nom de fichier ou tag.

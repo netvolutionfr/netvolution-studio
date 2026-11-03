@@ -20,7 +20,7 @@ import {
 import { IconButton, Segmented } from '../ui/index.ts';
 import type { SidePanel } from './App.tsx';
 import { DocumentBar } from './DocumentBar.tsx';
-import { LanguageMenu } from './LanguageMenu.tsx';
+import { guideUrl, LanguageMenu } from './LanguageMenu.tsx';
 import { useEditor, useStore } from './store.ts';
 import { MAX_WIDTH, MIN_WIDTH, VIEWPORTS } from './viewport.ts';
 
@@ -158,7 +158,7 @@ export function Toolbar(props: {
           label={t('toolbar.guide')}
           icon={CircleHelp}
           tooltip={t('toolbar.guideTip')}
-          onClick={() => open('./guide/', 'ns-guide')}
+          onClick={() => open(guideUrl(), 'ns-guide')}
         />
         <IconButton
           label={props.theme === 'dark' ? t('toolbar.lightTheme') : t('toolbar.darkTheme')}

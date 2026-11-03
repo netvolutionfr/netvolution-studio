@@ -130,3 +130,12 @@ Two audiences to serve: the French designers who use the Studio today, and an in
 - **History**: the slice reports, the architecture studies and the research (Tatsu analysis, feasibility study, import trial) moved to `docs/history/` (`reports/`, `studies/`, `research/`, `tatsu/`) and stay in French, with an English index (`docs/history/README.md`).
 - **Links checked**: `tests/docs.test.ts`, run by `npm run check`, fails on a relative Markdown link to a missing file.
 - CLAUDE.md now states the languages: documentation, code and APIs in English; conversations with the maintainer in French; history and guide in French.
+
+## Addendum of 11/03/2026 — batch 6
+
+- **Bilingual guide**: English at the root (`docs/guide/`, served at `/guide/`), French in `docs/guide/fr/` (served at `/guide/fr/`). Both languages use the **same English file names**, which Starlight needs to link the two versions of a page and to fall back to English for an untranslated page. The sidebar labels are translated in `apps/guide/astro.config.mjs`; chapter links (`03-building-a-page.md`) become routes of the page's language.
+- **Studio links**: the **?** button and the links of the Projects screen open the guide in the interface language (`guideUrl`), in English when the guide has no translation for it.
+- **Screenshots in both languages**: `npm run guide:screenshots [en|fr]` replays the tutorial once per language, in a browser of that language, on the version of Atelier Nord in that language, and writes `docs/guide/images/` and `docs/guide/fr/images/`. The interface labels of the script are written once, in French, and found in English through the catalogs (a text with several English translations is an error, to disambiguate by hand); the site's content is given in both languages. This settles, for the guide, the open point of batch 4: the end-to-end scenarios stay French.
+- **Atelier Nord in English**: as an archive (not written in code), it is translated by `translateArchive` from `templates/translations/atelier-nord.en.json`, under the same rules as `translateSpec`, so that the English tutorial runs on an English site.
+- The static site of an export is written to `<project>-<date>-static` (formerly `-statique`).
+- `apps/guide/guide.test.ts` checks that both languages have the same chapters, all listed in the sidebar, with no broken link or image.

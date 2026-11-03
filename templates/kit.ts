@@ -348,7 +348,7 @@ export function translateSpec(spec: TemplateSpec, lang: string, dict: Record<str
     pages: spec.pages.map((pg) => ({
       ...pg,
       title: tr(pg.title),
-      slug: pg.slug && pg.slug.split('/').map(tr).join('/'),
+      slug: pg.slug.split('/').map(tr).join('/'),
       description: tr(pg.description),
       tree: tree(pg.tree),
     })),
@@ -356,6 +356,63 @@ export function translateSpec(spec: TemplateSpec, lang: string, dict: Record<str
   if (missing.size)
     throw new Error(
       `${spec.id} (${lang}): ${missing.size} untranslated texts:\n${JSON.stringify([...missing], null, 1)}`,
+    );
+  return out;
+}
+
+/**
+ * Another language version of a template kept as an archive (Atelier Nord), by the same rule as
+ * `translateSpec`: every text of the site through `dict`, a missing text being an error.
+ */
+export function translateArchive<A extends { site: Site; template?: { name: string; description: string } }>(
+  archive: A,
+  lang: string,
+  dict: Record<string, string>,
+): A {
+  const missing = new Set<string>();
+  const tr = (text: string) => {
+    if (!/\p{L}/u.test(text)) return text;
+    const out = dict[text];
+    if (out === undefined) missing.add(text);
+    return out ?? text;
+  };
+  const texts = (v: unknown, key?: string): unknown => {
+    if (typeof v === 'string') return key && TEXT_KEYS.has(key) ? tr(v) : v;
+    if (Array.isArray(v)) return v.map((x) => texts(x, key));
+    if (v && typeof v === 'object')
+      return Object.fromEntries(
+        Object.entries(v).map(([k, x]) => [
+          k,
+          texts(x, k === 'items' || k === 'content' || k === 'texts' ? key : k),
+        ]),
+      );
+    return v;
+  };
+  const { site } = archive;
+  const nodes = Object.fromEntries(
+    Object.entries(site.nodes).map(([id, n]) => {
+      // An icon's `name` is the icon, not a text.
+      const { name, ...rest } = n.props as Record<string, unknown>;
+      const props = n.type === 'icon' ? { ...(texts(rest) as object), name } : texts(n.props);
+      return [id, { ...n, ...(n.name && { name: tr(n.name) }), props }];
+    }),
+  );
+  const out: A = {
+    ...archive,
+    site: {
+      ...(texts({ ...site, nodes: {} }) as Site),
+      settings: { ...site.settings, lang },
+      pages: site.pages.map((p) => ({
+        ...(texts(p) as Site['pages'][number]),
+        slug: p.slug.split('/').map(tr).join('/'),
+      })),
+      nodes,
+    },
+    ...(archive.template && { template: texts(archive.template) as A['template'] }),
+  };
+  if (missing.size)
+    throw new Error(
+      `archive (${lang}): ${missing.size} untranslated texts:\n${JSON.stringify([...missing], null, 1)}`,
     );
   return out;
 }

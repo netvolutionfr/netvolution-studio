@@ -2,7 +2,7 @@
 
 > Standing instructions for agents working on Netvolution Studio (NS).
 > Documentation, code, identifiers and APIs: English (ADR-0024). Conversations with the maintainer: French.
-> The history (`docs/history/`) and the user guide (`docs/guide/`, until it becomes bilingual) remain in French.
+> The history (`docs/history/`) remains in French. The user guide is bilingual: English in `docs/guide/`, French in `docs/guide/fr/`.
 
 ## 1. Vision and goals
 
@@ -28,7 +28,7 @@ The specifications are authoritative for their scope:
 - `docs/specifications/03-creative-studio.md` — **Milestone 3, delivered and validated**: reusable sections and components, site templates, advanced composition, declarative animations, services layer and AI assistance through structured commands with human approval. Review: `docs/history/reports/jalon-3-tranche-8.md`. Changes must not break the demonstrations or the bench (`npm run demo`, `npm run demo:site`, `npm run demo:creative`, `npm run test:fidelity`).
 - `docs/history/research/TATSU-ANALYSE.md` — reference research, **non-normative** (if present).
 - **Changes after milestone 3** (ADR-0017 to ADR-0024: decorative styles, imported fonts, fine typography, rich text, Gallery, Marquee, Carousel, custom CSS, internationalization). Limitations: `docs/limitations.md`.
-- `docs/guide/` — **user guide** for designers (Astro Starlight, served by the Studio at `/guide/`). Every visible feature updates it (the chapter concerned, appendices A and B); its screenshots are regenerated with `npm run guide:screenshots`.
+- `docs/guide/` — **user guide** for designers (Astro Starlight, served by the Studio at `/guide/`). Every visible feature updates it in both languages (the chapter concerned, appendices A and B); its screenshots, in both languages, are regenerated with `npm run guide:screenshots`.
 - `docs/history/research/essai-import-tatsu.md` — review of a **throwaway** trial converting a Tatsu site, to measure the gaps; it is not a migration feature (§1). The repository is public (Apache-2.0): no client content, name or address is versioned, nor the converter specific to a site.
 
 **Do not implement the next milestones ahead of time.** Allow the minimal contracts and abstractions needed so as not to block their evolution.

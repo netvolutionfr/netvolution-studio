@@ -1,107 +1,107 @@
 ---
-title: "2. L’interface"
+title: "2. The interface"
 ---
 
-L’éditeur se découpe en cinq zones. Les panneaux de gauche et de droite se redimensionnent en faisant glisser leur bordure ; le Studio retient leur largeur.
+The editor is divided into five areas. The left and right panels are resized by dragging their edge; the Studio remembers their width.
 
-![Un titre sélectionné : son cadre dans le canvas, sa ligne dans l’arborescence, ses réglages dans l’inspecteur](images/selection.png)
+![A selected heading: its frame in the canvas, its row in the layers, its settings in the inspector](images/selection.png)
 
-## L’écran Projets
+## The Projects screen
 
-C’est la page d’accueil du Studio. On y crée un projet depuis un **modèle**, on ouvre, **duplique** ou **supprime** un projet existant (il part dans une corbeille, côté serveur), et on **importe** une archive exportée d’un autre Studio. Les modèles de site que vous avez enregistrés apparaissent sous « Mes modèles de site ».
+This is the Studio's home page. There you create a project from a **template**, open, **duplicate** or **delete** an existing project (it goes to a trash, on the server), and **import** an archive exported from another Studio. The site templates you have saved appear under "My site templates".
 
-Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène. Le bouton de **langue** (en haut à droite) choisit la langue de l’interface ; la page se recharge dans la langue choisie. À la première visite, le Studio s’ouvre dans la langue du navigateur s’il la connaît (français ou anglais), sinon en anglais ; le choix fait ensuite est retenu par le navigateur.
+From the editor, the **← Projects** link at the top left brings you back. The **language** button (top right) chooses the interface language; the page reloads in the chosen language. On the first visit, the Studio opens in the browser's language if it knows it (English or French), else in English; the choice made afterwards is remembered by the browser.
 
-## La barre d’outils
+## The toolbar
 
-**À gauche**, le projet :
+**On the left**, the project:
 
-- le **nom du projet** et son **état** : « Enregistré » ou « Modifié (non enregistré) » ;
-- **Enregistrer** (<kbd>⌘</kbd> <kbd>S</kbd>) ;
-- le menu **⋯** (Plus d’actions) : exporter le site, exporter l’archive du projet (site et médias, pour le sauvegarder ou le transférer), enregistrer le projet comme modèle de site.
+- the **project name** and its **status**: "Saved" or "Modified (not saved)";
+- **Save** (<kbd>⌘</kbd> <kbd>S</kbd>);
+- the **⋯** menu (More actions): export the site, export the project archive (site and media, to back it up or transfer it), save the project as a site template.
 
-**Au centre**, l’affichage :
+**In the middle**, the display:
 
-- **Annuler** et **Rétablir** ;
-- la **taille d’écran** : Desktop (1280 px), Tablette (820 px), Mobile (390 px), ou une largeur précise dans le champ « px » ;
-- le **breakpoint édité**, par exemple « Base (desktop) » ou « Mobile » : les styles modifiés s’appliquent à ce breakpoint (voir plus bas).
+- **Undo** and **Redo**;
+- the **screen size**: Desktop (1280 px), Tablet (820 px), Mobile (390 px), or a precise width in the "px" field;
+- the **edited breakpoint**, for instance "Base (desktop)" or "Mobile": the styles you change apply to this breakpoint (see below).
 
-**À droite**, les panneaux du site, qui prennent la place de l’inspecteur (un second clic le rend) :
+**On the right**, the site panels, which take the inspector's place (a second click brings it back):
 
-| Icône | Panneau | Rôle |
+| Icon | Panel | Role |
 |---|---|---|
-| Palette | **Design system** | Couleurs, tailles, polices, styles de texte et CSS du projet |
-| Images | **Médiathèque** | Images, SVG et fichiers du projet |
-| Liste | **Menus** | Menus de navigation |
-| Étincelles | **Assistant IA** | Propositions de modifications, à valider |
-| Horloge | **Journal des opérations** | Ce qui a été fait pendant la session, par vous ou par l’IA |
+| Palette | **Design system** | Colors, sizes, fonts, text styles and project CSS |
+| Images | **Media library** | Images, SVG and files of the project |
+| List | **Menus** | Navigation menus |
+| Sparkles | **AI assistant** | Proposed changes, to approve |
+| Clock | **Operation log** | What was done during the session, by you or by the AI |
 
-Puis :
+Then:
 
-- **Aperçu du site** ouvre le site dans un nouvel onglet, pour naviguer de page en page sans les outils d’édition ;
-- **Aperçu** (l’œil) masque les panneaux et les cadres de sélection, pour juger la page seule ;
-- **?** ouvre ce guide ;
-- le soleil ou la lune bascule l’interface en **thème clair ou sombre** (le site produit n’est pas concerné) ;
-- le bouton de **langue** choisit la langue de l’interface (français ou anglais). Enregistrez avant : la page se recharge. La langue du site produit se règle à part, dans les réglages du site (inspecteur, section Site).
+- **Site preview** opens the site in a new tab, to browse from page to page without the editing tools;
+- **Preview** (the eye) hides the panels and selection frames, to judge the page alone;
+- **?** opens this guide;
+- the sun or the moon switches the interface to a **light or dark theme** (the produced site is not affected);
+- the **language** button chooses the interface language (English or French). Save first: the page reloads. The language of the produced site is set separately, in the site settings (inspector, Site section).
 
-## À gauche : pages, bibliothèque, arborescence
+## On the left: pages, library, layers
 
-**Pages.** La liste des pages, avec leur adresse ; la maison signale la page d’accueil, un œil barré une page non publiée. Cliquez sur une page pour l’ouvrir, sur l’icône en haut à droite pour en ajouter une. Dessous, **Header et footer** ouvre les parties communes à toutes les pages, et **Composants partagés** les composants réutilisables du projet, quand il y en a.
+**Pages.** The list of pages, with their address; the house marks the home page, a crossed-out eye an unpublished page. Click a page to open it, the icon at the top right to add one. Below, **Header and footer** opens the parts shared by every page, and **Shared components** the project's reusable components, when there are any.
 
-**Ajouter.** La bibliothèque, en deux onglets :
+**Add.** The library, in two tabs:
 
-- **Composants** : les éléments de base, rangés en **Structure** (conteneur, pile, grille, espaceur, accordéon, onglets), **Contenu** (titre, texte, liste, bouton, icône, séparateur, navigation, liste de liens), **Médias** (image, vidéo), puis des **Compositions** toutes prêtes (section, rangées de colonnes, hero, carte, galerie, tarifs, témoignages…) ;
-- **Sections** : les sections de la bibliothèque et celles que vous avez enregistrées.
+- **Components**: the basic elements, sorted into **Layout** (container, stack, grid, spacer, accordion, tabs), **Content** (heading, text, list, button, icon, divider, navigation, link list), **Media** (image, video), then ready-made **Compositions** (section, rows of columns, hero, card, gallery, pricing, testimonials…);
+- **Sections**: the sections of the library and those you have saved.
 
-Un clic insère l’élément dans la boîte sélectionnée, ou après l’élément sélectionné, ou à la fin de la page si rien n’est sélectionné (détails au chapitre [Construire une page](03-construire-une-page.md)). On peut aussi le glisser dans le canvas.
+A click inserts the element into the selected box, or after the selected element, or at the end of the page if nothing is selected (details in the chapter [Building a page](03-building-a-page.md)). You can also drag it into the canvas.
 
-**Arborescence.** La structure de la page, emboîtement compris. Elle sert à sélectionner un élément difficile à atteindre dans le canvas (un conteneur sans fond, un élément caché sur mobile), à déplier ou replier une partie de la page, et à déplacer des éléments par glisser-déposer. Le **nom** d’un élément se change dans l’inspecteur, section **Avancé** : nommez vos sections (« Hero », « Tarifs »), la page devient plus lisible.
+**Layers.** The structure of the page, nesting included. It is used to select an element that is hard to reach in the canvas (a container without a background, an element hidden on mobile), to expand or collapse a part of the page, and to move elements by drag and drop. The **name** of an element is changed in the inspector, **Advanced** section: name your sections ("Hero", "Pricing"), the page becomes more readable.
 
-## Au centre : le canvas
+## In the middle: the canvas
 
-Le canvas affiche la page avec les mêmes composants et les mêmes styles que le site exporté : ce que vous voyez est ce qui sera publié. Quand la largeur choisie dépasse la place disponible, la page est réduite (« Zoom 64 % » en haut à droite).
+The canvas shows the page with the same components and styles as the exported site: what you see is what will be published. When the chosen width exceeds the available room, the page is scaled down ("Zoom 64%" at the top right).
 
-- **Survoler** un élément l’entoure d’un trait fin ; **cliquer** le sélectionne. Son type s’affiche en étiquette au-dessus.
-- Un élément sélectionné porte des **poignées** pour régler sa largeur et sa hauteur à la souris, et une petite barre pour l’**aligner dans son parent**.
-- Les liens et boutons ne réagissent pas au clic dans le canvas : utilisez **Aperçu du site** pour naviguer.
+- **Hovering** an element outlines it with a thin line; **clicking** selects it. Its type shows as a label above it.
+- A selected element has **handles** to set its width and height with the mouse, and a small bar to **align it in its parent**.
+- Links and buttons do not react to clicks in the canvas: use **Site preview** to navigate.
 
-## À droite : l’inspecteur
+## On the right: the inspector
 
-**Quand rien n’est sélectionné** (<kbd>Échap</kbd>), il règle la page et le site : titre et adresse de la page, affichage du header et du footer, publication, **Référencement et partage**, puis nom, langue et URL du site.
+**When nothing is selected** (<kbd>Esc</kbd>), it sets the page and the site: title and address of the page, display of the header and footer, publication, **Search and sharing**, then name, language and URL of the site.
 
-**Quand un élément est sélectionné**, il affiche, de haut en bas :
+**When an element is selected**, it shows, from top to bottom:
 
-1. le type de l’élément et ses **actions** : monter, descendre, dupliquer, copier, couper, coller, créer un composant réutilisable, supprimer ;
-2. **Contenu** : ce que contient l’élément (texte, lien, image, niveau de titre…) ;
-3. l’indication **Styles appliqués à** : le breakpoint que vous modifiez ;
-4. les styles, regroupés en **Style**, **Mise en page**, **Espacements**, **Position et effets** et **Avancé** ; seuls les réglages utiles au type d’élément apparaissent ;
+1. the element's type and its **actions**: move up, move down, duplicate, copy, cut, paste, create a reusable component, delete;
+2. **Content**: what the element contains (text, link, image, heading level…);
+3. the **Styles applied to** indication: the breakpoint you are editing;
+4. the styles, grouped into **Style**, **Layout**, **Spacing**, **Position and effects** and **Advanced**; only the settings useful to the element's type appear;
 5. **Animations**.
 
-### Breakpoints : desktop d’abord, puis les exceptions
+### Breakpoints: desktop first, then the exceptions
 
-Les styles réglés en **Desktop** forment la **base** : ils s’appliquent à toutes les tailles d’écran. En Tablette ou en Mobile, vous ne réglez que les **différences** (une taille de titre plus petite, une rangée qui passe en colonne). Les modèles fournis définissent deux breakpoints :
+The styles set in **Desktop** form the **base**: they apply to every screen size. In Tablet or Mobile, you only set the **differences** (a smaller heading size, a row that becomes a column). The provided templates define two breakpoints:
 
-- **Tablette**, jusqu’à 1023 px de large ;
-- **Mobile**, jusqu’à 767 px.
+- **Tablet**, up to 1023 px wide;
+- **Mobile**, up to 767 px.
 
-Devant chaque réglage, un **point** indique d’où vient la valeur : **plein**, elle est définie sur ce breakpoint ; **creux**, elle est héritée d’une taille plus grande. La flèche circulaire à droite d’une valeur définie la **réinitialise**, c’est-à-dire revient à la valeur héritée. Le chapitre [Mise en forme et responsive](04-mise-en-forme-et-responsive.md) détaille la méthode.
+In front of each setting, a **dot** shows where the value comes from: **filled**, it is set at this breakpoint; **hollow**, it is inherited from a larger size. The circular arrow to the right of a set value **resets** it, that is, goes back to the inherited value. The chapter [Styling and responsive](04-styling-and-responsive.md) details the method.
 
-## Raccourcis clavier
+## Keyboard shortcuts
 
-Sous Windows et Linux, remplacez <kbd>⌘</kbd> par <kbd>Ctrl</kbd>.
+On Windows and Linux, replace <kbd>⌘</kbd> with <kbd>Ctrl</kbd>.
 
-| Action | Raccourci |
+| Action | Shortcut |
 |---|---|
-| Enregistrer | <kbd>⌘</kbd> <kbd>S</kbd> |
-| Annuler | <kbd>⌘</kbd> <kbd>Z</kbd> |
-| Rétablir | <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>Z</kbd> ou <kbd>⌘</kbd> <kbd>Y</kbd> |
-| Copier, couper, coller l’élément | <kbd>⌘</kbd> <kbd>C</kbd>, <kbd>⌘</kbd> <kbd>X</kbd>, <kbd>⌘</kbd> <kbd>V</kbd> |
-| Dupliquer l’élément | <kbd>⌘</kbd> <kbd>D</kbd> |
-| Supprimer l’élément | <kbd>Suppr</kbd> ou <kbd>⌫</kbd> |
-| Désélectionner | <kbd>Échap</kbd> |
+| Save | <kbd>⌘</kbd> <kbd>S</kbd> |
+| Undo | <kbd>⌘</kbd> <kbd>Z</kbd> |
+| Redo | <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>Z</kbd> or <kbd>⌘</kbd> <kbd>Y</kbd> |
+| Copy, cut, paste the element | <kbd>⌘</kbd> <kbd>C</kbd>, <kbd>⌘</kbd> <kbd>X</kbd>, <kbd>⌘</kbd> <kbd>V</kbd> |
+| Duplicate the element | <kbd>⌘</kbd> <kbd>D</kbd> |
+| Delete the element | <kbd>Del</kbd> or <kbd>⌫</kbd> |
+| Deselect | <kbd>Esc</kbd> |
 
-Dans l’arborescence, les flèches <kbd>↑</kbd> <kbd>↓</kbd> passent d’un élément à l’autre, <kbd>→</kbd> et <kbd>←</kbd> déplient et replient, <kbd>Début</kbd> et <kbd>Fin</kbd> vont au premier et au dernier élément.
+In the layers, the arrows <kbd>↑</kbd> <kbd>↓</kbd> move from one element to another, <kbd>→</kbd> and <kbd>←</kbd> expand and collapse, <kbd>Home</kbd> and <kbd>End</kbd> go to the first and last element.
 
-Les raccourcis d’édition sont inactifs pendant la saisie dans un champ : <kbd>⌘</kbd> <kbd>Z</kbd> y annule la frappe, pas la dernière action du Studio.
+Editing shortcuts are inactive while typing in a field: <kbd>⌘</kbd> <kbd>Z</kbd> undoes the typing there, not the Studio's last action.
 
-> **Copier-coller.** Le presse-papiers du Studio est interne à l’onglet : on copie un élément d’une page pour le coller sur une autre page du même projet, mais pas dans un autre logiciel ni dans un autre projet. Les sections enregistrées sont, elles aussi, propres à un projet ; pour repartir d’un projet entier, enregistrez-le comme modèle de site (chapitre [Réutiliser](08-reutiliser.md)).
+> **Copy and paste.** The Studio's clipboard is internal to the tab: you copy an element of one page to paste it on another page of the same project, but not into another program or another project. Saved sections are also specific to a project; to start again from a whole project, save it as a site template (chapter [Reuse](08-reuse.md)).

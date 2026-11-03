@@ -4,7 +4,8 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 
 export const collections = {
-  // The guide's sources stay in docs/guide/ (readable on GitHub, captures in docs/guide/images/).
+  // The guide's sources stay in docs/guide/ (readable on GitHub): English at the root, French in fr/,
+  // each with its screenshots in images/.
   docs: defineCollection({
     loader: glob({ base: '../../docs/guide', pattern: '**/[^_]*.md' }),
     schema: docsSchema(),

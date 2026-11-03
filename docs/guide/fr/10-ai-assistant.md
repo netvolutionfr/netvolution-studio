@@ -38,7 +38,7 @@ Une demande type remplit la consigne : vous pouvez la compléter (« Ton plus ch
 
 La proposition s’affiche dans une fenêtre qui liste **chaque changement** : l’élément, la propriété et le breakpoint, l’ancienne et la nouvelle valeur.
 
-![Une proposition de l’assistant : deux espacements modifiés sur le hero](images/assistant-proposition.png)
+![Une proposition de l’assistant : deux espacements modifiés sur le hero](images/assistant-proposal.png)
 
 - **Accepter** applique tous les changements, en **une seule action** : <kbd>⌘</kbd> <kbd>Z</kbd> les annule tous d’un coup.
 - **Rejeter** ferme la fenêtre ; le site n’a pas bougé. **Revoir la proposition** la rouvre tant que vous n’en avez pas demandé une autre.

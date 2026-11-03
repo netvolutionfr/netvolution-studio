@@ -19,7 +19,7 @@ const app = await serve(join(repo, 'apps/studio/dist'), {
   }),
 });
 const browser = await chromium.launch();
-// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios.
 const page = await browser.newPage({
   locale: 'fr-FR',
   viewport: { width: 1440, height: 900 },

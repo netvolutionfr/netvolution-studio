@@ -50,13 +50,13 @@
 ## Languages (ADR-0024)
 
 - **Interface, generated content and export translated.** The Studio, the components, the messages of the core and of the server go through the catalogs of `packages/core/src/i18n/locales/`; the interface opens in the browser's language when it has a catalog, else in English. The content the Studio writes into a site (default text of an element, sections, header and footer, new page, 404 page, accessible texts of the carousel, gallery and marquee) follows the site language (`settings.lang`), English when it has no catalog. The developer files of the export (README, `MEDIA.md`, `redirects/README.md`, comments) are in English.
-- **Site templates**: Studio Orbe and Cabinet Valéor exist in French and English; **Atelier Nord** (an archive, not written in code) and the starter pages remain in French. Another language is added with a dictionary `templates/translations/<template>.<language>.json`.
+- **Site templates**: Atelier Nord, Studio Orbe and Cabinet Valéor exist in French and English; the starter pages remain in French. Another language is added with a dictionary `templates/translations/<template>.<language>.json`.
 - **Simulated assistant** (demonstrations and tests): it understands instructions in French and English, but its answers and the content it proposes remain in French.
 - **Schema messages**: zod's own messages (types, lengths) stay in English whatever the language; only the messages written for the Studio are translated.
 - **Changing the language** reloads the page; the choice is kept in the browser (`localStorage`), not on the server.
 - **Right-to-left languages** are not supported.
 - **History**: the milestone reports, studies and research (`docs/history/`) remain in French.
-- **User guide** in French only (until ADR-0024, lot 6).
+- **User guide** in English and French; its tutorial uses the English or French version of Atelier Nord.
 
 ## Rendering and export
 
