@@ -1,133 +1,133 @@
-# Netvolution Studio — Fondations et architecture
+# Netvolution Studio — Foundations and architecture
 
-**Document :** `docs/specifications/00-foundations.md`  
-**Version :** 0.1  
-**Statut :** Spécification initiale  
-**Produit :** Netvolution Studio (NS)
+**Document:** `docs/specifications/00-foundations.md`  
+**Version:** 0.1  
+**Status:** Initial specification  
+**Product:** Netvolution Studio (NS)
 
 ## 1. Vision
 
-Netvolution Studio est une plateforme web de conception, gestion et publication de sites web.
+Netvolution Studio is a web platform to design, manage and publish websites.
 
-Elle vise à remplacer progressivement WordPress, Oshine et Tatsu pour les nouveaux projets de Netvolution, sans imposer la migration des sites existants.
+It aims to gradually replace WordPress, Oshine and Tatsu for Netvolution's new projects, without forcing the migration of existing sites.
 
-Le produit doit permettre à un concepteur de créer visuellement un site, à un client de gérer ultérieurement ses contenus, et à un exploitant de publier le site sur une infrastructure indépendante.
+The product must let a designer create a site visually, a client later manage its content, and an operator publish the site on independent infrastructure.
 
-Ses objectifs fondamentaux sont :
+Its fundamental goals are:
 
-1. **Productivité :** permettre à un graphiste de créer rapidement des sites professionnels.
-2. **Sécurité :** réduire l'exposition publique, les dépendances vulnérables et les erreurs de configuration.
-3. **Performance :** générer des sites légers, statiques par défaut.
-4. **Simplicité :** présenter les fonctionnalités pertinentes selon les rôles.
-5. **Évolutivité :** intégrer progressivement IA, automatisations, API et MCP.
-6. **Réversibilité :** garantir la possibilité d'exploiter les sites hors de Netvolution Studio.
+1. **Productivity:** let a graphic designer create professional sites quickly.
+2. **Security:** reduce public exposure, vulnerable dependencies and configuration errors.
+3. **Performance:** generate light sites, static by default.
+4. **Simplicity:** present the relevant features according to roles.
+5. **Scalability:** gradually integrate AI, automations, API and MCP.
+6. **Reversibility:** guarantee that sites can be run outside Netvolution Studio.
 
-L'expérience de Tatsu sert de référence ergonomique, mais ni son code ni son architecture ne constituent des dépendances obligatoires.
+The Tatsu experience serves as an ergonomic reference, but neither its code nor its architecture are mandatory dependencies.
 
-## 2. Périmètre des trois premiers jalons
+## 2. Scope of the first three milestones
 
-### Jalon 1 — Visual Editor
+### Milestone 1 — Visual Editor
 
-Créer et modifier une page visuellement, enregistrer son document structuré et produire une page Astro fidèle.
+Create and edit a page visually, save its structured document and produce a faithful Astro page.
 
-### Jalon 2 — Site Builder
+### Milestone 2 — Site Builder
 
-Créer un site vitrine complet : pages, menus, header/footer, médias, design system, responsive et export Astro autonome.
+Create a complete showcase site: pages, menus, header/footer, media, design system, responsive and standalone Astro export.
 
-### Jalon 3 — Creative Studio
+### Milestone 3 — Creative Studio
 
-Accélérer et enrichir la conception grâce aux bibliothèques de compositions, aux animations et à l'assistance IA.
+Speed up and enrich design with libraries of compositions, animations and AI assistance.
 
-### Évolutions ultérieures
+### Later evolutions
 
-- CMS éditorial multi-utilisateur.
-- Administration autonome par le client.
-- Authentification forte et gestion avancée des droits.
-- Workflows de publication.
-- Connexions aux services tiers.
-- API et serveur MCP de production.
-- Déploiement et exploitation multi-tenant.
-- Collaboration simultanée.
+- Multi-user editorial CMS.
+- Self-service administration by the client.
+- Strong authentication and advanced rights management.
+- Publishing workflows.
+- Connections to third-party services.
+- Production API and MCP server.
+- Multi-tenant deployment and operations.
+- Simultaneous collaboration.
 
-Ces évolutions doivent être facilitées par l'architecture, mais ne doivent pas être développées prématurément.
+The architecture must make these evolutions easier, but they must not be developed prematurely.
 
-## 3. Principes architecturaux
+## 3. Architectural principles
 
-### 3.1 Application web
+### 3.1 Web application
 
-L'interface principale fonctionne dans un navigateur moderne sur macOS, Windows et Linux.
+The main interface runs in a modern browser on macOS, Windows and Linux.
 
-Technologies privilégiées :
+Preferred technologies:
 
-- TypeScript en mode strict.
-- React pour l'interface.
-- Astro comme première cible de publication.
-- Standards HTML, CSS et JavaScript.
+- TypeScript in strict mode.
+- React for the interface.
+- Astro as the first publishing target.
+- HTML, CSS and JavaScript standards.
 
-Une distribution desktop reste envisageable, mais n'est pas incluse dans les trois premiers jalons.
+A desktop distribution remains possible, but is not included in the first three milestones.
 
-### 3.2 Monolithe modulaire
+### 3.2 Modular monolith
 
-Privilégier un monolithe modulaire plutôt qu'une architecture microservices.
+Prefer a modular monolith over a microservices architecture.
 
-Les responsabilités doivent être isolées par des contrats explicites :
+Responsibilities must be isolated by explicit contracts:
 
-- Modèle de site.
-- Modèle documentaire.
-- Registre de composants.
-- Moteur de mise en page et de styles.
-- Éditeur visuel.
-- Gestion des médias.
-- Rendu et export.
-- Persistance.
-- Automatisation.
+- Site model.
+- Document model.
+- Component registry.
+- Layout and style engine.
+- Visual editor.
+- Media management.
+- Rendering and export.
+- Persistence.
+- Automation.
 
-Le découpage en packages ne doit intervenir que lorsqu'il apporte une séparation concrète.
+Splitting into packages should only happen when it brings a concrete separation.
 
-### 3.3 Indépendance du CMS
+### 3.3 CMS independence
 
-Le modèle documentaire ne doit dépendre ni de WordPress, ni de Payload, ni d'un autre CMS.
+The document model must depend neither on WordPress, nor on Payload, nor on any other CMS.
 
-Il doit être possible d'éditer et de construire un site sans CMS externe.
+It must be possible to edit and build a site without an external CMS.
 
-Les futurs CMS et services de contenus seront intégrés via des adaptateurs.
+Future CMSs and content services will be integrated through adapters.
 
-### 3.4 Modèle documentaire comme source de vérité
+### 3.4 Document model as the source of truth
 
-Les documents de conception sont des données structurées et versionnées.
+Design documents are structured, versioned data.
 
-Le HTML généré ne constitue pas leur format de stockage principal.
+The generated HTML is not their main storage format.
 
-Le modèle doit distinguer :
+The model must distinguish:
 
-- La définition du site.
-- La structure et les propriétés des pages.
-- Les contenus éditoriaux.
-- Les ressources.
-- Le design system.
-- Les références aux composants.
+- The site definition.
+- The structure and properties of the pages.
+- Editorial content.
+- Resources.
+- The design system.
+- References to components.
 
-La séparation présentation/contenu doit être possible, sans imposer un CMS complexe au premier jalon.
+Separating presentation and content must be possible, without imposing a complex CMS at the first milestone.
 
-### 3.5 Publication statique par défaut
+### 3.5 Static publishing by default
 
-Les sites exportés sont pré-rendus avec Astro.
+Exported sites are pre-rendered with Astro.
 
-Un site public statique ne doit nécessiter aucun accès au CMS, à sa base de données ou à son interface d'administration.
+A static public site must not need any access to the CMS, its database or its administration interface.
 
-Les fonctionnalités dynamiques devront ultérieurement être explicites et isolées.
+Dynamic features will later have to be explicit and isolated.
 
-### 3.6 Réversibilité
+### 3.6 Reversibility
 
-Un export doit pouvoir être compilé et exploité indépendamment du Studio.
+An export must build and run independently of the Studio.
 
-Il doit contenir les sources, ressources, configurations et instructions nécessaires.
+It must contain the necessary sources, resources, configurations and instructions.
 
-Les dépendances au runtime privé de Netvolution sont interdites pour l'exécution publique des sites exportés.
+Dependencies on Netvolution's private runtime are forbidden for the public execution of exported sites.
 
-Ne pas promettre la conservation de l'édition visuelle dans un outil tiers : la réversibilité garantit d'abord un projet technique autonome et documenté.
+Do not promise that visual editing is preserved in a third-party tool: reversibility first guarantees a standalone, documented technical project.
 
-## 4. Architecture logique
+## 4. Logical architecture
 
 ```text
 Studio Web
@@ -159,15 +159,15 @@ Astro Adapter
    +-- Project Export
 ```
 
-Le rendu de prévisualisation et le rendu exporté doivent partager autant que possible les mêmes définitions et règles.
+Preview rendering and exported rendering must share the same definitions and rules as much as possible.
 
-Un composant ne doit pas nécessiter deux implémentations métier divergentes.
+A component must not need two diverging business implementations.
 
-## 5. Modèle documentaire initial
+## 5. Initial document model
 
-Le format définitif doit être élaboré et validé durant le jalon 1.
+The final format must be designed and validated during milestone 1.
 
-Structure conceptuelle proposée :
+Proposed conceptual structure:
 
 ```json
 {
@@ -183,7 +183,7 @@ Structure conceptuelle proposée :
     {
       "id": "page-home",
       "slug": "/",
-      "title": "Accueil",
+      "title": "Home",
       "root": {
         "id": "root-1",
         "type": "container",
@@ -197,70 +197,70 @@ Structure conceptuelle proposée :
 }
 ```
 
-Ce modèle est une illustration, pas encore un schéma contractuel définitif.
+This model is an illustration, not yet a final contractual schema.
 
-### Invariants obligatoires
+### Mandatory invariants
 
-- Identifiant stable et unique pour chaque élément.
-- Type de composant explicite.
-- Propriétés validées par un schéma.
-- Composition hiérarchique contrôlée.
-- Format versionné.
-- Sérialisation et désérialisation sans perte.
-- Migrations prévues entre versions.
-- Références aux médias indépendantes des URL physiques.
-- Aucun code JavaScript arbitraire exécuté depuis le document.
-- Erreurs de validation explicites.
+- Stable, unique id for each element.
+- Explicit component type.
+- Properties validated by a schema.
+- Controlled hierarchical composition.
+- Versioned format.
+- Lossless serialization and deserialization.
+- Migrations planned between versions.
+- Media references independent of physical URLs.
+- No arbitrary JavaScript code run from the document.
+- Explicit validation errors.
 
-## 6. Layout et styles
+## 6. Layout and styles
 
-Le modèle doit utiliser les capacités modernes de CSS :
+The model must use the modern capabilities of CSS:
 
 - Flexbox.
 - CSS Grid.
-- Variables CSS.
+- CSS variables.
 - Media queries.
-- Container queries lorsque pertinent.
-- Unités modernes et propriétés logiques.
+- Container queries when relevant.
+- Modern units and logical properties.
 
-L'interface doit offrir une composition structurée par défaut, sans interdire des compositions plus originales.
+The interface must offer structured composition by default, without forbidding more original compositions.
 
-Les propriétés responsive doivent avoir un mécanisme d'héritage prévisible.
+Responsive properties must have a predictable inheritance mechanism.
 
-Les styles globaux doivent reposer sur des design tokens.
+Global styles must rely on design tokens.
 
-## 7. Architecture de l'éditeur
+## 7. Editor architecture
 
-L'éditeur est constitué de :
+The editor consists of:
 
-- Un canvas représentant le site.
-- Une arborescence des éléments.
-- Un inspecteur de propriétés.
-- Une bibliothèque de composants.
-- Une barre d'outils.
-- Une gestion de l'historique.
-- Une interface de sauvegarde et d'export.
+- A canvas representing the site.
+- A tree of the elements.
+- A property inspector.
+- A component library.
+- A toolbar.
+- History management.
+- A save and export interface.
 
-La sélection et les outils d'édition ne doivent pas modifier le contenu du site publié.
+Selection and editing tools must not change the content of the published site.
 
-Le canvas doit reproduire le rendu réel, mais les contrôles de conception doivent en rester distincts.
+The canvas must reproduce the real rendering, but the design controls must stay separate from it.
 
-Privilégier un aperçu isolé, notamment par iframe, avec un protocole de communication typé si nécessaire.
+Prefer an isolated preview, notably through an iframe, with a typed communication protocol if needed.
 
-## 8. Gestion de l'état
+## 8. State management
 
-Distinguer :
+Distinguish:
 
-- État documentaire persistant.
-- État temporaire de l'interface.
-- État de sélection.
-- État transactionnel des modifications.
-- Historique annuler/refaire.
-- État de persistance.
+- Persistent document state.
+- Temporary interface state.
+- Selection state.
+- Transactional state of changes.
+- Undo/redo history.
+- Persistence state.
 
-Les modifications doivent passer par des opérations structurées.
+Changes must go through structured operations.
 
-Exemples :
+Examples:
 
 - `insertNode`
 - `moveNode`
@@ -270,96 +270,95 @@ Exemples :
 - `updateDesignTokens`
 - `createPage`
 
-Ces opérations constitueront ultérieurement un point d'intégration naturel pour les automatisations et l'IA.
+These operations will later be a natural integration point for automations and AI.
 
-## 9. Sécurité et isolation
+## 9. Security and isolation
 
-### Dès les premiers jalons
+### From the first milestones
 
-- Validation des documents importés.
-- Protection contre l'injection de HTML ou JavaScript non autorisé.
-- Interdiction de l'exécution libre de scripts depuis les propriétés des composants.
-- Isolation des aperçus non fiables.
-- Protection des chemins et fichiers lors de l'export.
-- Vérification des dépendances logicielles.
-- Aucune clé privée ou secret dans les projets générés.
-- Politique CSP adaptée aux sites exportés, lorsqu'elle est applicable.
-- Traitement sécurisé des fichiers médias.
+- Validation of imported documents.
+- Protection against injection of unauthorized HTML or JavaScript.
+- No free execution of scripts from component properties.
+- Isolation of untrusted previews.
+- Protection of paths and files during export.
+- Checking of software dependencies.
+- No private key or secret in the generated projects.
+- A CSP policy suited to exported sites, when applicable.
+- Secure handling of media files.
 
-### Pour le futur CMS
+### For the future CMS
 
-Prévoir les concepts nécessaires à :
+Plan the concepts needed for:
 
-- Identités et utilisateurs.
-- Permissions granulaires.
+- Identities and users.
+- Fine-grained permissions.
 - Passkeys/WebAuthn.
 - MFA.
-- Sessions sécurisées.
+- Secure sessions.
 - Audit.
-- Isolation multi-tenant.
-- Validation humaine des publications.
+- Multi-tenant isolation.
+- Human approval of publications.
 
-Ne pas développer un mécanisme d'authentification maison.
+Do not develop a home-made authentication mechanism.
 
-Si la V0.1 est déployée sur Internet avant l'intégration d'une authentification éprouvée, en restreindre l'accès à un environnement interne ou protégé.
+If V0.1 is deployed on the Internet before a proven authentication is integrated, restrict its access to an internal or protected environment.
 
-## 10. IA et automatisation
+## 10. AI and automation
 
-L'IA est une capacité transversale future.
+AI is a future cross-cutting capability.
 
-Dès le départ :
+From the start:
 
-- Exposer des opérations métier structurées.
-- Définir des schémas de validation des entrées.
-- Séparer les permissions des opérations.
-- Prévoir les transactions et les annulations.
-- Assurer la traçabilité des transformations.
+- Expose structured business operations.
+- Define validation schemas for the inputs.
+- Separate the permissions of operations.
+- Plan transactions and undo.
+- Ensure the traceability of transformations.
 
-L'IA ne doit pas modifier directement les structures internes du modèle documentaire en contournant les règles métier.
+AI must not change the internal structures of the document model directly, bypassing the business rules.
 
-L'implémentation des modèles et fournisseurs IA ne doit pas être couplée au cœur du Studio.
+The implementation of AI models and providers must not be coupled to the core of the Studio.
 
-## 11. Validation technique
+## 11. Technical validation
 
-Prévoir :
+Plan:
 
-- Tests unitaires des modèles et commandes.
-- Tests de validation documentaire.
-- Tests de sérialisation.
-- Tests des migrations.
-- Tests de rendu.
-- Tests visuels.
-- Tests de navigation et d'export.
-- Tests d'accessibilité automatisés.
-- Tests de compilation des projets Astro exportés.
-- Tests de sécurité des entrées non fiables.
+- Unit tests of the models and commands.
+- Document validation tests.
+- Serialization tests.
+- Migration tests.
+- Rendering tests.
+- Visual tests.
+- Navigation and export tests.
+- Automated accessibility tests.
+- Build tests of the exported Astro projects.
+- Security tests of untrusted inputs.
 
-L'export doit être testé dans un répertoire vierge, sans dépendre du monorepo.
+The export must be tested in a clean directory, without depending on the monorepo.
 
-## 12. Règles pour les agents de développement
+## 12. Rules for development agents
 
-1. Ne pas développer une fonctionnalité hors du jalon courant sans accord explicite.
-2. Commencer par vérifier les contrats et les dépendances existants.
-3. Proposer un ADR pour tout choix architectural structurant.
-4. Produire des tests correspondant aux critères d'acceptation.
-5. Ne pas faire passer un prototype temporaire pour une architecture stabilisée.
-6. Ne pas ajouter de dépendance majeure sans justification.
-7. Ne pas introduire de services externes indispensables sans nécessité.
-8. Ne pas modifier le modèle documentaire sans prévoir sa compatibilité.
-9. Maintenir la capacité de compilation et de démonstration à chaque incrément.
-10. Documenter explicitement les fonctionnalités incomplètes et les limites.
+1. Do not develop a feature outside the current milestone without explicit agreement.
+2. Start by checking the existing contracts and dependencies.
+3. Propose an ADR for any structuring architectural choice.
+4. Produce tests matching the acceptance criteria.
+5. Do not pass off a temporary prototype as a stabilized architecture.
+6. Do not add a major dependency without justification.
+7. Do not introduce indispensable external services without necessity.
+8. Do not change the document model without planning its compatibility.
+9. Keep the ability to build and demonstrate at each increment.
+10. Document incomplete features and limitations explicitly.
 
-## 13. Définition globale de terminé
+## 13. Global definition of done
 
-Un jalon est terminé lorsque :
+A milestone is done when:
 
-- Ses scénarios fonctionnels sont opérationnels.
-- Les critères d'acceptation sont vérifiés.
-- Les tests automatisables sont présents.
-- La documentation correspond au comportement réel.
-- Les principaux risques de sécurité ont été examinés.
-- L'export fonctionne dans l'environnement prévu.
-- Aucune dépendance au jalon suivant n'est nécessaire pour démontrer le résultat.
+- Its functional scenarios work.
+- The acceptance criteria are verified.
+- The automatable tests are present.
+- The documentation matches the real behavior.
+- The main security risks have been examined.
+- The export works in the intended environment.
+- No dependency on the next milestone is needed to demonstrate the result.
 
-La livraison doit être accompagnée d'une démonstration reproductible et d'une liste des limitations connues.
-
+The delivery must come with a reproducible demonstration and a list of known limitations.

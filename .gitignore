@@ -1,13 +1,13 @@
-# Copie de référence Tatsu/Oshin (GPL + composants tiers) : jamais versionnée
+# Reference copy of Tatsu/Oshine (GPL + third-party components): never versioned
 /resources/
 
-# Dépendances et builds
+# Dependencies and builds
 node_modules/
 dist/
 .astro/
 coverage/
 
-# Données locales du Studio (ADR-0004) et exports générés
+# Local data of the Studio (ADR-0004) and generated exports
 /data/
 /exports/
 
@@ -15,12 +15,12 @@ coverage/
 test-results/
 playwright-report/
 
-# Environnement et secrets
+# Environment and secrets
 .env
 .env.*
 !.env.example
 
-# Système / éditeurs
+# System / editors
 .DS_Store
 .vscode/
 .idea/

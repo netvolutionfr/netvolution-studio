@@ -1,34 +1,35 @@
 # Netvolution Studio
 
-**Netvolution Studio est un CMS visuel pour concevoir des sites vitrines professionnels et les publier en sites statiques autonomes.** Le graphiste compose ses pages à la souris, comme dans un page builder ; le Studio produit un site Astro standard, rapide et sûr, qui s'héberge n'importe où et ne dépend plus du Studio une fois exporté.
+**Netvolution Studio is a visual CMS to design professional showcase websites and publish them as standalone static sites.** Designers compose their pages with the mouse, as in a page builder; the Studio produces a standard Astro site, fast and secure, that can be hosted anywhere and no longer depends on the Studio once exported.
 
-- **Éditeur visuel** : bibliothèque de composants, glisser-déposer, arborescence, inspecteur, aperçu tablette et mobile, annuler/rétablir, copier-coller.
-- **Site complet** : pages, menus, header et footer partagés, design system (couleurs, typographie, espacements), médiathèque, SEO, redirections.
-- **Création** : sections et composants réutilisables, modèles de site, animations accessibles, texte enrichi, galerie, bandeau défilant, carrousel, CSS personnalisé contrôlé.
-- **Assistant IA** (facultatif) : propose des modifications sous forme de commandes, prévisualisées et validées par l'utilisateur (Anthropic ou tout service compatible OpenAI, y compris local).
-- **Export** : un projet Astro lisible et documenté, et le site statique prêt à mettre en ligne (HTML, CSS, images optimisées, `sitemap.xml`, `robots.txt`, page 404).
+- **Visual editor**: component library, drag and drop, tree, inspector, tablet and mobile preview, undo/redo, copy and paste.
+- **Complete site**: pages, menus, shared header and footer, design system (colors, typography, spacing), media library, SEO, redirects.
+- **Creation**: reusable sections and components, site templates, accessible animations, rich text, gallery, marquee, carousel, controlled custom CSS.
+- **AI assistant** (optional): proposes changes as commands, previewed and approved by the user (Anthropic or any OpenAI-compatible service, local ones included).
+- **Export**: a readable, documented Astro project, and the static site ready to go online (HTML, CSS, optimized images, `sitemap.xml`, `robots.txt`, 404 page).
+- **Languages**: interface in English and French, following the browser; the content the Studio writes into a site follows the site's language ([ADR-0024](docs/architecture/adr/ADR-0024-internationalization.md)). A new language is one JSON catalog.
 
-Interface et documentation en français. Le [guide d'utilisation](docs/guide/index.md) accompagne les graphistes pas à pas ; il est aussi servi par le Studio à `/guide/`.
+The [user guide](docs/guide/index.md), in French for now, walks designers through the Studio step by step; the Studio also serves it at `/guide/`.
 
-## Principes
+## Principles
 
-- **Document JSON versionné** comme source de vérité, indépendant de React, d'Astro et de tout CMS.
-- **Rendu fidèle** : l'aperçu de l'éditeur et l'export utilisent les mêmes composants et la même feuille CSS ; l'écart est mesuré automatiquement.
-- **Sites statiques par défaut** : HTML pré-rendu, aucun JavaScript livré sans besoin, aucun back-office exposé avec le site.
-- **Sécurité par conception** : documents validés, styles typés, aucun HTML ni JavaScript arbitraire ; le CSS personnalisé est analysé et republié par le Studio, jamais inséré tel quel (ADR-0023).
-- **Réversibilité** : l'export est un projet Astro standard, compilable sans le Studio, et les projets s'exportent en archive.
+- **Versioned JSON document** as the source of truth, independent of React, Astro and any CMS.
+- **Faithful rendering**: the editor preview and the export use the same components and the same stylesheet; the difference is measured automatically.
+- **Static sites by default**: pre-rendered HTML, no JavaScript shipped without need, no back office exposed with the site.
+- **Security by design**: validated documents, typed styles, no arbitrary HTML or JavaScript; custom CSS is parsed and republished by the Studio, never inserted as typed (ADR-0023).
+- **Reversibility**: the export is a standard Astro project, which builds without the Studio, and projects export as archives.
 
-Tatsu (page builder WordPress) sert de référence ergonomique uniquement ; son code n'est ni repris ni versionné.
+Tatsu (a WordPress page builder) is an ergonomic reference only; none of its code is reused or versioned.
 
-## État du projet
+## Project status
 
-Les trois jalons prévus sont livrés et validés (30/10/2026) : éditeur visuel d'une page, site vitrine complet, puis créativité et productivité (réutilisation, animations, IA). Des évolutions ont suivi (ADR-0017 à ADR-0023). Limites connues : [docs/limitations.md](docs/limitations.md).
+The three planned milestones are delivered and validated (10/30/2026): visual editor of a page, complete showcase site, then creativity and productivity (reuse, animations, AI). Changes followed (ADR-0017 to ADR-0024). Known limitations: [docs/limitations.md](docs/limitations.md).
 
-Hors périmètre actuel : comptes et rôles dans le Studio, collaboration en temps réel, administration éditoriale pour le client, e-commerce, migration WordPress.
+Out of the current scope: accounts and roles in the Studio, real-time collaboration, editorial administration for the client, e-commerce, WordPress migration.
 
-## Essayer en local
+## Trying it locally
 
-Prérequis : Node.js 26 LTS (ou 24 LTS) et npm 11.
+Requirements: Node.js 26 LTS (or 24 LTS) and npm 11.
 
 ```sh
 git clone https://github.com/netvolutionfr/netvolution-studio.git
@@ -37,15 +38,15 @@ npm ci
 npm run dev        # http://127.0.0.1:5173/
 ```
 
-Les projets sont enregistrés dans `data/projects/`, les exports dans `exports/`. Pour activer l'assistant IA, copiez `.env.example` en `.env` et renseignez le fournisseur et sa clé.
+Projects are saved in `data/projects/`, exports in `exports/`. To enable the AI assistant, copy `.env.example` to `.env` and fill in the provider and its key.
 
-## Installer le Studio sur sa machine ou son serveur
+## Installing the Studio on your machine or server
 
-Le Studio de production est un seul processus Node : l'application compilée et son API sur un port, avec les données dans un dossier.
+The production Studio is a single Node process: the compiled application and its API on one port, with the data in a folder.
 
-> **Le Studio n'a pas d'authentification.** Toute personne qui atteint son port a tous les droits sur les projets. Laissez-le écouter sur `127.0.0.1` et, pour un accès à distance, placez-le derrière un proxy qui fournit HTTPS et une authentification éprouvée (mot de passe nginx, Authelia, Cloudflare Access…).
+> **The Studio has no authentication.** Anyone who reaches its port has full rights over the projects. Keep it listening on `127.0.0.1` and, for remote access, put it behind a proxy that provides HTTPS and proven authentication (nginx password, Authelia, Cloudflare Access…).
 
-### Avec Docker (recommandé)
+### With Docker (recommended)
 
 ```sh
 docker build -t netvolution-studio .
@@ -56,27 +57,27 @@ docker run -d --name netvolution-studio --restart unless-stopped \
   netvolution-studio
 ```
 
-Le Studio est sur http://127.0.0.1:8080/. Le dossier `data/` contient les projets, médias, modèles et exports : c'est lui qu'il faut sauvegarder. Le conteneur tourne sous l'utilisateur `node` (uid 1000) : ce dossier doit lui appartenir. Retirez `--env-file .env` si vous n'utilisez pas l'assistant IA.
+The Studio is at http://127.0.0.1:8080/. The `data/` folder holds the projects, media, templates and exports: that is what to back up. The container runs as the `node` user (uid 1000): the folder must belong to it. Remove `--env-file .env` if you do not use the AI assistant.
 
-### Sans Docker
+### Without Docker
 
 ```sh
 npm ci
 npm run build -w @ns/studio
-NS_DATA_DIR=/chemin/vers/data node --env-file-if-exists=.env apps/studio/server.ts
+NS_DATA_DIR=/path/to/data node --env-file-if-exists=.env apps/studio/server.ts
 ```
 
-| Variable | Rôle | Par défaut |
+| Variable | Role | Default |
 |---|---|---|
-| `HOST` | Adresse d'écoute | `127.0.0.1` |
+| `HOST` | Listening address | `127.0.0.1` |
 | `PORT` | Port | `8080` |
-| `NS_DATA_DIR` | Projets, médias, modèles, journal de l'IA | `data/` dans le dépôt |
-| `NS_EXPORTS_DIR` | Exports générés | `<NS_DATA_DIR>/exports` |
-| `NS_AI_*`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | Assistant IA | désactivé (voir `.env.example`) |
+| `NS_DATA_DIR` | Projects, media, templates, AI log | `data/` in the repository |
+| `NS_EXPORTS_DIR` | Generated exports | `<NS_DATA_DIR>/exports` |
+| `NS_AI_*`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | AI assistant | disabled (see `.env.example`) |
 
-### Sur un serveur
+### On a server
 
-Faites tourner le Studio comme ci-dessus, sur `127.0.0.1`, puis exposez-le par un reverse proxy. Exemple nginx :
+Run the Studio as above, on `127.0.0.1`, then expose it through a reverse proxy. nginx example:
 
 ```nginx
 server {
@@ -85,92 +86,92 @@ server {
     # ssl_certificate … (Let's Encrypt)
 
     auth_basic "Netvolution Studio";
-    auth_basic_user_file /etc/nginx/htpasswd/studio;   # un utilisateur par personne (bcrypt)
-    client_max_body_size 200m;                          # import d'archives de projet
+    auth_basic_user_file /etc/nginx/htpasswd/studio;   # one user per person (bcrypt)
+    client_max_body_size 200m;                          # project archive imports
 
     location / {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_read_timeout 600s;                        # construction du site statique
+        proxy_read_timeout 600s;                        # static site build
     }
 }
 ```
 
-- Avec Docker, gardez le port publié sur `127.0.0.1` : Docker publie ses ports en contournant la plupart des pare-feux.
-- La construction du site statique lance `npm ci` dans l'export : le serveur doit pouvoir joindre le registre npm.
-- Un seul utilisateur à la fois par projet : un enregistrement concurrent est refusé, pas fusionné.
-- Déploiement automatique depuis GitHub (image GHCR, SSH, approbation sur tag de version) : voir [deploy/README.md](deploy/README.md) et l'[ADR-0015](docs/architecture/adr/ADR-0015-hebergement-docker.md).
+- With Docker, keep the published port on `127.0.0.1`: Docker publishes its ports bypassing most firewalls.
+- Building the static site runs `npm ci` in the export: the server must reach the npm registry.
+- One user at a time per project: a concurrent save is refused, not merged.
+- Automatic deployment from GitHub (GHCR image, SSH, approval on a version tag): see [deploy/README.md](deploy/README.md) and [ADR-0015](docs/architecture/adr/ADR-0015-docker-hosting.md).
 
-## Mettre en ligne un site exporté
+## Putting an exported site online
 
-Le Studio ne publie pas le site lui-même : il exporte des fichiers, que l'on dépose chez n'importe quel hébergeur. Rien ne tourne côté serveur et aucun lien ne subsiste avec le Studio. Le détail, pour les graphistes, est dans le chapitre [Publier et livrer](docs/guide/11-publier-et-livrer.md) du guide.
+The Studio does not publish the site itself: it exports files, which you upload to any host. Nothing runs on the server and no link to the Studio remains. The details, for designers, are in the guide's [publishing chapter](docs/guide/11-publier-et-livrer.md) (French).
 
-1. **Exporter** : dans le Studio, menu **⋯** > **Exporter le site (Astro)…**, cochez **Construire aussi le site statique**, puis **Exporter**. Corrigez d'abord les erreurs bloquantes des contrôles avant export.
-2. **Télécharger** l'archive **Site statique** (`.tar.gz`) et la décompresser. Elle contient le site prêt à servir : HTML, CSS, images, `sitemap.xml`, `robots.txt`, `404.html`.
-3. **Déposer le contenu** du dossier `…-statique` (les fichiers, pas le dossier) **à la racine** d'un domaine ou d'un sous-domaine, pas dans un sous-dossier :
+1. **Export**: in the Studio, **⋯** menu > **Export site (Astro)…**, tick **Also build the static site**, then **Export**. Fix the blocking errors of the checks before export first.
+2. **Download** the static site archive (`.tar.gz`) and extract it. It contains the site ready to serve: HTML, CSS, images, `sitemap.xml`, `robots.txt`, `404.html`.
+3. **Upload the content** of the static folder (the files, not the folder) **to the root** of a domain or subdomain, not into a subfolder:
 
-| Hébergement | Mise en ligne | Page 404 |
+| Hosting | Upload | 404 page |
 |---|---|---|
-| Hébergeur mutualisé (Apache) | FTP/SFTP dans `www`, `public_html` ou `htdocs` | `.htaccess` : `ErrorDocument 404 /404.html` |
-| Netlify, Cloudflare Pages | Glisser le dossier dans l'interface de déploiement | Automatique |
-| nginx | Copier dans le `root` du site | `error_page 404 /404.html;` |
-| Tout serveur de fichiers statiques | Copier les fichiers | Selon le serveur |
+| Shared hosting (Apache) | FTP/SFTP into `www`, `public_html` or `htdocs` | `.htaccess`: `ErrorDocument 404 /404.html` |
+| Netlify, Cloudflare Pages | Drag the folder into the deployment interface | Automatic |
+| nginx | Copy into the site's `root` | `error_page 404 /404.html;` |
+| Any static file server | Copy the files | Depends on the server |
 
-4. **Redirections** : une redirection interne existe déjà dans le site statique sous forme de page de renvoi. Pour une vraie redirection 301, et pour les redirections vers un autre site, ajoutez la configuration fournie dans les **sources Astro**, dossier `redirects/` (`.htaccess`, `_redirects` ou `nginx.conf`).
-5. **Mettre à jour** : réexportez, puis remplacez **tous** les fichiers en ligne, après avoir supprimé l'ancien contenu (sinon une page supprimée resterait accessible).
+4. **Redirects**: an internal redirect already exists in the static site as a forwarding page. For a real 301 redirect, and for redirects to another site, add the configuration provided in the **Astro sources**, `redirects/` folder (`.htaccess`, `_redirects` or `nginx.conf`).
+5. **Update**: export again, then replace **all** the online files, after deleting the old content (otherwise a deleted page would stay reachable).
 
-L'archive **Sources Astro** sert à un développeur qui veut reprendre le site sans le Studio : `npm ci && npm run build` produit le même site dans `dist/`. Son `README.md` décrit les pages, les tokens et les médias. Une fois modifiées à la main, ces sources ne se réimportent pas dans le Studio.
+The **Astro sources** archive is for a developer who wants to take the site over without the Studio: `npm ci && npm run build` produces the same site in `dist/`. Its `README.md` describes the pages, the tokens and the media. Once edited by hand, these sources cannot be imported back into the Studio.
 
-Un document peut aussi être exporté en ligne de commande :
+A document can also be exported from the command line:
 
 ```sh
 npm run export -- fixtures/grid.json ../site-grid
-cd ../site-grid && npm ci && npm run build      # site statique dans dist/
+cd ../site-grid && npm ci && npm run build      # static site in dist/
 ```
 
-## Développement
+## Development
 
 ```sh
-npm run check              # typecheck + lint + tests unitaires
-npm run test:fidelity      # banc de fidélité aperçu ↔ export ; rapport dans test-results/
-npm run test:e2e           # contrôles de bout en bout du shell
-npm run demo               # démonstration du jalon 1 (page éditée, exportée)
-npm run demo:site          # démonstration du jalon 2 (site vitrine de 5 pages)
-npm run demo:creative      # démonstration du jalon 3 (IA simulée)
-npm run templates:check    # crée, exporte, construit et vérifie chaque modèle de site
-npm run guide:screenshots  # rejoue le tutoriel du guide et régénère ses captures
-npm run fonts:catalog      # régénère le catalogue de polices libres (ADR-0018)
-npm run templates:build    # régénère les modèles écrits en code (templates/*.ts)
-npm run dev -w @ns/guide   # guide d'utilisation seul, sur http://127.0.0.1:4321/guide/
+npm run check              # typecheck + lint + unit tests (documentation links included)
+npm run test:fidelity      # fidelity bench preview ↔ export; report in test-results/
+npm run test:e2e           # end-to-end checks of the shell
+npm run demo               # milestone 1 demonstration (page edited, exported)
+npm run demo:site          # milestone 2 demonstration (five-page showcase site)
+npm run demo:creative      # milestone 3 demonstration (simulated AI)
+npm run templates:check    # creates, exports, builds and checks each site template
+npm run guide:screenshots  # replays the guide's tutorial and regenerates its screenshots
+npm run fonts:catalog      # regenerates the catalog of free fonts (ADR-0018)
+npm run templates:build    # regenerates the templates written in code (templates/*.ts), in every language
+npm run dev -w @ns/guide   # user guide alone, on http://127.0.0.1:4321/guide/
 ```
 
-Le banc de fidélité et les tests e2e demandent une fois `npx playwright install chromium-headless-shell`. La CI teste Node 26 et 24.
+The fidelity bench and the end-to-end tests need `npx playwright install chromium-headless-shell` once. The CI tests Node 26 and 24. To contribute, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```text
-apps/studio/            application web (Vite + React) : shell, canvas, aperçu ; server.ts pour la production
-apps/guide/             guide d'utilisation (Astro Starlight) ; sources dans docs/guide/
-packages/core/          modèle documentaire, validation, registre, styles et CSS, protocole — sans React
-packages/components/    composants : schémas et vues React pures, partagés aperçu/export
-packages/export-astro/  générateur de projet Astro autonome, gabarit avec lockfile, CLI
-templates/              modèles de site intégrés
-fonts/                  catalogue de polices libres, avec leurs licences
-fixtures/               documents de référence (pages de départ, banc de fidélité)
-tests/                  banc de fidélité et scénarios de bout en bout (Playwright)
-deploy/                 déploiement automatisé (GitHub Actions, Docker, nginx)
-docs/                   guide, spécifications, architecture et ADR
-prototypes/             prototypes jetables
+apps/studio/            web application (Vite + React): shell, canvas, preview; server.ts for production
+apps/guide/             user guide (Astro Starlight); sources in docs/guide/
+packages/core/          document model, validation, registry, styles and CSS, protocol, i18n — no React
+packages/components/    components: schemas and pure React views, shared by preview and export
+packages/export-astro/  generator of a standalone Astro project, template with lockfile, CLI
+templates/              built-in site templates, and their translations
+fonts/                  catalog of free fonts, with their licenses
+fixtures/               reference documents (starter pages, fidelity bench)
+tests/                  fidelity bench, end-to-end scenarios (Playwright), documentation checks
+deploy/                 automated deployment (GitHub Actions, Docker, nginx)
+docs/                   guide, specifications, architecture, ADRs and history
+prototypes/             throwaway prototypes
 ```
 
 ## Documentation
 
-- [Guide d'utilisation](docs/guide/index.md) · [Limites connues](docs/limitations.md)
-- Spécifications : [Fondations](docs/specifications/00-foundations.md) · [Jalon 1](docs/specifications/01-visual-editor.md) · [Jalon 2](docs/specifications/02-site-builder.md) · [Jalon 3](docs/specifications/03-creative-studio.md)
-- Bilans : [jalon 1](docs/architecture/tranche-5.md) · [jalon 2](docs/architecture/jalon-2-tranche-8.md) · [jalon 3](docs/architecture/jalon-3-tranche-8.md) · [Design system du Studio](docs/ui/README.md)
-- [Décisions d'architecture (ADR)](docs/architecture/adr/)
+- [User guide](docs/guide/index.md) (French) · [Known limitations](docs/limitations.md)
+- Specifications: [Foundations](docs/specifications/00-foundations.md) · [Milestone 1](docs/specifications/01-visual-editor.md) · [Milestone 2](docs/specifications/02-site-builder.md) · [Milestone 3](docs/specifications/03-creative-studio.md)
+- [Architecture decisions (ADRs)](docs/architecture/adr/) · [Studio design system](docs/ui/README.md)
+- [History](docs/history/README.md): milestone reports, architecture studies and research (French)
 
-## Licence
+## License
 
-[Apache License 2.0](LICENSE) — voir aussi [NOTICE](NOTICE). Les polices de `fonts/files/` gardent chacune leur licence (SIL OFL 1.1, ou Apache 2.0 pour Roboto), dont le texte est dans `fonts/licenses/`. La licence ne donne pas le droit d'utiliser le nom « Netvolution ».
+[Apache License 2.0](LICENSE) — see also [NOTICE](NOTICE). The fonts of `fonts/files/` each keep their license (SIL OFL 1.1, or Apache 2.0 for Roboto), whose text is in `fonts/licenses/`. The license does not grant the right to use the name "Netvolution".
 
-Pour signaler une faille de sécurité, voir [SECURITY.md](SECURITY.md).
+To report a security vulnerability, see [SECURITY.md](SECURITY.md).

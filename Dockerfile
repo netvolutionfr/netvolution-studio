@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
-# Netvolution Studio (ADR-0015) : application compilée + API sur un port, derrière un reverse proxy
-# qui fournit HTTPS et la protection d'accès. Données persistantes dans le volume /data.
+# Netvolution Studio (ADR-0015): compiled application + API on one port, behind a reverse proxy
+# providing HTTPS and access protection. Persistent data in the /data volume.
 
-# 1. Build de l'application (dépendances de développement comprises)
-# Node 26 LTS (active), version et empreinte figées ; Dependabot propose les correctifs.
+# 1. Build of the application (development dependencies included)
+# Node 26 LTS (active), version and checksum pinned; Dependabot proposes the patches.
 FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94 AS build
 WORKDIR /app
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
@@ -19,7 +19,7 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build -w @ns/studio
 
-# 2. Dépendances d'exécution seulement, puis les sources exécutées par Node (TypeScript natif)
+# 2. Runtime dependencies only, then the sources run by Node (native TypeScript)
 FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94 AS runtime-deps
 WORKDIR /app
 COPY --from=build /app/package.json /app/package-lock.json ./
@@ -39,9 +39,9 @@ COPY apps/studio/server.ts apps/studio/
 COPY apps/studio/dev-server apps/studio/dev-server
 COPY --from=build /app/apps/studio/dist apps/studio/dist
 
-# 3. Image finale : utilisateur non privilégié ; npm et tar servent à l'export (build Astro, archive)
+# 3. Final image: unprivileged user; npm and tar serve the export (Astro build, archive)
 FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94
-# Correctifs de sécurité Alpine du jour, à chaque build.
+# The day's Alpine security patches, on every build.
 RUN apk upgrade --no-cache && apk add --no-cache tar && mkdir /data && chown node:node /data
 WORKDIR /app
 COPY --from=runtime-deps /app ./

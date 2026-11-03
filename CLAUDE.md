@@ -1,186 +1,191 @@
 # CLAUDE.md — Netvolution Studio
 
-> Instructions permanentes pour les agents intervenant sur Netvolution Studio (NS).
-> Langue des échanges et de la documentation : français. Code, identifiants et API : anglais.
+> Standing instructions for agents working on Netvolution Studio (NS).
+> Documentation, code, identifiers and APIs: English (ADR-0024). Conversations with the maintainer: French.
+> The history (`docs/history/`) and the user guide (`docs/guide/`, until it becomes bilingual) remain in French.
 
-## 1. Vision et objectifs
+## 1. Vision and goals
 
-Netvolution Studio est un **CMS visuel moderne**, conçu pour créer, gérer et publier des sites web professionnels. Il doit offrir la productivité d'un page builder comme Tatsu, sans dépendre de WordPress et sans reproduire sa complexité.
+Netvolution Studio is a **modern visual CMS**, designed to create, manage and publish professional websites. It must offer the productivity of a page builder such as Tatsu, without depending on WordPress and without reproducing its complexity.
 
-Priorités du produit :
+Product priorities:
 
-1. **Sécurité par conception** : limiter l'exposition du back-office, réduire les dépendances et les possibilités d'injection, prévoir l'authentification forte et des permissions explicites.
-2. **Performance structurelle** : sites publics statiques par défaut, HTML pré-rendu, CSS propre, JavaScript uniquement si nécessaire ; aucun CMS ou accès à la base de données pour servir une page statique.
-3. **Simplicité et productivité** : concepteur visuel efficace, workflows intuitifs, puis administration éditoriale ciblée par rôle.
-4. **Évolutivité** : composants déclaratifs, commandes métier structurées, futures intégrations IA, automatisations, API et MCP.
-5. **Réversibilité** : sources, données et ressources exportables ; sites exploitables hors de Netvolution et documentés pour un tiers.
+1. **Security by design**: limit the exposure of the back office, reduce dependencies and injection opportunities, plan for strong authentication and explicit permissions.
+2. **Structural performance**: static public sites by default, pre-rendered HTML, clean CSS, JavaScript only when needed; no CMS or database access to serve a static page.
+3. **Simplicity and productivity**: an efficient visual designer, intuitive workflows, then editorial administration targeted by role.
+4. **Scalability**: declarative components, structured business commands, future AI integrations, automations, API and MCP.
+5. **Reversibility**: exportable sources, data and resources; sites usable outside Netvolution and documented for a third party.
 
-Tatsu/Oshine sont des **références fonctionnelles et ergonomiques**, pas des dépendances obligatoires. Aucune migration des sites WordPress existants n'est prévue dans le périmètre actuel. Ne pas développer de compatibilité WordPress ou de convertisseur de shortcodes sans demande explicite.
+Tatsu/Oshine are **functional and ergonomic references**, not mandatory dependencies. No migration of existing WordPress sites is planned in the current scope. Do not develop WordPress compatibility or a shortcode converter without an explicit request.
 
-## 2. Portée et ordre des jalons
+## 2. Scope and order of the milestones
 
-Les spécifications font autorité pour leur périmètre :
+The specifications are authoritative for their scope:
 
-- `docs/specifications/00-foundations.md` — architecture et invariants communs.
-- `docs/specifications/01-visual-editor.md` — **Jalon 1, livré et validé** : éditeur visuel d'une page, document JSON, canvas, inspecteur, composition, sauvegarde et export Astro fidèle. Bilan : `docs/architecture/tranche-5.md`.
-- `docs/specifications/02-site-builder.md` — **Jalon 2, livré et validé** : projets et pages, menus, header/footer partagés, design tokens, médiathèque, responsive, SEO et export d'un site vitrine complet. Bilan : `docs/architecture/jalon-2-tranche-8.md` ; limites connues : `docs/limitations.md`.
-- `docs/specifications/03-creative-studio.md` — **Jalon 3, livré et validé** : sections et composants réutilisables, modèles de site, composition avancée, animations déclaratives, couche de services et assistance IA par commandes structurées avec validation humaine. Bilan : `docs/architecture/jalon-3-tranche-8.md`. Les évolutions ne doivent pas casser les démonstrations ni le banc (`npm run demo`, `npm run demo:site`, `npm run demo:creative`, `npm run test:fidelity`).
-- `docs/research/TATSU-ANALYSE.md` — recherche de référence, **non normative** (si présente).
-- **Évolutions après le jalon 3** (ADR-0017 à ADR-0023 : styles décoratifs, polices importées, typographie fine, texte enrichi, Galerie, Bandeau défilant, Carrousel, CSS personnalisé). Limites : `docs/limitations.md`.
-- `docs/guide/` — **guide d'utilisation** pour les graphistes (Astro Starlight, servi par le Studio à `/guide/`). Toute fonctionnalité visible le met à jour (chapitre concerné, annexes A et B) ; ses captures se régénèrent avec `npm run guide:screenshots`.
-- `docs/research/essai-import-tatsu.md` — bilan d'un essai **jetable** de conversion d'un site Tatsu, pour mesurer les écarts ; ce n'est pas une fonctionnalité de migration (§1). Le dépôt est public (Apache-2.0) : aucun contenu, nom ou adresse de client n'y est versionné, ni le convertisseur propre à un site.
+- `docs/specifications/00-foundations.md` — shared architecture and invariants.
+- `docs/specifications/01-visual-editor.md` — **Milestone 1, delivered and validated**: visual editor of one page, JSON document, canvas, inspector, composition, saving and faithful Astro export. Review: `docs/history/reports/tranche-5.md`.
+- `docs/specifications/02-site-builder.md` — **Milestone 2, delivered and validated**: projects and pages, menus, shared header/footer, design tokens, media library, responsive, SEO and export of a complete showcase site. Review: `docs/history/reports/jalon-2-tranche-8.md`; known limitations: `docs/limitations.md`.
+- `docs/specifications/03-creative-studio.md` — **Milestone 3, delivered and validated**: reusable sections and components, site templates, advanced composition, declarative animations, services layer and AI assistance through structured commands with human approval. Review: `docs/history/reports/jalon-3-tranche-8.md`. Changes must not break the demonstrations or the bench (`npm run demo`, `npm run demo:site`, `npm run demo:creative`, `npm run test:fidelity`).
+- `docs/history/research/TATSU-ANALYSE.md` — reference research, **non-normative** (if present).
+- **Changes after milestone 3** (ADR-0017 to ADR-0024: decorative styles, imported fonts, fine typography, rich text, Gallery, Marquee, Carousel, custom CSS, internationalization). Limitations: `docs/limitations.md`.
+- `docs/guide/` — **user guide** for designers (Astro Starlight, served by the Studio at `/guide/`). Every visible feature updates it (the chapter concerned, appendices A and B); its screenshots are regenerated with `npm run guide:screenshots`.
+- `docs/history/research/essai-import-tatsu.md` — review of a **throwaway** trial converting a Tatsu site, to measure the gaps; it is not a migration feature (§1). The repository is public (Apache-2.0): no client content, name or address is versioned, nor the converter specific to a site.
 
-**Ne pas implémenter les jalons suivants par anticipation.** Autoriser les contrats et abstractions minimaux nécessaires pour éviter de bloquer leur évolution.
+**Do not implement the next milestones ahead of time.** Allow the minimal contracts and abstractions needed so as not to block their evolution.
 
-L'application doit rester fonctionnelle, testable et démontrable à la fin de chaque jalon.
+The application must remain functional, testable and demonstrable at the end of each milestone.
 
-### Hors périmètre des trois jalons
+### Out of scope of the three milestones
 
-CMS éditorial complet et multi-utilisateur, interface d'administration client autonome, collaboration temps réel, e-commerce, marketplace, migration WordPress, publication automatisée multi-hébergeurs, serveur MCP public, gestion avancée des organisations, hébergement mutualisé complet. Ces éléments sont des évolutions envisagées, non des fonctionnalités déjà acquises.
+Complete multi-user editorial CMS, standalone client administration interface, real-time collaboration, e-commerce, marketplace, WordPress migration, automated multi-host publishing, public MCP server, advanced organization management, full shared hosting. These are possible evolutions, not features already acquired.
 
-## 3. Décisions techniques et hypothèses
+## 3. Technical decisions and assumptions
 
-- **Distribution principale : application web** utilisable dans les navigateurs modernes sur macOS, Windows et Linux, hébergée en instance privée pour l'équipe (`studio.netvolution.fr`, ADR-0015, ADR-0016). Pas de client desktop Tauri/Electron ni de SaaS multi-clients pour l'instant.
-- **Langage principal : TypeScript strict** ; **interface : React moderne**.
-- **Architecture : monolithe modulaire**, sans microservices ni multiplication prématurée des packages.
-- **Site public : Astro**, en rendu statique par défaut et sans dépendance à NS à l'exécution.
-- **Modèle : document et site structurés, sérialisables et versionnés**, indépendants de React, Astro et de tout CMS.
-- **CSS : standards modernes** (Flexbox, Grid, variables, media/container queries), responsive explicite, design tokens.
-- **Animations futures : modèle déclaratif**, CSS natif / Web Animations API en premier, Motion candidat ; GSAP soumis à vérification de licence avant toute intégration.
-- **Persistance : adaptateur simple pour le prototype**, base de données, CMS tiers et backend définitif non décidés.
-- **Rust/WASM, Tauri/Electron, Payload** : options futures, **pas** de dépendances à introduire sans décision argumentée.
+- **Main distribution: web application** usable in modern browsers on macOS, Windows and Linux, hosted as a private instance for the team (`studio.netvolution.fr`, ADR-0015, ADR-0016). No Tauri/Electron desktop client nor multi-tenant SaaS for now.
+- **Main language: strict TypeScript**; **interface: modern React**.
+- **Architecture: modular monolith**, without microservices or premature multiplication of packages.
+- **Public site: Astro**, statically rendered by default and without depending on NS at runtime.
+- **Model: structured, serializable and versioned document and site**, independent of React, Astro and any CMS.
+- **CSS: modern standards** (Flexbox, Grid, variables, media/container queries), explicit responsive, design tokens.
+- **Animations: declarative model**, native CSS / Web Animations API first, Motion as a candidate; GSAP subject to a license check before any integration.
+- **Persistence: simple adapter for the prototype**; database, third-party CMS and final backend not decided.
+- **Rust/WASM, Tauri/Electron, Payload**: future options, **no** dependency to introduce without a reasoned decision.
 
-Ces orientations ne dispensent pas d'un ADR pour les choix structurants ; ne pas présenter les options ouvertes comme définitivement choisies.
+These orientations do not replace an ADR for structuring choices; do not present open options as definitively chosen.
 
-## 4. Séparation des responsabilités
+## 4. Separation of concerns
 
-Préserver les frontières suivantes, même si elles résident dans une seule application :
+Preserve the following boundaries, even when they live in a single application:
 
-- `Site Model` : projets, pages, URLs, menus, layouts partagés, paramètres.
-- `Document Model` : arbre des composants d'une page et ses propriétés.
-- `Component Registry` : schémas, contraintes d'imbrication, valeurs par défaut, propriétés éditables et capacités de rendu.
-- `Editor Core` : commandes, transactions, validation, sélection, historique undo/redo.
-- `Visual Editor` : canvas, arborescence, inspecteur et interactions ; ne détient pas le modèle métier.
-- `Design System` : tokens et styles réutilisables.
-- `Assets` : références stables et traitements des médias.
-- `Rendering / Astro Export` : rendu, génération et compilation, sans dépendance aux contrôles de l'éditeur.
-- `Persistence / Content Adapters` : contrats permettant d'évoluer vers la gestion éditoriale sans coupler le document à un CMS.
+- `Site Model`: projects, pages, URLs, menus, shared layouts, settings.
+- `Document Model`: tree of the components of a page and their properties.
+- `Component Registry`: schemas, nesting constraints, default values, editable properties and rendering capabilities.
+- `Editor Core`: commands, transactions, validation, selection, undo/redo history.
+- `Visual Editor`: canvas, tree, inspector and interactions; does not own the business model.
+- `Design System`: tokens and reusable styles.
+- `Assets`: stable references and media processing.
+- `Rendering / Astro Export`: rendering, generation and compilation, without depending on the editor's controls.
+- `Persistence / Content Adapters`: contracts allowing an evolution towards editorial management without coupling the document to a CMS.
 
-**Ne pas confondre source de vérité documentaire et contenu éditorial externe.** Les futures données d'un CMS peuvent être liées aux composants sans être copiées systématiquement dans la composition.
+**Do not confuse the document source of truth with external editorial content.** Future CMS data can be linked to components without being systematically copied into the composition.
 
-## 5. Invariants du modèle
+## 5. Model invariants
 
-- JSON versionné (`schemaVersion`), validé à l'entrée et avant export.
-- Identifiants stables et uniques ; types de composants explicites.
-- Props typées, contraintes de composition explicites, aucune référence DOM/React non sérialisable.
-- Références médias abstraites, non dépendantes des chemins d'hébergement.
-- Commandes métier structurées (`insertNode`, `moveNode`, `updateNodeProps`, `removeNode`, etc.), utilisées par l'UI et plus tard par l'IA.
-- Migrations documentaires documentées lorsqu'un format évolue.
-- Aucun texte destiné à l'utilisateur écrit en dur dans l'interface du Studio : il passe par `t()` et les catalogues `packages/core/src/i18n/locales/` (`en.json` fait référence, `fr.json` complet ; ADR-0024). Le cœur et le serveur renvoient des `Message` (clé et paramètres, `msg()`), traduits à l'affichage par `tm()` ; le contenu écrit dans un site utilise des clés `content.*`, traduites dans la langue du site. Les fichiers de l'export destinés aux développeurs sont en anglais ; les modèles écrits en code sont traduits par `templates/translations/` (texte français → texte traduit, complet, vérifié par les tests).
-- Pas d'exécution arbitraire de HTML/JS depuis les documents. Le seul CSS saisi à la main est la feuille du projet (ADR-0023) : toujours vérifiée par `checkCustomCss` et publiée depuis la sortie de l'analyseur (couche `@layer ns-custom`, au-dessus des styles générés dans `@layer ns`), jamais insérée telle quelle.
-- Modifications transactionnelles, undo/redo cohérents ; un glissement de slider correspond à une action logique.
+- Versioned JSON (`schemaVersion`), validated on input and before export.
+- Stable, unique ids; explicit component types.
+- Typed props, explicit composition constraints, no non-serializable DOM/React reference.
+- Abstract media references, independent of hosting paths.
+- Structured business commands (`insertNode`, `moveNode`, `updateNodeProps`, `removeNode`, etc.), used by the UI and by the AI.
+- Document migrations documented when a format changes.
+- No user-facing text hard-coded in the Studio: it goes through `t()` and the catalogs of `packages/core/src/i18n/locales/` (`en.json` is the reference, `fr.json` complete; ADR-0024). The core and the server return `Message`s (key and parameters, `msg()`), translated on display by `tm()`; content written into a site uses `content.*` keys, translated into the site language. The export's developer files are in English; the templates written in code are translated through `templates/translations/` (French text → translated text, complete, checked by the tests).
+- No arbitrary execution of HTML/JS from documents. The only hand-written CSS is the project stylesheet (ADR-0023): always checked by `checkCustomCss` and published from the parser's output (`@layer ns-custom`, above the generated styles in `@layer ns`), never inserted as typed.
+- Transactional changes, consistent undo/redo; dragging a slider is one logical action.
 
-Le HTML exporté n'est **pas** le format de persistance principal.
+The exported HTML is **not** the main persistence format.
 
-## 6. Rendu, canvas et export
+## 6. Rendering, canvas and export
 
-La fidélité entre aperçu et export est un risque architectural de premier ordre. **Valider la stratégie de rendu avant de développer beaucoup de composants.** Ne pas supposer qu'une version React et une version Astro seront identiques par nature.
+Fidelity between preview and export is a first-order architectural risk. **Validate the rendering strategy before developing many components.** Do not assume that a React version and an Astro version will be identical by nature.
 
-- Tester le rendu avec le même viewport, les mêmes polices, les mêmes ressources et les mêmes données.
-- Partager les règles et définitions lorsque possible ; éviter les implémentations métier divergentes.
-- Séparer les overlays d'édition du DOM et des assets publics.
-- L'export ne minifie pas le CSS (`cssMinify: false`) : le minificateur réécrivait des valeurs que le banc de fidélité compare.
-- Un îlot qui modifie le balisage initial (onglets, bandeau, carrousel) tourne aussi dans le canvas (`canvasIslands`), pour que son DOM corresponde à l'export.
-- Privilégier un canvas isolé (iframe si pertinent) et un protocole d'échange typé.
-- Ne pas reconstruire intégralement la page sur chaque frappe si un mécanisme incrémental est possible.
-- L'export Astro doit fournir **sources compréhensibles, dépendances figées, médias et README**, et compiler dans un environnement vierge, sans service privé NS.
-- Pour un site complet (jalon 2), fournir aussi un build statique hébergeable indépendamment.
+- Test rendering with the same viewport, the same fonts, the same resources and the same data.
+- Share rules and definitions when possible; avoid diverging business implementations.
+- Keep editing overlays out of the DOM and the public assets.
+- The export does not minify CSS (`cssMinify: false`): the minifier rewrote values that the fidelity bench compares.
+- An island that changes the initial markup (tabs, marquee, carousel) also runs in the canvas (`canvasIslands`), so that its DOM matches the export.
+- The canvas declares the site's language (`<html lang>`), not the interface's.
+- Prefer an isolated canvas (iframe when relevant) and a typed exchange protocol.
+- Do not rebuild the whole page on every keystroke if an incremental mechanism is possible.
+- The Astro export must provide **understandable sources, pinned dependencies, media and a README**, and build in a clean environment, without any private NS service.
+- For a complete site (milestone 2), also provide a static build that can be hosted independently.
 
-La réversibilité ne signifie pas le réimport automatique de sources Astro modifiées par un tiers.
+Reversibility does not mean automatically re-importing Astro sources modified by a third party.
 
-## 7. Expérience de conception
+## 7. Design experience
 
-L'éditeur doit rester accessible aux graphistes sans programmation : sélection directe, arborescence, glisser-déposer, inspecteur déclaratif, inline editing lorsque pertinent, raccourcis, undo/redo, previews responsive, templates.
+The editor must stay accessible to designers who do not program: direct selection, tree, drag and drop, declarative inspector, inline editing when relevant, shortcuts, undo/redo, responsive previews, templates.
 
-S'inspirer de Tatsu pour la familiarité, de Figma/Webstudio pour les manipulations et contraintes ; ne pas reproduire obligatoirement `Section > Row > Column > Module` comme hiérarchie interne. Proposer les compositions usuelles sous forme de presets de conteneurs Flex/Grid.
+Take inspiration from Tatsu for familiarity, from Figma/Webstudio for manipulations and constraints; do not necessarily reproduce `Section > Row > Column > Module` as the internal hierarchy. Offer the usual compositions as Flex/Grid container presets.
 
-Ne jamais sacrifier la sémantique HTML, l'accessibilité ou le responsive à une liberté de positionnement illimitée.
+Never sacrifice HTML semantics, accessibility or responsive behavior to unlimited positioning freedom.
 
-## 8. Sécurité et confidentialité
+## 8. Security and confidentiality
 
-- Valider tous les documents et fichiers importés ; filtrer les HTML, SVG et URLs selon leur contexte.
-- Ne pas autoriser un document à exécuter librement du JavaScript, ni à injecter des scripts arbitraires dans la prévisualisation ou l'export.
-- Séparer l'interface d'administration et le site public ; aucun secret dans le build ni dans les sources exportées.
-- Sécuriser les chemins de fichiers, archives et accès aux médias ; aucune traversée de répertoire.
-- Réduire les dépendances, surveiller leurs licences et correctifs.
-- Ne pas inventer un système d'authentification maison. Pour un déploiement Internet avant l'authentification du produit, utiliser une protection d'accès externe éprouvée.
-- Préparer conceptuellement rôles, permissions, passkeys/WebAuthn, audit et isolation des clients, **sans les développer dans le MVP**.
-- Les futures opérations IA/MCP doivent appliquer les mêmes droits, validations et audits que les actions humaines ; publication sensible avec validation explicite.
+- Validate every imported document and file; filter HTML, SVG and URLs according to their context.
+- Do not let a document freely execute JavaScript, nor inject arbitrary scripts into the preview or the export.
+- Separate the administration interface from the public site; no secret in the build or in the exported sources.
+- Secure file paths, archives and media access; no directory traversal.
+- Reduce dependencies, monitor their licenses and patches.
+- Do not invent a home-made authentication system. For an Internet deployment before the product has authentication, use a proven external access protection.
+- Prepare roles, permissions, passkeys/WebAuthn, audit and client isolation conceptually, **without developing them in the MVP**.
+- AI/MCP operations must apply the same rights, validations and audits as human actions; sensitive publishing requires explicit approval.
 
-## 9. Qualité des sites produits
+## 9. Quality of the produced sites
 
-- HTML sémantique, accessibilité clavier, focus visible, alternatives médias.
-- Responsive robuste, pas de contenus cachés ou inaccessibles par défaut.
-- Respect de `prefers-reduced-motion` pour les effets futurs.
-- Métadonnées SEO, URLs, sitemap, robots, liens et 404 au jalon 2.
-- JavaScript limité aux composants interactifs utilisés ; navigation et contenu de base accessibles sans JS.
-- Tests de performance reproductibles ; définir les seuils sur des pages et environnements de référence, ne pas inventer des garanties chiffrées.
+- Semantic HTML, keyboard accessibility, visible focus, media alternatives.
+- Robust responsive behavior, no content hidden or inaccessible by default.
+- Respect `prefers-reduced-motion` for effects.
+- SEO metadata, URLs, sitemap, robots, links and 404 at milestone 2.
+- JavaScript limited to the interactive components used; navigation and basic content accessible without JS.
+- Reproducible performance tests; define thresholds on reference pages and environments, do not invent numeric guarantees.
 
-## 10. Méthode de travail agentique
+## 10. Agentic working method
 
-Avant chaque tranche :
+Before each slice:
 
-1. Lire ce fichier et les spécifications pertinentes.
-2. Examiner le code et les contrats existants ; ne pas créer d'abstraction doublon.
-3. Vérifier le jalon actif et définir une tâche au périmètre borné.
-4. Identifier les fichiers et interfaces touchés, les risques et les tests d'acceptation.
-5. Pour une décision structurante ou incertaine, rédiger un ADR avec alternatives et compromis.
-6. Implémenter le plus petit incrément vertical testable.
-7. Exécuter tests, lint/typecheck et build pertinents ; ne pas déclarer comme exécuté un test qui ne l'a pas été.
-8. Résumer les modifications, limitations et points restant ouverts.
+1. Read this file and the relevant specifications.
+2. Examine the existing code and contracts; do not create a duplicate abstraction.
+3. Check the active milestone and define a bounded task.
+4. Identify the files and interfaces touched, the risks and the acceptance tests.
+5. For a structuring or uncertain decision, write an ADR with alternatives and trade-offs.
+6. Implement the smallest testable vertical increment.
+7. Run the relevant tests, lint/typecheck and build; never report a test as run when it was not.
+8. Summarize the changes, limitations and open points.
 
-### Concurrence des agents
+### Agent concurrency
 
-- Stabiliser les contrats avant le travail parallèle.
-- Répartir les tâches par modules/fichiers et éviter les modifications simultanées d'un même contrat.
-- Ne pas modifier un schéma central ou une API partagée sans signaler les consommateurs impactés.
-- Ne pas refactoriser hors tâche sans justification.
-- Documenter explicitement les choix provisoires et la dette introduite.
+- Stabilize contracts before parallel work.
+- Split tasks by module/file and avoid simultaneous changes to the same contract.
+- Do not change a central schema or a shared API without flagging the impacted consumers.
+- Do not refactor outside the task without justification.
+- Document provisional choices and the debt introduced explicitly.
 
-### Documentation et ADR prioritaires
+### Priority documentation and ADRs
 
-- `ADR-0001` : document et composants versionnés.
-- `ADR-0002` : stratégie de rendu fidèle preview ↔ Astro (**prioritaire**).
-- `ADR-0003` : commandes, transactions et historique.
-- `ADR-0004` : persistance MVP.
-- `ADR-0005` : organisation du monorepo.
+- `ADR-0001`: versioned document and components.
+- `ADR-0002`: faithful preview ↔ Astro rendering strategy (**priority**).
+- `ADR-0003`: commands, transactions and history.
+- `ADR-0004`: MVP persistence.
+- `ADR-0005`: monorepo organization.
 
-ADR acceptés depuis : `ADR-0006` (design system du Studio), `ADR-0007` (modèle de site v2), `ADR-0008` (persistance par
-projet), `ADR-0009` (design tokens), `ADR-0010` (médiathèque et images), `ADR-0011` (composants réutilisables),
-`ADR-0012` (animations déclaratives), `ADR-0013` (services et lots de commandes), `ADR-0014` (fournisseurs d'IA et
-confidentialité), `ADR-0015` (hébergement Docker derrière nginx), `ADR-0016` (distribution : application web
-hébergée, instance privée), `ADR-0017` (styles décoratifs : bordures, ombres, dégradés,
-images de fond), `ADR-0018` (polices importées et catalogue de polices libres), `ADR-0019` (typographie fine, éléments
-collants, retours à la ligne), `ADR-0020` (texte enrichi : paragraphes, couleur, titres enrichis, dégradé), `ADR-0021` (galerie en mosaïque et agrandissement), `ADR-0022` (bandeau défilant et carrousel), `ADR-0023` (CSS personnalisé : feuille du projet et classes), `ADR-0024` (internationalisation : catalogues de messages, anglais par défaut, français conservé) ; addendum « îlots JavaScript » d'`ADR-0002`.
+ADRs accepted since: `ADR-0006` (Studio design system), `ADR-0007` (site model v2), `ADR-0008` (per-project
+persistence), `ADR-0009` (design tokens), `ADR-0010` (media library and images), `ADR-0011` (reusable components),
+`ADR-0012` (declarative animations), `ADR-0013` (services and command batches), `ADR-0014` (AI providers and
+confidentiality), `ADR-0015` (Docker hosting behind nginx), `ADR-0016` (distribution: hosted web application,
+private instance), `ADR-0017` (decorative styles: borders, shadows, gradients, background images), `ADR-0018`
+(imported fonts and catalog of free fonts), `ADR-0019` (fine typography, sticky elements, line breaks), `ADR-0020`
+(rich text: paragraphs, color, rich headings, gradient), `ADR-0021` (masonry gallery and lightbox), `ADR-0022`
+(marquee and carousel), `ADR-0023` (custom CSS: project stylesheet and classes), `ADR-0024` (internationalization:
+message catalogs, English by default, French kept); "JavaScript islands" addendum of `ADR-0002`.
 
-Consigner les ADR selon l'organisation retenue dans `docs/architecture/adr/`.
+Record ADRs in `docs/architecture/adr/`, in English, with English file names. `npm run check` verifies the relative
+links of the documentation.
 
-## 11. Critères de fin de jalon
+## 11. Milestone completion criteria
 
-### Jalon 1 — Page éditable
+### Milestone 1 — Editable page
 
-Canvas, arbre, inspecteur, composants fondamentaux, responsive initial, commandes/undo-redo, document importable/exportable, génération Astro. Démontrer une page hero + texte + bouton + image + grille, éditée, sauvegardée et exportée ; compiler hors du dépôt NS et vérifier la fidélité du rendu.
+Canvas, tree, inspector, fundamental components, initial responsive, commands/undo-redo, importable/exportable document, Astro generation. Demonstrate a hero + text + button + image + grid page, edited, saved and exported; build outside the NS repository and check rendering fidelity.
 
-### Jalon 2 — Site vitrine complet
+### Milestone 2 — Complete showcase site
 
-Projets, pages, slugs, menus, header/footer, design tokens, médias, navigation responsive, métadonnées SEO, validation des liens, export Astro multipage et build statique. Démontrer un site vitrine de cinq pages, prévisualisable, exporté et servi indépendamment.
+Projects, pages, slugs, menus, header/footer, design tokens, media, responsive navigation, SEO metadata, link validation, multi-page Astro export and static build. Demonstrate a five-page showcase site, previewable, exported and served independently.
 
-### Jalon 3 — Créativité et productivité
+### Milestone 3 — Creativity and productivity
 
-Sections/templates, instances réutilisables, composition avancée, animations déclaratives et accessibles, premières transformations IA via commandes typées, prévisualisation des différences et validation humaine. Démontrer le site du jalon 2 enrichi puis exporté sans dépendance de runtime au Studio.
+Sections/templates, reusable instances, advanced composition, declarative and accessible animations, first AI transformations through typed commands, preview of the differences and human approval. Demonstrate the milestone 2 site enriched then exported without any runtime dependency on the Studio.
 
-**Definition of Done commune :** scénario complet fonctionnel, tests automatiques pertinents, build vérifié, documentation à jour, risques et limites connus explicités, aucun besoin d'une fonctionnalité du jalon suivant pour valider le résultat.
+**Shared Definition of Done:** complete working scenario, relevant automated tests, verified build, up-to-date documentation, known risks and limitations stated, no need for a feature of the next milestone to validate the result.
 
-## 12. Principe directeur
+## 12. Guiding principle
 
-**Construire d'abord le plus petit studio capable de produire un vrai site vitrine autonome.** Préserver les capacités nécessaires à un futur CMS éditorial sécurisé et à l'assistance IA, sans créer dès maintenant une usine à gaz ni enfermer les clients dans un runtime Netvolution.
+**First build the smallest studio able to produce a real standalone showcase site.** Preserve the capabilities needed for a future secure editorial CMS and AI assistance, without building an overengineered machine now or locking clients into a Netvolution runtime.

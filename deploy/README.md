@@ -1,99 +1,99 @@
-# Déploiement de Netvolution Studio (Docker, nginx, GitHub Actions)
+# Deploying Netvolution Studio (Docker, nginx, GitHub Actions)
 
-Décisions et risques : [ADR-0015](../docs/architecture/adr/ADR-0015-hebergement-docker.md) (hébergement), [ADR-0016](../docs/architecture/adr/ADR-0016-mode-de-distribution.md) (instance privée pour l'équipe).
+Decisions and risks: [ADR-0015](../docs/architecture/adr/ADR-0015-docker-hosting.md) (hosting), [ADR-0016](../docs/architecture/adr/ADR-0016-distribution-mode.md) (private instance for the team).
 
 ```text
-Navigateur ──HTTPS + mot de passe──▶ nginx ──127.0.0.1:3010──▶ conteneur netvolution-studio ──▶ volume ./data
-GitHub (push sur main) ─▶ vérifications ─▶ image ghcr.io/<propriétaire>/<dépôt>:<commit> ─▶ SSH ─▶ docker compose up
+Browser ──HTTPS + password──▶ nginx ──127.0.0.1:3010──▶ netvolution-studio container ──▶ ./data volume
+GitHub (version tag) ─▶ checks ─▶ image ghcr.io/<owner>/<repo>:<commit> ─▶ SSH ─▶ docker compose up
 ```
 
-## 1. Une seule fois, sur le serveur
+## 1. Once, on the server
 
-Le Studio tourne sous un compte dédié, membre du groupe `docker`, qui est aussi l'utilisateur SSH du déploiement.
+The Studio runs under a dedicated account, member of the `docker` group, which is also the SSH user of the deployment.
 
-| Élément | Emplacement (exemple) |
+| Item | Location (example) |
 |---|---|
-| Dossier de déploiement (`DEPLOY_PATH`) | `/srv/studio` (`compose.yaml` copié par le workflow) |
-| Données (projets, médias, exports) | `<DEPLOY_PATH>/data`, propriété de l'uid 1000 (« node » du conteneur) |
-| Secrets du Studio (assistant IA, voir `.env.example`) | `<DEPLOY_PATH>/.env`, mode 600, jamais versionné |
-| Port interne | `127.0.0.1:3010` (`NS_PORT` dans le `.env` pour en changer) |
-| Vhost nginx | proxy HTTPS vers `127.0.0.1:3010`, avec `auth_basic` (ou un portail d'authentification) |
-| Certificat | Let's Encrypt (certbot) |
-| Mots de passe (un utilisateur par personne) | fichier `htpasswd` lu par le vhost |
+| Deployment folder (`DEPLOY_PATH`) | `/srv/studio` (`compose.yaml` copied by the workflow) |
+| Data (projects, media, exports) | `<DEPLOY_PATH>/data`, owned by uid 1000 (the container's "node") |
+| Studio secrets (AI assistant, see `.env.example`) | `<DEPLOY_PATH>/.env`, mode 600, never versioned |
+| Internal port | `127.0.0.1:3010` (`NS_PORT` in the `.env` to change it) |
+| nginx virtual host | HTTPS proxy to `127.0.0.1:3010`, with `auth_basic` (or an authentication portal) |
+| Certificate | Let's Encrypt (certbot) |
+| Passwords (one user per person) | `htpasswd` file read by the virtual host |
 
-Ajouter un utilisateur (bcrypt, mot de passe saisi au clavier, pas de rechargement de nginx nécessaire) :
+Adding a user (bcrypt, password typed at the keyboard, no nginx reload needed):
 
 ```sh
-printf "prenom:%s\n" "$(mkpasswd -m bcrypt)" >> /chemin/vers/htpasswd
+printf "firstname:%s\n" "$(mkpasswd -m bcrypt)" >> /path/to/htpasswd
 ```
 
-Bannir les essais de mot de passe répétés (401) avec un outil comme CrowdSec ou fail2ban.
+Ban repeated password attempts (401) with a tool such as CrowdSec or fail2ban.
 
-Le port publié doit rester sur `127.0.0.1` : Docker publie ses ports par DNAT, ce qu'un pare-feu nftables ou iptables filtrant la chaîne `input` ne voit pas.
+The published port must stay on `127.0.0.1`: Docker publishes its ports through DNAT, which an nftables or iptables firewall filtering the `input` chain does not see.
 
-## 2. Une seule fois, dans GitHub (Settings → Secrets and variables → Actions)
+## 2. Once, in GitHub (Settings → Secrets and variables → Actions)
 
-| Nom | Type | Valeur |
+| Name | Type | Value |
 |---|---|---|
-| `SSH_HOST` | secret | nom du serveur |
-| `SSH_USER` | secret | compte de déploiement (membre du groupe `docker`) |
-| `SSH_PRIVATE_KEY` | secret | clé privée dédiée au déploiement (clé publique dans `~/.ssh/authorized_keys` du serveur) |
-| `SSH_FINGERPRINT` | secret | empreinte de la clé d'hôte **ECDSA** du serveur, vérifiée à chaque connexion : `ssh <serveur> ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key.pub \| cut -d' ' -f2` (forme `SHA256:…`). Pas la clé ED25519 : le client SSH (Go) des actions appleboy négocie ECDSA en priorité, et l'empreinte ED25519 échoue en « host key fingerprint mismatch » |
-| `GHCR_TOKEN` | secret | jeton GitHub avec la seule permission `read:packages` (si l'image est privée) |
-| `DEPLOY_PATH` | variable | dossier de déploiement sur le serveur ; sans cette variable, le job de déploiement est ignoré |
+| `SSH_HOST` | secret | server name |
+| `SSH_USER` | secret | deployment account (member of the `docker` group) |
+| `SSH_PRIVATE_KEY` | secret | private key dedicated to deployment (public key in the server's `~/.ssh/authorized_keys`) |
+| `SSH_FINGERPRINT` | secret | fingerprint of the server's **ECDSA** host key, checked on every connection: `ssh <server> ssh-keygen -lf /etc/ssh/ssh_host_ecdsa_key.pub \| cut -d' ' -f2` (form `SHA256:…`). Not the ED25519 key: the SSH client (Go) of the appleboy actions negotiates ECDSA first, and the ED25519 fingerprint fails with "host key fingerprint mismatch" |
+| `GHCR_TOKEN` | secret | GitHub token with only the `read:packages` permission (if the image is private) |
+| `DEPLOY_PATH` | variable | deployment folder on the server; without this variable, the deployment job is skipped |
 
-Créer aussi l'environnement **`production`** (Settings → Environments). On peut y exiger une approbation avant chaque déploiement.
+Also create the **`production`** environment (Settings → Environments). It can require an approval before each deployment.
 
-Recommandé dans Settings :
-- **Code security** : activer *Dependabot alerts* et *Dependabot security updates* ;
-- **Branches** : protéger `main` en exigeant les vérifications `check (26)` et `check (24)` avant fusion.
+Recommended in Settings:
+- **Code security**: enable *Dependabot alerts* and *Dependabot security updates*;
+- **Branches**: protect `main` by requiring the `check (26)` and `check (24)` checks before merging.
 
-## Sécurité de la chaîne et versions de Node
+## Supply-chain security and Node versions
 
-- **Node 26 LTS** (active depuis le 28/10/2026) dans l'image, avec la version et l'empreinte (`sha256`) figées dans le `Dockerfile`.
-- **Correctifs Alpine** : appliqués à chaque build (`apk upgrade`).
-- **CI sur Node 26 et 24** (LTS de maintenance, postes de développement), toujours au dernier correctif (`check-latest`).
-- **Audit des dépendances d'exécution** : `npm audit --omit=dev --audit-level=high` bloque le pipeline en cas de faille haute ou critique.
-- **Dependabot** (`.github/dependabot.yml`) propose chaque semaine des mises à jour, testées par la CI avant fusion :
-  - les actions GitHub ;
-  - l'image Node ;
-  - les dépendances npm.
-- **Actions GitHub épinglées par commit**, avec la version en commentaire : un tag déplacé ne peut pas injecter de code.
-- **Droits minimaux** : `contents: read` par défaut, `packages: write` seulement pour publier l'image, jeton Git non conservé après le checkout.
-- **Image** : publiée avec sa provenance et sa nomenclature logicielle (SBOM).
-- **Déploiement** :
-  - clé d'hôte SSH vérifiée ;
-  - jeton GHCR en lecture seule, déconnecté après usage ;
-  - déploiements sérialisés.
-- **Fin de vie** : Node 24 sort du support en avril 2028 et Node 26 en avril 2029. On passe à la LTS suivante quand Dependabot la propose, après le passage de la CI.
+- **Node 26 LTS** (active since 10/28/2026) in the image, with its version and checksum (`sha256`) pinned in the `Dockerfile`.
+- **Alpine patches**: applied on every build (`apk upgrade`).
+- **CI on Node 26 and 24** (maintenance LTS, development machines), always at the latest patch (`check-latest`).
+- **Audit of runtime dependencies**: `npm audit --omit=dev --audit-level=high` blocks the pipeline on a high or critical vulnerability.
+- **Dependabot** (`.github/dependabot.yml`) proposes updates every week, tested by the CI before merging:
+  - GitHub actions;
+  - the Node image;
+  - npm dependencies.
+- **GitHub actions pinned by commit**, with the version in a comment: a moved tag cannot inject code.
+- **Least privilege**: `contents: read` by default, `packages: write` only to publish the image, Git token not kept after checkout.
+- **Image**: published with its provenance and software bill of materials (SBOM).
+- **Deployment**:
+  - SSH host key checked;
+  - read-only GHCR token, logged out after use;
+  - deployments serialized.
+- **End of life**: Node 24 leaves support in April 2028 and Node 26 in April 2029. Move to the next LTS when Dependabot proposes it, once the CI passes.
 
-## 3. Vérifier, construire, publier une version
+## 3. Check, build, release a version
 
-1. **check** : `npm ci`, typecheck, lint, tests unitaires, sur chaque pull request et chaque push.
-2. **build-and-push** (push sur `main` ou tag `v*`) : image Docker poussée sur GHCR, étiquetée avec le hash du commit, `latest` pour `main` et le numéro de version pour un tag.
-3. **deploy** (tag `v*` seulement) : attend l'approbation sur l'environnement `production`, puis copie `compose.yaml` sur le serveur et lance `docker compose pull && up -d` avec l'image **de ce commit**. Le job échoue si le conteneur n'est pas sain en une minute.
+1. **check**: `npm ci`, typecheck, lint, unit tests, on every pull request and every push.
+2. **build-and-push** (push to `main` or `v*` tag): Docker image pushed to GHCR, tagged with the commit hash, `latest` for `main` and the version number for a tag.
+3. **deploy** (`v*` tags only): waits for approval on the `production` environment, then copies `compose.yaml` to the server and runs `docker compose pull && up -d` with the image **of that commit**. The job fails if the container is not healthy within a minute.
 
-Le dépôt est public : une fusion sur `main`, même d'un contributeur, ne part jamais en production. Pour livrer :
+The repository is public: a merge into `main`, even by a contributor, never goes to production. To ship:
 
 ```sh
 git switch main && git pull
 git tag -a v1.2.0 -m "v1.2.0" && git push origin v1.2.0
 ```
 
-puis approuver le déploiement (onglet Actions → l'exécution du tag → *Review deployments*).
+then approve the deployment (Actions tab → the tag's run → *Review deployments*).
 
-L'environnement `production` exige l'approbation du mainteneur et n'accepte que les tags `v*` (Settings → Environments).
+The `production` environment requires the maintainer's approval and only accepts `v*` tags (Settings → Environments).
 
-## Exploitation
+## Operations
 
-- **Revenir à une version** : relancer le workflow sur le tag voulu (Actions → « Vérifier, construire et déployer » → *Run workflow*, choisir le tag), ou sur le serveur `cd "$DEPLOY_PATH" && IMAGE_TAG=<hash du commit> docker compose up -d`.
-- **Journaux** : `docker logs -f netvolution-studio`. Appels IA sans contenu dans `data/ai-log.jsonl`.
-- **Sauvegardes** : le dossier `data/` (projets, médias, modèles, exports, corbeille), à inclure dans les sauvegardes du serveur. Les exports sont régénérables et peuvent en être exclus (`data/exports/`).
-- **Récupérer un export** : liens « Télécharger (.tar.gz) » dans la boîte d'export du Studio.
-- **Mise à jour des dépendances de l'image** : reconstruite à chaque push ; l'image de base Node est figée dans le `Dockerfile`.
+- **Roll back**: rerun the workflow on the wanted tag (Actions → the deployment workflow → *Run workflow*, choose the tag), or on the server `cd "$DEPLOY_PATH" && IMAGE_TAG=<commit hash> docker compose up -d`.
+- **Logs**: `docker logs -f netvolution-studio`. AI calls, without content, in `data/ai-log.jsonl`.
+- **Backups**: the `data/` folder (projects, media, templates, exports, trash), to include in the server backups. Exports can be regenerated and may be excluded (`data/exports/`).
+- **Getting an export**: download links (.tar.gz) in the Studio's export dialog.
+- **Updating the image's dependencies**: rebuilt on every push; the Node base image is pinned in the `Dockerfile`.
 
-## Limites
+## Limits
 
-- Pas de comptes dans le Studio : la protection est **uniquement** celle de nginx, et toute personne connectée a tous les droits. Un portail avec double authentification (Authelia, Cloudflare Access…) est conseillé au-delà de quelques utilisateurs de confiance.
-- Un seul utilisateur à la fois par projet : un enregistrement concurrent est refusé (conflit), pas fusionné.
-- L'export avec build statique a besoin d'accéder au registre npm depuis le conteneur et dure jusqu'à quelques minutes.
+- No accounts in the Studio: protection comes **only** from nginx, and anyone logged in has full rights. A portal with two-factor authentication (Authelia, Cloudflare Access…) is advised beyond a few trusted users.
+- One user at a time per project: a concurrent save is refused (conflict), not merged.
+- Export with a static build needs access to the npm registry from the container and takes up to a few minutes.
