@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { agenceCreative } from './agence-creative.ts';
 import { cabinetConseil } from './cabinet-conseil.ts';
-import { buildTemplate, translateSpec } from './kit.ts';
+import { buildTemplate, translateArchive, translateSpec } from './kit.ts';
 
 const dir = import.meta.dirname;
 const dictionary = (id: string, lang: string) =>
@@ -19,3 +19,11 @@ for (const source of [agenceCreative, cabinetConseil]) {
     for (const w of warnings) console.log(`  warning: ${w}`);
   }
 }
+
+// Atelier Nord is an archive, not written in code: its English version is translated from it.
+const atelier = JSON.parse(readFileSync(join(dir, 'atelier-nord.json'), 'utf8'));
+writeFileSync(
+  join(dir, 'atelier-nord-en.json'),
+  `${JSON.stringify(translateArchive(atelier, 'en', dictionary('atelier-nord', 'en')))}\n`,
+);
+console.log('atelier-nord-en: translated from the archive');

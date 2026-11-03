@@ -48,7 +48,7 @@ const api = createApi({
 });
 const app = await serve(join(repo, 'apps/studio/dist'), { middleware: api });
 const browser = await chromium.launch();
-// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios.
 const page = await browser.newPage({ locale: 'fr-FR', viewport: { width: 1600, height: 1000 } });
 page.on('dialog', (d) => void d.accept());
 const errors: string[] = [];

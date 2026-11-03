@@ -32,7 +32,7 @@ Cliquez sur chaque erreur pour aller à l’élément concerné : le plus souven
 Vérifiez que vous avez enregistré, exporté **à nouveau**, puis remplacé **tous** les fichiers chez l’hébergeur. Videz le cache du navigateur (<kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>R</kbd>).
 
 **Les pages s’affichent en ligne, mais pas la page 404, ou les redirections ne marchent pas.**
-Elles demandent une configuration de l’hébergeur (chapitre [Publier et livrer](11-publier-et-livrer.md)).
+Elles demandent une configuration de l’hébergeur (chapitre [Publier et livrer](11-publish-and-deliver.md)).
 
 **Les images ou le style manquent en ligne.**
 Le site doit être à la **racine** du domaine, et c’est **le contenu** du dossier exporté qu’il faut copier, pas le dossier lui-même.
@@ -46,7 +46,7 @@ Non. Reconstruisez-le dans le Studio, en partant d’un modèle ; c’est souven
 Pas encore : le Studio est réservé à l’équipe. Les modifications passent par vous, puis par un nouvel export.
 
 **Où sont hébergés les sites ?**
-Où vous voulez : le Studio produit des fichiers, à déposer chez n’importe quel hébergeur (chapitre [Publier et livrer](11-publier-et-livrer.md)).
+Où vous voulez : le Studio produit des fichiers, à déposer chez n’importe quel hébergeur (chapitre [Publier et livrer](11-publish-and-deliver.md)).
 
 **Mes projets sont-ils sauvegardés ?**
 Sur le serveur du Studio, à chaque enregistrement. Pour une copie à vous, exportez l’**archive du projet** (menu **⋯**).
@@ -55,7 +55,7 @@ Sur le serveur du Studio, à chaque enregistrement. Pour une copie à vous, expo
 Si sa licence autorise l’usage sur le web : importez son fichier WOFF2 (chapitre [Le design system](05-design-system.md)).
 
 **L’assistant IA voit-il tout le site ?**
-Non : la sélection (ou la page), sa structure et ses textes seulement (chapitre [L’assistant IA](10-assistant-ia.md)).
+Non : la sélection (ou la page), sa structure et ses textes seulement (chapitre [L’assistant IA](10-ai-assistant.md)).
 
 **Le site exporté dépend-il de Netvolution ?**
 Non. Il fonctionne seul, sans le Studio ni aucun service Netvolution ; ses sources sont un projet Astro standard.

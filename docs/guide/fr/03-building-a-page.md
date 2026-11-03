@@ -35,7 +35,7 @@ Plutôt que d’emboîter les boîtes à la main, partez des **Compositions**, e
 | **Hero** | Titre, texte et bouton, avec un visuel à côté | Le visuel passe dessous |
 | **Carte**, **Logo**, **Appel à l’action**, **Grille d’images**, **Accordéon (FAQ)**, **Bloc d’onglets**, **Présentation**, **Atouts**, **Témoignages**, **Tarifs**, **Équipe**, **Contact** | Des sections complètes, à personnaliser | Adaptées |
 
-Une fois insérée, une composition est un ensemble ordinaire de boîtes et de composants : vous pouvez tout modifier, ajouter ou supprimer. L’onglet **Sections** de la bibliothèque propose d’autres sections et celles que vous avez enregistrées (chapitre [Réutiliser](08-reutiliser.md)).
+Une fois insérée, une composition est un ensemble ordinaire de boîtes et de composants : vous pouvez tout modifier, ajouter ou supprimer. L’onglet **Sections** de la bibliothèque propose d’autres sections et celles que vous avez enregistrées (chapitre [Réutiliser](08-reuse.md)).
 
 ## Ajouter un élément
 
@@ -47,7 +47,7 @@ Une fois insérée, une composition est un ensemble ordinaire de boîtes et de c
 
 C’est la méthode la plus précise : sélectionnez une colonne, cliquez sur **Titre** puis sur **Texte**, les deux s’ajoutent dans la colonne, l’un sous l’autre.
 
-![L’arborescence après l’ajout d’une rangée de deux colonnes, d’un titre et d’un texte dans la première colonne](images/arborescence.png)
+![L’arborescence après l’ajout d’une rangée de deux colonnes, d’un titre et d’un texte dans la première colonne](images/tree.png)
 
 **Par glisser-déposer.** Faites glisser un élément de la bibliothèque dans le canvas : un repère montre où il sera déposé. Au-dessus d’un emplacement impossible, l’étiquette indique « dépôt impossible ici ».
 
@@ -84,9 +84,9 @@ Le collage suit la même règle que le clic dans la bibliothèque : dans la boî
 | **Bandeau défilant** | **Contenu** (textes ou images), **Textes**, **Séparateur**, **Images**, **Hauteur des images**, **Espacement**, **Durée d’un tour**, **Sens** | Défile en boucle, s’arrête au survol et au focus, avec un bouton **Mettre en pause**. Immobile pour les visiteurs qui ont réduit les animations. |
 | **Liste** | **Puces** (disque, cercle, carré, aucune, numéros, lettres, chiffres romains), **Éléments** | Une vraie liste HTML : chaque élément est une ligne de texte enrichi (gras, italique, liens). Les numéros, lettres et chiffres romains en font une liste ordonnée. |
 | **Bouton** | Libellé, Lien, **Apparence** (Principal, Secondaire, Lien texte) | Le lien mène à une page du site, à une adresse (URL, `mailto:`, `tel:`) ou à un fichier de la médiathèque. |
-| **Image** | Image, **Texte alternatif**, légende, lien, ajustement, chargement | Décrivez l’image dans le texte alternatif, ou cochez **Image décorative** si elle n’apporte rien au sens. Chapitre [Les médias](07-les-medias.md). |
-| **Galerie** | **Images** (texte alternatif et légende de chacune), **Disposition** (mosaïque ou vignettes), **Proportion des vignettes**, **Agrandir au clic** | Voir le chapitre [Les médias](07-les-medias.md). Colonnes et espacement se règlent dans la section **Mise en page**, par taille d’écran. |
-| **Carrousel** | **Images**, **Nom accessible**, **Proportion des images**, **Images visibles** (par taille d’écran), **Espacement**, **Défilement automatique** et **Intervalle** | Voir le chapitre [Les médias](07-les-medias.md). |
+| **Image** | Image, **Texte alternatif**, légende, lien, ajustement, chargement | Décrivez l’image dans le texte alternatif, ou cochez **Image décorative** si elle n’apporte rien au sens. Chapitre [Les médias](07-media.md). |
+| **Galerie** | **Images** (texte alternatif et légende de chacune), **Disposition** (mosaïque ou vignettes), **Proportion des vignettes**, **Agrandir au clic** | Voir le chapitre [Les médias](07-media.md). Colonnes et espacement se règlent dans la section **Mise en page**, par taille d’écran. |
+| **Carrousel** | **Images**, **Nom accessible**, **Proportion des images**, **Images visibles** (par taille d’écran), **Espacement**, **Défilement automatique** et **Intervalle** | Voir le chapitre [Les médias](07-media.md). |
 | **Vidéo** | Adresse YouTube ou Vimeo, titre | Pas de fichier vidéo hébergé. |
 | **Icône** | Pictogramme, **Nom accessible** | Nom vide : l’icône est décorative. |
 | **Séparateur** | — | Un trait horizontal. |
@@ -104,7 +104,7 @@ Le champ **Texte** a une petite barre d’outils : **gras** (<kbd>⌘</kbd> <kbd
 - Dans un **Titre**, <kbd>Entrée</kbd> insère un retour à la ligne (un titre reste un seul bloc).
 - **Couleur** ouvre les couleurs du design system et un nuancier (**Autre**). La couleur choisie est enregistrée telle quelle : si vous modifiez plus tard une couleur du design system, les passages déjà colorés ne suivent pas. Pour colorer tout un élément, préférez la **Couleur du texte** de l’inspecteur, qui accepte les couleurs du design system.
 
-![Le champ de texte enrichi et sa barre d’outils](images/texte-enrichi.png)
+![Le champ de texte enrichi et sa barre d’outils](images/rich-text.png)
 
 Pour une énumération, utilisez le composant **Liste** : dans l’inspecteur, chaque élément a son propre champ enrichi, avec des flèches pour le déplacer, une corbeille pour le supprimer et **Ajouter un élément** en bas. Les intertitres dans un texte ne sont pas disponibles : utilisez un composant **Titre** entre deux **Texte**, ce qui garde la hiérarchie des titres correcte.
 

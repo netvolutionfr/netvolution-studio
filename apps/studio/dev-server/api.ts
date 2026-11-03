@@ -418,7 +418,7 @@ export function createApi(options: ApiOptions) {
 
     // GET /api/exports/:name.tar.gz — an export (Astro sources or static site) as a compressed archive,
     // to retrieve it from a hosted Studio (ADR-0015); dependencies, build cache and build output excluded.
-    const exported = /^\/api\/exports\/([a-z0-9]+-[0-9T-]{19}(-statique)?)\.tar\.gz$/.exec(url.pathname);
+    const exported = /^\/api\/exports\/([a-z0-9]+-[0-9T-]{19}(-static)?)\.tar\.gz$/.exec(url.pathname);
     if (exported && req.method === 'GET') {
       const name = exported[1] as string;
       if (!(await stat(inside(options.exportsDir, name)).catch(() => null))?.isDirectory())
@@ -610,7 +610,7 @@ export function createApi(options: ApiOptions) {
               msg('server.build', { detail: (err.stderr || err.message).slice(-600) }),
             );
           }
-          staticDir = inside(options.exportsDir, `${id}-${stamp}-statique`);
+          staticDir = inside(options.exportsDir, `${id}-${stamp}-static`);
           await cp(join(outDir, 'dist'), staticDir, { recursive: true });
         }
         // Names of the downloadable archives (GET /api/exports/:name.tar.gz).

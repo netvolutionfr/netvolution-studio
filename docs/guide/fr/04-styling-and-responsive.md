@@ -84,7 +84,7 @@ Une image de fond est **décorative** : elle n’a pas de texte alternatif et le
 
 ## La pile (Flexbox), en pratique
 
-![Les réglages de mise en page d’une pile : le hero de l’accueil, en ligne, centré, espacement 48 px](images/pile-flex.png)
+![Les réglages de mise en page d’une pile : le hero de l’accueil, en ligne, centré, espacement 48 px](images/flex-stack.png)
 
 | Réglage | Effet |
 |---|---|
@@ -157,7 +157,7 @@ Concevez donc d’abord pour le desktop, puis passez en tablette et en mobile po
 - Devant chaque réglage, un **point plein** indique une valeur **définie sur ce breakpoint** ; un **point creux**, une valeur **héritée** d’une taille plus grande. Survolez le point pour le lire.
 - La **flèche circulaire** à droite d’une valeur définie la **réinitialise** : l’élément reprend la valeur héritée.
 
-![Le même hero en Mobile : direction en colonne, espacements réduits, chaque valeur définie pour le mobile seul](images/surcharge-mobile.png)
+![Le même hero en Mobile : direction en colonne, espacements réduits, chaque valeur définie pour le mobile seul](images/mobile-override.png)
 
 Le champ « px » de la barre d’outils affiche n’importe quelle largeur (de 320 à 2560 px) : utile pour vérifier une taille intermédiaire, une petite tablette ou un grand écran. Les styles modifiés s’appliquent alors au breakpoint qui couvre cette largeur.
 

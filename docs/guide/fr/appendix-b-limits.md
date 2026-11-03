@@ -2,7 +2,7 @@
 title: "Annexe B. Limites actuelles et contournements"
 ---
 
-Le Studio est jeune : certaines fonctions des page builders n’existent pas encore, d’autres sont volontairement absentes. Cette annexe liste ce que vous rencontrerez, avec le contournement quand il existe. Les absences **volontaires** (HTML libre, plugins…) sont expliquées dans l’[annexe A](annexe-a-correspondances.md).
+Le Studio est jeune : certaines fonctions des page builders n’existent pas encore, d’autres sont volontairement absentes. Cette annexe liste ce que vous rencontrerez, avec le contournement quand il existe. Les absences **volontaires** (HTML libre, plugins…) sont expliquées dans l’[annexe A](appendix-a-equivalences.md).
 
 ## Édition
 
@@ -20,7 +20,7 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 | Le canvas ne montre pas les animations par défaut | Cochez **Jouer les animations dans le canvas**, ou utilisez l’**Aperçu du site** |
 | Pas d’historique entre deux sessions : l’annulation et le journal repartent de zéro à la réouverture | Avant une grosse modification, exportez l’archive du projet (menu **⋯**) |
 | Pas d’enregistrement automatique | <kbd>⌘</kbd> <kbd>S</kbd> régulièrement ; le Studio prévient si vous fermez l’onglet sans enregistrer |
-| Interface en anglais : noms des composants, champs de l’inspecteur, messages de contrôle et assistant IA restent en français | Traduction en cours ; le français reste complet |
+| Langues de l’interface : français et anglais seulement | Une autre langue s’ajoute par un fichier de traduction (voir CONTRIBUTING du dépôt) |
 
 ## Composants et mise en forme
 
@@ -63,7 +63,7 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 | Le site statique se construit sur le serveur du Studio, en une à quelques minutes, sans barre de progression | Patientez sans fermer la fenêtre d’export |
 | La fenêtre d’export ne garde pas la liste des exports précédents | Téléchargez les archives dès la fin de l’export |
 | Les archives sont au format `.tar.gz`, pas `.zip` | macOS et Windows 11 les ouvrent ; sinon 7-Zip |
-| Pas de publication automatique chez un hébergeur | Dépôt manuel des fichiers (chapitre [Publier et livrer](11-publier-et-livrer.md)) |
+| Pas de publication automatique chez un hébergeur | Dépôt manuel des fichiers (chapitre [Publier et livrer](11-publish-and-deliver.md)) |
 | Des sources modifiées à la main par un développeur ne se réimportent pas | Décidez qui fait évoluer le site : le Studio ou le code |
 
 Une limite vous gêne souvent ? Signalez-la à l’équipe : c’est ainsi que se décident les prochaines évolutions.

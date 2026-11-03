@@ -58,7 +58,7 @@ for (const width of [1280, 1024, 768, 375]) {
   console.log(`${width}px  identical DOM: ${html}  elements with different style/box: ${styleDiffs}/${a.styles.length}  identical pixels: ${pixels}`);
   await page.close();
 }
-console.log(`<script> dans l'export statique: ${scripts}`);
+console.log(`<script> in the static export: ${scripts}`);
 await browser.close();
 server.close();
 process.exit(failures || scripts ? 1 : 0);

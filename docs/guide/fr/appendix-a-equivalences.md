@@ -9,15 +9,15 @@ Cette table aide à retrouver un réflexe. Les colonnes Tatsu et Elementor donne
 | Tatsu | Elementor | Netvolution Studio |
 |---|---|---|
 | Section | Section / Conteneur | **Section** (composition) ou **Conteneur** |
-| Row, Column | Inner Section, Colonne | [**Pile (Flex)** ou **Grille**](03-construire-une-page.md) ; compositions **Rangée 2 colonnes**, **Rangée 3 colonnes** |
+| Row, Column | Inner Section, Colonne | [**Pile (Flex)** ou **Grille**](03-building-a-page.md) ; compositions **Rangée 2 colonnes**, **Rangée 3 colonnes** |
 | Module | Widget | **Composant** |
 | Arbre des modules | Navigator | **Arborescence** |
-| Panneau d’options | Panneau d’édition (Contenu / Style / Avancé) | [**Inspecteur**](04-mise-en-forme-et-responsive.md) : Contenu, Style, Mise en page, Espacements, Position et effets, Avancé |
+| Panneau d’options | Panneau d’édition (Contenu / Style / Avancé) | [**Inspecteur**](04-styling-and-responsive.md) : Contenu, Style, Mise en page, Espacements, Position et effets, Avancé |
 | Modes responsive | Mode responsive | **Desktop / Tablette / Mobile** dans la barre d’outils ; les réglages ne s’appliquent qu’au breakpoint affiché |
 | Masquer sur mobile | Responsive > Hide on Mobile | Avancé > **Masquer sur ce breakpoint** |
 | Global Colors / Typography | Site Settings, couleurs et polices globales | [**Design system**](05-design-system.md) |
 | Google Fonts, polices personnalisées | Google Fonts, Custom Fonts | **Catalogue de polices** du design system, ou import d’un fichier WOFF2 dans la médiathèque (polices servies par le site, sans appel à Google) |
-| Global Sections | Global Widget | [**Composant réutilisable**](08-reutiliser.md) (lié : une modification se propage) |
+| Global Sections | Global Widget | [**Composant réutilisable**](08-reuse.md) (lié : une modification se propage) |
 | Templates sauvegardés | My Templates | Onglet **Sections** de la bibliothèque |
 | Header / Footer Builder | Theme Builder (header, footer) | **Header et footer**, dans le panneau Pages |
 | Kits de démarrage | Website Kits | **Modèles de site** (écran Projets) |

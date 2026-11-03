@@ -14,7 +14,7 @@ Ouvrez le Studio. L’écran **Projets** liste les sites de l’équipe.
 2. Dans **Modèle**, choisissez **Atelier Nord — site vitrine (5 pages)**, dans le groupe « Sites complets ».
 3. Cliquez sur **Créer le projet**.
 
-![L’écran Projets, avec le nom du projet et le modèle choisis](images/projets.png)
+![L’écran Projets, avec le nom du projet et le modèle choisis](images/projects.png)
 
 Les autres modèles, sous « Pages de départ », créent un site d’une seule page : utiles pour partir de zéro, moins pour découvrir.
 
@@ -22,7 +22,7 @@ Les autres modèles, sous « Pages de départ », créent un site d’une seule 
 
 Le projet s’ouvre sur la page d’accueil.
 
-![L’éditeur : pages, bibliothèque et arborescence à gauche, la page au centre, l’inspecteur à droite](images/editeur.png)
+![L’éditeur : pages, bibliothèque et arborescence à gauche, la page au centre, l’inspecteur à droite](images/editor.png)
 
 - **À gauche**, de haut en bas : les **pages** du site, la bibliothèque **Ajouter** (les éléments à insérer) et l’**arborescence** de la page.
 - **Au centre**, le **canvas** : la page telle qu’elle sera publiée.
@@ -37,7 +37,7 @@ Le chapitre [L’interface](02-interface.md) détaille chaque zone.
 2. Dans l’inspecteur, section **Contenu**, remplacez le **Texte** par « Studio Martin, graphisme et sites web ».
 3. Cliquez ailleurs ou appuyez sur <kbd>Tab</kbd> : le canvas se met à jour.
 
-![L’inspecteur du titre : contenu, puis styles](images/inspecteur.png)
+![L’inspecteur du titre : contenu, puis styles](images/inspector.png)
 
 Sous le contenu, les sections **Style**, **Mise en page** et **Espacements** règlent l’apparence de l’élément. Essayez la **Taille de police** : le curseur et le champ font la même chose.
 
@@ -49,7 +49,7 @@ Sous le contenu, les sections **Style**, **Mise en page** et **Espacements** rè
 2. L’inspecteur montre ses réglages. Saisissez le **Titre** « Tarifs », puis l’**Adresse (slug)** « tarifs » : la page sera publiée à `/tarifs/`.
 3. La page est vide, à l’exception du header et du footer communs à tout le site. Dans **Ajouter**, onglet **Composants**, descendez jusqu’aux **Compositions** et cliquez sur **Appel à l’action**. La section s’insère dans la page.
 
-![La nouvelle page « Tarifs » avec une section « Appel à l’action »](images/nouvelle-page.png)
+![La nouvelle page « Tarifs » avec une section « Appel à l’action »](images/new-page.png)
 
 Vous pouvez aussi **glisser** un élément de la bibliothèque à l’endroit voulu du canvas : un repère indique où il sera déposé, et le Studio refuse les emplacements impossibles.
 
@@ -99,7 +99,7 @@ Les **erreurs bloquantes**, elles, doivent être corrigées avant l’export (un
    - les **sources Astro**, pour un développeur qui voudrait reprendre le site ;
    - le **site statique**, les fichiers HTML, CSS et images prêts à déposer chez un hébergeur.
 
-Le chapitre [Publier et livrer](11-publier-et-livrer.md) explique la mise en ligne.
+Le chapitre [Publier et livrer](11-publish-and-deliver.md) explique la mise en ligne.
 
 ## Bravo
 
@@ -108,5 +108,5 @@ Vous avez créé un site, modifié une page, ajouté une page au menu, vérifié
 Pour la suite :
 
 - [L’interface](02-interface.md), pour connaître chaque zone et les raccourcis ;
-- [Construire une page](03-construire-une-page.md), pour bâtir vos propres mises en page ;
-- [les correspondances avec Tatsu et Elementor](annexe-a-correspondances.md), pour retrouver vos habitudes.
+- [Construire une page](03-building-a-page.md), pour bâtir vos propres mises en page ;
+- [les correspondances avec Tatsu et Elementor](appendix-a-equivalences.md), pour retrouver vos habitudes.

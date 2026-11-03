@@ -1,117 +1,117 @@
 ---
-title: "5. Le design system du site"
+title: "5. The site's design system"
 ---
 
-Le design system rassemble les **valeurs nommées** du site : ses couleurs, ses tailles, ses polices et ses styles de texte. On les appelle des **tokens**. Il accueille aussi la **feuille CSS du projet**, pour les effets que l’inspecteur ne propose pas. C’est l’équivalent des couleurs et de la typographie globales d’Elementor (Site Settings) ou de Tatsu.
+The design system gathers the site's **named values**: its colors, sizes, fonts and text styles. They are called **tokens**. It also holds the **project stylesheet**, for the effects the inspector does not offer. It is the equivalent of the global colors and typography of Elementor (Site Settings) or Tatsu.
 
-Un élément qui utilise un token ne contient pas la valeur, mais une référence : changez la couleur « Primaire » dans le design system, tous les boutons, fonds et textes qui l’utilisent changent aussitôt, sur toutes les pages.
+An element that uses a token does not contain the value, but a reference: change the "Primary" color in the design system, and every button, background and text that uses it changes at once, on every page.
 
-Ouvrez-le avec l’icône **Design system** (la palette) de la barre d’outils. Il prend la place de l’inspecteur ; un second clic sur l’icône rend l’inspecteur.
+Open it with the **Design system** icon (the palette) of the toolbar. It takes the inspector's place; a second click on the icon brings the inspector back.
 
-![Le panneau Design system du modèle Atelier Nord](images/design-system.png)
+![The Design system panel of the Atelier Nord template](images/design-system.png)
 
-## Couleurs
+## Colors
 
-Chaque couleur a un **nuancier** et un **nom**. Nommez les couleurs par leur **rôle** plutôt que par leur teinte : « Primaire », « Accent », « Texte », « Fond clair » restent justes le jour où la charte change, « Vert » non.
+Each color has a **swatch** and a **name**. Name colors by their **role** rather than their hue: "Primary", "Accent", "Text", "Light background" stay right the day the brand guidelines change, "Green" does not.
 
-Pour l’utiliser, dans l’inspecteur d’un élément, choisissez le nom de la couleur dans la liste à côté du nuancier (**Couleur du texte**, **Couleur de fond**).
+To use it, in an element's inspector, choose the color's name in the list next to the swatch (**Text color**, **Background color**).
 
-> Vérifiez le **contraste** entre texte et fond : au moins 4,5:1 pour un texte courant (critère d’accessibilité WCAG). Le Studio ne le mesure pas encore ; un outil comme le *Contrast Checker* de WebAIM le fait en ligne.
+> Check the **contrast** between text and background: at least 4.5:1 for body text (WCAG accessibility criterion). The Studio does not measure it yet; a tool such as WebAIM's *Contrast Checker* does it online.
 
-## Tailles : espacements, arrondis, largeurs, tailles de police
+## Sizes: spacing, radii, widths, font sizes
 
-Quatre familles de tailles :
+Four families of sizes:
 
-| Famille | Pour |
+| Family | For |
 |---|---|
-| **Espacements** | Paddings, marges, espacements (gap) : « S », « M », « L », « Section »… |
-| **Arrondis** | Arrondi des boutons, cartes, images |
-| **Largeurs maximales** | Largeur du contenu : « Texte » (700 px), « Page » (1120 px)… |
-| **Tailles de police** | Tailles de texte hors styles de texte |
+| **Spacing** | Paddings, margins, spacing (gap): "S", "M", "L", "Section"… |
+| **Radii** | Radius of buttons, cards, images |
+| **Maximum widths** | Width of the content: "Text" (700 px), "Page" (1120 px)… |
+| **Font sizes** | Text sizes outside text styles |
 
-Une taille a une valeur de **Base** et, si besoin, une valeur par **breakpoint** (Tablette, Mobile). Un token « Section » à 80 px en base et 40 px en mobile règle d’un coup l’espacement de toutes les sections sur mobile, sans toucher aux pages.
+A size has a **Base** value and, if needed, a value per **breakpoint** (Tablet, Mobile). A "Section" token at 80 px at the base and 40 px on mobile sets the spacing of every section on mobile at once, without touching the pages.
 
-Pour utiliser une taille, dans un champ de dimension de l’inspecteur, ouvrez la liste des **unités** : les tokens de taille y figurent, dans le groupe **Tokens**.
+To use a size, in a dimension field of the inspector, open the list of **units**: the size tokens are there, in the **Tokens** group.
 
-## Polices
+## Fonts
 
-Une police du design system est une **liste de familles, par ordre de préférence**, par exemple `Lora, Georgia, serif` : le navigateur utilise la première qu’il trouve. Pour que le site s’affiche partout avec la police de la charte, **importez-la** : ses fichiers sont alors livrés avec le site.
+A design system font is a **list of families, in order of preference**, for instance `Lora, Georgia, serif`: the browser uses the first one it finds. For the site to show everywhere with the font of the brand guidelines, **import it**: its files are then delivered with the site.
 
-### Le catalogue de polices
+### The font catalog
 
-Le bouton **Catalogue de polices…**, sous la section **Polices**, propose 25 polices libres parmi les plus utilisées sur le web : Inter, Roboto, Open Sans, Montserrat, Lato, Poppins, Raleway, Nunito, Playfair Display, Merriweather, Lora, Source Serif…
+The **Font catalog…** button, under the **Fonts** section, offers 25 free fonts among the most used on the web: Inter, Roboto, Open Sans, Montserrat, Lato, Poppins, Raleway, Nunito, Playfair Display, Merriweather, Lora, Source Serif…
 
-![Le catalogue de polices : chaque police sur une phrase d’exemple](images/catalogue-polices.png)
+![The font catalog: each font on a sample sentence](images/font-catalog.png)
 
-1. Ouvrez le catalogue : chaque police est montrée sur une phrase d’exemple.
-2. Cliquez sur **Ajouter** : les fichiers de la police entrent dans la médiathèque du projet, et une police du même nom est créée dans le design system (par exemple `Inter, sans-serif`).
-3. Utilisez-la dans vos **styles de texte** ou dans le champ **Police** de l’inspecteur.
+1. Open the catalog: each font is shown on a sample sentence.
+2. Click **Add**: the font's files enter the project's media library, and a font of the same name is created in the design system (for instance `Inter, sans-serif`).
+3. Use it in your **text styles** or in the **Font** field of the inspector.
 
-Ces polices sont **libres** (licence SIL Open Font License, ou Apache pour Roboto Slab) : on peut les utiliser sur les sites des clients sans rien payer. La plupart sont **variables** : un seul fichier couvre toutes les graisses, de la plus fine à la plus grasse.
+These fonts are **free** (SIL Open Font License, or Apache for Roboto Slab): they can be used on clients' sites without paying anything. Most are **variable**: a single file covers every weight, from the thinnest to the boldest.
 
-### Importer une police de la charte
+### Importing a brand font
 
-Pour une police qui n’est pas dans le catalogue, importez son fichier **WOFF2** dans la **médiathèque** (bouton **Importer**). Le Studio lit la famille, la graisse et le style dans le nom du fichier (`Marque-BoldItalic.woff2` donne « Marque », 700, italique) ; corrigez-les dans la fiche du média si besoin. Importez un fichier par graisse et par style utilisés (ou un seul fichier pour une police variable), puis écrivez le nom de la famille **en tête** d’une police du design system : `Marque, Helvetica, sans-serif`.
+For a font that is not in the catalog, import its **WOFF2** file into the **media library** (**Import** button). The Studio reads the family, the weight and the style from the file name (`Brand-BoldItalic.woff2` gives "Brand", 700, italic); correct them in the media file's details if needed. Import one file per weight and style used (or a single file for a variable font), then write the family name **at the head** of a design system font: `Brand, Helvetica, sans-serif`.
 
-> **Licence.** Une police de marque achetée pour la bureautique n’autorise pas toujours l’usage sur un site web. Vérifiez que la licence couvre le **web** (« webfont » ou « self-hosting ») avant d’importer le fichier. Les polices de Google Fonts, de Fontshare ou de la Velvetyne sont libres, et souvent disponibles en WOFF2.
+> **License.** A brand font bought for office use does not always allow use on a website. Check that the license covers the **web** ("webfont" or "self-hosting") before importing the file. The fonts of Google Fonts, Fontshare or Velvetyne are free, and often available as WOFF2.
 
-> **Pourquoi pas Google Fonts en ligne ?** Charger une police depuis les serveurs de Google transmet l’adresse IP de chaque visiteur à Google, aux États-Unis : depuis l’arrêt Schrems II, c’est un risque RGPD pour vos clients. Les polices importées sont servies par le site lui-même, sans aucun appel extérieur.
+> **Why not Google Fonts online?** Loading a font from Google's servers sends each visitor's IP address to Google, in the United States: since the Schrems II ruling, it is a GDPR risk for European clients. Imported fonts are served by the site itself, without any outside call.
 
-### Les polices de repli
+### Fallback fonts
 
-Terminez toujours une pile par une famille générique (`serif`, `sans-serif`, `monospace`) : elle s’affiche si la police principale manque ou n’est pas encore chargée. Sans police importée, seules les polices présentes **sur l’appareil du visiteur** s’affichent ; quelques piles système sûres :
+Always end a stack with a generic family (`serif`, `sans-serif`, `monospace`): it shows if the main font is missing or not loaded yet. Without an imported font, only the fonts present **on the visitor's device** are shown; a few safe system stacks:
 
-| Style | Pile |
+| Style | Stack |
 |---|---|
-| Sans empattement, interface | `system-ui, -apple-system, Segoe UI, Roboto, sans-serif` |
-| Avec empattement, classique | `Georgia, Times New Roman, serif` |
-| Humaniste | `Optima, Candara, Noto Sans, sans-serif` |
-| Chasse fixe | `ui-monospace, Menlo, Consolas, monospace` |
+| Sans serif, interface | `system-ui, -apple-system, Segoe UI, Roboto, sans-serif` |
+| Serif, classic | `Georgia, Times New Roman, serif` |
+| Humanist | `Optima, Candara, Noto Sans, sans-serif` |
+| Monospace | `ui-monospace, Menlo, Consolas, monospace` |
 
-## Styles de texte
+## Text styles
 
-Un style de texte combine une **police**, une **graisse**, une **casse** (capitales…) et l’**italique**, et pour chaque breakpoint une **taille**, un **interligne** et un **espacement des lettres**. C’est la typographie du site, définie une fois.
+A text style combines a **font**, a **weight**, a **case** (capitals…) and **italics**, and for each breakpoint a **size**, a **line height** and a **letter spacing**. It is the site's typography, defined once.
 
-Sept styles ont un rôle particulier : **Texte courant** et **Titre 1** à **Titre 6** s’appliquent **automatiquement** aux paragraphes et aux titres du niveau correspondant, sans rien régler sur les éléments. Créez-les avec les boutons du même nom en bas de la section. Le modèle Atelier Nord définit par exemple « Titre 1 » : Georgia, 700, 52 px en base et 36 px en mobile.
+Seven styles have a special role: **Body text** and **Heading 1** to **Heading 6** apply **automatically** to paragraphs and to headings of the matching level, without setting anything on the elements. Create them with the buttons of the same name at the bottom of the section. The Atelier Nord template defines for instance "Heading 1": Georgia, 700, 52 px at the base and 36 px on mobile.
 
-**Style personnalisé** crée un style libre (« Chapô », « Légende », « Grand chiffre »…), à appliquer à un élément depuis l’inspecteur, section **Style**, liste **Style de texte**.
+**Custom style** creates a free style ("Lead", "Caption", "Big figure"…), to apply to an element from the inspector, **Style** section, **Text style** list.
 
-Un réglage fait directement sur un élément (une taille de police, par exemple) **l’emporte** sur son style de texte. Pour garder une typographie cohérente, préférez modifier le style plutôt que les éléments un par un.
+A setting made directly on an element (a font size, for instance) **wins** over its text style. To keep consistent typography, prefer changing the style rather than the elements one by one.
 
-## CSS du projet
+## Project CSS
 
-Pour un effet que l’inspecteur ne propose pas, le designer du projet peut écrire une feuille de style, dans la section **CSS du projet** du design system :
+For an effect the inspector does not offer, the project's designer can write a stylesheet, in the **Project CSS** section of the design system:
 
-1. Sur l’élément, dans l’inspecteur, section **Avancé**, donnez-lui une ou plusieurs **Classes CSS**, par exemple `carte-relief` : des minuscules, des chiffres et des tirets, sans le préfixe `ns-`, réservé au Studio.
-2. Dans **CSS du projet**, écrivez la règle :
+1. On the element, in the inspector, **Advanced** section, give it one or more **CSS classes**, for instance `raised-card`: lowercase letters, digits and hyphens, without the `ns-` prefix, reserved for the Studio.
+2. In **Project CSS**, write the rule:
 
 ```css
-.carte-relief {
+.raised-card {
   border-left: 6px solid var(--ns-color-primary);
   transition: transform .3s;
 }
-.carte-relief:hover { transform: translateY(-4px); }
+.raised-card:hover { transform: translateY(-4px); }
 @media (prefers-reduced-motion: reduce) {
-  .carte-relief { transition: none; }
+  .raised-card { transition: none; }
 }
 ```
 
-L’éditeur colore la syntaxe (sélecteurs, propriétés, valeurs, chaînes, commentaires) et le canvas applique la feuille en direct. Elle **l’emporte** sur les réglages de l’inspecteur. Les tokens s’utilisent par leurs variables (`var(--ns-color-primary)`, liste dans le README de l’export).
+The editor highlights the syntax (selectors, properties, values, strings, comments) and the canvas applies the stylesheet live. It **wins** over the inspector's settings. Tokens are used through their variables (`var(--ns-color-primary)`, listed in the export's README).
 
-- **Sont admis** : les règles ordinaires, `@media`, `@supports`, `@container` et `@keyframes`. Les images viennent de la médiathèque, avec la liste **Insérer une image de la médiathèque…**, qui écrit `url("ns-asset:…")`.
-- **Sont refusés** : `@import`, `@font-face` (passez par les polices importées), les adresses externes et tout ce qui pourrait exécuter du code. L’erreur est indiquée à la ligne près ; tant qu’elle n’est pas corrigée, la dernière version valide reste appliquée.
-- **Avertissements** (la feuille s’applique quand même) : contour de focus supprimé sans règle `:focus-visible`, contenu masqué hors media query, animation sans règle `prefers-reduced-motion`, `!important`, et règles visant les classes internes `ns-…`. Ces classes changent d’une version du Studio à l’autre : visez vos propres classes.
+- **Allowed**: ordinary rules, `@media`, `@supports`, `@container` and `@keyframes`. Images come from the media library, with the **Insert an image from the media library…** list, which writes `url("ns-asset:…")`.
+- **Refused**: `@import`, `@font-face` (use imported fonts), external addresses and anything that could run code. The error is reported to the line; until it is fixed, the last valid version stays applied.
+- **Warnings** (the stylesheet still applies): focus outline removed without a `:focus-visible` rule, content hidden outside a media query, animation without a `prefers-reduced-motion` rule, `!important`, and rules targeting the internal `ns-…` classes. These classes change from one version of the Studio to the next: target your own classes.
 
-Réservez cette feuille aux vrais besoins : un réglage de l’inspecteur reste plus simple à maintenir et vérifié par le Studio.
+Keep this stylesheet for real needs: an inspector setting stays simpler to maintain and is checked by the Studio.
 
-## Modifier et supprimer un token
+## Changing and deleting a token
 
-- Une modification s’applique **immédiatement à tout le site** et s’annule avec <kbd>⌘</kbd> <kbd>Z</kbd>, comme toute action.
-- Renommer un token ne casse rien : les éléments le désignent par un identifiant interne, pas par son nom.
-- Un token **utilisé** ne peut pas être supprimé : le Studio indique combien d’éléments ou de styles s’en servent. Remplacez-le d’abord sur ces éléments.
+- A change applies **immediately to the whole site** and is undone with <kbd>⌘</kbd> <kbd>Z</kbd>, like any action.
+- Renaming a token breaks nothing: elements point to it by an internal id, not by its name.
+- A **used** token cannot be deleted: the Studio says how many elements or styles use it. Replace it on these elements first.
 
-## Méthode conseillée
+## Advised method
 
-1. **Avant de construire les pages**, posez la charte : 3 à 6 couleurs, une ou deux polices, les styles Texte courant, Titre 1, Titre 2 et Titre 3 (avec leurs tailles mobiles), deux ou trois espacements.
-2. **En construisant**, utilisez les tokens plutôt que des valeurs personnalisées.
-3. **Pour une variante de charte** (le même site pour un autre client), dupliquez le projet depuis l’écran Projets et modifiez seulement le design system.
+1. **Before building the pages**, set the brand guidelines: 3 to 6 colors, one or two fonts, the Body text, Heading 1, Heading 2 and Heading 3 styles (with their mobile sizes), two or three spacings.
+2. **While building**, use tokens rather than custom values.
+3. **For a variant of the guidelines** (the same site for another client), duplicate the project from the Projects screen and change only the design system.

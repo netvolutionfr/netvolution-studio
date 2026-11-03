@@ -32,7 +32,7 @@ Un composant réutilisable est une section que vous concevez **une fois** et pla
 2. Dans l’inspecteur, cliquez sur l’icône **Créer un composant réutilisable** (parmi les actions en haut).
 3. Donnez-lui un **Nom**, une **Catégorie** et, si vous voulez, une **Description**, puis **Créer**.
 
-![La création d’un composant réutilisable](images/creer-composant.png)
+![La création d’un composant réutilisable](images/create-component.png)
 
 L’élément devient la **première instance** du composant. Le composant apparaît dans l’onglet **Sections** (rubrique « Composants du projet ») et dans le panneau **Pages** (« Composants partagés »).
 
@@ -72,7 +72,7 @@ L’icône **Détacher (copie indépendante)** coupe le lien : l’instance devi
 
 ## Les modèles de site
 
-Un modèle de site est un **projet complet** (pages, header et footer, menus, design system, médias, composants) qui sert de point de départ à de nouveaux projets. Trois modèles sont fournis avec le Studio, dans la liste **Modèle** de l’écran Projets (groupe « Sites complets ») :
+Un modèle de site est un **projet complet** (pages, header et footer, menus, design system, médias, composants) qui sert de point de départ à de nouveaux projets. Trois modèles sont fournis avec le Studio, en français et en anglais, dans la liste **Modèle** de l’écran Projets (groupe « Sites complets ») :
 
 | Modèle | Style | Pages |
 |---|---|---|
@@ -80,7 +80,7 @@ Un modèle de site est un **projet complet** (pages, header et footer, menus, de
 | **Studio Orbe — agence créative** | Sombre et graphique : Space Grotesk, dégradés, grilles animées | Accueil, L’agence, Expertises, Projets, Contact |
 | **Cabinet Valéor — conseil** | Clair et éditorial : Fraunces, vert sapin et laiton ; adapté à un cabinet de conseil, d’avocats ou d’architectes | Accueil, Le cabinet, Expertises, Honoraires, Contact |
 
-**Studio Orbe** et **Cabinet Valéor** existent aussi en anglais (« Studio Orbe — creative agency », « Valéor Partners — consulting ») : un site en anglais, adresses des pages comprises. La liste indique la langue d’un modèle quand ce n’est pas celle de l’interface.
+Les trois modèles existent aussi en anglais (« Atelier Nord — showcase website », « Studio Orbe — creative agency », « Valéor Partners — consulting ») : un site en anglais, adresses des pages comprises. La liste indique la langue d’un modèle quand ce n’est pas celle de l’interface.
 
 Les textes, coordonnées et visuels de ces modèles sont fictifs : remplacez-les par ceux de votre client. Leurs visuels sont des illustrations générées, libres de droits ; leurs polices viennent du catalogue et sont déjà dans la médiathèque. Étudier comment ils sont construits (arborescence, design system, animations) est aussi une bonne façon d’apprendre le Studio.
 

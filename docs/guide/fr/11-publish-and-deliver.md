@@ -23,7 +23,7 @@ Les contrôles du Studio vérifient une bonne partie de cette liste, pas toute :
 3. Cochez **Construire aussi le site statique** : c’est lui que l’on met en ligne. La construction prend une à quelques minutes.
 4. Cliquez sur **Exporter**.
 
-![Le résultat d’un export : les sources Astro, avec leur lien de téléchargement](images/export-resultat.png)
+![Le résultat d’un export : les sources Astro, avec leur lien de téléchargement](images/export-result.png)
 
 Le résultat propose un ou deux liens **Télécharger (.tar.gz)** :
 
@@ -39,7 +39,7 @@ Ignorez le chemin affiché à côté (il désigne le dossier sur le serveur du S
 - **macOS** : double-cliquez sur le fichier.
 - **Windows 11** : clic droit > **Extraire tout** ; sur une version plus ancienne, avec [7-Zip](https://www.7-zip.org).
 
-L’archive contient un dossier au nom du projet et de la date de l’export (`…-statique` pour le site statique).
+L’archive contient un dossier au nom du projet et de la date de l’export (`…-static` pour le site statique).
 
 ## Mettre en ligne
 
@@ -49,12 +49,12 @@ Le site statique se dépose **à la racine** d’un domaine ou d’un sous-domai
 
 1. Connectez-vous en **FTP** ou **SFTP** (FileZilla, Cyberduck, Transmit).
 2. Ouvrez le dossier racine du site (`www`, `public_html` ou `htdocs` selon l’hébergeur).
-3. **Supprimez** l’ancien contenu s’il y en a un, puis copiez **le contenu** du dossier `…-statique` (les fichiers, pas le dossier lui-même).
+3. **Supprimez** l’ancien contenu s’il y en a un, puis copiez **le contenu** du dossier `…-static` (les fichiers, pas le dossier lui-même).
 4. Déclarez la page d’erreur : créez ou complétez le fichier `.htaccess` à la racine avec la ligne `ErrorDocument 404 /404.html`.
 
 ### Sur Netlify ou Cloudflare Pages
 
-Glissez le dossier `…-statique` dans l’interface de déploiement. La page 404 est reconnue automatiquement.
+Glissez le dossier `…-static` dans l’interface de déploiement. La page 404 est reconnue automatiquement.
 
 ### Sur un serveur nginx
 
@@ -62,7 +62,7 @@ Copiez le contenu dans la racine du site (`root`) et ajoutez `error_page 404 /40
 
 ### Les redirections
 
-Si vous avez défini des **redirections** (chapitre [Le site](06-le-site.md)), le site statique contient déjà une page à chaque ancienne adresse qui mène vers une page du site, et cette page renvoie le visiteur vers la nouvelle. Une redirection vers une adresse extérieure, elle, n’existe que dans la configuration de l’hébergeur. Pour une vraie **redirection 301**, celle que Google comprend le mieux, ajoutez la configuration de l’hébergeur. Elle se trouve dans les **sources Astro**, dossier `redirects/` :
+Si vous avez défini des **redirections** (chapitre [Le site](06-the-site.md)), le site statique contient déjà une page à chaque ancienne adresse qui mène vers une page du site, et cette page renvoie le visiteur vers la nouvelle. Une redirection vers une adresse extérieure, elle, n’existe que dans la configuration de l’hébergeur. Pour une vraie **redirection 301**, celle que Google comprend le mieux, ajoutez la configuration de l’hébergeur. Elle se trouve dans les **sources Astro**, dossier `redirects/` :
 
 | Hébergement | Fichier | Où le mettre |
 |---|---|---|

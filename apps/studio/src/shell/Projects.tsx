@@ -15,7 +15,7 @@ import {
   type ProjectSummary,
   type TemplateSummary,
 } from './api.ts';
-import { LanguageMenu } from './LanguageMenu.tsx';
+import { guideUrl, LanguageMenu } from './LanguageMenu.tsx';
 import { templates } from './store.ts';
 
 export const projectHash = (id: string, pageId?: string) => `#/p/${id}${pageId ? `/${pageId}` : ''}`;
@@ -96,11 +96,11 @@ export function Projects() {
         </div>
         <p className="projects-help">
           {t('projects.firstTime')}{' '}
-          <a href="./guide/01-prise-en-main/" target="_blank" rel="noopener">
+          <a href={guideUrl('01-getting-started/')} target="_blank" rel="noopener">
             {t('projects.followTutorial')}
           </a>{' '}
           {t('projects.orOpenThe')}{' '}
-          <a href="./guide/" target="_blank" rel="noopener">
+          <a href={guideUrl()} target="_blank" rel="noopener">
             {t('projects.userGuide')}
           </a>
           .

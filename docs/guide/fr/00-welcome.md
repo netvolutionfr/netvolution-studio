@@ -33,4 +33,4 @@ Une fois connecté, toute l’équipe partage les mêmes projets : il n’y a pa
 
 ## Et maintenant ?
 
-Le plus simple est de suivre la [prise en main](01-prise-en-main.md) : en vingt minutes, vous aurez créé, modifié et exporté un site complet.
+Le plus simple est de suivre la [prise en main](01-getting-started.md) : en vingt minutes, vous aurez créé, modifié et exporté un site complet.

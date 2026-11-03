@@ -9,7 +9,7 @@ Le Studio garantit un code propre, des pages légères et une accessibilité de 
 Un site accessible est utilisable au clavier, avec un lecteur d’écran, en zoomant, par des personnes âgées ou en situation de handicap. C’est aussi une obligation légale pour de nombreux sites, et un atout pour le référencement.
 
 - **Un titre H1 par page, puis H2, H3 dans l’ordre**, sans sauter de niveau. Le niveau dit la structure ; la taille se règle dans le style. Les contrôles avant export signalent les écarts.
-- **Un texte alternatif utile** pour chaque image qui porte du sens ; **Image décorative** pour les autres (chapitre [Les médias](07-les-medias.md)).
+- **Un texte alternatif utile** pour chaque image qui porte du sens ; **Image décorative** pour les autres (chapitre [Les médias](07-media.md)).
 - **Du contraste** : 4,5:1 au moins entre un texte courant et son fond, 3:1 pour un grand titre. Attention aux textes clairs sur des photos : ajoutez un voile (dégradé).
 - **Des liens explicites** : « Voir nos tarifs » plutôt que « Cliquez ici ». Plusieurs « En savoir plus » sur une page se distinguent mal pour un lecteur d’écran : préférez « Découvrir le conseil », « Découvrir la création »…
 - **Pas d’information portée par la seule couleur** (« les champs en rouge ») ni par la seule position (« le bouton à droite »).
@@ -22,7 +22,7 @@ Le Studio vérifie automatiquement une partie de ces règles (avec l’outil axe
 
 ## Référencement (SEO)
 
-- **Un titre SEO et une meta description par page**, uniques, qui donnent envie de cliquer (chapitre [Le site](06-le-site.md)).
+- **Un titre SEO et une meta description par page**, uniques, qui donnent envie de cliquer (chapitre [Le site](06-the-site.md)).
 - **Des adresses courtes et parlantes** : `/tarifs/`, `/services/creation-site/`. Ne les changez plus une fois le site en ligne, ou ajoutez une redirection.
 - **L’URL canonique du site** renseignée : elle active le sitemap.
 - **Des titres qui reprennent les mots que cherchent les clients** (« Création de site vitrine à Lille »), sans bourrage de mots-clés.
