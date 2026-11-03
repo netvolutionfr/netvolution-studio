@@ -15,6 +15,7 @@ import {
   type StyleProperty,
   type TokenRef,
   type Tokens,
+  t,
 } from '@ns/core';
 import {
   ArrowDown,
@@ -50,10 +51,10 @@ type Control =
   | { kind: 'backgroundImage' };
 
 const ALIGN = [
-  ['stretch', 'Étirer'],
-  ['start', 'Début'],
-  ['center', 'Centre'],
-  ['end', 'Fin'],
+  ['stretch', t('style.v.stretch')],
+  ['start', t('style.v.start')],
+  ['center', t('style.v.center')],
+  ['end', t('style.v.end')],
 ] as const;
 const side = (prefix: string, auto?: boolean) => ({
   label: prefix,
@@ -63,168 +64,176 @@ const side = (prefix: string, auto?: boolean) => ({
 
 /** Shared style controls (VE-06 "propriétés communes mutualisées"); labels are UI concerns. */
 export const STYLE_FIELDS: { [K in StyleProperty]-?: { label: string } & Control } = {
-  paddingTop: side('Padding haut'),
-  paddingRight: side('Padding droite'),
-  paddingBottom: side('Padding bas'),
-  paddingLeft: side('Padding gauche'),
-  marginTop: side('Marge haut', true),
-  marginRight: side('Marge droite', true),
-  marginBottom: side('Marge bas', true),
-  marginLeft: side('Marge gauche', true),
-  width: { label: 'Largeur', kind: 'length', auto: true, slider: 1600 },
-  maxWidth: { label: 'Largeur max.', kind: 'length', slider: 1600 },
-  height: { label: 'Hauteur', kind: 'length', auto: true, slider: 800 },
-  minHeight: { label: 'Hauteur min.', kind: 'length', slider: 800 },
+  paddingTop: side(t('style.paddingTop')),
+  paddingRight: side(t('style.paddingRight')),
+  paddingBottom: side(t('style.paddingBottom')),
+  paddingLeft: side(t('style.paddingLeft')),
+  marginTop: side(t('style.marginTop'), true),
+  marginRight: side(t('style.marginRight'), true),
+  marginBottom: side(t('style.marginBottom'), true),
+  marginLeft: side(t('style.marginLeft'), true),
+  width: { label: t('style.width'), kind: 'length', auto: true, slider: 1600 },
+  maxWidth: { label: t('style.maxWidth'), kind: 'length', slider: 1600 },
+  height: { label: t('style.height'), kind: 'length', auto: true, slider: 800 },
+  minHeight: { label: t('style.minHeight'), kind: 'length', slider: 800 },
   direction: {
-    label: 'Direction',
+    label: t('style.direction'),
     kind: 'segmented',
     options: [
-      ['row', 'Ligne', ArrowRight],
-      ['column', 'Colonne', ArrowDown],
-      ['row-reverse', 'Ligne inversée', ArrowLeft],
-      ['column-reverse', 'Colonne inversée', ArrowUp],
+      ['row', t('style.v.row'), ArrowRight],
+      ['column', t('style.v.column'), ArrowDown],
+      ['row-reverse', t('style.v.rowReverse'), ArrowLeft],
+      ['column-reverse', t('style.v.columnReverse'), ArrowUp],
     ],
   },
   justify: {
-    label: 'Distribution',
+    label: t('style.justify'),
     kind: 'select',
     options: [
-      ['start', 'Début'],
-      ['center', 'Centre'],
-      ['end', 'Fin'],
-      ['space-between', 'Espacé (entre)'],
-      ['space-around', 'Espacé (autour)'],
-      ['space-evenly', 'Espacé (égal)'],
+      ['start', t('style.v.start')],
+      ['center', t('style.v.center')],
+      ['end', t('style.v.end')],
+      ['space-between', t('style.v.spaceBetween')],
+      ['space-around', t('style.v.spaceAround')],
+      ['space-evenly', t('style.v.spaceEvenly')],
     ],
   },
-  align: { label: 'Alignement', kind: 'select', options: [...ALIGN, ['baseline', 'Ligne de base']] },
-  wrap: { label: 'Retour à la ligne', kind: 'boolean' },
-  gap: { label: 'Espacement (gap)', kind: 'length', slider: 160 },
-  columns: { label: 'Colonnes', kind: 'number', min: 1, max: 12, step: 1 },
-  grow: { label: 'Croissance (flex-grow)', kind: 'number', min: 0, max: 10, step: 1 },
-  basis: { label: 'Base (flex-basis)', kind: 'length', auto: true },
-  alignSelf: { label: 'Alignement propre', kind: 'select', options: [['auto', 'Auto'], ...ALIGN] },
-  textStyle: { label: 'Style de texte', kind: 'token', tokens: 'textStyles' },
-  fontFamily: { label: 'Police', kind: 'token', tokens: 'fonts' },
-  fontSize: { label: 'Taille de police', kind: 'length', slider: 120 },
+  align: {
+    label: t('style.align'),
+    kind: 'select',
+    options: [...ALIGN, ['baseline', t('style.v.baseline')]],
+  },
+  wrap: { label: t('style.wrap'), kind: 'boolean' },
+  gap: { label: t('style.gap'), kind: 'length', slider: 160 },
+  columns: { label: t('style.columns'), kind: 'number', min: 1, max: 12, step: 1 },
+  grow: { label: t('style.grow'), kind: 'number', min: 0, max: 10, step: 1 },
+  basis: { label: t('style.basis'), kind: 'length', auto: true },
+  alignSelf: {
+    label: t('style.alignSelf'),
+    kind: 'select',
+    options: [['auto', t('style.v.auto')], ...ALIGN],
+  },
+  textStyle: { label: t('style.textStyle'), kind: 'token', tokens: 'textStyles' },
+  fontFamily: { label: t('style.fontFamily'), kind: 'token', tokens: 'fonts' },
+  fontSize: { label: t('style.fontSize'), kind: 'length', slider: 120 },
   fontWeight: {
-    label: 'Graisse',
+    label: t('style.fontWeight'),
     kind: 'select',
     options: [100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) => [w, String(w)] as const),
   },
-  lineHeight: { label: 'Interligne', kind: 'number', min: 0.5, max: 4, step: 0.05 },
-  letterSpacing: { label: 'Espacement des lettres', kind: 'length', slider: 20 },
+  lineHeight: { label: t('style.lineHeight'), kind: 'number', min: 0.5, max: 4, step: 0.05 },
+  letterSpacing: { label: t('style.letterSpacing'), kind: 'length', slider: 20 },
   textTransform: {
-    label: 'Casse',
+    label: t('style.textTransform'),
     kind: 'select',
     options: [
-      ['none', 'Telle que saisie'],
-      ['uppercase', 'CAPITALES'],
-      ['lowercase', 'minuscules'],
-      ['capitalize', 'Initiales En Capitales'],
+      ['none', t('style.v.asTyped')],
+      ['uppercase', t('style.v.uppercase')],
+      ['lowercase', t('style.v.lowercase')],
+      ['capitalize', t('style.v.capitalize')],
     ],
   },
-  textGradient: { label: 'Texte en dégradé', kind: 'gradient' },
+  textGradient: { label: t('style.textGradient'), kind: 'gradient' },
   fontStyle: {
-    label: 'Style',
+    label: t('style.fontStyle'),
     kind: 'select',
     options: [
-      ['normal', 'Normal'],
-      ['italic', 'Italique'],
+      ['normal', t('style.v.normal')],
+      ['italic', t('style.v.italic')],
     ],
   },
   textAlign: {
-    label: 'Alignement du texte',
+    label: t('style.textAlign'),
     kind: 'segmented',
     options: [
-      ['start', 'Début', TextAlignStart],
-      ['center', 'Centre', TextAlignCenter],
-      ['end', 'Fin', TextAlignEnd],
-      ['justify', 'Justifié', TextAlignJustify],
+      ['start', t('style.v.start'), TextAlignStart],
+      ['center', t('style.v.center'), TextAlignCenter],
+      ['end', t('style.v.end'), TextAlignEnd],
+      ['justify', t('style.v.justify'), TextAlignJustify],
     ],
   },
-  color: { label: 'Couleur du texte', kind: 'color' },
-  backgroundColor: { label: 'Couleur de fond', kind: 'color' },
-  gradient: { label: 'Dégradé', kind: 'gradient' },
-  backgroundImage: { label: 'Image de fond', kind: 'backgroundImage' },
-  radius: { label: 'Arrondi', kind: 'length', slider: 80 },
-  borderWidth: { label: 'Bordure', kind: 'length', slider: 20 },
+  color: { label: t('style.color'), kind: 'color' },
+  backgroundColor: { label: t('style.backgroundColor'), kind: 'color' },
+  gradient: { label: t('style.gradient'), kind: 'gradient' },
+  backgroundImage: { label: t('style.backgroundImage'), kind: 'backgroundImage' },
+  radius: { label: t('style.radius'), kind: 'length', slider: 80 },
+  borderWidth: { label: t('style.borderWidth'), kind: 'length', slider: 20 },
   borderStyle: {
-    label: 'Style de bordure',
+    label: t('style.borderStyle'),
     kind: 'select',
     options: [
-      ['solid', 'Plein'],
-      ['dashed', 'Tirets'],
-      ['dotted', 'Pointillés'],
-      ['double', 'Double'],
-      ['none', 'Aucune'],
+      ['solid', t('style.v.solid')],
+      ['dashed', t('style.v.dashed')],
+      ['dotted', t('style.v.dotted')],
+      ['double', t('style.v.double')],
+      ['none', t('style.v.none')],
     ],
   },
-  borderColor: { label: 'Couleur de bordure', kind: 'color' },
-  shadow: { label: 'Ombre', kind: 'shadow' },
-  hidden: { label: 'Masquer sur ce breakpoint', kind: 'boolean' },
+  borderColor: { label: t('style.borderColor'), kind: 'color' },
+  shadow: { label: t('style.shadow'), kind: 'shadow' },
+  hidden: { label: t('style.hidden'), kind: 'boolean' },
   aspectRatio: {
-    label: 'Proportions',
+    label: t('style.aspectRatio'),
     kind: 'select',
     options: [
-      ['1/1', 'Carré (1:1)'],
+      ['1/1', t('style.v.square')],
       ['4/3', '4:3'],
       ['3/2', '3:2'],
       ['16/9', '16:9'],
       ['21/9', '21:9'],
-      ['3/4', 'Portrait 3:4'],
-      ['2/3', 'Portrait 2:3'],
-      ['9/16', 'Portrait 9:16'],
+      ['3/4', t('style.v.portrait34')],
+      ['2/3', t('style.v.portrait23')],
+      ['9/16', t('style.v.portrait916')],
     ],
   },
   objectPosition: {
-    label: 'Cadrage de l’image',
+    label: t('style.objectPosition'),
     kind: 'select',
     options: [
-      ['center', 'Centre'],
-      ['top', 'Haut'],
-      ['bottom', 'Bas'],
-      ['left', 'Gauche'],
-      ['right', 'Droite'],
+      ['center', t('style.v.center')],
+      ['top', t('style.v.top')],
+      ['bottom', t('style.v.bottom')],
+      ['left', t('style.v.left')],
+      ['right', t('style.v.right')],
     ],
   },
   position: {
-    label: 'Position',
+    label: t('style.position'),
     kind: 'select',
     options: [
-      ['static', 'Dans le flux'],
-      ['relative', 'Relative (repère pour les enfants)'],
-      ['absolute', 'Absolue (dans le parent positionné)'],
-      ['sticky', 'Collante (reste visible au défilement)'],
+      ['static', t('style.v.static')],
+      ['relative', t('style.v.relative')],
+      ['absolute', t('style.v.absolute')],
+      ['sticky', t('style.v.sticky')],
     ],
   },
-  top: side('Haut', true),
-  right: side('Droite', true),
-  bottom: side('Bas', true),
-  left: side('Gauche', true),
-  zIndex: { label: 'Plan (z-index)', kind: 'number', min: -10, max: 1000, step: 1 },
+  top: side(t('style.v.top'), true),
+  right: side(t('style.v.right'), true),
+  bottom: side(t('style.v.bottom'), true),
+  left: side(t('style.v.left'), true),
+  zIndex: { label: t('style.zIndex'), kind: 'number', min: -10, max: 1000, step: 1 },
   overflow: {
-    label: 'Débordement',
+    label: t('style.overflow'),
     kind: 'select',
     options: [
-      ['visible', 'Visible'],
-      ['hidden', 'Masqué'],
-      ['clip', 'Rogné'],
-      ['auto', 'Défilement si besoin'],
+      ['visible', t('style.v.visible')],
+      ['hidden', t('style.v.hidden')],
+      ['clip', t('style.v.clip')],
+      ['auto', t('style.v.scroll')],
     ],
   },
-  translate: { label: 'Décalage', kind: 'translate' },
-  rotate: { label: 'Rotation (°)', kind: 'number', min: -360, max: 360, step: 1 },
-  scale: { label: 'Échelle', kind: 'number', min: 0, max: 10, step: 0.05 },
+  translate: { label: t('style.translate'), kind: 'translate' },
+  rotate: { label: t('style.rotate'), kind: 'number', min: -360, max: 360, step: 1 },
+  scale: { label: t('style.scale'), kind: 'number', min: 0, max: 10, step: 0.05 },
 };
 
 type SectionSpec = { title: string; groups: StyleGroup[] };
 const SECTIONS: SectionSpec[] = [
-  { title: 'Mise en page', groups: ['flex', 'grid', 'item', 'size'] },
-  { title: 'Espacements', groups: ['spacing'] },
-  { title: 'Style', groups: ['typography', 'background', 'media'] },
-  { title: 'Position et effets', groups: ['position', 'effects'] },
-  { title: 'Avancé', groups: ['visibility'] },
+  { title: t('style.sections.layout'), groups: ['flex', 'grid', 'item', 'size'] },
+  { title: t('style.sections.spacing'), groups: ['spacing'] },
+  { title: t('style.sections.style'), groups: ['typography', 'background', 'media'] },
+  { title: t('style.sections.position'), groups: ['position', 'effects'] },
+  { title: t('style.sections.advanced'), groups: ['visibility'] },
 ];
 
 /** Collapsible inspector section (native details/summary: keyboard and screen readers for free). */
@@ -266,10 +275,11 @@ export function StyleSections(props: {
             groups.filter((g) => allowed.has(g)).flatMap((g) => STYLE_GROUPS[g] as readonly StyleProperty[]),
           ),
         ];
-        if (!keys.length && title !== 'Avancé') return null;
+        const advanced = groups.includes('visibility');
+        if (!keys.length && !advanced) return null;
         return (
           <Section key={title} title={title}>
-            <div className={title === 'Espacements' ? 'spacing-grid' : 'field-list'}>
+            <div className={groups.includes('spacing') ? 'spacing-grid' : 'field-list'}>
               {keys.map((k) => (
                 <StyleRow
                   key={`${props.node.id}-${k}`}
@@ -280,7 +290,7 @@ export function StyleSections(props: {
                 />
               ))}
             </div>
-            {title === 'Avancé' && props.children}
+            {advanced && props.children}
           </Section>
         );
       })}
@@ -317,14 +327,14 @@ function StyleRow(props: { doc: Site; node: DocNode; breakpoint: string; prop: S
     <IconButton
       size="sm"
       icon={RotateCcw}
-      label={`Réinitialiser ${spec.label}`}
-      tooltip="Revenir à la valeur héritée"
+      label={t('style.reset', { label: spec.label })}
+      tooltip={t('style.resetTip')}
       className="field-reset"
       onClick={() =>
         store.dispatch(
           'updateNodeStyle',
           { id: node.id, breakpoint, unset: [prop] },
-          `Réinitialiser ${spec.label}`,
+          t('style.reset', { label: spec.label }),
         )
       }
     />
@@ -468,9 +478,9 @@ function StyleRow(props: { doc: Site; node: DocNode; breakpoint: string; prop: S
             }
           >
             <option value="">—</option>
-            {Object.entries(tokens[spec.tokens]).map(([tid, t]) => (
+            {Object.entries(tokens[spec.tokens]).map(([tid, token]) => (
               <option key={tid} value={tid}>
-                {t.label}
+                {token.label}
               </option>
             ))}
           </select>
@@ -499,10 +509,10 @@ function StyleRow(props: { doc: Site; node: DocNode; breakpoint: string; prop: S
                 set(e.target.value ? { token: e.target.value } : (ref?.value ?? toHex6(undefined)))
               }
             >
-              <option value="">{isTokenRef(value) || !value ? 'Personnalisée' : String(value)}</option>
-              {Object.entries(tokens.colors).map(([tid, t]) => (
+              <option value="">{isTokenRef(value) || !value ? t('style.custom') : String(value)}</option>
+              {Object.entries(tokens.colors).map(([tid, token]) => (
                 <option key={tid} value={tid}>
-                  {t.label}
+                  {token.label}
                 </option>
               ))}
             </select>
@@ -560,7 +570,7 @@ function LengthControl(props: {
         onBlur={tx.end}
       />
       <select
-        aria-label={`${props.label} (unité)`}
+        aria-label={t('style.unit', { label: props.label })}
         value={ref ? `token:${ref.token}` : value === 'auto' ? 'auto' : unit}
         onChange={(e) => {
           const v = e.target.value;
@@ -574,10 +584,10 @@ function LengthControl(props: {
         ))}
         {props.auto && <option value="auto">auto</option>}
         {Object.keys(props.sizes).length > 0 && (
-          <optgroup label="Tokens">
-            {Object.entries(props.sizes).map(([tid, t]) => (
+          <optgroup label={t('style.tokens')}>
+            {Object.entries(props.sizes).map(([tid, token]) => (
               <option key={tid} value={`token:${tid}`}>
-                {t.label}
+                {token.label}
               </option>
             ))}
           </optgroup>
@@ -588,9 +598,17 @@ function LengthControl(props: {
 }
 
 const SHADOWS: [string, string, Shadow][] = [
-  ['soft', 'Douce', { x: px(0), y: px(1), blur: px(3), spread: px(0), color: '#0000001a' }],
-  ['medium', 'Moyenne', { x: px(0), y: px(4), blur: px(12), spread: px(-2), color: '#00000026' }],
-  ['strong', 'Forte', { x: px(0), y: px(12), blur: px(32), spread: px(-4), color: '#00000040' }],
+  ['soft', t('style.shadows.soft'), { x: px(0), y: px(1), blur: px(3), spread: px(0), color: '#0000001a' }],
+  [
+    'medium',
+    t('style.shadows.medium'),
+    { x: px(0), y: px(4), blur: px(12), spread: px(-2), color: '#00000026' },
+  ],
+  [
+    'strong',
+    t('style.shadows.strong'),
+    { x: px(0), y: px(12), blur: px(32), spread: px(-4), color: '#00000040' },
+  ],
 ];
 function px(value: number): Length {
   return { value, unit: 'px' };
@@ -633,7 +651,7 @@ function ShadowControl(props: {
   return (
     <div className="shadow">
       <select
-        aria-label="Ombre"
+        aria-label={t('style.shadow')}
         value={preset}
         onChange={(e) => {
           const v = e.target.value;
@@ -646,22 +664,22 @@ function ShadowControl(props: {
         }}
       >
         {preset === '' && <option value="">—</option>}
-        <option value="none">Aucune</option>
+        <option value="none">{t('style.v.none')}</option>
         {SHADOWS.map(([id, label]) => (
           <option key={id} value={id}>
             {label}
           </option>
         ))}
-        <option value="custom">Personnalisée</option>
+        <option value="custom">{t('style.custom')}</option>
       </select>
       {shadow && (
         <div className="shadow-grid">
           {number('X (px)', 'x')}
           {number('Y (px)', 'y')}
-          {number('Flou (px)', 'blur', 0)}
-          {number('Étendue (px)', 'spread')}
+          {number(t('style.blur'), 'blur', 0)}
+          {number(t('style.spread'), 'spread')}
           <label className="shadow-field">
-            <span>Couleur</span>
+            <span>{t('style.shadowColor')}</span>
             <input
               type="color"
               value={shadow.color.slice(0, 7)}
@@ -673,7 +691,7 @@ function ShadowControl(props: {
             />
           </label>
           <label className="shadow-field">
-            <span>Opacité (%)</span>
+            <span>{t('style.opacity')}</span>
             <input
               type="number"
               min={0}
@@ -696,7 +714,7 @@ function ShadowControl(props: {
               checked={shadow.inset === true}
               onChange={(e) => onChange({ ...shadow, inset: e.target.checked || undefined })}
             />
-            Intérieure
+            {t('style.inset')}
           </label>
         </div>
       )}
@@ -713,7 +731,7 @@ const withAlpha = (color: string, percent: number) =>
 const GRADIENTS: [string, string, Gradient][] = [
   [
     'veil',
-    'Voile sombre (sur une image)',
+    t('style.gradients.veil'),
     {
       kind: 'linear',
       angle: 180,
@@ -725,7 +743,7 @@ const GRADIENTS: [string, string, Gradient][] = [
   ],
   [
     'linear',
-    'Linéaire',
+    t('style.gradients.linear'),
     {
       kind: 'linear',
       angle: 135,
@@ -737,7 +755,7 @@ const GRADIENTS: [string, string, Gradient][] = [
   ],
   [
     'radial',
-    'Radial',
+    t('style.gradients.radial'),
     {
       kind: 'radial',
       angle: 0,
@@ -767,7 +785,7 @@ function GradientControl(props: {
   return (
     <div className="shadow">
       <select
-        aria-label="Dégradé"
+        aria-label={t('style.gradient')}
         value={value === 'none' ? 'none' : gradient ? gradient.kind : ''}
         onChange={(e) => {
           const v = e.target.value;
@@ -778,10 +796,8 @@ function GradientControl(props: {
         }}
       >
         {!value && <option value="">—</option>}
-        <option value="none">Aucun</option>
-        {gradient && (
-          <option value={gradient.kind}>{gradient.kind === 'linear' ? 'Linéaire' : 'Radial'}</option>
-        )}
+        <option value="none">{t('style.noneMasc')}</option>
+        {gradient && <option value={gradient.kind}>{t(`style.gradients.${gradient.kind}`)}</option>}
         {GRADIENTS.filter(([id]) => id !== gradient?.kind).map(([id, label]) => (
           <option key={id} value={id}>
             {label}
@@ -799,7 +815,7 @@ function GradientControl(props: {
           />
           {gradient.kind === 'linear' && (
             <label className="shadow-field">
-              <span>Angle (°)</span>
+              <span>{t('style.angle')}</span>
               <input
                 type="number"
                 min={0}
@@ -818,7 +834,7 @@ function GradientControl(props: {
             <div className="gradient-stop" key={i}>
               <input
                 type="color"
-                aria-label={`Couleur ${i + 1}`}
+                aria-label={t('style.stopColor', { n: i + 1 })}
                 value={stop.color.slice(0, 7)}
                 onInput={(e) =>
                   setStop(i, { color: `${(e.target as HTMLInputElement).value}${stop.color.slice(7)}` })
@@ -827,7 +843,7 @@ function GradientControl(props: {
                 onBlur={tx.end}
               />
               <label className="shadow-field">
-                <span>Opacité (%)</span>
+                <span>{t('style.opacity')}</span>
                 <input
                   type="number"
                   min={0}
@@ -841,7 +857,7 @@ function GradientControl(props: {
                 />
               </label>
               <label className="shadow-field">
-                <span>Position (%)</span>
+                <span>{t('style.stopPosition')}</span>
                 <input
                   type="number"
                   min={0}
@@ -857,7 +873,7 @@ function GradientControl(props: {
               <IconButton
                 size="sm"
                 icon={Trash2}
-                label={`Retirer la couleur ${i + 1}`}
+                label={t('style.removeStop', { n: i + 1 })}
                 disabled={gradient.stops.length <= 2}
                 onClick={() => onChange({ ...gradient, stops: gradient.stops.filter((_, j) => j !== i) })}
               />
@@ -874,7 +890,7 @@ function GradientControl(props: {
                 })
               }
             >
-              Ajouter une couleur
+              {t('style.addStop')}
             </Button>
           )}
         </>
@@ -884,16 +900,16 @@ function GradientControl(props: {
 }
 
 const SIZES = [
-  ['cover', 'Couvrir (recadrer)'],
-  ['contain', 'Contenir (image entière)'],
-  ['auto', 'Taille d’origine'],
+  ['cover', t('style.sizes.cover')],
+  ['contain', t('style.sizes.contain')],
+  ['auto', t('style.sizes.auto')],
 ] as const;
 const POSITIONS = [
-  ['center', 'Centre'],
-  ['top', 'Haut'],
-  ['bottom', 'Bas'],
-  ['left', 'Gauche'],
-  ['right', 'Droite'],
+  ['center', t('style.v.center')],
+  ['top', t('style.v.top')],
+  ['bottom', t('style.v.bottom')],
+  ['left', t('style.v.left')],
+  ['right', t('style.v.right')],
 ] as const;
 
 /** Background image (ADR-0017): an image of the media library, its fit and its position. */
@@ -908,7 +924,7 @@ function BackgroundImageControl(props: {
   return (
     <div className="shadow">
       <select
-        aria-label="Image de fond"
+        aria-label={t('style.backgroundImage')}
         value={value === 'none' ? 'none' : (image?.asset ?? '')}
         onChange={(e) => {
           const v = e.target.value;
@@ -917,18 +933,18 @@ function BackgroundImageControl(props: {
         }}
       >
         {!value && <option value="">—</option>}
-        <option value="none">Aucune</option>
+        <option value="none">{t('style.v.none')}</option>
         {pictures.map((a) => (
           <option key={a.id} value={a.id}>
             {a.name || a.file}
           </option>
         ))}
       </select>
-      {pictures.length === 0 && <p className="hint">Importez d’abord l’image dans la médiathèque.</p>}
+      {pictures.length === 0 && <p className="hint">{t('style.importFirst')}</p>}
       {image && (
         <div className="shadow-grid">
           <label className="shadow-field">
-            <span>Ajustement</span>
+            <span>{t('style.fit')}</span>
             <select
               value={image.size}
               onChange={(e) => onChange({ ...image, size: e.target.value as BackgroundImage['size'] })}
@@ -941,7 +957,7 @@ function BackgroundImageControl(props: {
             </select>
           </label>
           <label className="shadow-field">
-            <span>Position</span>
+            <span>{t('style.position')}</span>
             <select
               value={image.position}
               onChange={(e) =>

@@ -1,5 +1,5 @@
 import { registry, sections } from '@ns/components';
-import { insertionPoint, type Rect } from '@ns/core';
+import { insertionPoint, type Rect, t } from '@ns/core';
 import { LayoutTemplate, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { PRESET_ICONS, Segmented, Tip, typeIcon } from '../ui/index.ts';
@@ -8,7 +8,7 @@ import { SectionLibrary } from './SectionLibrary.tsx';
 import { useStore } from './store.ts';
 
 const TAB_KEY = 'ns.library-tab';
-const CATEGORIES = { layout: 'Structure', content: 'Contenu', media: 'Médias' } as const;
+const CATEGORIES = ['layout', 'content', 'media'] as const;
 
 export function Library(props: { rects: () => Record<string, Rect>; onDrag: (d: DragState | null) => void }) {
   const [tab, setTab] = useState<'components' | 'sections'>(() => {
@@ -31,11 +31,15 @@ export function Library(props: { rects: () => Record<string, Rect>; onDrag: (d: 
     const { doc, rootId, selection } = store.getState();
     const at = insertionPoint(doc, rootId, registry, selection, item.type);
     if (!at) return;
-    store.dispatch('insertTree', { ...at, tree: item.tree ?? { type: item.type } }, `Ajouter ${item.label}`);
+    store.dispatch(
+      'insertTree',
+      { ...at, tree: item.tree ?? { type: item.type } },
+      t('common.add', { label: item.label }),
+    );
   };
   const button = (item: DragItem, key: string, Icon: LucideIcon) => (
     <li key={key}>
-      <Tip content="Cliquer pour insérer après la sélection, ou glisser dans le canvas" side="right">
+      <Tip content={t('library.insertTip')} side="right">
         <button
           type="button"
           className="library-item"
@@ -50,16 +54,16 @@ export function Library(props: { rects: () => Record<string, Rect>; onDrag: (d: 
   );
   const defs = registry.list();
   return (
-    <section className="panel library" aria-label="Bibliothèque">
+    <section className="panel library" aria-label={t('library.title')}>
       <div className="panel-title-row">
-        <h2 className="panel-title">Ajouter</h2>
+        <h2 className="panel-title">{t('library.add')}</h2>
         <Segmented
           size="sm"
-          label="Contenu de la bibliothèque"
+          label={t('library.tabs')}
           value={tab}
           options={[
-            { value: 'components', label: 'Composants' },
-            { value: 'sections', label: 'Sections' },
+            { value: 'components', label: t('library.components') },
+            { value: 'sections', label: t('library.sections') },
           ]}
           onChange={(v) => choose(v as 'components' | 'sections')}
         />
@@ -68,12 +72,12 @@ export function Library(props: { rects: () => Record<string, Rect>; onDrag: (d: 
         <SectionLibrary />
       ) : (
         <>
-          {Object.entries(CATEGORIES).map(([category, title]) => {
+          {CATEGORIES.map((category) => {
             const items = defs.filter((d) => d.category === category);
             return (
               items.length > 0 && (
                 <div key={category}>
-                  <h3>{title}</h3>
+                  <h3>{t(`library.categories.${category}`)}</h3>
                   <ul className="library-list">
                     {items.map((d) => button({ type: d.type, label: d.label }, d.type, typeIcon(d.type)))}
                   </ul>
@@ -81,7 +85,7 @@ export function Library(props: { rects: () => Record<string, Rect>; onDrag: (d: 
               )
             );
           })}
-          <h3>Compositions</h3>
+          <h3>{t('library.compositions')}</h3>
           <ul className="library-list">
             {sections.map((p) =>
               button(

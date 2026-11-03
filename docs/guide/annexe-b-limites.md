@@ -20,6 +20,7 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 | Le canvas ne montre pas les animations par défaut | Cochez **Jouer les animations dans le canvas**, ou utilisez l’**Aperçu du site** |
 | Pas d’historique entre deux sessions : l’annulation et le journal repartent de zéro à la réouverture | Avant une grosse modification, exportez l’archive du projet (menu **⋯**) |
 | Pas d’enregistrement automatique | <kbd>⌘</kbd> <kbd>S</kbd> régulièrement ; le Studio prévient si vous fermez l’onglet sans enregistrer |
+| Interface en anglais : noms des composants, champs de l’inspecteur, messages de contrôle et assistant IA restent en français | Traduction en cours ; le français reste complet |
 
 ## Composants et mise en forme
 

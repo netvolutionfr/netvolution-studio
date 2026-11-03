@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type EditorStore, insertionPoint, type NodeTemplate, toTemplate } from '@ns/core';
+import { type EditorStore, insertionPoint, type NodeTemplate, t, toTemplate } from '@ns/core';
 
 // ponytail: in-memory clipboard within the Studio tab; system clipboard and cross-document paste come later.
 let clipboard: NodeTemplate | null = null;
@@ -16,7 +16,7 @@ export function copy(store: EditorStore) {
 export function cut(store: EditorStore) {
   const id = store.getState().selection;
   if (!id || !copy(store)) return;
-  store.dispatch('removeNode', { id }, 'Couper');
+  store.dispatch('removeNode', { id }, t('clipboard.cut'));
 }
 
 /** Pastes inside the selected container, after the selected node, or at the end of the page; refusals are reported. */
@@ -27,5 +27,5 @@ export function paste(store: EditorStore) {
     parentId: rootId,
     index: 0,
   };
-  store.dispatch('insertTree', { ...at, tree: clipboard }, 'Coller');
+  store.dispatch('insertTree', { ...at, tree: clipboard }, t('clipboard.paste'));
 }

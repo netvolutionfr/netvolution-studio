@@ -1,4 +1,4 @@
-import type { Diagnostic } from '@ns/core';
+import { type Diagnostic, formatDate, t } from '@ns/core';
 import { CopyPlus, Plus, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -15,6 +15,7 @@ import {
   type ProjectSummary,
   type TemplateSummary,
 } from './api.ts';
+import { LanguageMenu } from './LanguageMenu.tsx';
 import { templates } from './store.ts';
 
 export const projectHash = (id: string, pageId?: string) => `#/p/${id}${pageId ? `/${pageId}` : ''}`;
@@ -46,7 +47,7 @@ export function Projects() {
   useEffect(() => void refresh(), []);
 
   const open = (id: string, missingMedia = 0) => {
-    if (missingMedia) alert(`${missingMedia} média(s) référencé(s) introuvable(s) : images à remplacer.`);
+    if (missingMedia) alert(t('projects.missingMedia', { count: missingMedia }));
     location.hash = projectHash(id);
   };
   const create = () =>
@@ -56,7 +57,7 @@ export function Projects() {
         const created = await createFromTemplate(template.slice(5), name.trim());
         return open(created.id, created.missingMedia);
       }
-      const tpl = templates.find((t) => t.doc.id === template);
+      const tpl = templates.find((x) => x.doc.id === template);
       if (!tpl) return;
       const created = await createProject({ ...tpl.doc, name: name.trim() || tpl.doc.name });
       open(created.id, created.missingMedia);
@@ -67,7 +68,7 @@ export function Projects() {
       try {
         raw = JSON.parse(await file.text());
       } catch {
-        throw new ApiError(400, 'Fichier JSON illisible');
+        throw new ApiError(400, t('projects.unreadableJson'));
       }
       // An archive (site + media) or a bare site JSON.
       const created =
@@ -80,45 +81,48 @@ export function Projects() {
   return (
     <main className="projects">
       <div className="projects-inner">
-        <h1>Projets</h1>
+        <div className="projects-head">
+          <h1>{t('projects.title')}</h1>
+          <LanguageMenu />
+        </div>
         <p className="projects-help">
-          Première fois ?{' '}
+          {t('projects.firstTime')}{' '}
           <a href="./guide/01-prise-en-main/" target="_blank" rel="noopener">
-            Suivez la prise en main
+            {t('projects.followTutorial')}
           </a>{' '}
-          ou ouvrez le{' '}
+          {t('projects.orOpenThe')}{' '}
           <a href="./guide/" target="_blank" rel="noopener">
-            guide d’utilisation
+            {t('projects.userGuide')}
           </a>
           .
         </p>
         <form
           className="projects-new"
-          aria-label="Nouveau projet"
+          aria-label={t('projects.newProject')}
           onSubmit={(e) => {
             e.preventDefault();
             void create();
           }}
         >
           <label>
-            Nom du projet
+            {t('projects.projectName')}
             <input value={name} onChange={(e) => setName(e.target.value)} maxLength={200} />
           </label>
           <label>
-            Modèle
+            {t('projects.template')}
             <select value={template} onChange={(e) => setTemplate(e.target.value)}>
-              <optgroup label="Pages de départ">
-                {templates.map((t) => (
-                  <option key={t.doc.id} value={t.doc.id}>
-                    {t.doc.name}
+              <optgroup label={t('projects.starterPages')}>
+                {templates.map((tpl) => (
+                  <option key={tpl.doc.id} value={tpl.doc.id}>
+                    {tpl.doc.name}
                   </option>
                 ))}
               </optgroup>
               {siteTemplates.length > 0 && (
-                <optgroup label="Sites complets">
-                  {siteTemplates.map((t) => (
-                    <option key={t.id} value={`site:${t.id}`}>
-                      {t.name} ({t.pages} pages)
+                <optgroup label={t('projects.fullSites')}>
+                  {siteTemplates.map((tpl) => (
+                    <option key={tpl.id} value={`site:${tpl.id}`}>
+                      {tpl.name} ({t('projects.pageCount', { count: tpl.pages })})
                     </option>
                   ))}
                 </optgroup>
@@ -126,10 +130,10 @@ export function Projects() {
             </select>
           </label>
           <Button type="submit" variant="primary" icon={Plus}>
-            Créer le projet
+            {t('projects.create')}
           </Button>
           <Button type="button" icon={Upload} onClick={() => fileInput.current?.click()}>
-            Importer (archive ou JSON)…
+            {t('projects.import')}
           </Button>
           <input
             ref={fileInput}
@@ -146,7 +150,7 @@ export function Projects() {
         {error && (
           <div className="toast toast-error" role="alert">
             <span className="toast-text">
-              Échec : {error.message}
+              {t('projects.failed', { message: error.message })}
               {error.diagnostics.slice(0, 5).map((d) => (
                 <span key={`${d.code}-${d.path.join('.')}`}>
                   <br />
@@ -156,18 +160,20 @@ export function Projects() {
             </span>
           </div>
         )}
-        {projects?.length === 0 && <p>Aucun projet : créez-en un depuis un modèle.</p>}
-        <ul className="projects-list" aria-label="Mes projets">
+        {projects?.length === 0 && <p>{t('projects.empty')}</p>}
+        <ul className="projects-list" aria-label={t('projects.myProjects')}>
           {projects?.map((p) => (
             <li key={p.id} className="projects-row">
               <a href={projectHash(p.id)}>{p.name || p.id}</a>
               <span className="projects-meta">
-                {p.pages} page{p.pages > 1 ? 's' : ''} · modifié le{' '}
-                {new Date(p.updatedAt).toLocaleString('fr-FR')}
+                {t('projects.pageCount', { count: p.pages })} ·{' '}
+                {t('projects.modifiedOn', {
+                  date: formatDate(p.updatedAt, { dateStyle: 'short', timeStyle: 'medium' }),
+                })}
               </span>
               <IconButton
                 size="sm"
-                label={`Dupliquer ${p.name}`}
+                label={t('projects.duplicate', { name: p.name })}
                 icon={CopyPlus}
                 onClick={() =>
                   run(async () => {
@@ -178,11 +184,11 @@ export function Projects() {
               />
               <IconButton
                 size="sm"
-                label={`Supprimer ${p.name}`}
+                label={t('projects.remove', { name: p.name })}
                 icon={Trash2}
                 variant="danger"
                 onClick={() =>
-                  confirm(`Déplacer le projet « ${p.name} » dans la corbeille ?`) &&
+                  confirm(t('projects.confirmTrash', { name: p.name })) &&
                   run(async () => {
                     await deleteProject(p.id);
                     await refresh();
@@ -192,30 +198,28 @@ export function Projects() {
             </li>
           ))}
         </ul>
-        {siteTemplates.some((t) => !t.builtIn) && (
+        {siteTemplates.some((tpl) => !tpl.builtIn) && (
           <>
-            <h2 className="projects-subtitle">Mes modèles de site</h2>
-            <ul className="projects-list" aria-label="Mes modèles de site">
+            <h2 className="projects-subtitle">{t('projects.myTemplates')}</h2>
+            <ul className="projects-list" aria-label={t('projects.myTemplates')}>
               {siteTemplates
-                .filter((t) => !t.builtIn)
-                .map((t) => (
-                  <li key={t.id} className="projects-row">
+                .filter((tpl) => !tpl.builtIn)
+                .map((tpl) => (
+                  <li key={tpl.id} className="projects-row">
                     <span>
-                      <strong>{t.name}</strong>
-                      {t.description && <span className="projects-meta"> · {t.description}</span>}
+                      <strong>{tpl.name}</strong>
+                      {tpl.description && <span className="projects-meta"> · {tpl.description}</span>}
                     </span>
-                    <span className="projects-meta">{t.pages} page(s)</span>
+                    <span className="projects-meta">{t('projects.pageCount', { count: tpl.pages })}</span>
                     <IconButton
                       size="sm"
-                      label={`Supprimer le modèle ${t.name}`}
+                      label={t('projects.removeTemplate', { name: tpl.name })}
                       icon={Trash2}
                       variant="danger"
                       onClick={() =>
-                        confirm(
-                          `Supprimer le modèle « ${t.name} » ? Les projets créés avec restent intacts.`,
-                        ) &&
+                        confirm(t('projects.confirmRemoveTemplate', { name: tpl.name })) &&
                         run(async () => {
-                          await deleteTemplate(t.id);
+                          await deleteTemplate(tpl.id);
                           await refresh();
                         })
                       }

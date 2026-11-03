@@ -7,6 +7,7 @@ import {
   isNoopMove,
   type NodeTemplate,
   type Rect,
+  t,
 } from '@ns/core';
 import type { PointerEvent } from 'react';
 
@@ -85,21 +86,21 @@ export function dragHandlers(
       cancel();
       if (!done) return;
       suppressClick = true;
-      const t = done.target;
-      if (!t) return;
+      const target = done.target;
+      if (!target) return;
       if (item.nodeId) {
-        if (!isNoopMove(env.store.getState().doc, item.nodeId, t)) {
+        if (!isNoopMove(env.store.getState().doc, item.nodeId, target)) {
           env.store.dispatch(
             'moveNode',
-            { id: item.nodeId, parentId: t.parentId, index: t.index },
-            'Déplacer',
+            { id: item.nodeId, parentId: target.parentId, index: target.index },
+            t('drag.move'),
           );
         }
       } else {
         env.store.dispatch(
           'insertTree',
-          { parentId: t.parentId, index: t.index, tree: item.tree ?? { type: item.type } },
-          `Ajouter ${item.label}`,
+          { parentId: target.parentId, index: target.index, tree: item.tree ?? { type: item.type } },
+          t('common.add', { label: item.label }),
         );
       }
     },

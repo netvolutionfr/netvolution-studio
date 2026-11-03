@@ -1,4 +1,4 @@
-import { serializeSite } from '@ns/core';
+import { serializeSite, t } from '@ns/core';
 import {
   Archive,
   ArrowLeft,
@@ -36,13 +36,13 @@ export function DocumentBar() {
 
   /** Site template (CS-02) from the saved version of the project. */
   const asTemplate = async () => {
-    if (dirty && !confirm('Le modèle reprend la version enregistrée. Continuer sans enregistrer ?')) return;
-    const name = prompt('Nom du modèle de site', doc.name)?.trim();
+    if (dirty && !confirm(t('documentBar.templateUnsaved'))) return;
+    const name = prompt(t('documentBar.templateName'), doc.name)?.trim();
     if (!name) return;
-    const description = prompt('Description (facultative)', '') ?? '';
+    const description = prompt(t('documentBar.templateDescription'), '') ?? '';
     try {
       await saveAsTemplate(doc.id, name, description);
-      setSession({ notice: `Modèle de site « ${name} » enregistré : disponible à la création d’un projet.` });
+      setSession({ notice: t('documentBar.templateSaved', { name }) });
     } catch (e) {
       setSession({ error: { message: (e as Error).message, conflict: false } });
     }
@@ -57,13 +57,17 @@ export function DocumentBar() {
     }
   };
 
-  const status = session.saving ? 'Enregistrement…' : dirty ? 'Modifié (non enregistré)' : 'Enregistré';
+  const status = session.saving
+    ? t('documentBar.saving')
+    : dirty
+      ? t('documentBar.modified')
+      : t('documentBar.saved');
 
   return (
     <>
       <a className="project-link" href="#/projects">
         <ArrowLeft aria-hidden="true" size={16} />
-        Projets
+        {t('documentBar.projects')}
       </a>
       <span className="project-name" title={doc.name}>
         {doc.name || doc.id}
@@ -74,7 +78,7 @@ export function DocumentBar() {
       >
         {status}
       </span>
-      <Tip content="Enregistrer" shortcut="⌘S">
+      <Tip content={t('documentBar.save')} shortcut="⌘S">
         <Button
           variant="primary"
           size="sm"
@@ -82,35 +86,31 @@ export function DocumentBar() {
           onClick={() => void save(store)}
           disabled={session.saving || !dirty}
         >
-          Enregistrer
+          {t('documentBar.save')}
         </Button>
       </Tip>
       <Menu
-        label="Plus d’actions"
+        label={t('documentBar.more')}
         icon={Ellipsis}
-        tooltip="Exporter, archiver"
+        tooltip={t('documentBar.moreTip')}
         items={[
-          { label: 'Exporter JSON', icon: Download, onSelect: downloadJson },
+          { label: t('documentBar.exportJson'), icon: Download, onSelect: downloadJson },
           {
-            label: 'Exporter l’archive (site et médias)',
+            label: t('documentBar.exportArchive'),
             icon: Archive,
             onSelect: () => {
               // Archive of the saved version: save first so it matches what is on screen.
-              if (
-                dirty &&
-                !confirm('L’archive contient la version enregistrée. Continuer sans enregistrer ?')
-              )
-                return;
+              if (dirty && !confirm(t('documentBar.archiveUnsaved'))) return;
               Object.assign(document.createElement('a'), { href: archiveUrl(doc.id), download: '' }).click();
             },
           },
           {
-            label: 'Enregistrer comme modèle de site…',
+            label: t('documentBar.saveAsTemplate'),
             icon: BookCopy,
             onSelect: () => void asTemplate(),
           },
           'separator',
-          { label: 'Exporter le site (Astro)…', icon: PackageOpen, onSelect: () => setExporting(true) },
+          { label: t('documentBar.exportSite'), icon: PackageOpen, onSelect: () => setExporting(true) },
         ]}
       />
       <ExportDialog open={exporting} onClose={() => setExporting(false)} />
@@ -122,7 +122,7 @@ export function DocumentBar() {
               {session.notice}
             </span>
             <IconButton
-              label="Fermer le message"
+              label={t('documentBar.closeMessage')}
               icon={X}
               size="sm"
               onClick={() => setSession({ notice: null })}
@@ -132,14 +132,14 @@ export function DocumentBar() {
         {session.error && (
           <div className="toast toast-error save-error" role="alert">
             <CircleAlert aria-hidden="true" size={16} />
-            <span className="toast-text">Échec : {session.error.message}</span>
+            <span className="toast-text">{t('documentBar.failed', { message: session.error.message })}</span>
             {session.error.conflict ? (
               <Button size="sm" onClick={() => void overwrite()}>
-                Écraser la version du serveur
+                {t('documentBar.overwrite')}
               </Button>
             ) : (
               <Button size="sm" onClick={() => void save(store)}>
-                Réessayer
+                {t('documentBar.retry')}
               </Button>
             )}
           </div>

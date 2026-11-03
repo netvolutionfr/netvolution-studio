@@ -1,4 +1,4 @@
-import type { EditorStore } from '@ns/core';
+import { type EditorStore, t } from '@ns/core';
 import { copy, cut, paste } from './clipboard.ts';
 import { save } from './persistence.ts';
 
@@ -14,11 +14,11 @@ export function handleShortcut(store: EditorStore, { key, mod, shift }: Shortcut
   else if (mod && key === 'v') paste(store);
   else if (mod && key === 'd') {
     const id = store.getState().selection;
-    if (id) store.dispatch('duplicateNode', { id }, 'Dupliquer');
+    if (id) store.dispatch('duplicateNode', { id }, t('inspector.duplicate'));
   } else if (key === 'Escape') store.select(null);
   else if (key === 'Delete' || key === 'Backspace') {
     const id = store.getState().selection;
-    if (id) store.dispatch('removeNode', { id }, 'Supprimer');
+    if (id) store.dispatch('removeNode', { id }, t('inspector.remove'));
   } else return false;
   return true;
 }

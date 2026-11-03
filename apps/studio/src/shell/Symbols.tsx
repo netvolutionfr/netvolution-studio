@@ -9,6 +9,7 @@ import {
   SYMBOL_CATEGORIES,
   type SymbolCategory,
   summarize,
+  t,
 } from '@ns/core';
 import { Component, Link2Off, Pencil, RefreshCw, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -16,7 +17,7 @@ import { Button, IconButton } from '../ui/index.ts';
 import { TextField } from './fields.tsx';
 import { PropFields } from './PropFields.tsx';
 import { ReviewDialog } from './Review.tsx';
-import { CATEGORY_LABELS } from './SectionLibrary.tsx';
+import { categoryLabel } from './SectionLibrary.tsx';
 import { Section } from './StyleFields.tsx';
 import { useEditor, useStore } from './store.ts';
 
@@ -40,10 +41,10 @@ function UpdateReview({ pending, onClose }: { pending: Pending; onClose: () => v
   const store = useStore();
   return (
     <ReviewDialog
-      title="Mettre à jour les instances"
+      title={t('symbols.updateInstances')}
       lines={pending.lines}
       notice={pending.notice}
-      acceptLabel="Mettre à jour"
+      acceptLabel={t('symbols.update')}
       onAccept={() =>
         store.applyBatch(
           [
@@ -52,7 +53,7 @@ function UpdateReview({ pending, onClose }: { pending: Pending; onClose: () => v
               params: { symbolId: pending.symbolId, ...(pending.ids ? { ids: pending.ids } : {}) },
             },
           ],
-          'Mettre à jour les instances',
+          t('symbols.updateInstances'),
         )
       }
       onClose={onClose}
@@ -69,13 +70,13 @@ export function InstancePanel({ node }: { node: DocNode }) {
   if (!node.instance) return null;
   if (!status)
     return (
-      <Section title="Composant partagé">
-        <p className="field-error">Définition introuvable : {node.instance.symbolId}</p>
+      <Section title={t('symbols.shared')}>
+        <p className="field-error">{t('symbols.missing', { id: node.instance.symbolId })}</p>
       </Section>
     );
   const { symbol } = status;
   return (
-    <Section title={`Composant « ${symbol.name} »`}>
+    <Section title={t('symbols.component', { name: symbol.name })}>
       <p
         className={
           status.outdated || status.modified
@@ -83,10 +84,9 @@ export function InstancePanel({ node }: { node: DocNode }) {
             : 'hint instance-status'
         }
       >
-        Version {node.instance.version}
-        {status.outdated ? ` — version ${symbol.version} disponible` : ' (à jour)'}
-        {status.modified &&
-          ' — modifiée hors de ses paramètres : ces changements seront écrasés à la mise à jour.'}
+        {t('symbols.version', { version: node.instance.version })}
+        {status.outdated ? t('symbols.versionAvailable', { version: symbol.version }) : t('symbols.upToDate')}
+        {status.modified && t('symbols.modified')}
       </p>
       {symbol.params.map((param) => {
         const target = nodeAtPath(doc, node.id, param.path);
@@ -103,25 +103,25 @@ export function InstancePanel({ node }: { node: DocNode }) {
           />
         );
       })}
-      <div className="inspector-actions" role="toolbar" aria-label="Actions sur l'instance">
+      <div className="inspector-actions" role="toolbar" aria-label={t('symbols.instanceActions')}>
         <Button
           size="sm"
           icon={RefreshCw}
           disabled={!status.outdated && !status.modified}
           onClick={() => setPending(dryRun(store, symbol.id, [node.id]))}
         >
-          Mettre à jour
+          {t('symbols.update')}
         </Button>
         <IconButton
           size="sm"
           icon={Link2Off}
-          label="Détacher (copie indépendante)"
-          onClick={() => store.dispatch('detachInstance', { id: node.id }, 'Détacher l’instance')}
+          label={t('symbols.detach')}
+          onClick={() => store.dispatch('detachInstance', { id: node.id }, t('symbols.detachDone'))}
         />
         <IconButton
           size="sm"
           icon={Pencil}
-          label="Modifier le composant"
+          label={t('symbols.edit')}
           onClick={() => store.setPage(symbol.id)}
         />
       </div>
@@ -143,44 +143,53 @@ export function SymbolSettings() {
   const set = (patch: Record<string, unknown>, label: string) =>
     store.dispatch('updateSymbol', { id: symbol.id, ...patch }, label);
   return (
-    <Section title="Composant partagé">
+    <Section title={t('symbols.shared')}>
       <p className="hint">
-        Version {symbol.version} · {instances.length} instance(s)
-        {outdated ? `, dont ${outdated} en retard` : ''}. Les modifications faites ici ne touchent les
-        instances qu’après « Publier » puis « Mettre à jour ».
+        {t('symbols.instances', { version: symbol.version, count: instances.length })}
+        {outdated ? t('symbols.outdated', { count: outdated }) : ''}
+        {t('symbols.publishHint')}
       </p>
-      <TextField label="Nom" value={symbol.name} onChange={(name) => set({ name }, 'Nom du composant')} />
       <TextField
-        label="Description"
+        label={t('symbols.name')}
+        value={symbol.name}
+        onChange={(name) => set({ name }, t('symbols.nameDone'))}
+      />
+      <TextField
+        label={t('symbols.description')}
         value={symbol.description}
-        onChange={(description) => set({ description }, 'Description du composant')}
+        onChange={(description) => set({ description }, t('symbols.descriptionDone'))}
       />
       <label className="field field-stack">
-        <span className="field-label">Catégorie</span>
+        <span className="field-label">{t('symbols.category')}</span>
         <select
           value={symbol.category}
-          onChange={(e) => set({ category: e.target.value }, 'Catégorie du composant')}
+          onChange={(e) => set({ category: e.target.value }, t('symbols.categoryDone'))}
         >
           {SYMBOL_CATEGORIES.map((c) => (
             <option key={c} value={c}>
-              {CATEGORY_LABELS[c]}
+              {categoryLabel(c)}
             </option>
           ))}
         </select>
       </label>
       <p className="hint">
-        Paramètres modifiables dans chaque instance :{' '}
-        {symbol.params.map((p) => p.label).join(' ; ') || 'aucun'}.
+        {t('symbols.params', {
+          params: symbol.params.map((p) => p.label).join(' ; ') || t('symbols.noParams'),
+        })}
       </p>
-      <div className="inspector-actions" role="toolbar" aria-label="Actions sur le composant">
+      <div className="inspector-actions" role="toolbar" aria-label={t('symbols.componentActions')}>
         <Button
           size="sm"
           icon={Upload}
           onClick={() =>
-            store.dispatch('publishSymbol', { id: symbol.id }, `Publier la version ${symbol.version + 1}`)
+            store.dispatch(
+              'publishSymbol',
+              { id: symbol.id },
+              t('symbols.publish', { version: symbol.version + 1 }),
+            )
           }
         >
-          Publier la version {symbol.version + 1}
+          {t('symbols.publish', { version: symbol.version + 1 })}
         </Button>
         <Button
           size="sm"
@@ -188,16 +197,16 @@ export function SymbolSettings() {
           disabled={!outdated}
           onClick={() => setPending(dryRun(store, symbol.id))}
         >
-          Mettre à jour les instances
+          {t('symbols.updateInstances')}
         </Button>
         <IconButton
           size="sm"
           variant="danger"
           icon={Trash2}
-          label="Supprimer le composant"
+          label={t('symbols.remove')}
           onClick={() =>
-            confirm(`Supprimer le composant « ${symbol.name} » ?`) &&
-            store.dispatch('removeSymbol', { id: symbol.id }, 'Supprimer le composant')
+            confirm(t('symbols.confirmRemove', { name: symbol.name })) &&
+            store.dispatch('removeSymbol', { id: symbol.id }, t('symbols.remove'))
           }
         />
       </div>
@@ -222,10 +231,10 @@ export function CreateSymbolButton({ nodeId, disabled }: { nodeId: string; disab
     <>
       <IconButton
         size="sm"
-        label="Créer un composant réutilisable"
+        label={t('symbols.createReusable')}
         icon={Component}
         disabled={disabled}
-        tooltip="Enregistrer comme composant (section réutilisable, liée)"
+        tooltip={t('symbols.createTip')}
         onClick={() => {
           setName(store.getState().doc.nodes[nodeId]?.name ?? '');
           setError(null);
@@ -245,7 +254,7 @@ export function CreateSymbolButton({ nodeId, disabled }: { nodeId: string; disab
               const r = store.dispatch(
                 'createSymbol',
                 { nodeId, name, category, description },
-                'Créer un composant',
+                t('symbols.create'),
               );
               if (!r.ok) {
                 e.preventDefault();
@@ -253,26 +262,24 @@ export function CreateSymbolButton({ nodeId, disabled }: { nodeId: string; disab
               }
             }}
           >
-            <h2 id="symbol-title">Créer un composant</h2>
-            <p className="hint">
-              L’élément devient la première instance ; le composant apparaît dans la bibliothèque (Sections).
-            </p>
+            <h2 id="symbol-title">{t('symbols.create')}</h2>
+            <p className="hint">{t('symbols.createHint')}</p>
             <label className="field field-stack">
-              <span className="field-label">Nom</span>
+              <span className="field-label">{t('symbols.name')}</span>
               <input required value={name} maxLength={120} onChange={(e) => setName(e.target.value)} />
             </label>
             <label className="field field-stack">
-              <span className="field-label">Catégorie</span>
+              <span className="field-label">{t('symbols.category')}</span>
               <select value={category} onChange={(e) => setCategory(e.target.value as SymbolCategory)}>
                 {SYMBOL_CATEGORIES.map((c) => (
                   <option key={c} value={c}>
-                    {CATEGORY_LABELS[c]}
+                    {categoryLabel(c)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field field-stack">
-              <span className="field-label">Description</span>
+              <span className="field-label">{t('symbols.description')}</span>
               <input value={description} maxLength={300} onChange={(e) => setDescription(e.target.value)} />
             </label>
             {error && (
@@ -282,10 +289,10 @@ export function CreateSymbolButton({ nodeId, disabled }: { nodeId: string; disab
             )}
             <div className="dialog-actions">
               <Button type="button" onClick={() => dialog.current?.close()}>
-                Annuler
+                {t('symbols.cancel')}
               </Button>
               <Button type="submit" variant="primary">
-                Créer
+                {t('symbols.createButton')}
               </Button>
             </div>
           </form>

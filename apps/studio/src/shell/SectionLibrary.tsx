@@ -1,24 +1,20 @@
 import { type LibrarySection, registry, sections } from '@ns/components';
-import { insertionPoint, instancesOf, type Site, type SymbolCategory, toTemplate } from '@ns/core';
+import {
+  insertionPoint,
+  instancesOf,
+  type Site,
+  SYMBOL_CATEGORIES,
+  type SymbolCategory,
+  t,
+  toTemplate,
+} from '@ns/core';
 import { Link2, Pencil, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
 import { useEditor, useStore } from './store.ts';
 import { Thumbnail } from './Thumbnail.tsx';
 
-export const CATEGORY_LABELS: Record<SymbolCategory, string> = {
-  structure: 'Structure',
-  hero: 'Hero',
-  presentation: 'Présentation',
-  features: 'Atouts',
-  testimonials: 'Témoignages',
-  pricing: 'Tarifs',
-  team: 'Équipe',
-  gallery: 'Galerie',
-  cta: 'Appel à l’action',
-  contact: 'Contact',
-  elements: 'Éléments',
-};
+export const categoryLabel = (category: SymbolCategory) => t(`sections.categories.${category}`);
 
 /** Id of the shared component made from a library section, once linked into the site. */
 const librarySymbolId = (section: LibrarySection) => `s-${section.id}`;
@@ -44,12 +40,17 @@ export function SectionLibrary() {
   };
   const insertCopy = (section: LibrarySection) => {
     const point = at(section.tree.type);
-    if (point) store.dispatch('insertTree', { ...point, tree: section.tree }, `Ajouter ${section.name}`);
+    if (point)
+      store.dispatch(
+        'insertTree',
+        { ...point, tree: section.tree },
+        t('common.add', { label: section.name }),
+      );
   };
   const insertLinked = (symbolId: string, type: string, section?: LibrarySection) => {
     const point = at(type);
     if (!point) return;
-    store.begin(`Ajouter ${section?.name ?? 'un composant'} (lié)`);
+    store.begin(t('sections.addLinked', { name: section?.name ?? t('sections.aComponent') }));
     if (section && !store.getState().doc.symbols?.some((x) => x.id === symbolId)) {
       store.dispatch('importSymbol', { ...section, id: symbolId });
     }
@@ -64,32 +65,36 @@ export function SectionLibrary() {
       <div className="sections-tools">
         <input
           type="search"
-          aria-label="Rechercher une section"
-          placeholder="Rechercher…"
+          aria-label={t('sections.search')}
+          placeholder={t('sections.searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <select
-          aria-label="Catégorie"
+          aria-label={t('sections.category')}
           value={category}
           onChange={(e) => setCategory(e.target.value as SymbolCategory | '')}
         >
-          <option value="">Toutes</option>
-          {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+          <option value="">{t('sections.all')}</option>
+          {SYMBOL_CATEGORIES.map((value) => (
             <option key={value} value={value}>
-              {label}
+              {categoryLabel(value)}
             </option>
           ))}
         </select>
       </div>
-      {own.length > 0 && <h3>Composants du projet</h3>}
-      <ul className="sections-list" aria-label="Composants du projet">
+      {own.length > 0 && <h3>{t('sections.projectComponents')}</h3>}
+      <ul className="sections-list" aria-label={t('sections.projectComponents')}>
         {own.map((sym) => (
           <SectionCard
             key={sym.id}
             site={theme}
             name={sym.name}
-            description={`${CATEGORY_LABELS[sym.category]} · version ${sym.version} · ${instancesOf(doc, sym.id).length} instance(s)`}
+            description={t('sections.symbolDescription', {
+              category: categoryLabel(sym.category),
+              version: sym.version,
+              count: instancesOf(doc, sym.id).length,
+            })}
             tree={toTemplate(doc, sym.rootId)}
             onCopy={() => {
               const point = at(doc.nodes[sym.rootId]?.type ?? 'stack');
@@ -97,7 +102,7 @@ export function SectionLibrary() {
                 store.dispatch(
                   'insertSymbol',
                   { symbolId: sym.id, ...point, linked: false },
-                  `Ajouter ${sym.name}`,
+                  t('common.add', { label: sym.name }),
                 );
             }}
             onLinked={() => insertLinked(sym.id, doc.nodes[sym.rootId]?.type ?? 'stack')}
@@ -105,8 +110,8 @@ export function SectionLibrary() {
           />
         ))}
       </ul>
-      <h3>Bibliothèque</h3>
-      <ul className="sections-list" aria-label="Sections de la bibliothèque">
+      <h3>{t('sections.library')}</h3>
+      <ul className="sections-list" aria-label={t('sections.librarySections')}>
         {builtIn.map((section) => (
           <SectionCard
             key={section.id}
@@ -119,7 +124,7 @@ export function SectionLibrary() {
           />
         ))}
       </ul>
-      {own.length + builtIn.length === 0 && <p className="hint">Aucune section ne correspond.</p>}
+      {own.length + builtIn.length === 0 && <p className="hint">{t('sections.noMatch')}</p>}
     </div>
   );
 }
@@ -141,20 +146,20 @@ function SectionCard(props: {
         <span className="hint">{props.description}</span>
         <div className="section-card-actions">
           <Button size="sm" icon={Plus} onClick={props.onCopy}>
-            Insérer
+            {t('sections.insert')}
           </Button>
           <IconButton
             size="sm"
             icon={Link2}
-            label={`Insérer « ${props.name} » liée`}
-            tooltip="Insérer une instance liée : les nouvelles versions pourront lui être appliquées"
+            label={t('sections.insertLinked', { name: props.name })}
+            tooltip={t('sections.insertLinkedTip')}
             onClick={props.onLinked}
           />
           {props.onEdit && (
             <IconButton
               size="sm"
               icon={Pencil}
-              label={`Modifier le composant « ${props.name} »`}
+              label={t('sections.editComponent', { name: props.name })}
               onClick={props.onEdit}
             />
           )}

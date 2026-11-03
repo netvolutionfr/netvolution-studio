@@ -1,4 +1,4 @@
-import type { Rect } from '@ns/core';
+import { type Rect, t } from '@ns/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Assistant } from './Assistant.tsx';
 import { Canvas } from './Canvas.tsx';
@@ -18,13 +18,7 @@ import { Tree } from './Tree.tsx';
 import { VIEWPORTS } from './viewport.ts';
 
 export type SidePanel = 'inspector' | 'design' | 'menus' | 'media' | 'journal' | 'assistant';
-const SIDE_TITLES = {
-  design: 'Design system',
-  menus: 'Menus',
-  media: 'Médiathèque',
-  journal: 'Journal des opérations',
-  assistant: 'Assistant IA',
-} as const;
+const sideTitle = (side: Exclude<SidePanel, 'inspector'>) => t(`app.panels.${side}`);
 
 const PANELS_KEY = 'ns.panels';
 const THEME_KEY = 'ns.theme';
@@ -136,7 +130,7 @@ export function App() {
       </div>
       {!preview && (
         <Splitter
-          label="Largeur du panneau de gauche"
+          label={t('app.leftPanelWidth')}
           value={panels.left}
           min={200}
           max={480}
@@ -155,7 +149,7 @@ export function App() {
       />
       {!preview && (
         <Splitter
-          label="Largeur de l'inspecteur"
+          label={t('app.inspectorWidth')}
           value={panels.right}
           min={240}
           max={560}
@@ -167,8 +161,8 @@ export function App() {
         (side === 'inspector' ? (
           <Inspector width={width} />
         ) : (
-          <aside className="panel inspector" aria-label={SIDE_TITLES[side]}>
-            <h2 className="panel-title">{SIDE_TITLES[side]}</h2>
+          <aside className="panel inspector" aria-label={sideTitle(side)}>
+            <h2 className="panel-title">{sideTitle(side)}</h2>
             {side === 'design' ? (
               <DesignSystem />
             ) : side === 'menus' ? (
@@ -192,7 +186,7 @@ export function App() {
           role="status"
         >
           {drag.item.label}
-          {drag.overCanvas && !drag.target ? ' — dépôt impossible ici' : ''}
+          {drag.overCanvas && !drag.target ? t('app.dropRefused') : ''}
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { activeBreakpoint, nodeClass, parentOf } from '@ns/core';
+import { activeBreakpoint, nodeClass, parentOf, t } from '@ns/core';
 import {
   ArrowDown,
   ArrowUp,
@@ -33,11 +33,10 @@ export function Inspector({ width }: { width: number }) {
   const node = id ? doc.nodes[id] : undefined;
   if (!id || !node) {
     return (
-      <aside className="panel inspector" aria-label="Inspecteur">
-        <h2 className="panel-title">Inspecteur</h2>
+      <aside className="panel inspector" aria-label={t('inspector.title')}>
+        <h2 className="panel-title">{t('inspector.title')}</h2>
         <p className="hint">
-          <MousePointer2 aria-hidden="true" size={14} strokeWidth={1.5} /> Sélectionnez un élément dans le
-          canvas ou l'arborescence pour le modifier.
+          <MousePointer2 aria-hidden="true" size={14} strokeWidth={1.5} /> {t('inspector.empty')}
         </p>
         <PageSettings />
         <LayoutSettings />
@@ -50,13 +49,14 @@ export function Inspector({ width }: { width: number }) {
   const parent = parentOf(doc, id);
   const index = parent?.children.indexOf(id) ?? -1;
   const bp = activeBreakpoint(doc, width);
-  const bpLabel = bp === 'base' ? 'Base (desktop)' : (doc.breakpoints.find((b) => b.id === bp)?.label ?? bp);
+  const bpLabel =
+    bp === 'base' ? t('viewport.base') : (doc.breakpoints.find((b) => b.id === bp)?.label ?? bp);
   const BpIcon = BP_ICONS[bp] ?? Monitor;
   const move = (to: number, label: string) =>
     parent && store.dispatch('moveNode', { id, parentId: parent.id, index: to }, label);
 
   return (
-    <aside className="panel inspector" aria-label="Inspecteur">
+    <aside className="panel inspector" aria-label={t('inspector.title')}>
       <header className="inspector-head">
         <Icon aria-hidden="true" size={16} strokeWidth={1.75} className="inspector-icon" />
         <div className="inspector-title">
@@ -64,33 +64,33 @@ export function Inspector({ width }: { width: number }) {
           {node.name && <span className="inspector-name">{node.name}</span>}
         </div>
       </header>
-      <div className="inspector-actions" role="toolbar" aria-label="Actions sur l'élément">
+      <div className="inspector-actions" role="toolbar" aria-label={t('inspector.actions')}>
         <IconButton
           size="sm"
-          label="Monter"
+          label={t('inspector.moveUp')}
           icon={ArrowUp}
           disabled={!parent || index <= 0}
-          onClick={() => move(index - 1, 'Monter')}
+          onClick={() => move(index - 1, t('inspector.moveUp'))}
         />
         <IconButton
           size="sm"
-          label="Descendre"
+          label={t('inspector.moveDown')}
           icon={ArrowDown}
           disabled={!parent || index >= (parent?.children.length ?? 0) - 1}
-          onClick={() => move(index + 1, 'Descendre')}
+          onClick={() => move(index + 1, t('inspector.moveDown'))}
         />
         <span className="toolbar-sep" />
         <IconButton
           size="sm"
-          label="Dupliquer"
+          label={t('inspector.duplicate')}
           icon={CopyPlus}
           shortcut="⌘D"
           disabled={!parent}
-          onClick={() => store.dispatch('duplicateNode', { id }, 'Dupliquer')}
+          onClick={() => store.dispatch('duplicateNode', { id }, t('inspector.duplicate'))}
         />
         <IconButton
           size="sm"
-          label="Copier"
+          label={t('inspector.copy')}
           icon={Copy}
           shortcut="⌘C"
           disabled={!parent}
@@ -98,7 +98,7 @@ export function Inspector({ width }: { width: number }) {
         />
         <IconButton
           size="sm"
-          label="Couper"
+          label={t('inspector.cut')}
           icon={Scissors}
           shortcut="⌘X"
           disabled={!parent}
@@ -106,35 +106,36 @@ export function Inspector({ width }: { width: number }) {
         />
         <IconButton
           size="sm"
-          label="Coller"
+          label={t('inspector.paste')}
           icon={ClipboardPaste}
           shortcut="⌘V"
-          tooltip="Coller dans la sélection ou après elle"
+          tooltip={t('inspector.pasteTip')}
           onClick={() => paste(store)}
         />
         <CreateSymbolButton nodeId={id} disabled={!parent || node.instance !== undefined} />
         <span className="toolbar-sep" />
         <IconButton
           size="sm"
-          label="Supprimer"
+          label={t('inspector.remove')}
           icon={Trash2}
           shortcut="⌫"
           variant="danger"
           disabled={!parent}
-          onClick={() => store.dispatch('removeNode', { id }, 'Supprimer')}
+          onClick={() => store.dispatch('removeNode', { id }, t('inspector.remove'))}
         />
       </div>
 
       <InstancePanel node={node} />
       {def && def.fields.length > 0 && (
-        <Section title="Contenu">
+        <Section title={t('inspector.content')}>
           <PropFields node={node} fields={def.fields} />
         </Section>
       )}
 
       <p className="bp-note">
         <BpIcon aria-hidden="true" size={14} strokeWidth={1.75} />
-        Styles appliqués à : <strong>{bpLabel}</strong>
+        {t('inspector.stylesFor')}
+        <strong>{bpLabel}</strong>
       </p>
       <StyleSections
         doc={doc}
@@ -145,20 +146,25 @@ export function Inspector({ width }: { width: number }) {
       >
         <TextField
           key={`${id}-name`}
-          label="Nom dans l'arborescence"
+          label={t('inspector.layerName')}
           value={node.name ?? ''}
-          onChange={(name) => store.dispatch('renameNode', { id, name }, 'Renommer')}
+          onChange={(name) => store.dispatch('renameNode', { id, name }, t('inspector.rename'))}
         />
         <TextField
           key={`${id}-classes`}
-          label="Classes CSS (séparées par des espaces)"
+          label={t('inspector.classes')}
           value={(node.classes ?? []).join(' ')}
           onChange={(v) =>
-            store.dispatch('setNodeClasses', { id, classes: v.split(/\s+/).filter(Boolean) }, 'Classes CSS')
+            store.dispatch(
+              'setNodeClasses',
+              { id, classes: v.split(/\s+/).filter(Boolean) },
+              t('inspector.classesDone'),
+            )
           }
         />
         <p className="hint">
-          Pour la feuille « CSS du projet » (Système de design). Classe interne : <code>{nodeClass(id)}</code>
+          {t('inspector.classesHint')}
+          <code>{nodeClass(id)}</code>
         </p>
       </StyleSections>
       <AnimationSection node={node} />

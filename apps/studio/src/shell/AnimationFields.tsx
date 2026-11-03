@@ -1,4 +1,4 @@
-import { type Animation, type DocNode, EASINGS } from '@ns/core';
+import { type Animation, type DocNode, EASINGS, t } from '@ns/core';
 import { Play, Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -7,20 +7,13 @@ import { replay, setMotion, useMotion } from './motion.ts';
 import { Section } from './StyleFields.tsx';
 import { useStore } from './store.ts';
 
-const TRIGGERS: [Animation['trigger'], string][] = [
-  ['load', 'Au chargement'],
-  ['inView', 'À l’apparition (défilement)'],
-  ['hover', 'Au survol'],
-  ['focus', 'Au focus clavier'],
-  ['click', 'Au clic'],
-];
-const EASING_LABELS: Record<(typeof EASINGS)[number], string> = {
-  linear: 'Linéaire',
-  ease: 'Douce',
-  'ease-in': 'Accélérée',
-  'ease-out': 'Décélérée',
-  'ease-in-out': 'Accélérée puis décélérée',
-};
+const TRIGGERS = [
+  'load',
+  'inView',
+  'hover',
+  'focus',
+  'click',
+] as const satisfies readonly Animation['trigger'][];
 const ENTRANCE: Animation = {
   trigger: 'inView',
   effect: { opacity: 0, y: 24 },
@@ -77,11 +70,11 @@ export function AnimationSection({ node }: { node: DocNode }) {
   const effect = (i: number, a: Animation, key: keyof Animation['effect'], v: number | undefined) => {
     const next = { ...a.effect, [key]: v };
     if (v === undefined) delete next[key];
-    return edit(i, { effect: next }, 'Effet de l’animation');
+    return edit(i, { effect: next }, t('animation.effectDone'));
   };
 
   return (
-    <Section title="Animations">
+    <Section title={t('animation.title')}>
       <div className="field field-boolean">
         <label className="field-check">
           <input
@@ -89,7 +82,7 @@ export function AnimationSection({ node }: { node: DocNode }) {
             checked={motion === 'on'}
             onChange={(e) => setMotion(e.target.checked ? 'on' : 'off')}
           />
-          Jouer les animations dans le canvas
+          {t('animation.playInCanvas')}
         </label>
       </div>
       <div className="field field-boolean">
@@ -99,23 +92,18 @@ export function AnimationSection({ node }: { node: DocNode }) {
             checked={motion === 'reduce'}
             onChange={(e) => setMotion(e.target.checked ? 'reduce' : 'off')}
           />
-          Simuler « mouvement réduit » (aucune animation)
+          {t('animation.reduceMotion')}
         </label>
       </div>
-      {list.length > 0 && (
-        <p className="hint">
-          L’effet est l’état de départ d’une entrée (chargement, apparition, clic) ou l’état visé au survol et
-          au focus. Sans JavaScript ou en mouvement réduit, le contenu reste visible et immobile.
-        </p>
-      )}
+      {list.length > 0 && <p className="hint">{t('animation.hint')}</p>}
       {list.map((a, i) => {
         const entrance = a.trigger !== 'hover' && a.trigger !== 'focus';
         return (
           // biome-ignore lint/suspicious/noArrayIndexKey: animations are edited in place, in order.
           <div className="menu-row animation-row" key={i}>
-            <Field label="Déclencheur">
+            <Field label={t('animation.trigger')}>
               <select
-                aria-label="Déclencheur"
+                aria-label={t('animation.trigger')}
                 value={a.trigger}
                 onChange={(e) => {
                   const trigger = e.target.value as Animation['trigger'];
@@ -125,19 +113,19 @@ export function AnimationSection({ node }: { node: DocNode }) {
                       trigger,
                       ...(a.iterations === 'infinite' && trigger !== 'load' ? { iterations: 1 } : {}),
                     },
-                    'Déclencheur de l’animation',
+                    t('animation.triggerDone'),
                   );
                 }}
               >
-                {TRIGGERS.map(([value, label]) => (
+                {TRIGGERS.map((value) => (
                   <option key={value} value={value}>
-                    {label}
+                    {t(`animation.triggers.${value}`)}
                   </option>
                 ))}
               </select>
             </Field>
             <Num
-              label={entrance ? 'Opacité de départ' : 'Opacité visée'}
+              label={entrance ? t('animation.startOpacity') : t('animation.targetOpacity')}
               value={a.effect.opacity}
               min={0}
               max={1}
@@ -145,21 +133,21 @@ export function AnimationSection({ node }: { node: DocNode }) {
               onChange={(v) => effect(i, a, 'opacity', v)}
             />
             <Num
-              label="Décalage X (px)"
+              label={t('animation.x')}
               value={a.effect.x}
               min={-2000}
               max={2000}
               onChange={(v) => effect(i, a, 'x', v)}
             />
             <Num
-              label="Décalage Y (px)"
+              label={t('animation.y')}
               value={a.effect.y}
               min={-2000}
               max={2000}
               onChange={(v) => effect(i, a, 'y', v)}
             />
             <Num
-              label="Échelle"
+              label={t('animation.scale')}
               value={a.effect.scale}
               min={0}
               max={10}
@@ -167,39 +155,39 @@ export function AnimationSection({ node }: { node: DocNode }) {
               onChange={(v) => effect(i, a, 'scale', v)}
             />
             <Num
-              label="Rotation (°)"
+              label={t('animation.rotate')}
               value={a.effect.rotate}
               min={-720}
               max={720}
               onChange={(v) => effect(i, a, 'rotate', v)}
             />
             <Num
-              label="Durée (ms)"
+              label={t('animation.duration')}
               value={a.duration}
               min={0}
               max={10000}
               step={50}
-              onChange={(v) => edit(i, { duration: v ?? 0 }, 'Durée de l’animation')}
+              onChange={(v) => edit(i, { duration: v ?? 0 }, t('animation.durationDone'))}
             />
             <Num
-              label="Délai (ms)"
+              label={t('animation.delay')}
               value={a.delay}
               min={0}
               max={10000}
               step={50}
-              onChange={(v) => edit(i, { delay: v ?? 0 }, 'Délai de l’animation')}
+              onChange={(v) => edit(i, { delay: v ?? 0 }, t('animation.delayDone'))}
             />
-            <Field label="Accélération">
+            <Field label={t('animation.easing')}>
               <select
-                aria-label="Accélération"
+                aria-label={t('animation.easing')}
                 value={typeof a.easing === 'string' ? a.easing : 'ease'}
                 onChange={(e) =>
-                  edit(i, { easing: e.target.value as Animation['easing'] }, 'Accélération de l’animation')
+                  edit(i, { easing: e.target.value as Animation['easing'] }, t('animation.easingDone'))
                 }
               >
                 {EASINGS.map((value) => (
                   <option key={value} value={value}>
-                    {EASING_LABELS[value]}
+                    {t(`animation.easings.${value}`)}
                   </option>
                 ))}
               </select>
@@ -207,11 +195,11 @@ export function AnimationSection({ node }: { node: DocNode }) {
             {entrance && (
               <>
                 <Num
-                  label="Répétitions"
+                  label={t('animation.iterations')}
                   value={a.iterations === 'infinite' ? undefined : a.iterations}
                   min={1}
                   max={10}
-                  onChange={(v) => edit(i, { iterations: v ?? 1 }, 'Répétitions de l’animation')}
+                  onChange={(v) => edit(i, { iterations: v ?? 1 }, t('animation.iterationsDone'))}
                 />
                 {a.trigger === 'load' && (
                   <div className="field field-boolean">
@@ -220,27 +208,35 @@ export function AnimationSection({ node }: { node: DocNode }) {
                         type="checkbox"
                         checked={a.iterations === 'infinite'}
                         onChange={(e) =>
-                          edit(i, { iterations: e.target.checked ? 'infinite' : 1 }, 'Répétition infinie')
+                          edit(
+                            i,
+                            { iterations: e.target.checked ? 'infinite' : 1 },
+                            t('animation.infiniteDone'),
+                          )
                         }
                       />
-                      Répéter sans fin
+                      {t('animation.infinite')}
                     </label>
                   </div>
                 )}
-                <Field label="Sens">
+                <Field label={t('animation.direction')}>
                   <select
-                    aria-label="Sens"
+                    aria-label={t('animation.direction')}
                     value={a.direction}
                     onChange={(e) =>
-                      edit(i, { direction: e.target.value as Animation['direction'] }, 'Sens de l’animation')
+                      edit(
+                        i,
+                        { direction: e.target.value as Animation['direction'] },
+                        t('animation.directionDone'),
+                      )
                     }
                   >
-                    <option value="normal">Normal</option>
-                    <option value="alternate">Aller-retour</option>
+                    <option value="normal">{t('animation.normal')}</option>
+                    <option value="alternate">{t('animation.alternate')}</option>
                   </select>
                 </Field>
                 <Num
-                  label="Cascade des enfants (ms)"
+                  label={t('animation.stagger')}
                   value={a.stagger}
                   min={0}
                   max={2000}
@@ -249,25 +245,25 @@ export function AnimationSection({ node }: { node: DocNode }) {
                     const { stagger: _, ...rest } = a;
                     save(
                       list.map((x, j) => (j === i ? (v === undefined ? rest : { ...rest, stagger: v }) : x)),
-                      'Cascade de l’animation',
+                      t('animation.staggerDone'),
                     );
                   }}
                 />
               </>
             )}
-            <div className="inspector-actions" role="toolbar" aria-label={`Animation ${i + 1}`}>
+            <div className="inspector-actions" role="toolbar" aria-label={t('animation.row', { n: i + 1 })}>
               <Button size="sm" icon={Play} disabled={motion === 'reduce'} onClick={() => replay(node.id)}>
-                Rejouer
+                {t('animation.replay')}
               </Button>
               <IconButton
                 size="sm"
                 variant="danger"
                 icon={Trash2}
-                label="Supprimer l’animation"
+                label={t('animation.remove')}
                 onClick={() =>
                   save(
                     list.filter((_, j) => j !== i),
-                    'Supprimer une animation',
+                    t('animation.removeDone'),
                   )
                 }
               />
@@ -276,8 +272,8 @@ export function AnimationSection({ node }: { node: DocNode }) {
         );
       })}
       {list.length < 5 && (
-        <Button size="sm" icon={Plus} onClick={() => save([...list, ENTRANCE], 'Ajouter une animation')}>
-          Ajouter une animation
+        <Button size="sm" icon={Plus} onClick={() => save([...list, ENTRANCE], t('animation.add'))}>
+          {t('animation.add')}
         </Button>
       )}
     </Section>

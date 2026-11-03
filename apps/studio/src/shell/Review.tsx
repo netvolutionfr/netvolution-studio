@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { CircleCheck, CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Button } from '../ui/index.ts';
@@ -25,7 +26,7 @@ export function ReviewDialog(props: {
     >
       <h2 id="review-title">{props.title}</h2>
       {props.notice && <p className="hint">{props.notice}</p>}
-      <ul className="review-lines" aria-label="Changements proposés">
+      <ul className="review-lines" aria-label={t('review.changes')}>
         {props.lines.map((line, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: static list for this review.
           <li key={i}>{line}</li>
@@ -33,7 +34,7 @@ export function ReviewDialog(props: {
       </ul>
       <div className="dialog-actions">
         <Button type="button" icon={CircleX} onClick={() => dialog.current?.close()}>
-          Rejeter
+          {t('review.reject')}
         </Button>
         <Button
           type="button"
@@ -44,7 +45,7 @@ export function ReviewDialog(props: {
             dialog.current?.close();
           }}
         >
-          {props.acceptLabel ?? 'Appliquer'}
+          {props.acceptLabel ?? t('review.apply')}
         </Button>
       </div>
     </dialog>

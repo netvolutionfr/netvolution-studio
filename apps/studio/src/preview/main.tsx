@@ -1,5 +1,5 @@
 import { animate, DocumentView, islands, registry } from '@ns/components';
-import { animationConfig, customCss, loadSite, pagePath, pageRoots, type Site, toCss } from '@ns/core';
+import { animationConfig, customCss, loadSite, pagePath, pageRoots, type Site, t, toCss } from '@ns/core';
 import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
@@ -12,6 +12,7 @@ const css = document.getElementById('ns-css');
 if (!host || !css) throw new Error('preview.html is missing #ns-root or #ns-css');
 const container: HTMLElement = host;
 const style: HTMLElement = css;
+document.title = t('preview.title');
 const root = createRoot(container);
 const route = () => /^#\/(p[a-z0-9]{10})(\/.*)$/.exec(location.hash);
 const projectId = route()?.[1];
@@ -25,13 +26,13 @@ function render() {
   const page = site.pages.find((p) => pagePath(p.slug) === path);
   document.documentElement.lang = site.settings.lang;
   if (!page) {
-    document.title = 'Page introuvable';
+    document.title = t('preview.notFound');
     style.textContent = '';
     root.render(
       <main>
-        <h1>Page introuvable</h1>
+        <h1>{t('preview.notFound')}</h1>
         <p>
-          <a href={`#/${projectId}/`}>Retour à l'accueil</a>
+          <a href={`#/${projectId}/`}>{t('preview.backHome')}</a>
         </p>
       </main>,
     );
@@ -66,7 +67,7 @@ const accept = (raw: unknown) => {
 };
 
 if (!projectId) {
-  root.render(<p>Aucun projet à prévisualiser.</p>);
+  root.render(<p>{t('preview.noProject')}</p>);
 } else {
   const channel = new BroadcastChannel('ns-preview');
   channel.onmessage = (e: MessageEvent<{ type?: string; doc?: unknown }>) => {

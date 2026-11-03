@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type EditorStore, loadSite } from '@ns/core';
+import { type EditorStore, getLocale, loadSite, t } from '@ns/core';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.tsx';
@@ -28,11 +28,7 @@ function Root() {
     const onHash = () => {
       const next = route();
       const leaving = editor && next?.projectId !== editor.id;
-      if (
-        leaving &&
-        editor.store.getState().dirty &&
-        !confirm('Les modifications non enregistrées seront perdues. Continuer ?')
-      ) {
+      if (leaving && editor.store.getState().dirty && !confirm(t('app.unsavedLost'))) {
         history.replaceState(null, '', previous);
         return;
       }
@@ -96,11 +92,11 @@ function Root() {
   if (error)
     return (
       <main className="projects">
-        <p role="alert">Projet impossible à ouvrir : {error}</p>
-        <a href="#/projects">Retour aux projets</a>
+        <p role="alert">{t('app.openFailed', { error })}</p>
+        <a href="#/projects">{t('app.backToProjects')}</a>
       </main>
     );
-  if (!editor || editor.id !== projectId) return <p className="projects">Chargement…</p>;
+  if (!editor || editor.id !== projectId) return <p className="projects">{t('app.loading')}</p>;
   return (
     <StoreContext.Provider value={editor.store}>
       <App key={editor.id} />
@@ -108,6 +104,7 @@ function Root() {
   );
 }
 
+document.documentElement.lang = getLocale();
 const container = document.getElementById('app');
 if (!container) throw new Error('#app missing');
 createRoot(container).render(

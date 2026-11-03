@@ -87,3 +87,12 @@ Deux publics à servir : les graphistes français qui utilisent le Studio aujour
 - Les fichiers de documentation et d'ADR prennent des noms anglais au lot 5 ; les liens sont vérifiés par `npm run check`.
 - Limite connue : les langues écrites de droite à gauche ne sont pas prises en charge. Il faudra auditer le CSS du Studio (propriétés logiques, icônes directionnelles) avant d'en accepter une.
 - Risque : une traduction communautaire de mauvaise qualité ou malveillante. Les catalogues ne contiennent que du texte, sans HTML, et passent par une PR relue comme le code.
+
+## Addendum du 03/11/2026 — lot 1
+
+- **Module** `packages/core/src/i18n/` : `t(key, params?, locale?)`, `getLocale`, `setLocale`, `formatDate`, `LOCALES`. La langue est lue à la première traduction (choix retenu dans le navigateur, sinon la langue par défaut) : un `t()` évalué au chargement d'un module (tableaux de libellés) reçoit donc déjà la bonne langue, sans ordre d'import à respecter. Hors navigateur (serveur, tests), c'est la langue par défaut.
+- **Langue par défaut : le français** jusqu'au lot 4 (constante `DEFAULT_LOCALE`), qui passera à la langue du navigateur, sinon l'anglais.
+- **Changement de langue** : menu « Langue de l'interface » dans la barre d'outils et sur l'écran Projets ; la page se recharge. Les langues sont nommées dans leur propre langue.
+- **Clé absente** : la clé s'affiche, sans erreur à l'exécution. Le typage (clé inconnue = erreur de compilation) et les tests du catalogue tiennent ce rôle : complétude du français, aucune clé inconnue de l'anglais, mêmes paramètres `{{…}}`, aucune clé anglaise inutilisée (une clé construite, `` t(`a.b.${x}`) ``, couvre tout son préfixe).
+- **Périmètre** : tout le shell du Studio (`apps/studio/src`), environ 680 clés. Restent pour les lots suivants : les définitions des composants et des sections (`packages/components`), les messages du cœur et de l'API, le prompt et les consignes de l'IA, le contenu par défaut inséré dans un site (header, footer, nouvelle page, redirection, élément de liste) et l'export. Les préfixes d'identifiants des nouveaux tokens (`couleur`, `police`, `espace`…) sont conservés pour ne pas changer les documents existants.
+- **Format** : quelques mises en forme dans une phrase (`<code>` autour de `.env`) ont été abandonnées plutôt que de mettre du HTML dans les messages.

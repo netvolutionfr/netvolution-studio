@@ -1,5 +1,5 @@
 import { DocumentView, registry } from '@ns/components';
-import { buildTree, type NodeTemplate, newNodeId, type Site, toCss } from '@ns/core';
+import { buildTree, type NodeTemplate, newNodeId, type Site, t, toCss } from '@ns/core';
 import { useEffect, useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { mediaBase } from './api.ts';
@@ -72,7 +72,7 @@ export function Thumbnail(props: { site: Site; tree: NodeTemplate | null; label:
       ref={host}
       className="thumbnail"
       role="img"
-      aria-label={`Aperçu : ${props.label}`}
+      aria-label={t('thumbnail.label', { label: props.label })}
       style={{ width }}
     />
   );

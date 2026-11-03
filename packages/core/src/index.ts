@@ -8,6 +8,7 @@ export * from './document/schema.ts';
 export * from './editor/commands.ts';
 export * from './editor/drop.ts';
 export * from './editor/store.ts';
+export * from './i18n/index.ts';
 export * from './protocol/messages.ts';
 export * from './registry/registry.ts';
 export * from './services/batch.ts';

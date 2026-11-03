@@ -1,3 +1,4 @@
+import { t } from '@ns/core';
 import { type ReactNode, useEffect, useId, useState } from 'react';
 import { useStore } from './store.ts';
 
@@ -32,8 +33,8 @@ export function Field(props: {
           <span
             role="img"
             className={`state-dot state-${props.state}`}
-            aria-label={props.state === 'own' ? 'Défini sur ce breakpoint' : 'Valeur héritée'}
-            title={props.state === 'own' ? 'Défini sur ce breakpoint' : 'Valeur héritée'}
+            aria-label={props.state === 'own' ? t('fields.own') : t('fields.inherited')}
+            title={props.state === 'own' ? t('fields.own') : t('fields.inherited')}
           />
         )}
         {props.htmlFor ? <label htmlFor={props.htmlFor}>{props.label}</label> : <span>{props.label}</span>}
@@ -87,7 +88,7 @@ export function TextField(props: {
       )}
       {invalid && (
         <span id={`${id}-error`} className="field-error">
-          Valeur refusée, le document n'est pas modifié.
+          {t('fields.refused')}
         </span>
       )}
     </Field>

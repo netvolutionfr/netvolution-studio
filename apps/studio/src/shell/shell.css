@@ -931,6 +931,11 @@ aside.panel {
   max-width: 880px;
   margin: 0 auto;
 }
+.projects-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .projects h1 {
   margin: 0;
   font-size: 20px;
