@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { registry } from '@ns/components/definitions';
 import { loadSite, type Site } from '@ns/core';
 import { describe, expect, it } from 'vitest';
-import { generatePageFiles, readme, siteFiles } from './generate.ts';
+import { generatePageFiles, readme, siteFiles, withNotFound } from './generate.ts';
 import { exportProject, mediaFiles, readViews, writeFiles } from './write.ts';
 
 const fixture = async (name: string) => {
@@ -118,6 +118,9 @@ describe('SEO, sitemap, robots, 404 and redirects (SB-08)', () => {
     expect(String(files['src/pages/mentions-legales.astro'])).toContain('content="noindex"');
     expect(String(files['src/pages/404.astro'])).toContain('content="noindex"');
     expect(String(files['src/page/404.tsx'])).toContain('Page introuvable');
+    // The 404 page follows the site language (ADR-0024).
+    const english = withNotFound({ ...r.doc, settings: { ...r.doc.settings, lang: 'en' } });
+    expect(JSON.stringify(english.nodes.nnotfoundh1?.props)).toContain('Page not found');
     const site_ = siteFiles(r.doc);
     expect(site_['public/sitemap.xml']).toContain('<loc>https://atelier.example/contact/</loc>');
     expect(site_['public/sitemap.xml']).not.toContain('mentions-legales');

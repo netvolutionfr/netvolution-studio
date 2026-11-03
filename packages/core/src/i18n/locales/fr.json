@@ -1472,6 +1472,11 @@
     },
     "redirect": {
       "from": "/ancienne-page-{{n}}/"
+    },
+    "notFound": {
+      "title": "Page introuvable",
+      "text": "La page demandée n’existe pas ou a été déplacée.",
+      "home": "Retour à l’accueil"
     }
   }
 }

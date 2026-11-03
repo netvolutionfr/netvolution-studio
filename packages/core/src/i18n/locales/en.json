@@ -1472,6 +1472,11 @@
     },
     "redirect": {
       "from": "/old-page-{{n}}/"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "text": "The page you requested does not exist or has been moved.",
+      "home": "Back to home"
     }
   }
 }

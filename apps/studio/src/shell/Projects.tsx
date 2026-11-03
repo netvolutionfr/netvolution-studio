@@ -1,4 +1,4 @@
-import { type Diagnostic, formatDate, t, tm } from '@ns/core';
+import { type Diagnostic, formatDate, getLocale, t, tm } from '@ns/core';
 import { CopyPlus, Plus, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -19,6 +19,15 @@ import { LanguageMenu } from './LanguageMenu.tsx';
 import { templates } from './store.ts';
 
 export const projectHash = (id: string, pageId?: string) => `#/p/${id}${pageId ? `/${pageId}` : ''}`;
+
+/** A language in the interface language (« anglais », « English »); shown when it is not the interface's. */
+const languageName = (lang: string) => {
+  try {
+    return new Intl.DisplayNames(getLocale(), { type: 'language' }).of(lang) ?? lang;
+  } catch {
+    return lang;
+  }
+};
 
 /** Projects screen (SB-01): create from a template, import, open, duplicate, delete (to the trash). */
 export function Projects() {
@@ -122,7 +131,8 @@ export function Projects() {
                 <optgroup label={t('projects.fullSites')}>
                   {siteTemplates.map((tpl) => (
                     <option key={tpl.id} value={`site:${tpl.id}`}>
-                      {tpl.name} ({t('projects.pageCount', { count: tpl.pages })})
+                      {tpl.name} ({t('projects.pageCount', { count: tpl.pages })}
+                      {tpl.lang && tpl.lang.split('-')[0] !== getLocale() && ` · ${languageName(tpl.lang)}`})
                     </option>
                   ))}
                 </optgroup>

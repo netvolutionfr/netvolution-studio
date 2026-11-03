@@ -80,6 +80,8 @@ Un modèle de site est un **projet complet** (pages, header et footer, menus, de
 | **Studio Orbe — agence créative** | Sombre et graphique : Space Grotesk, dégradés, grilles animées | Accueil, L’agence, Expertises, Projets, Contact |
 | **Cabinet Valéor — conseil** | Clair et éditorial : Fraunces, vert sapin et laiton ; adapté à un cabinet de conseil, d’avocats ou d’architectes | Accueil, Le cabinet, Expertises, Honoraires, Contact |
 
+**Studio Orbe** et **Cabinet Valéor** existent aussi en anglais (« Studio Orbe — creative agency », « Valéor Partners — consulting ») : un site en anglais, adresses des pages comprises. La liste indique la langue d’un modèle quand ce n’est pas celle de l’interface.
+
 Les textes, coordonnées et visuels de ces modèles sont fictifs : remplacez-les par ceux de votre client. Leurs visuels sont des illustrations générées, libres de droits ; leurs polices viennent du catalogue et sont déjà dans la médiathèque. Étudier comment ils sont construits (arborescence, design system, animations) est aussi une bonne façon d’apprendre le Studio.
 
 ### Enregistrer un modèle

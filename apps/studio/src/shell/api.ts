@@ -175,6 +175,8 @@ export type TemplateSummary = {
   description: string;
   pages: number;
   builtIn: boolean;
+  /** Site language of the template. */
+  lang?: string;
 };
 
 export const listTemplates = async () => (await (await call('./api/templates')).json()) as TemplateSummary[];
