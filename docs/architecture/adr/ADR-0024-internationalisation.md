@@ -1,6 +1,6 @@
 # ADR-0024 — Internationalisation : catalogues de messages, anglais par défaut
 
-**Statut :** Proposé le 03/11/2026 · **Date :** 03/11/2026 · **Réf. :** CLAUDE §4, §5 et §8, ADR-0005, ADR-0013, ADR-0014, ADR-0016
+**Statut :** Accepté le 03/11/2026 · **Date :** 03/11/2026 · **Réf. :** CLAUDE §4, §5 et §8, ADR-0005, ADR-0013, ADR-0014, ADR-0016
 
 ## Contexte
 

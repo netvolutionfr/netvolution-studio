@@ -160,9 +160,7 @@ projet), `ADR-0009` (design tokens), `ADR-0010` (médiathèque et images), `ADR-
 confidentialité), `ADR-0015` (hébergement Docker derrière nginx), `ADR-0016` (distribution : application web
 hébergée, instance privée), `ADR-0017` (styles décoratifs : bordures, ombres, dégradés,
 images de fond), `ADR-0018` (polices importées et catalogue de polices libres), `ADR-0019` (typographie fine, éléments
-collants, retours à la ligne), `ADR-0020` (texte enrichi : paragraphes, couleur, titres enrichis, dégradé), `ADR-0021` (galerie en mosaïque et agrandissement), `ADR-0022` (bandeau défilant et carrousel), `ADR-0023` (CSS personnalisé : feuille du projet et classes) ; addendum « îlots JavaScript » d'`ADR-0002`.
-
-ADR proposé, en attente de validation : `ADR-0024` (internationalisation : catalogues de messages, anglais par défaut, français conservé).
+collants, retours à la ligne), `ADR-0020` (texte enrichi : paragraphes, couleur, titres enrichis, dégradé), `ADR-0021` (galerie en mosaïque et agrandissement), `ADR-0022` (bandeau défilant et carrousel), `ADR-0023` (CSS personnalisé : feuille du projet et classes), `ADR-0024` (internationalisation : catalogues de messages, anglais par défaut, français conservé) ; addendum « îlots JavaScript » d'`ADR-0002`.
 
 Consigner les ADR selon l'organisation retenue dans `docs/architecture/adr/`.
 
