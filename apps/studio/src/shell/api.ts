@@ -1,4 +1,13 @@
-import type { AiRequest, AiResponse, AiStatus, Asset, Check, Diagnostic, Site } from '@ns/core';
+import {
+  type AiRequest,
+  type AiResponse,
+  type AiStatus,
+  type Asset,
+  type Check,
+  type Diagnostic,
+  type Site,
+  t,
+} from '@ns/core';
 
 /** Client of the development API (apps/studio/dev-server/api.ts). */
 export class ApiError extends Error {
@@ -18,11 +27,11 @@ async function call(input: string, init?: RequestInit): Promise<Response> {
   try {
     res = await fetch(input, init);
   } catch {
-    throw new ApiError(0, 'Serveur injoignable (le serveur de développement est-il lancé ?)');
+    throw new ApiError(0, t('api.unreachable'));
   }
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as { error?: string; diagnostics?: Diagnostic[] };
-    throw new ApiError(res.status, body.error ?? `Erreur ${res.status}`, body.diagnostics);
+    throw new ApiError(res.status, body.error ?? t('api.error', { status: res.status }), body.diagnostics);
   }
   return res;
 }

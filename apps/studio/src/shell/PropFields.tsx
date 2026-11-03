@@ -1,4 +1,4 @@
-import type { CommandResult, DocNode, Link, PropField } from '@ns/core';
+import { type CommandResult, type DocNode, type Link, type PropField, t } from '@ns/core';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -181,18 +181,18 @@ export function LinkField(props: {
             );
           }}
         >
-          {props.optional && <option value=":none">Aucun lien</option>}
-          <option value="">Adresse (URL)</option>
-          <optgroup label="Page du site">
+          {props.optional && <option value=":none">{t('link.none')}</option>}
+          <option value="">{t('link.url')}</option>
+          <optgroup label={t('link.page')}>
             {pages.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.title || p.slug || 'Accueil'}
-                {p.id === pageId ? ' (cette page)' : ''}
+                {p.title || p.slug || t('link.home')}
+                {p.id === pageId ? t('link.thisPage') : ''}
               </option>
             ))}
           </optgroup>
           {files.length > 0 && (
-            <optgroup label="Fichier à télécharger">
+            <optgroup label={t('link.file')}>
               {files.map((a) => (
                 <option key={a.id} value={`asset:${a.id}`}>
                   {a.name || a.file}
@@ -203,7 +203,11 @@ export function LinkField(props: {
         </select>
       </Field>
       {value?.kind === 'url' && (
-        <TextField label="Adresse" value={value.href} onChange={(href) => onChange({ kind: 'url', href })} />
+        <TextField
+          label={t('link.address')}
+          value={value.href}
+          onChange={(href) => onChange({ kind: 'url', href })}
+        />
       )}
     </>
   );
@@ -223,7 +227,7 @@ function MenuField(props: {
         value={props.value ?? ''}
         onChange={(e) => props.onChange(e.target.value || null)}
       >
-        <option value="">— (créer un menu dans le panneau Menus)</option>
+        <option value="">{t('menuField.none')}</option>
         {menus.map((m) => (
           <option key={m.id} value={m.id}>
             {m.name || m.id}
@@ -254,21 +258,21 @@ function ListItemsField(props: {
         // biome-ignore lint/suspicious/noArrayIndexKey: items have no identity; edited in place, in order.
         <div className="list-item" key={i}>
           <RichTextField
-            label={`Élément ${i + 1}`}
+            label={t('listField.item', { n: i + 1 })}
             value={runs}
             onChange={(v) => props.onChange(items.map((x, j) => (j === i ? (v as Inline[]) : x)))}
           />
-          <div className="inspector-actions" role="toolbar" aria-label={`Actions sur l’élément ${i + 1}`}>
+          <div className="inspector-actions" role="toolbar" aria-label={t('listField.actions', { n: i + 1 })}>
             <IconButton
               size="sm"
-              label={`Monter l’élément ${i + 1}`}
+              label={t('listField.moveUp', { n: i + 1 })}
               icon={ArrowUp}
               disabled={i === 0}
               onClick={() => move(i, i - 1)}
             />
             <IconButton
               size="sm"
-              label={`Descendre l’élément ${i + 1}`}
+              label={t('listField.moveDown', { n: i + 1 })}
               icon={ArrowDown}
               disabled={i === items.length - 1}
               onClick={() => move(i, i + 1)}
@@ -276,7 +280,7 @@ function ListItemsField(props: {
             <IconButton
               size="sm"
               variant="danger"
-              label={`Supprimer l’élément ${i + 1}`}
+              label={t('listField.remove', { n: i + 1 })}
               icon={Trash2}
               disabled={items.length <= 1}
               onClick={() => props.onChange(items.filter((_, j) => j !== i))}
@@ -285,7 +289,7 @@ function ListItemsField(props: {
         </div>
       ))}
       <Button size="sm" icon={Plus} onClick={() => props.onChange([...items, [{ text: 'Nouvel élément' }]])}>
-        Ajouter un élément
+        {t('listField.add')}
       </Button>
     </fieldset>
   );

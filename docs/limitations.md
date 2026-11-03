@@ -48,6 +48,12 @@
 - **Dimensions des images** mesurées par le navigateur ; le serveur n'en vérifie que la forme.
 - **Fermeture d'onglet.** Pas de brouillon local : la protection est `beforeunload`.
 
+## Langues (ADR-0024)
+
+- **Interface traduite en partie.** Le shell du Studio (barres, panneaux, dialogues, messages) passe par les catalogues `packages/core/src/i18n/locales/` ; le français reste la langue par défaut. Restent en français, quelle que soit la langue choisie : les noms des composants et des sections, les champs de l'inspecteur propres à chaque composant, les messages de validation et de contrôle avant export, les consignes et le prompt de l'assistant IA, le contenu par défaut d'un élément inséré (header, footer, nouvelle page, redirection), l'export (README, page 404). Ce sont les lots 2 et 3.
+- **Changement de langue** par rechargement de la page ; le choix est retenu dans le navigateur (`localStorage`), pas côté serveur.
+- **Langues écrites de droite à gauche** non prises en charge.
+
 ## Rendu et export
 
 - **Fidélité** mesurée sous **Chromium uniquement**, sur une machine, avec les polices système. Firefox, WebKit et les polices web ne sont pas couverts.

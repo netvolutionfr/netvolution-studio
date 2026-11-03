@@ -7,6 +7,7 @@ import {
   type Rect,
   type ShellMessage,
   type Site,
+  t,
 } from '@ns/core';
 import { AlignCenterVertical, AlignEndVertical, AlignStartVertical, StretchHorizontal } from 'lucide-react';
 import { type PointerEvent, useEffect, useRef, useState } from 'react';
@@ -56,7 +57,7 @@ export function Canvas(props: {
     const onMessage = (event: MessageEvent) => {
       if (event.source !== frame.current?.contentWindow) return;
       const parsed = canvasMessageSchema.safeParse(event.data);
-      if (!parsed.success) return console.warn('Message canvas ignoré', event.data);
+      if (!parsed.success) return console.warn('Canvas message ignored', event.data);
       const m: CanvasMessage = parsed.data;
       if (m.type === 'ready') setReady(true);
       else if (m.type === 'rendered') setDiagnostics(null);
@@ -118,7 +119,7 @@ export function Canvas(props: {
     const r = selection ? rects[selection] : undefined;
     if (!r) return;
     e.preventDefault();
-    store.begin('Redimensionner');
+    store.begin(t('canvas.resize'));
     setResize({ edges, start: { cx: e.clientX, cy: e.clientY, w: r.width, h: r.height }, guides: {} });
   };
   const moveResize = (e: PointerEvent<HTMLDivElement>) => {
@@ -149,7 +150,7 @@ export function Canvas(props: {
     store.dispatch(
       'updateNodeStyle',
       { id: selection, breakpoint: activeBreakpoint(doc, props.width), set },
-      'Redimensionner',
+      t('canvas.resize'),
     );
     setResize({ ...resize, guides });
   };
@@ -176,7 +177,7 @@ export function Canvas(props: {
     store.dispatch(
       'updateNodeStyle',
       { id: selection, breakpoint: activeBreakpoint(doc, props.width), set: { alignSelf: value } },
-      'Aligner dans le parent',
+      t('canvas.align'),
     );
 
   const box = (id: string | null, kind: 'hover' | 'selected') => {
@@ -202,9 +203,11 @@ export function Canvas(props: {
   const selectedBox = selection ? rects[selection] : undefined;
 
   return (
-    <main className="canvas-area" aria-label="Canvas" ref={area}>
-      {diagnostics && <p role="alert">Document refusé par le canvas : {diagnostics}</p>}
-      <p className="zoom">{scale < 1 ? `Zoom ${Math.round(scale * 100)} %` : '100 %'}</p>
+    <main className="canvas-area" aria-label={t('canvas.label')} ref={area}>
+      {diagnostics && <p role="alert">{t('canvas.refused', { message: diagnostics })}</p>}
+      <p className="zoom">
+        {scale < 1 ? t('canvas.zoom', { percent: Math.round(scale * 100) }) : t('canvas.fullSize')}
+      </p>
       {/* The frame keeps its real width (true media queries) and is only scaled for display. */}
       <div className="canvas-stage" style={{ width: props.width * scale, height: frameHeight * scale }}>
         <div
@@ -220,7 +223,7 @@ export function Canvas(props: {
           <iframe
             ref={frame}
             className="canvas-iframe"
-            title="Aperçu de la page"
+            title={t('canvas.frameTitle')}
             src="./canvas.html"
             sandbox="allow-scripts allow-same-origin"
           />
@@ -260,7 +263,7 @@ export function Canvas(props: {
             <div
               className="canvas-tools"
               role="toolbar"
-              aria-label="Aligner dans le parent"
+              aria-label={t('canvas.align')}
               style={{
                 transform: `translate(${selectedBox.x + selectedBox.width}px, ${selectedBox.y}px) translate(-100%, -100%) scale(${1 / scale})`,
                 transformOrigin: 'bottom right',
@@ -268,10 +271,10 @@ export function Canvas(props: {
             >
               {(
                 [
-                  ['start', 'Aligner au début', AlignStartVertical],
-                  ['center', 'Centrer', AlignCenterVertical],
-                  ['end', 'Aligner à la fin', AlignEndVertical],
-                  ['stretch', 'Étirer', StretchHorizontal],
+                  ['start', t('canvas.alignStart'), AlignStartVertical],
+                  ['center', t('canvas.alignCenter'), AlignCenterVertical],
+                  ['end', t('canvas.alignEnd'), AlignEndVertical],
+                  ['stretch', t('canvas.stretch'), StretchHorizontal],
                 ] as const
               ).map(([value, label, icon]) => (
                 <IconButton key={value} size="sm" icon={icon} label={label} onClick={() => align(value)} />

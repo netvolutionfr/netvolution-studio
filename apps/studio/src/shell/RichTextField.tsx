@@ -1,4 +1,4 @@
-import { hrefSchema, pagePath, type Link as SiteLink } from '@ns/core';
+import { hrefSchema, pagePath, type Link as SiteLink, t } from '@ns/core';
 import { Bold, Italic, Link, Palette, RemoveFormatting, Unlink } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { IconButton } from '../ui/index.ts';
@@ -210,16 +210,12 @@ export function RichTextField(props: {
     setColors(false);
   };
   const link = () => {
-    const href = prompt(
-      'Adresse du lien (https://, mailto:, tel:, #ancre ou page du site : /a-propos/)',
-      'https://',
-    );
+    const href = prompt(t('richText.linkPrompt'), 'https://');
     if (href === null) return;
     // An internal path becomes a page link, which follows later slug changes.
     const page = href.startsWith('/') && pages.find((p) => [pagePath(p.slug), `/${p.slug}`].includes(href));
     if (page) return exec('createLink', toHref({ kind: 'page', pageId: page.id }));
-    if (!hrefSchema.safeParse(href).success)
-      return alert('Adresse refusée : https, http, mailto, tel, #ancre ou adresse d’une page du site.');
+    if (!hrefSchema.safeParse(href).success) return alert(t('richText.linkRefused'));
     exec('createLink', href);
   };
 
@@ -228,23 +224,23 @@ export function RichTextField(props: {
       <span id={id} className="field-label">
         {props.label}
       </span>
-      <div className="rt-toolbar" role="toolbar" aria-label="Mise en forme">
+      <div className="rt-toolbar" role="toolbar" aria-label={t('richText.formatting')}>
         {(
           [
-            ['Gras', Bold, () => exec('bold'), '⌘B'],
-            ['Italique', Italic, () => exec('italic'), '⌘I'],
-            ['Couleur', Palette, () => setColors(!colors), undefined],
-            ['Lien', Link, link, undefined],
-            ['Retirer le lien', Unlink, () => exec('unlink'), undefined],
-            ['Effacer la mise en forme', RemoveFormatting, () => exec('removeFormat'), undefined],
+            ['bold', Bold, () => exec('bold'), '⌘B'],
+            ['italic', Italic, () => exec('italic'), '⌘I'],
+            ['color', Palette, () => setColors(!colors), undefined],
+            ['link', Link, link, undefined],
+            ['unlink', Unlink, () => exec('unlink'), undefined],
+            ['clear', RemoveFormatting, () => exec('removeFormat'), undefined],
           ] as const
-        ).map(([label, icon, action, shortcut]) => (
+        ).map(([key, icon, action, shortcut]) => (
           <IconButton
-            key={label}
+            key={key}
             size="sm"
-            label={label}
+            label={t(`richText.${key}`)}
             icon={icon}
-            aria-pressed={label === 'Couleur' ? colors : undefined}
+            aria-pressed={key === 'color' ? colors : undefined}
             {...(shortcut ? { shortcut } : {})}
             onMouseDown={(e) => {
               e.preventDefault();
@@ -256,7 +252,7 @@ export function RichTextField(props: {
       </div>
       {colors && (
         <fieldset className="rt-colors">
-          <legend className="visually-hidden">Couleur du texte sélectionné</legend>
+          <legend className="visually-hidden">{t('richText.colorLegend')}</legend>
           {Object.values(palette).map((c) => (
             <button
               key={c.label}
@@ -270,7 +266,7 @@ export function RichTextField(props: {
             />
           ))}
           <label className="rt-custom">
-            Autre
+            {t('richText.other')}
             <input type="color" onChange={(e) => setColor(e.target.value)} />
           </label>
         </fieldset>
@@ -308,9 +304,7 @@ export function RichTextField(props: {
           );
         }}
       />
-      {invalid && (
-        <span className="field-error">Texte vide ou lien invalide : le document n'est pas modifié.</span>
-      )}
+      {invalid && <span className="field-error">{t('richText.invalid')}</span>}
     </div>
   );
 }

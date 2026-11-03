@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type Asset, assetReferences, isPicture } from '@ns/core';
+import { type Asset, assetReferences, isPicture, t } from '@ns/core';
 import { FileText, Trash2, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -7,11 +7,10 @@ import { listMediaFiles, MEDIA_ACCEPT, mediaBase, uploadMedia } from './api.ts';
 import { TextField } from './fields.tsx';
 import { useEditor, useStore } from './store.ts';
 
-const KIND_LABELS = { image: 'Image', svg: 'SVG', file: 'Fichier', font: 'Police' } as const;
 const size = (bytes: number) =>
   bytes < 1024 * 1024
-    ? `${Math.max(1, Math.round(bytes / 1024))} Ko`
-    : `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
+    ? t('media.kb', { n: Math.max(1, Math.round(bytes / 1024)) })
+    : t('media.mb', { n: (bytes / 1024 / 1024).toFixed(1) });
 const matches = (a: Asset, q: string) =>
   !q ||
   [a.name ?? '', a.file, a.kind === 'font' ? a.family : '', ...(a.tags ?? [])].some((v) =>
@@ -50,12 +49,12 @@ export function MediaLibrary() {
   const upload = async (files: File[]) => {
     setBusy(true);
     const failed: string[] = [];
-    store.begin('Importer des médias');
+    store.begin(t('media.importDone'));
     for (const file of files) {
       try {
         store.dispatch('addAsset', { asset: await uploadMedia(doc.id, file) });
       } catch (e) {
-        failed.push(`${file.name} : ${(e as Error).message}`);
+        failed.push(t('media.uploadFailed', { file: file.name, message: (e as Error).message }));
       }
     }
     store.commit();
@@ -70,13 +69,13 @@ export function MediaLibrary() {
       <div className="media-tools">
         <input
           type="search"
-          aria-label="Rechercher un média (nom, fichier, tag)"
-          placeholder="Rechercher (nom, tag)…"
+          aria-label={t('media.search')}
+          placeholder={t('media.searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <Button size="sm" icon={Upload} disabled={busy} onClick={() => input.current?.click()}>
-          {busy ? 'Import…' : 'Importer'}
+          {busy ? t('media.importing') : t('media.import')}
         </Button>
         <input
           ref={input}
@@ -91,16 +90,13 @@ export function MediaLibrary() {
           }}
         />
       </div>
-      <p className="hint">
-        Images (PNG, JPEG, WebP, AVIF), SVG vérifiés (sans script ni référence externe), polices WOFF2 et
-        fichiers PDF, ZIP, DOCX, XLSX, PPTX. Les images sont optimisées à l'export.
-      </p>
+      <p className="hint">{t('media.hint')}</p>
       {errors.map((e) => (
         <p key={e} className="field-error" role="alert">
           {e}
         </p>
       ))}
-      {assets.length === 0 && <p className="hint">{query ? 'Aucun média ne correspond.' : 'Aucun média.'}</p>}
+      {assets.length === 0 && <p className="hint">{query ? t('media.noMatch') : t('media.empty')}</p>}
       <ul className="media-list">
         {assets.map((a) => {
           // A font is used through the font stacks of the design system (ADR-0018).
@@ -131,44 +127,43 @@ export function MediaLibrary() {
               </div>
               <div className="media-body">
                 <p className="media-meta">
-                  {KIND_LABELS[a.kind]} · {isPicture(a) ? `${a.width}×${a.height}` : size(a.size)} ·{' '}
+                  {t(`media.kinds.${a.kind}`)} · {isPicture(a) ? `${a.width}×${a.height}` : size(a.size)} ·{' '}
                   <span className={used ? undefined : 'media-unused'}>
-                    {used ? `utilisé ${used} fois` : 'inutilisé'}
+                    {used ? t('media.used', { count: used }) : t('media.unused')}
                   </span>
                   {missing && (
                     <strong className="media-missing" role="alert">
-                      {' '}
-                      · fichier manquant
+                      {t('media.missing')}
                     </strong>
                   )}
                 </p>
                 <TextField
-                  label="Nom"
+                  label={t('media.name')}
                   value={a.name ?? ''}
-                  onChange={(name) => update({ name }, 'Nom du média')}
+                  onChange={(name) => update({ name }, t('media.nameDone'))}
                 />
                 {isPicture(a) && (
                   <TextField
-                    label="Texte alternatif par défaut"
+                    label={t('media.alt')}
                     value={a.alt ?? ''}
-                    onChange={(alt) => update({ alt }, 'Texte alternatif du média')}
+                    onChange={(alt) => update({ alt }, t('media.altDone'))}
                   />
                 )}
                 {a.kind === 'font' && (
                   <>
                     <TextField
-                      label="Famille"
+                      label={t('media.family')}
                       value={a.family}
                       onChange={(family) =>
                         store.dispatch(
                           'updateAsset',
                           { id: a.id, font: { family, weight: a.weight, style: a.style } },
-                          'Famille de la police',
+                          t('media.familyDone'),
                         )
                       }
                     />
                     <TextField
-                      label="Graisse (400, ou 100-900 pour une police variable)"
+                      label={t('media.weight')}
                       value={weightText(a.weight)}
                       onChange={(v) => {
                         const weight = parseWeight(v);
@@ -176,7 +171,7 @@ export function MediaLibrary() {
                           ? store.dispatch(
                               'updateAsset',
                               { id: a.id, font: { family: a.family, weight, style: a.style } },
-                              'Graisse de la police',
+                              t('media.weightDone'),
                             )
                           : { ok: false };
                       }}
@@ -196,27 +191,27 @@ export function MediaLibrary() {
                                 style: e.target.checked ? 'italic' : 'normal',
                               },
                             },
-                            'Style de la police',
+                            t('media.styleDone'),
                           )
                         }
                       />
-                      Italique
+                      {t('media.italic')}
                     </label>
                     {a.license && <p className="hint">{a.license}</p>}
                   </>
                 )}
                 <TextField
-                  label="Tags (séparés par des virgules)"
+                  label={t('media.tags')}
                   value={(a.tags ?? []).join(',')}
-                  onChange={(v) => update({ tags: v ? v.split(',') : [] }, 'Tags du média')}
+                  onChange={(v) => update({ tags: v ? v.split(',') : [] }, t('media.tagsDone'))}
                 />
               </div>
               <IconButton
                 size="sm"
                 variant="danger"
-                label={`Retirer ${a.name || a.file} de la médiathèque`}
+                label={t('media.remove', { name: a.name || a.file })}
                 icon={Trash2}
-                onClick={() => store.dispatch('removeAsset', { id: a.id }, 'Retirer un média')}
+                onClick={() => store.dispatch('removeAsset', { id: a.id }, t('media.removeDone'))}
               />
             </li>
           );

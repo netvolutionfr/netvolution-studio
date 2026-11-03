@@ -7,6 +7,7 @@ import {
   newNodeId,
   type Proposal,
   proposalFrom,
+  t,
 } from '@ns/core';
 import { Sparkles } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
@@ -15,25 +16,19 @@ import { aiComplete, aiStatus } from './api.ts';
 import { ReviewDialog } from './Review.tsx';
 import { useEditor, useStore } from './store.ts';
 
-const PROVIDERS = {
-  anthropic: 'Anthropic',
-  openai: 'Compatible OpenAI',
-  simulated: 'Simulé (tests, démonstration)',
-} as const;
-
-const TASKS: [keyof typeof AI_TASKS, string][] = [
-  ['title', 'Titre'],
-  ['rewrite', 'Reformuler'],
-  ['summarize', 'Résumer'],
-  ['tone', 'Ton'],
-  ['seo', 'SEO'],
-  ['structure', 'Structure depuis un brief'],
-  ['testimonials', 'Section témoignages'],
-  ['tablet', '2 colonnes sur tablette'],
-  ['spacing', 'Harmoniser les espacements'],
-  ['sober', 'Variante sobre'],
-  ['palette', 'Appliquer la palette'],
-];
+const TASKS = [
+  'title',
+  'rewrite',
+  'summarize',
+  'tone',
+  'seo',
+  'structure',
+  'testimonials',
+  'tablet',
+  'spacing',
+  'sober',
+  'palette',
+] as const satisfies readonly (keyof typeof AI_TASKS)[];
 
 /**
  * AI assistant panel (CS-08, CS-09, ADR-0014): an instruction on the selection (or the page), sent
@@ -58,13 +53,13 @@ export function Assistant() {
       .catch((e: Error) => setError(e.message));
   }, []);
   if (error && !status) return <p className="field-error ds">{error}</p>;
-  if (!status) return <p className="hint ds">Chargement…</p>;
+  if (!status) return <p className="hint ds">{t('assistant.loading')}</p>;
 
   const node = selection ? doc.nodes[selection] : undefined;
   const page = doc.pages.find((p) => p.id === pageId);
   const scope = node
-    ? `l’élément « ${node.name ?? registry.get(node.type)?.label ?? node.type} »`
-    : `la page « ${page?.title ?? 'courante'} »`;
+    ? t('assistant.scopeElement', { name: node.name ?? registry.get(node.type)?.label ?? node.type })
+    : t('assistant.scopePage', { title: page?.title ?? t('assistant.currentPage') });
 
   async function ask() {
     setError(null);
@@ -99,13 +94,17 @@ export function Assistant() {
       {status.enabled ? (
         <>
           <p className="hint">
-            {status.provider ? PROVIDERS[status.provider] : ''} ({status.model}) · agit sur {scope}.
+            {t('assistant.actsOn', {
+              provider: status.provider ? t(`assistant.providers.${status.provider}`) : '',
+              model: status.model ?? '',
+              scope,
+            })}
           </p>
           <fieldset className="assistant-tasks">
-            <legend className="field-label">Demandes types</legend>
-            {TASKS.map(([key, label]) => (
+            <legend className="field-label">{t('assistant.taskExamples')}</legend>
+            {TASKS.map((key) => (
               <Button key={key} size="sm" onClick={() => setInstruction(AI_TASKS[key])}>
-                {label}
+                {t(`assistant.tasks.${key}`)}
               </Button>
             ))}
           </fieldset>
@@ -117,7 +116,7 @@ export function Assistant() {
             }}
           >
             <label className="field field-stack" htmlFor={id}>
-              <span className="field-label">Consigne</span>
+              <span className="field-label">{t('assistant.instruction')}</span>
               <textarea
                 id={id}
                 rows={4}
@@ -128,13 +127,10 @@ export function Assistant() {
               />
             </label>
             <Button type="submit" variant="primary" icon={Sparkles} disabled={busy || !instruction.trim()}>
-              {busy ? 'Proposition en cours…' : 'Proposer'}
+              {busy ? t('assistant.proposing') : t('assistant.propose')}
             </Button>
           </form>
-          <p className="hint">
-            Envoyé au fournisseur : la consigne, {scope} (sa structure et ses textes), les types de composants
-            et les noms des tokens. Ni les autres pages, ni les médias, ni les réglages.
-          </p>
+          <p className="hint">{t('assistant.sent', { scope })}</p>
           {error && (
             <p className="field-error" role="alert">
               {error}
@@ -143,16 +139,16 @@ export function Assistant() {
           {proposal && (
             <div className="assistant-result" role="status">
               {proposal.kind === 'error' ? (
-                <p className="field-error">Proposition refusée : {proposal.message}</p>
+                <p className="field-error">{t('assistant.refused', { message: proposal.message })}</p>
               ) : proposal.kind === 'text' ? (
                 <p>
-                  <strong>Suggestion (sans effet sur le site) :</strong> {proposal.text}
+                  <strong>{t('assistant.suggestion')}</strong> {proposal.text}
                 </p>
               ) : (
                 <>
-                  <p>{proposal.lines.length} changement(s) proposé(s).</p>
+                  <p>{t('assistant.changes', { count: proposal.lines.length })}</p>
                   <Button size="sm" onClick={() => setReview(true)}>
-                    Revoir la proposition
+                    {t('assistant.review')}
                   </Button>
                 </>
               )}
@@ -160,20 +156,20 @@ export function Assistant() {
           )}
           {proposal?.kind === 'batch' && review && (
             <ReviewDialog
-              title="Proposition de l’assistant"
+              title={t('assistant.proposal')}
               lines={proposal.lines}
               notice={proposal.text || undefined}
-              acceptLabel="Accepter"
+              acceptLabel={t('assistant.accept')}
               onAccept={() => {
                 const r = store.applyBatch(
                   proposal.calls,
                   // Never the instruction: it may quote the client's texts (journal without content).
-                  'Proposition de l’assistant',
+                  t('assistant.proposal'),
                   'ai',
                   AI_PERMISSIONS,
                 );
                 if (r.ok) setProposal(null);
-                else setError(`Proposition devenue invalide : ${r.error.message}`);
+                else setError(t('assistant.invalid', { message: r.error.message }));
               }}
               onClose={() => setReview(false)}
             />
@@ -182,19 +178,18 @@ export function Assistant() {
       ) : (
         <>
           <p role="status">
-            <strong>Assistant désactivé.</strong> {status.reason}
+            <strong>{t('assistant.disabled')}</strong> {status.reason}
           </p>
-          <p className="hint">
-            Pour l’activer, renseignez <code>NS_AI_PROVIDER</code> et la clé du fournisseur dans le fichier{' '}
-            <code>.env</code> du serveur (voir <code>.env.example</code>), puis relancez le Studio. Les clés
-            restent sur le serveur.
-          </p>
+          <p className="hint">{t('assistant.enableHint')}</p>
         </>
       )}
       <p className="hint">
-        Limites : {status.limits.maxTokens} jetons par réponse, {status.limits.perMinute} requêtes par minute,{' '}
-        {status.limits.dailyTokens} jetons par jour ({status.usedToday} utilisés aujourd’hui). L’IA ne publie
-        et n’exporte jamais : chaque proposition est à valider, puis s’annule comme toute modification.
+        {t('assistant.limits', {
+          maxTokens: status.limits.maxTokens,
+          perMinute: status.limits.perMinute,
+          dailyTokens: status.limits.dailyTokens,
+          usedToday: status.usedToday,
+        })}
       </p>
     </div>
   );

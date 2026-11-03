@@ -1,24 +1,22 @@
+import { formatDate, t } from '@ns/core';
 import { useEditor } from './store.ts';
 
-const time = (iso: string) => new Date(iso).toLocaleTimeString('fr-FR');
+const time = (iso: string) => formatDate(iso, { timeStyle: 'medium' });
 
 /** Operation journal (CS-09, ADR-0013): every recorded change, its origin and counts; never content. */
 export function Journal() {
   const journal = useEditor((s) => s.journal);
   return (
     <div className="ds journal">
-      <p className="hint">
-        Opérations de cette session, de la plus récente à la plus ancienne. Le contenu modifié n’est pas
-        consigné.
-      </p>
-      {journal.length === 0 && <p className="hint">Aucune opération.</p>}
-      <ol className="journal-list" aria-label="Journal des opérations">
+      <p className="hint">{t('journal.hint')}</p>
+      {journal.length === 0 && <p className="hint">{t('journal.empty')}</p>}
+      <ol className="journal-list" aria-label={t('journal.title')}>
         {[...journal].reverse().map((r) => (
           <li key={`${r.at}-${r.label}`} className="journal-row">
             <span className="journal-meta">
               {time(r.at)} ·{' '}
               <span className={`journal-origin journal-${r.origin}`}>
-                {r.origin === 'ai' ? 'IA' : 'Vous'}
+                {r.origin === 'ai' ? t('journal.ai') : t('journal.you')}
               </span>
             </span>
             <strong>{r.label}</strong>

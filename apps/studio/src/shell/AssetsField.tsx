@@ -1,4 +1,4 @@
-import { type CommandResult, isPicture } from '@ns/core';
+import { type CommandResult, isPicture, t } from '@ns/core';
 import { ArrowDown, ArrowUp, ImagePlus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
@@ -38,7 +38,7 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
   const upload = async (files: File[]) => {
     setBusy(true);
     setError(null);
-    store.begin(`Ajouter ${files.length} image(s)`);
+    store.begin(t('assetsField.addImages', { count: files.length }));
     const added: Item[] = [];
     try {
       for (const file of files) {
@@ -70,26 +70,30 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
             )}
             <div className="gallery-fields">
               <TextField
-                label={`Texte alternatif de l’image ${i + 1} (vide : décorative)`}
+                label={t('assetsField.alt', { n: i + 1 })}
                 value={item.alt}
                 onChange={(alt) => edit(i, { alt })}
               />
               <TextField
-                label={`Légende de l’image ${i + 1}`}
+                label={t('assetsField.caption', { n: i + 1 })}
                 value={item.caption ?? ''}
                 onChange={(caption) => edit(i, caption ? { caption } : { caption: undefined })}
               />
-              <div className="inspector-actions" role="toolbar" aria-label={`Actions sur l’image ${i + 1}`}>
+              <div
+                className="inspector-actions"
+                role="toolbar"
+                aria-label={t('assetsField.actions', { n: i + 1 })}
+              >
                 <IconButton
                   size="sm"
-                  label={`Monter l’image ${i + 1}`}
+                  label={t('assetsField.moveUp', { n: i + 1 })}
                   icon={ArrowUp}
                   disabled={i === 0}
                   onClick={() => move(i, i - 1)}
                 />
                 <IconButton
                   size="sm"
-                  label={`Descendre l’image ${i + 1}`}
+                  label={t('assetsField.moveDown', { n: i + 1 })}
                   icon={ArrowDown}
                   disabled={i === items.length - 1}
                   onClick={() => move(i, i + 1)}
@@ -97,7 +101,7 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
                 <IconButton
                   size="sm"
                   variant="danger"
-                  label={`Retirer l’image ${i + 1}`}
+                  label={t('assetsField.remove', { n: i + 1 })}
                   icon={Trash2}
                   onClick={() => props.onChange(items.filter((_, j) => j !== i))}
                 />
@@ -108,7 +112,7 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
       })}
       {pictures.length > 0 && (
         <label className="field field-stack">
-          <span className="field-label">Ajouter depuis la médiathèque</span>
+          <span className="field-label">{t('assetsField.fromLibrary')}</span>
           <select
             value=""
             onChange={(e) => {
@@ -116,7 +120,7 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
               if (isPicture(asset)) props.onChange([...items, { assetId: asset.id, alt: asset.alt ?? '' }]);
             }}
           >
-            <option value="">Choisir une image…</option>
+            <option value="">{t('assetsField.choose')}</option>
             {pictures.map((a) => (
               <option key={a.id} value={a.id}>
                 {a.name || a.file}
@@ -126,7 +130,7 @@ export function AssetsField(props: { label: string; value: Item[]; onChange: (v:
         </label>
       )}
       <Button size="sm" icon={ImagePlus} disabled={busy} onClick={() => input.current?.click()}>
-        {busy ? 'Import…' : 'Importer des images…'}
+        {busy ? t('assetsField.importing') : t('assetsField.import')}
       </Button>
       <input
         ref={input}

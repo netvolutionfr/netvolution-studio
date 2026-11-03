@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { parentOf, type Rect, type Site } from '@ns/core';
+import { parentOf, type Rect, type Site, t } from '@ns/core';
 import { ChevronRight } from 'lucide-react';
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { typeIcon } from '../ui/index.ts';
@@ -92,9 +92,9 @@ export function Tree({ onHover, drag }: { onHover: (id: string | null) => void; 
   };
 
   return (
-    <nav className="panel" aria-label="Arborescence">
+    <nav className="panel" aria-label={t('tree.title')}>
       <h2 className="panel-title" id="tree-title">
-        Arborescence
+        {t('tree.title')}
       </h2>
       <div role="tree" aria-labelledby="tree-title" className="tree" ref={tree}>
         {rows.map((row, i) => {
@@ -129,7 +129,7 @@ export function Tree({ onHover, drag }: { onHover: (id: string | null) => void; 
                   type="button"
                   tabIndex={-1}
                   className="tree-toggle"
-                  aria-label={row.expanded ? `Replier ${label}` : `Déplier ${label}`}
+                  aria-label={row.expanded ? t('tree.collapse', { label }) : t('tree.expand', { label })}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggle(row.id);

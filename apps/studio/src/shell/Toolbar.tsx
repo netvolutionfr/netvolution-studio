@@ -1,4 +1,4 @@
-import { activeBreakpoint, pagePath } from '@ns/core';
+import { activeBreakpoint, pagePath, t } from '@ns/core';
 import {
   CircleAlert,
   CircleHelp,
@@ -20,6 +20,7 @@ import {
 import { IconButton, Segmented } from '../ui/index.ts';
 import type { SidePanel } from './App.tsx';
 import { DocumentBar } from './DocumentBar.tsx';
+import { LanguageMenu } from './LanguageMenu.tsx';
 import { useEditor, useStore } from './store.ts';
 import { MAX_WIDTH, MIN_WIDTH, VIEWPORTS } from './viewport.ts';
 
@@ -42,7 +43,7 @@ export function Toolbar(props: {
   const canRedo = useEditor((s) => s.future.length > 0);
   const error = useEditor((s) => s.lastError);
   const bp = activeBreakpoint(doc, props.width);
-  const bpLabel = bp === 'base' ? 'Base (desktop)' : doc.breakpoints.find((b) => b.id === bp)?.label;
+  const bpLabel = bp === 'base' ? t('viewport.base') : doc.breakpoints.find((b) => b.id === bp)?.label;
   const preset = VIEWPORTS.find((v) => v.width === props.width)?.id;
 
   return (
@@ -54,20 +55,36 @@ export function Toolbar(props: {
         <DocumentBar />
       </div>
       <div className="toolbar-center">
-        <IconButton label="Annuler" icon={Undo2} shortcut="⌘Z" onClick={store.undo} disabled={!canUndo} />
-        <IconButton label="Rétablir" icon={Redo2} shortcut="⇧⌘Z" onClick={store.redo} disabled={!canRedo} />
+        <IconButton
+          label={t('toolbar.undo')}
+          icon={Undo2}
+          shortcut="⌘Z"
+          onClick={store.undo}
+          disabled={!canUndo}
+        />
+        <IconButton
+          label={t('toolbar.redo')}
+          icon={Redo2}
+          shortcut="⇧⌘Z"
+          onClick={store.redo}
+          disabled={!canRedo}
+        />
         <span className="toolbar-sep" />
         <Segmented
-          label="Largeur d'aperçu"
+          label={t('viewport.label')}
           value={preset}
-          options={VIEWPORTS.map((v) => ({ value: v.id, label: v.label, icon: VIEWPORT_ICONS[v.id] }))}
+          options={VIEWPORTS.map((v) => ({
+            value: v.id,
+            label: t(`viewport.${v.id}`),
+            icon: VIEWPORT_ICONS[v.id],
+          }))}
           onChange={(id) => {
             const v = VIEWPORTS.find((x) => x.id === id);
             if (v) props.onWidth(v.width);
           }}
         />
         <label className="width-input">
-          <span className="visually-hidden">Largeur personnalisée en pixels</span>
+          <span className="visually-hidden">{t('viewport.custom')}</span>
           <input
             type="number"
             min={MIN_WIDTH}
@@ -81,79 +98,80 @@ export function Toolbar(props: {
           <span aria-hidden="true">px</span>
         </label>
         <span className="breakpoint">
-          <span className="visually-hidden">Breakpoint édité : </span>
+          <span className="visually-hidden">{t('viewport.editedBreakpoint')}</span>
           <strong>{bpLabel}</strong>
         </span>
       </div>
       <div className="toolbar-end">
         <IconButton
-          label="Design system"
+          label={t('toolbar.design')}
           icon={Palette}
-          tooltip="Couleurs, tailles, polices et styles de texte du site"
+          tooltip={t('toolbar.designTip')}
           aria-pressed={props.side === 'design'}
           onClick={() => props.onSide(props.side === 'design' ? 'inspector' : 'design')}
         />
         <IconButton
-          label="Médiathèque"
+          label={t('toolbar.media')}
           icon={Images}
-          tooltip="Images, SVG et fichiers du projet"
+          tooltip={t('toolbar.mediaTip')}
           aria-pressed={props.side === 'media'}
           onClick={() => props.onSide(props.side === 'media' ? 'inspector' : 'media')}
         />
         <IconButton
-          label="Menus"
+          label={t('toolbar.menus')}
           icon={ListTree}
-          tooltip="Menus de navigation du site"
+          tooltip={t('toolbar.menusTip')}
           aria-pressed={props.side === 'menus'}
           onClick={() => props.onSide(props.side === 'menus' ? 'inspector' : 'menus')}
         />
         <IconButton
-          label="Assistant IA"
+          label={t('toolbar.assistant')}
           icon={Sparkles}
-          tooltip="Propositions de l’IA, toujours soumises à votre validation"
+          tooltip={t('toolbar.assistantTip')}
           aria-pressed={props.side === 'assistant'}
           onClick={() => props.onSide(props.side === 'assistant' ? 'inspector' : 'assistant')}
         />
         <IconButton
-          label="Journal des opérations"
+          label={t('toolbar.journal')}
           icon={History}
-          tooltip="Opérations de la session (vous et l’IA)"
+          tooltip={t('toolbar.journalTip')}
           aria-pressed={props.side === 'journal'}
           onClick={() => props.onSide(props.side === 'journal' ? 'inspector' : 'journal')}
         />
         <IconButton
-          label="Aperçu du site"
+          label={t('toolbar.sitePreview')}
           icon={ExternalLink}
-          tooltip="Naviguer dans le site, sans les outils d’édition (nouvel onglet)"
+          tooltip={t('toolbar.sitePreviewTip')}
           onClick={() => {
             const slug = doc.pages.find((p) => p.id === pageId)?.slug ?? '';
             open(`./preview.html#/${doc.id}${pagePath(slug)}`, `ns-preview-${doc.id}`);
           }}
         />
         <IconButton
-          label="Aperçu"
+          label={t('toolbar.preview')}
           icon={Eye}
-          tooltip="Aperçu sans les contrôles de l’éditeur"
+          tooltip={t('toolbar.previewTip')}
           aria-pressed={props.preview}
           onClick={() => props.onPreview(!props.preview)}
         />
         <IconButton
-          label="Guide d’utilisation"
+          label={t('toolbar.guide')}
           icon={CircleHelp}
-          tooltip="Guide d’utilisation du Studio (nouvel onglet)"
+          tooltip={t('toolbar.guideTip')}
           onClick={() => open('./guide/', 'ns-guide')}
         />
         <IconButton
-          label={props.theme === 'dark' ? 'Thème clair' : 'Thème sombre'}
+          label={props.theme === 'dark' ? t('toolbar.lightTheme') : t('toolbar.darkTheme')}
           icon={props.theme === 'dark' ? Sun : Moon}
           onClick={() => props.onTheme(props.theme === 'dark' ? 'light' : 'dark')}
         />
+        <LanguageMenu />
       </div>
       {error && (
         <div className="toasts toasts-editor">
           <div className="toast toast-error error" role="alert">
             <CircleAlert aria-hidden="true" size={16} />
-            <span className="toast-text">Refusé : {error.message}</span>
+            <span className="toast-text">{t('toolbar.refused', { message: error.message })}</span>
           </div>
         </div>
       )}

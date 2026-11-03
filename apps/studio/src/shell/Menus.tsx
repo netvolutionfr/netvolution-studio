@@ -1,4 +1,4 @@
-import type { Link, Menu, MenuItem } from '@ns/core';
+import { type Link, type Menu, type MenuItem, t } from '@ns/core';
 import { ArrowDown, ArrowUp, IndentDecrease, IndentIncrease, Plus, Trash2 } from 'lucide-react';
 import { Button, IconButton } from '../ui/index.ts';
 import { TextField } from './fields.tsx';
@@ -55,45 +55,45 @@ export function Menus() {
           const next = [...rows];
           const [row] = next.splice(i, 1);
           if (row) next.splice(to, 0, row);
-          return update(next, 'Déplacer une entrée');
+          return update(next, t('menus.moveEntry'));
         };
         return (
           <Section key={menu.id} title={menu.name || menu.id}>
             <TextField
-              label="Nom du menu"
+              label={t('menus.menuName')}
               value={menu.name}
-              onChange={(name) => save({ ...menu, name }, 'Nom du menu')}
+              onChange={(name) => save({ ...menu, name }, t('menus.menuName'))}
             />
             <ul className="menu-rows">
               {rows.map((row, i) => (
                 <li key={row.item.id} className={row.depth ? 'menu-row menu-row-sub' : 'menu-row'}>
                   <TextField
-                    label="Libellé"
+                    label={t('menus.label')}
                     value={row.item.label}
-                    onChange={(label) => edit(i, { item: { ...row.item, label } }, 'Libellé de l’entrée')}
+                    onChange={(label) => edit(i, { item: { ...row.item, label } }, t('menus.entryLabel'))}
                   />
                   <LinkField
-                    label="Lien"
+                    label={t('menus.link')}
                     value={row.item.link}
                     onChange={(link: Link | null) =>
-                      edit(i, { item: { ...row.item, link: link ?? row.item.link } }, 'Lien de l’entrée')
+                      edit(i, { item: { ...row.item, link: link ?? row.item.link } }, t('menus.entryLink'))
                     }
                   />
                   <div
                     className="inspector-actions"
                     role="toolbar"
-                    aria-label={`Actions sur ${row.item.label}`}
+                    aria-label={t('menus.actionsOn', { label: row.item.label })}
                   >
                     <IconButton
                       size="sm"
-                      label="Monter l’entrée"
+                      label={t('menus.moveUp')}
                       icon={ArrowUp}
                       disabled={i === 0}
                       onClick={() => move(i, i - 1)}
                     />
                     <IconButton
                       size="sm"
-                      label="Descendre l’entrée"
+                      label={t('menus.moveDown')}
                       icon={ArrowDown}
                       disabled={i === rows.length - 1}
                       onClick={() => move(i, i + 1)}
@@ -101,28 +101,28 @@ export function Menus() {
                     {row.depth === 0 ? (
                       <IconButton
                         size="sm"
-                        label="En faire une sous-entrée"
+                        label={t('menus.indent')}
                         icon={IndentIncrease}
                         disabled={i === 0 || rows[i + 1]?.depth === 1}
-                        onClick={() => edit(i, { depth: 1 }, 'Sous-entrée')}
+                        onClick={() => edit(i, { depth: 1 }, t('menus.indentDone'))}
                       />
                     ) : (
                       <IconButton
                         size="sm"
-                        label="Remonter au premier niveau"
+                        label={t('menus.outdent')}
                         icon={IndentDecrease}
-                        onClick={() => edit(i, { depth: 0 }, 'Entrée de premier niveau')}
+                        onClick={() => edit(i, { depth: 0 }, t('menus.outdentDone'))}
                       />
                     )}
                     <IconButton
                       size="sm"
                       variant="danger"
-                      label="Supprimer l’entrée"
+                      label={t('menus.removeEntry')}
                       icon={Trash2}
                       onClick={() =>
                         update(
                           rows.filter((_, j) => j !== i),
-                          'Supprimer une entrée',
+                          t('menus.removeEntryDone'),
                         )
                       }
                     />
@@ -141,46 +141,43 @@ export function Menus() {
                       {
                         item: {
                           id: freeId(new Set(rows.map((r) => r.item.id)), 'e'),
-                          label: 'Nouvelle entrée',
+                          label: t('menus.newEntry'),
                           link: { kind: 'page', pageId: homeId },
                         },
                         depth: 0,
                       },
                     ],
-                    'Ajouter une entrée',
+                    t('menus.addEntry'),
                   )
                 }
               >
-                Ajouter une entrée
+                {t('menus.addEntry')}
               </Button>
               <Button
                 size="sm"
                 icon={Trash2}
                 variant="danger"
-                onClick={() => store.dispatch('removeMenu', { id: menu.id }, 'Supprimer le menu')}
+                onClick={() => store.dispatch('removeMenu', { id: menu.id }, t('menus.removeMenu'))}
               >
-                Supprimer le menu
+                {t('menus.removeMenu')}
               </Button>
             </div>
           </Section>
         );
       })}
-      <p className="hint">
-        Les entrées vers une page suivent ses changements d'adresse. Une page peut figurer dans plusieurs
-        menus, ou dans aucun. Un composant Navigation affiche un menu.
-      </p>
+      <p className="hint">{t('menus.hint')}</p>
       <div className="ds-add">
         <Button
           size="sm"
           icon={Plus}
           onClick={() =>
             save(
-              { id: freeId(new Set(menus.map((m) => m.id)), 'menu-'), name: 'Nouveau menu', items: [] },
-              'Ajouter un menu',
+              { id: freeId(new Set(menus.map((m) => m.id)), 'menu-'), name: t('menus.newMenu'), items: [] },
+              t('menus.addMenu'),
             )
           }
         >
-          Nouveau menu
+          {t('menus.newMenu')}
         </Button>
       </div>
     </div>

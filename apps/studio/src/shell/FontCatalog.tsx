@@ -1,11 +1,11 @@
+import { t } from '@ns/core';
 import { Check, Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/index.ts';
 import { addCatalogFont, type CatalogFont, fontFileUrl, listFonts } from './api.ts';
 import { useEditor, useStore } from './store.ts';
 
-const CATEGORIES = { 'sans-serif': 'Sans empattement', serif: 'Avec empattement' } as const;
-const SAMPLE = 'Portez ce vieux whisky au juge blond qui fume';
+const CATEGORIES = ['sans-serif', 'serif'] as const;
 /** Generic family closing the stack of a catalog font, by category. */
 const fallback = (category: string) => (category === 'serif' ? 'serif' : 'sans-serif');
 const tokenId = (family: string) =>
@@ -43,7 +43,7 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
       const assets = await addCatalogFont(doc.id, font.id);
       const tokens = store.getState().doc.tokens;
       const hasToken = Object.values(tokens?.fonts ?? {}).some((f) => f.stack[0] === font.family);
-      store.begin(`Ajouter la police ${font.family}`);
+      store.begin(t('fonts.addDone', { family: font.family }));
       const results = [
         ...assets.map((asset) => store.dispatch('addAsset', { asset })),
         ...(hasToken
@@ -75,11 +75,8 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
       onClose={props.onClose}
       aria-labelledby="font-catalog-title"
     >
-      <h2 id="font-catalog-title">Catalogue de polices</h2>
-      <p className="hint">
-        Polices libres (licence SIL OFL ou Apache), jeu de caractères latin (français compris). Les fichiers
-        sont copiés dans le projet et livrés avec le site : aucun appel à Google Fonts ni à un autre service.
-      </p>
+      <h2 id="font-catalog-title">{t('fonts.title')}</h2>
+      <p className="hint">{t('fonts.hint')}</p>
       {fonts && (
         <style>
           {fonts
@@ -94,12 +91,13 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
       )}
       {error && (
         <p className="field-error" role="alert">
-          Échec : {error}
+          {t('fonts.failed', { message: error })}
         </p>
       )}
-      {!fonts && !error && <p>Chargement…</p>}
+      {!fonts && !error && <p>{t('fonts.loading')}</p>}
       {fonts &&
-        Object.entries(CATEGORIES).map(([category, title]) => {
+        CATEGORIES.map((category) => {
+          const title = t(`fonts.categories.${category}`);
           const list = fonts.filter((f) => fallback(f.category) === category);
           return (
             list.length > 0 && (
@@ -113,21 +111,21 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
                         className="font-sample"
                         style={{ fontFamily: `"ns-catalog-${f.id}", ${fallback(f.category)}` }}
                       >
-                        {SAMPLE}
+                        {t('fonts.sample')}
                       </span>
                       {imported.has(f.family) ? (
                         <span className="font-added">
-                          <Check aria-hidden="true" size={14} /> Ajoutée
+                          <Check aria-hidden="true" size={14} /> {t('fonts.added')}
                         </span>
                       ) : (
                         <Button
                           size="sm"
                           icon={Plus}
                           disabled={busy !== null}
-                          aria-label={`Ajouter ${f.family}`}
+                          aria-label={t('common.add', { label: f.family })}
                           onClick={() => void add(f)}
                         >
-                          {busy === f.id ? 'Ajout…' : 'Ajouter'}
+                          {busy === f.id ? t('fonts.adding') : t('fonts.add')}
                         </Button>
                       )}
                     </li>
@@ -139,7 +137,7 @@ export function FontCatalog(props: { open: boolean; onClose: () => void }) {
         })}
       <div className="dialog-actions">
         <Button type="button" onClick={() => dialog.current?.close()}>
-          Fermer
+          {t('fonts.close')}
         </Button>
       </div>
     </dialog>

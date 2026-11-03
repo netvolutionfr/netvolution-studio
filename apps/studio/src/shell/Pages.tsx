@@ -10,6 +10,7 @@ import {
   pageReferences,
   type Redirect,
   type Seo,
+  t,
 } from '@ns/core';
 import {
   ArrowDown,
@@ -50,15 +51,15 @@ export function PagesPanel() {
     store.dispatch(
       'createPage',
       { title: 'Nouvelle page', slug: freeSlug(doc, 'nouvelle-page'), tree },
-      'Ajouter une page',
+      t('pages.add'),
     );
   };
 
   return (
-    <section className="panel pages" aria-label="Pages">
+    <section className="panel pages" aria-label={t('pages.title')}>
       <div className="panel-title-row">
-        <h2 className="panel-title">Pages</h2>
-        <IconButton size="sm" label="Ajouter une page" icon={FilePlus} onClick={add} />
+        <h2 className="panel-title">{t('pages.title')}</h2>
+        <IconButton size="sm" label={t('pages.add')} icon={FilePlus} onClick={add} />
       </div>
       <ul className="pages-list">
         {pages.map((p) => (
@@ -70,12 +71,12 @@ export function PagesPanel() {
               onClick={() => store.setPage(p.id)}
             >
               {p.id === home ? (
-                <House aria-label="Page d'accueil" size={14} strokeWidth={1.75} />
+                <House aria-label={t('pages.home')} size={14} strokeWidth={1.75} />
               ) : (
                 <span className="pages-icon" aria-hidden="true" />
               )}
-              <span className="pages-title">{p.title || 'Sans titre'}</span>
-              {!p.publish && <EyeOff aria-label="Non publiée" size={14} strokeWidth={1.75} />}
+              <span className="pages-title">{p.title || t('pages.untitled')}</span>
+              {!p.publish && <EyeOff aria-label={t('pages.unpublished')} size={14} strokeWidth={1.75} />}
               <span className="pages-path">{pagePath(p.slug)}</span>
             </button>
           </li>
@@ -83,7 +84,7 @@ export function PagesPanel() {
       </ul>
       {symbols.length > 0 && (
         <>
-          <h3 className="pages-subtitle">Composants partagés</h3>
+          <h3 className="pages-subtitle">{t('pages.symbols')}</h3>
           <ul className="pages-list">
             {symbols.map((sym) => (
               <li key={sym.id}>
@@ -102,7 +103,7 @@ export function PagesPanel() {
           </ul>
         </>
       )}
-      <h3 className="pages-subtitle">Header et footer</h3>
+      <h3 className="pages-subtitle">{t('pages.layouts')}</h3>
       <ul className="pages-list">
         {layouts.map((l) => {
           const Icon = l.role === 'header' ? PanelTop : PanelBottom;
@@ -127,7 +128,7 @@ export function PagesPanel() {
               <button type="button" className="pages-item" onClick={() => createLayout(store, role)}>
                 <Plus aria-hidden="true" size={14} strokeWidth={1.75} />
                 <span className="pages-title">
-                  {role === 'header' ? 'Créer le header' : 'Créer le footer'}
+                  {role === 'header' ? t('pages.createHeader') : t('pages.createFooter')}
                 </span>
               </button>
             </li>
@@ -146,7 +147,7 @@ const px = (value: number) => ({ value, unit: 'px' as const });
 function createLayout(store: EditorStore, role: LayoutRole) {
   const { doc } = store.getState();
   const name = role === 'header' ? 'Header' : 'Footer';
-  store.begin(`Créer le ${role}`);
+  store.begin(role === 'header' ? t('pages.createHeader') : t('pages.createFooter'));
   let menuId = doc.menus?.[0]?.id;
   if (!menuId) {
     menuId = 'principal';
@@ -237,21 +238,22 @@ export function LayoutSettings() {
   if (!layout) return null;
   const shown = doc.pages.filter((p) => pageLayout(doc, p.id, layout.role)?.id === layout.id).length;
   return (
-    <Section title={layout.role === 'header' ? 'Header partagé' : 'Footer partagé'}>
-      <p className="hint">
-        Affiché sur {shown} page{shown > 1 ? 's' : ''} sur {doc.pages.length}. Une modification ici s'applique
-        à toutes ces pages.
-      </p>
+    <Section title={layout.role === 'header' ? t('pages.sharedHeader') : t('pages.sharedFooter')}>
+      <p className="hint">{t('pages.layoutShown', { count: shown, total: doc.pages.length })}</p>
       <Button
         size="sm"
         icon={Trash2}
         variant="danger"
         onClick={() =>
-          confirm(`Supprimer « ${layout.name} » de toutes les pages ?`) &&
-          store.dispatch('removeLayout', { id: layout.id }, `Supprimer ${layout.name}`)
+          confirm(t('pages.confirmRemoveLayout', { name: layout.name })) &&
+          store.dispatch(
+            'removeLayout',
+            { id: layout.id },
+            t('pages.removeLayoutDone', { name: layout.name }),
+          )
         }
       >
-        Supprimer
+        {t('pages.remove')}
       </Button>
     </Section>
   );
@@ -274,35 +276,37 @@ export function PageSettings() {
 
   return (
     <>
-      <Section title="Page">
+      <Section title={t('pages.page')}>
         <TextField
           key={`${page.id}-title`}
-          label="Titre"
+          label={t('pages.pageTitle')}
           value={page.title}
-          onChange={(title) => update({ title }, 'Titre de la page')}
+          onChange={(title) => update({ title }, t('pages.pageTitleDone'))}
         />
         {isHome ? (
           <p className="hint">
-            Adresse : <code>/</code> (page d'accueil)
+            {t('pages.address')}
+            <code>/</code>
+            {t('pages.homeSuffix')}
           </p>
         ) : (
           <TextField
             key={`${page.id}-slug`}
-            label="Adresse (slug)"
+            label={t('pages.slug')}
             value={page.slug}
-            onChange={(slug) => update({ slug }, 'Adresse de la page')}
+            onChange={(slug) => update({ slug }, t('pages.slugDone'))}
           />
         )}
         {!isHome && (
           <p className="hint">
-            Publiée à <code>{pagePath(page.slug)}</code>. Minuscules, chiffres et tirets ; « / » pour une
-            sous-adresse.
+            {t('pages.publishedAt')}
+            <code>{pagePath(page.slug)}</code>
+            {t('pages.slugHint')}
           </p>
         )}
         {links > 0 && (
           <p className="hint" role="note">
-            {links} élément{links > 1 ? 's' : ''} du site lie{links > 1 ? 'nt' : ''} vers cette page : leurs
-            liens suivent automatiquement un changement d'adresse.
+            {t('pages.inboundLinks', { count: links })}
           </p>
         )}
         {(['header', 'footer'] as const)
@@ -317,11 +321,11 @@ export function PageSettings() {
                     store.dispatch(
                       'setPageLayout',
                       { id: page.id, role, show: e.target.checked },
-                      role === 'header' ? 'Afficher le header' : 'Afficher le footer',
+                      role === 'header' ? t('pages.showHeader') : t('pages.showFooter'),
                     )
                   }
                 />
-                {role === 'header' ? 'Afficher le header' : 'Afficher le footer'}
+                {role === 'header' ? t('pages.showHeader') : t('pages.showFooter')}
               </label>
             </div>
           ))}
@@ -331,41 +335,41 @@ export function PageSettings() {
               type="checkbox"
               checked={page.publish}
               disabled={isHome}
-              onChange={(e) => update({ publish: e.target.checked }, 'Publication de la page')}
+              onChange={(e) => update({ publish: e.target.checked }, t('pages.publishDone'))}
             />
-            Publier (inclure dans l'export)
+            {t('pages.publish')}
           </label>
         </div>
-        <div className="inspector-actions" role="toolbar" aria-label="Actions sur la page">
+        <div className="inspector-actions" role="toolbar" aria-label={t('pages.actions')}>
           <IconButton
             size="sm"
-            label="Monter la page"
+            label={t('pages.moveUp')}
             icon={ArrowUp}
             disabled={index <= 0}
-            onClick={() => store.dispatch('movePage', { id: page.id, index: index - 1 }, 'Monter la page')}
+            onClick={() => store.dispatch('movePage', { id: page.id, index: index - 1 }, t('pages.moveUp'))}
           />
           <IconButton
             size="sm"
-            label="Descendre la page"
+            label={t('pages.moveDown')}
             icon={ArrowDown}
             disabled={index >= doc.pages.length - 1}
-            onClick={() => store.dispatch('movePage', { id: page.id, index: index + 1 }, 'Descendre la page')}
+            onClick={() => store.dispatch('movePage', { id: page.id, index: index + 1 }, t('pages.moveDown'))}
           />
           <IconButton
             size="sm"
-            label="Dupliquer la page"
+            label={t('pages.duplicate')}
             icon={CopyPlus}
-            onClick={() => store.dispatch('duplicatePage', { id: page.id }, 'Dupliquer la page')}
+            onClick={() => store.dispatch('duplicatePage', { id: page.id }, t('pages.duplicate'))}
           />
           <IconButton
             size="sm"
-            label="Supprimer la page"
+            label={t('pages.removePage')}
             icon={Trash2}
             variant="danger"
             disabled={isHome}
             onClick={() =>
-              confirm(`Supprimer la page « ${page.title} » et son contenu ?`) &&
-              store.dispatch('removePage', { id: page.id }, 'Supprimer la page')
+              confirm(t('pages.confirmRemovePage', { title: page.title })) &&
+              store.dispatch('removePage', { id: page.id }, t('pages.removePage'))
             }
           />
         </div>
@@ -373,28 +377,28 @@ export function PageSettings() {
           <Button
             size="sm"
             icon={House}
-            onClick={() => store.dispatch('setHomePage', { id: page.id }, "Définir la page d'accueil")}
+            onClick={() => store.dispatch('setHomePage', { id: page.id }, t('pages.setHomeDone'))}
           >
-            Définir comme page d'accueil
+            {t('pages.setHome')}
           </Button>
         )}
       </Section>
       <SeoSection key={page.id} pageId={page.id} />
-      <Section title="Site">
+      <Section title={t('pages.site')}>
         <TextField
-          label="Nom du projet"
+          label={t('pages.projectName')}
           value={doc.name}
-          onChange={(name) => site({ name }, 'Nom du projet')}
+          onChange={(name) => site({ name }, t('pages.projectName'))}
         />
         <TextField
-          label="Langue (fr, en-GB…)"
+          label={t('pages.siteLang')}
           value={doc.settings.lang}
-          onChange={(lang) => site({ lang }, 'Langue du site')}
+          onChange={(lang) => site({ lang }, t('pages.siteLangDone'))}
         />
         <TextField
-          label="URL canonique (https://exemple.fr)"
+          label={t('pages.siteUrl')}
           value={doc.settings.siteUrl ?? ''}
-          onChange={(siteUrl) => site({ siteUrl: siteUrl || null }, 'URL canonique')}
+          onChange={(siteUrl) => site({ siteUrl: siteUrl || null }, t('pages.siteUrlDone'))}
         />
       </Section>
       <RedirectsSection />
@@ -417,40 +421,40 @@ function SeoSection({ pageId }: { pageId: string }) {
   };
   const images = Object.values(doc.assets).filter(isPicture);
   return (
-    <Section title="Référencement et partage">
+    <Section title={t('seo.title')}>
       <TextField
-        label="Titre SEO (sinon le titre de la page)"
+        label={t('seo.seoTitle')}
         value={seo.title ?? ''}
-        onChange={(title) => set({ title }, 'Titre SEO')}
+        onChange={(title) => set({ title }, t('seo.seoTitleDone'))}
       />
       <TextField
-        label="Meta description (≈ 160 caractères)"
+        label={t('seo.description')}
         multiline
         value={seo.description ?? ''}
-        onChange={(description) => set({ description }, 'Meta description')}
+        onChange={(description) => set({ description }, t('seo.descriptionDone'))}
       />
       <TextField
-        label="URL canonique (si différente de la page)"
+        label={t('seo.canonical')}
         value={seo.canonical ?? ''}
-        onChange={(canonical) => set({ canonical }, 'URL canonique de la page')}
+        onChange={(canonical) => set({ canonical }, t('seo.canonicalDone'))}
       />
       <div className="field field-boolean">
         <label className="field-check">
           <input
             type="checkbox"
             checked={seo.index !== false}
-            onChange={(e) => set({ index: e.target.checked ? undefined : false }, 'Indexation de la page')}
+            onChange={(e) => set({ index: e.target.checked ? undefined : false }, t('seo.indexDone'))}
           />
-          Indexer (moteurs de recherche, sitemap)
+          {t('seo.index')}
         </label>
       </div>
       <label className="field field-stack">
-        <span className="field-label">Image de partage (Open Graph)</span>
+        <span className="field-label">{t('seo.image')}</span>
         <select
           value={seo.image ?? ''}
-          onChange={(e) => set({ image: e.target.value || undefined }, 'Image de partage')}
+          onChange={(e) => set({ image: e.target.value || undefined }, t('seo.imageDone'))}
         >
-          <option value="">Aucune</option>
+          <option value="">{t('seo.none')}</option>
           {images.map((a) => (
             <option key={a.id} value={a.id}>
               {a.name || a.file}
@@ -475,47 +479,45 @@ function RedirectsSection() {
       label,
     );
   return (
-    <Section title="Redirections">
+    <Section title={t('redirects.title')}>
       {redirects.map((r, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: rows are edited in place, in order.
         <div className="menu-row" key={i}>
           <TextField
-            label="Ancienne adresse (/chemin/)"
+            label={t('redirects.from')}
             value={r.from}
-            onChange={(from) => edit(i, { from }, 'Redirection')}
+            onChange={(from) => edit(i, { from }, t('redirects.done'))}
           />
           <LinkField
-            label="Vers"
+            label={t('redirects.to')}
             value={r.to}
-            onChange={(to) => edit(i, { to: to ?? r.to }, 'Redirection')}
+            onChange={(to) => edit(i, { to: to ?? r.to }, t('redirects.done'))}
           />
           <div className="field field-boolean">
             <label className="field-check">
               <input
                 type="checkbox"
                 checked={r.permanent}
-                onChange={(e) => edit(i, { permanent: e.target.checked }, 'Redirection')}
+                onChange={(e) => edit(i, { permanent: e.target.checked }, t('redirects.done'))}
               />
-              Permanente (301)
+              {t('redirects.permanent')}
             </label>
             <IconButton
               size="sm"
               variant="danger"
-              label="Supprimer la redirection"
+              label={t('redirects.remove')}
               icon={Trash2}
               onClick={() =>
                 save(
                   redirects.filter((_, j) => j !== i),
-                  'Supprimer une redirection',
+                  t('redirects.removeDone'),
                 )
               }
             />
           </div>
         </div>
       ))}
-      <p className="hint">
-        Exportées pour Netlify, Cloudflare, nginx et Apache ; un site statique ne peut pas les imposer seul.
-      </p>
+      <p className="hint">{t('redirects.hint')}</p>
       <Button
         size="sm"
         icon={Plus}
@@ -527,11 +529,11 @@ function RedirectsSection() {
               ...redirects,
               { from: `/ancienne-page-${n}/`, to: { kind: 'page', pageId: homeId }, permanent: true },
             ],
-            'Ajouter une redirection',
+            t('redirects.add'),
           );
         }}
       >
-        Ajouter une redirection
+        {t('redirects.add')}
       </Button>
     </Section>
   );

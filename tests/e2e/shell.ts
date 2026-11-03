@@ -416,6 +416,18 @@ await check('Thème clair : bascule et accessibilité (axe)', async () => {
   await page.getByRole('button', { name: 'Thème sombre' }).click();
 });
 
+await check('Langue de l’interface : anglais, puis retour au français (ADR-0024)', async () => {
+  if (await saveButton.isEnabled()) await saveButton.click();
+  await eventually(status, 'Enregistré', 'enregistré avant le rechargement');
+  await page.getByRole('button', { name: 'Langue de l’interface' }).click();
+  await page.getByRole('menuitem', { name: 'English' }).click();
+  await eventually(status, 'Saved', 'interface en anglais');
+  expect((await page.evaluate(() => document.documentElement.lang)) === 'en', 'lang de la page');
+  await page.getByRole('button', { name: 'Interface language' }).click();
+  await page.getByRole('menuitem', { name: 'Français' }).click();
+  await eventually(status, 'Enregistré', 'retour au français');
+});
+
 await check('Site de 3 pages liées : créer, lier, renommer un slug, recharger (SB-02)', async () => {
   const pages = page.locator('.pages');
   const add = async (title: string, slug: string) => {

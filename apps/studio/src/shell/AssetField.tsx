@@ -1,4 +1,4 @@
-import { type Asset, type DocNode, isPicture } from '@ns/core';
+import { type Asset, type DocNode, isPicture, t } from '@ns/core';
 import { ImagePlus } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Button } from '../ui/index.ts';
@@ -49,7 +49,7 @@ export function AssetField({
         : store.dispatch('updateNodeProps', { id: node.id, props }, label);
     if (!set?.ok) {
       store.cancel();
-      setError(set && !set.ok ? set.error.message : 'Ajout refusé');
+      setError(set && !set.ok ? set.error.message : t('assetField.refused'));
       return;
     }
     store.commit();
@@ -60,8 +60,7 @@ export function AssetField({
 
   const upload = async () => {
     if (!file) return;
-    if (!decorative && !alt.trim())
-      return setError('Texte alternatif obligatoire (ou cocher « décorative »).');
+    if (!decorative && !alt.trim()) return setError(t('assetField.altRequired'));
     setBusy(true);
     try {
       use(await uploadMedia(projectId, file, decorative ? '' : alt.trim()), true);
@@ -81,10 +80,10 @@ export function AssetField({
       {current ? (
         <img className="asset-thumb" src={`.${mediaBase(projectId)}${current.file}`} alt="" />
       ) : (
-        <p className="hint">Aucune image.</p>
+        <p className="hint">{t('assetField.none')}</p>
       )}
       <label className="field">
-        Envoyer une image (PNG, JPEG, WebP, AVIF, SVG ; 10 Mo max.)
+        {t('assetField.upload')}
         <input
           type="file"
           accept="image/png,image/jpeg,image/webp,image/avif,image/svg+xml"
@@ -97,7 +96,7 @@ export function AssetField({
       {file && (
         <>
           <label className="field" htmlFor={`${id}-alt`}>
-            Texte alternatif
+            {t('assetField.alt')}
           </label>
           <input
             id={`${id}-alt`}
@@ -107,16 +106,16 @@ export function AssetField({
           />
           <label className="field-check">
             <input type="checkbox" checked={decorative} onChange={(e) => setDecorative(e.target.checked)} />
-            Image décorative
+            {t('assetField.decorative')}
           </label>
           <Button variant="primary" size="sm" icon={ImagePlus} disabled={busy} onClick={() => void upload()}>
-            {busy ? 'Envoi…' : "Ajouter l'image"}
+            {busy ? t('assetField.sending') : t('assetField.add')}
           </Button>
         </>
       )}
       {others.length > 0 && (
         <label className="field">
-          Médiathèque
+          {t('assetField.library')}
           <select
             value=""
             onChange={(e) => {
@@ -124,7 +123,7 @@ export function AssetField({
               if (asset) use(asset, false);
             }}
           >
-            <option value="">Réutiliser…</option>
+            <option value="">{t('assetField.reuse')}</option>
             {others.map((a) => (
               <option key={a.id} value={a.id}>
                 {`${a.name || a.file} (${a.width}×${a.height})`}

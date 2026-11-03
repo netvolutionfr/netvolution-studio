@@ -1,5 +1,5 @@
 import { registry } from '@ns/components';
-import { type Check, checkSite } from '@ns/core';
+import { type Check, checkSite, t } from '@ns/core';
 import { CircleAlert, PackageOpen, TriangleAlert } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/index.ts';
@@ -79,17 +79,18 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
       onClose={props.onClose}
       aria-labelledby="export-title"
     >
-      <h2 id="export-title">Exporter le site</h2>
+      <h2 id="export-title">{t('export.title')}</h2>
       {!checks ? (
-        <p>Contrôles en cours…</p>
+        <p>{t('export.checking')}</p>
       ) : (
         <>
-          <h3>Contrôles avant export</h3>
-          {errors.length === 0 && warnings.length === 0 && <p>Aucun problème détecté.</p>}
+          <h3>{t('export.checks')}</h3>
+          {errors.length === 0 && warnings.length === 0 && <p>{t('export.noProblem')}</p>}
           {errors.length > 0 && (
             <>
               <p role="alert">
-                <strong>{errors.length} erreur(s) bloquante(s)</strong> : à corriger avant d'exporter.
+                <strong>{t('export.errors', { count: errors.length })}</strong>
+                {t('export.errorsHint')}
               </p>
               {list(errors, CircleAlert)}
             </>
@@ -97,7 +98,8 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
           {warnings.length > 0 && (
             <>
               <p>
-                <strong>{warnings.length} avertissement(s)</strong> : l'export reste possible.
+                <strong>{t('export.warnings', { count: warnings.length })}</strong>
+                {t('export.warningsHint')}
               </p>
               {list(warnings, TriangleAlert)}
             </>
@@ -106,28 +108,30 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
       )}
       <label className="field-check">
         <input type="checkbox" checked={build} onChange={(e) => setBuild(e.target.checked)} />
-        Construire aussi le site statique (npm ci + build Astro : réseau nécessaire, une à quelques minutes)
+        {t('export.build')}
       </label>
       {result && (
         <p className="export-result" role="status">
-          Sources Astro : <code>{result.path}</code>
+          {t('export.sources')}
+          <code>{result.path}</code>
           {result.download && (
             <>
               {' '}
               <a href={`./api/exports/${result.download}.tar.gz`} download>
-                Télécharger (.tar.gz)
+                {t('export.download')}
               </a>
             </>
           )}
           {result.staticPath && (
             <>
               <br />
-              Site statique, prêt à héberger : <code>{result.staticPath}</code>
+              {t('export.staticSite')}
+              <code>{result.staticPath}</code>
               {result.staticDownload && (
                 <>
                   {' '}
                   <a href={`./api/exports/${result.staticDownload}.tar.gz`} download>
-                    Télécharger (.tar.gz)
+                    {t('export.download')}
                   </a>
                 </>
               )}
@@ -137,12 +141,12 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
       )}
       {error && (
         <p className="field-error" role="alert">
-          Échec : {error}
+          {t('export.failed', { message: error })}
         </p>
       )}
       <div className="dialog-actions">
         <Button type="button" onClick={() => dialog.current?.close()}>
-          Fermer
+          {t('export.close')}
         </Button>
         <Button
           type="button"
@@ -151,7 +155,7 @@ export function ExportDialog(props: { open: boolean; onClose: () => void }) {
           disabled={!checks || errors.length > 0 || busy}
           onClick={() => void run()}
         >
-          {busy ? (build ? 'Export et build…' : 'Export…') : 'Exporter'}
+          {busy ? (build ? t('export.exportingWithBuild') : t('export.exporting')) : t('export.export')}
         </Button>
       </div>
     </dialog>

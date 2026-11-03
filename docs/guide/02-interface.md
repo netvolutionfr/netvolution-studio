@@ -10,7 +10,7 @@ L’éditeur se découpe en cinq zones. Les panneaux de gauche et de droite se r
 
 C’est la page d’accueil du Studio. On y crée un projet depuis un **modèle**, on ouvre, **duplique** ou **supprime** un projet existant (il part dans une corbeille, côté serveur), et on **importe** une archive exportée d’un autre Studio. Les modèles de site que vous avez enregistrés apparaissent sous « Mes modèles de site ».
 
-Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène.
+Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène. Le bouton de **langue** (en haut à droite) choisit la langue de l’interface ; la page se recharge dans la langue choisie.
 
 ## La barre d’outils
 
@@ -41,7 +41,8 @@ Puis :
 - **Aperçu du site** ouvre le site dans un nouvel onglet, pour naviguer de page en page sans les outils d’édition ;
 - **Aperçu** (l’œil) masque les panneaux et les cadres de sélection, pour juger la page seule ;
 - **?** ouvre ce guide ;
-- le soleil ou la lune bascule l’interface en **thème clair ou sombre** (le site produit n’est pas concerné).
+- le soleil ou la lune bascule l’interface en **thème clair ou sombre** (le site produit n’est pas concerné) ;
+- le bouton de **langue** choisit la langue de l’interface (français ou anglais). Enregistrez avant : la page se recharge. La langue du site produit se règle à part, dans les réglages du site (inspecteur, section Site).
 
 ## À gauche : pages, bibliothèque, arborescence
 
