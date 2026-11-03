@@ -1,0 +1,403 @@
+{
+  "schemaVersion": 1,
+  "kind": "ns.page",
+  "id": "flex",
+  "title": "Composition Flex",
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "rootId": "nroot00001",
+  "nodes": {
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nhero0001", "nrow00001"],
+      "name": "Page"
+    },
+    "nhero0001": {
+      "id": "nhero0001",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "align": "center",
+          "gap": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 64,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 64,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "direction": "column",
+          "align": "stretch",
+          "gap": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["ncopy0001", "npanel001"],
+      "name": "Hero"
+    },
+    "ncopy0001": {
+      "id": "ncopy0001",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "grow": 1,
+          "basis": {
+            "value": 0,
+            "unit": "px"
+          },
+          "gap": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1000001", "ntxt00001"]
+    },
+    "nh1000001": {
+      "id": "nh1000001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Un hero en Flex"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 48,
+            "unit": "px"
+          },
+          "lineHeight": 1.1
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxt00001": {
+      "id": "ntxt00001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Deux colonnes sur desktop, empilées sur mobile."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 18,
+            "unit": "px"
+          },
+          "color": "#4b5563"
+        }
+      },
+      "children": []
+    },
+    "npanel001": {
+      "id": "npanel001",
+      "type": "container",
+      "props": {
+        "tag": "aside"
+      },
+      "style": {
+        "base": {
+          "grow": 1,
+          "basis": {
+            "value": 0,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 240,
+            "unit": "px"
+          },
+          "backgroundColor": "#c7d2fe",
+          "radius": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nrow00001": {
+      "id": "nrow00001",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "wrap": true,
+          "justify": "space-between",
+          "gap": {
+            "value": 16,
+            "unit": "px"
+          }
+        },
+        "tablet": {
+          "justify": "center"
+        }
+      },
+      "children": ["nchip0001", "nchip0002", "nchip0003", "nchip0004"],
+      "name": "Rangée"
+    },
+    "nchip0001": {
+      "id": "nchip0001",
+      "type": "container",
+      "props": {
+        "tag": "div"
+      },
+      "style": {
+        "base": {
+          "basis": {
+            "value": 220,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 80,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 12,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 12,
+            "unit": "px"
+          },
+          "backgroundColor": "#f3f4f6",
+          "radius": {
+            "value": 8,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nchipt001"]
+    },
+    "nchip0002": {
+      "id": "nchip0002",
+      "type": "container",
+      "props": {
+        "tag": "div"
+      },
+      "style": {
+        "base": {
+          "basis": {
+            "value": 220,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 80,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 12,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 12,
+            "unit": "px"
+          },
+          "backgroundColor": "#f3f4f6",
+          "radius": {
+            "value": 8,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nchipt002"]
+    },
+    "nchip0003": {
+      "id": "nchip0003",
+      "type": "container",
+      "props": {
+        "tag": "div"
+      },
+      "style": {
+        "base": {
+          "basis": {
+            "value": 220,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 80,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 12,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 12,
+            "unit": "px"
+          },
+          "backgroundColor": "#f3f4f6",
+          "radius": {
+            "value": 8,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nchipt003"]
+    },
+    "nchip0004": {
+      "id": "nchip0004",
+      "type": "container",
+      "props": {
+        "tag": "div"
+      },
+      "style": {
+        "base": {
+          "basis": {
+            "value": 220,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 80,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 12,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 12,
+            "unit": "px"
+          },
+          "backgroundColor": "#f3f4f6",
+          "radius": {
+            "value": 8,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nchipt004"]
+    },
+    "nchipt001": {
+      "id": "nchipt001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Élément 1"
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nchipt002": {
+      "id": "nchipt002",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Élément 2"
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nchipt003": {
+      "id": "nchipt003",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Élément 3"
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nchipt004": {
+      "id": "nchipt004",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Élément 4"
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    }
+  },
+  "assets": {}
+}

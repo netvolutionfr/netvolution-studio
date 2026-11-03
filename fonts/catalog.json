@@ -1,0 +1,594 @@
+[
+  {
+    "id": "dm-sans",
+    "family": "DM Sans",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts)",
+    "files": [
+      {
+        "file": "dm-sans-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 1000
+        },
+        "style": "normal"
+      },
+      {
+        "file": "dm-sans-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 1000
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "figtree",
+    "family": "Figtree",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree)",
+    "files": [
+      {
+        "file": "figtree-normal.woff2",
+        "weight": {
+          "min": 300,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "figtree-italic.woff2",
+        "weight": {
+          "min": 300,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "fraunces",
+    "family": "Fraunces",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces)",
+    "files": [
+      {
+        "file": "fraunces-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "fraunces-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "inter",
+    "family": "Inter",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)",
+    "files": [
+      {
+        "file": "inter-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "inter-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "jost",
+    "family": "Jost",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type/Jost)",
+    "files": [
+      {
+        "file": "jost-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "jost-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "lato",
+    "family": "Lato",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1.",
+    "files": [
+      {
+        "file": "lato-400-normal.woff2",
+        "weight": {
+          "min": 400,
+          "max": 400
+        },
+        "style": "normal"
+      },
+      {
+        "file": "lato-700-normal.woff2",
+        "weight": {
+          "min": 700,
+          "max": 700
+        },
+        "style": "normal"
+      },
+      {
+        "file": "lato-400-italic.woff2",
+        "weight": {
+          "min": 400,
+          "max": 400
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "lora",
+    "family": "Lora",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2011 The Lora Project Authors (https://github.com/cyrealtype/Lora-Cyrillic), with Reserved Font Name \"Lora\".",
+    "files": [
+      {
+        "file": "lora-normal.woff2",
+        "weight": {
+          "min": 400,
+          "max": 700
+        },
+        "style": "normal"
+      },
+      {
+        "file": "lora-italic.woff2",
+        "weight": {
+          "min": 400,
+          "max": 700
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "manrope",
+    "family": "Manrope",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2019 The Manrope Project Authors (https://github.com/sharanda/manrope)",
+    "files": [
+      {
+        "file": "manrope-normal.woff2",
+        "weight": {
+          "min": 200,
+          "max": 800
+        },
+        "style": "normal"
+      }
+    ]
+  },
+  {
+    "id": "merriweather",
+    "family": "Merriweather",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2024 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather4) with Reserved Font Name \"Merriweather\".",
+    "files": [
+      {
+        "file": "merriweather-normal.woff2",
+        "weight": {
+          "min": 300,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "merriweather-italic.woff2",
+        "weight": {
+          "min": 300,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "montserrat",
+    "family": "Montserrat",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2011 The Montserrat Project Authors (https://github.com/JulietaUla/Montserrat)",
+    "files": [
+      {
+        "file": "montserrat-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "montserrat-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "noto-sans",
+    "family": "Noto Sans",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)",
+    "files": [
+      {
+        "file": "noto-sans-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "noto-sans-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "noto-serif",
+    "family": "Noto Serif",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)",
+    "files": [
+      {
+        "file": "noto-serif-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "noto-serif-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "nunito",
+    "family": "Nunito",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito)",
+    "files": [
+      {
+        "file": "nunito-normal.woff2",
+        "weight": {
+          "min": 200,
+          "max": 1000
+        },
+        "style": "normal"
+      },
+      {
+        "file": "nunito-italic.woff2",
+        "weight": {
+          "min": 200,
+          "max": 1000
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "open-sans",
+    "family": "Open Sans",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)",
+    "files": [
+      {
+        "file": "open-sans-normal.woff2",
+        "weight": {
+          "min": 300,
+          "max": 800
+        },
+        "style": "normal"
+      },
+      {
+        "file": "open-sans-italic.woff2",
+        "weight": {
+          "min": 300,
+          "max": 800
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "oswald",
+    "family": "Oswald",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2016 The Oswald Project Authors (https://github.com/googlefonts/OswaldFont)",
+    "files": [
+      {
+        "file": "oswald-normal.woff2",
+        "weight": {
+          "min": 200,
+          "max": 700
+        },
+        "style": "normal"
+      }
+    ]
+  },
+  {
+    "id": "outfit",
+    "family": "Outfit",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2021 The Outfit Project Authors (https://github.com/Outfitio/Outfit-Fonts)",
+    "files": [
+      {
+        "file": "outfit-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      }
+    ]
+  },
+  {
+    "id": "playfair-display",
+    "family": "Playfair Display",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2017 The Playfair Display Project Authors (https://github.com/clauseggers/Playfair-Display), with Reserved Font Name \"Playfair Display\".",
+    "files": [
+      {
+        "file": "playfair-display-normal.woff2",
+        "weight": {
+          "min": 400,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "playfair-display-italic.woff2",
+        "weight": {
+          "min": 400,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "plus-jakarta-sans",
+    "family": "Plus Jakarta Sans",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Plus Jakarta Sans Project Authors (https://github.com/tokotype/PlusJakartaSans)",
+    "files": [
+      {
+        "file": "plus-jakarta-sans-normal.woff2",
+        "weight": {
+          "min": 200,
+          "max": 800
+        },
+        "style": "normal"
+      },
+      {
+        "file": "plus-jakarta-sans-italic.woff2",
+        "weight": {
+          "min": 200,
+          "max": 800
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "poppins",
+    "family": "Poppins",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)",
+    "files": [
+      {
+        "file": "poppins-400-normal.woff2",
+        "weight": {
+          "min": 400,
+          "max": 400
+        },
+        "style": "normal"
+      },
+      {
+        "file": "poppins-500-normal.woff2",
+        "weight": {
+          "min": 500,
+          "max": 500
+        },
+        "style": "normal"
+      },
+      {
+        "file": "poppins-600-normal.woff2",
+        "weight": {
+          "min": 600,
+          "max": 600
+        },
+        "style": "normal"
+      },
+      {
+        "file": "poppins-700-normal.woff2",
+        "weight": {
+          "min": 700,
+          "max": 700
+        },
+        "style": "normal"
+      },
+      {
+        "file": "poppins-400-italic.woff2",
+        "weight": {
+          "min": 400,
+          "max": 400
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "raleway",
+    "family": "Raleway",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2010 The Raleway Project Authors (impallari@gmail.com), with Reserved Font Name \"Raleway\".",
+    "files": [
+      {
+        "file": "raleway-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "raleway-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "roboto",
+    "family": "Roboto",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)",
+    "files": [
+      {
+        "file": "roboto-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "roboto-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "roboto-slab",
+    "family": "Roboto Slab",
+    "category": "serif",
+    "license": "Apache License 2.0 — Roboto Slab, Google Fonts",
+    "files": [
+      {
+        "file": "roboto-slab-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      }
+    ]
+  },
+  {
+    "id": "source-serif-4",
+    "family": "Source Serif 4",
+    "category": "serif",
+    "license": "SIL Open Font License 1.1 — Google Inc.",
+    "files": [
+      {
+        "file": "source-serif-4-normal.woff2",
+        "weight": {
+          "min": 200,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "source-serif-4-italic.woff2",
+        "weight": {
+          "min": 200,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  },
+  {
+    "id": "space-grotesk",
+    "family": "Space Grotesk",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)",
+    "files": [
+      {
+        "file": "space-grotesk-normal.woff2",
+        "weight": {
+          "min": 300,
+          "max": 700
+        },
+        "style": "normal"
+      }
+    ]
+  },
+  {
+    "id": "work-sans",
+    "family": "Work Sans",
+    "category": "sans-serif",
+    "license": "SIL Open Font License 1.1 — Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans)",
+    "files": [
+      {
+        "file": "work-sans-normal.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "normal"
+      },
+      {
+        "file": "work-sans-italic.woff2",
+        "weight": {
+          "min": 100,
+          "max": 900
+        },
+        "style": "italic"
+      }
+    ]
+  }
+]

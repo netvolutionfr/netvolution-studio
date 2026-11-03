@@ -1,0 +1,11 @@
+Netvolution Studio
+Copyright 2026 Stanis Humez
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The font files in fonts/files/ are not covered by that license: each one keeps its
+own license (SIL Open Font License 1.1, or Apache License 2.0 for Roboto), whose
+text is in fonts/licenses/.
+
+"Netvolution" is the trade name of the Netvolution company; the license does not
+grant permission to use it (section 6 of the Apache License).

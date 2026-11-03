@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "kind": "ns.page",
+  "id": "grid",
+  "title": "Grille responsive",
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    },
+    {
+      "id": "small",
+      "label": "Petit mobile",
+      "maxWidth": 479
+    }
+  ],
+  "rootId": "nroot00001",
+  "nodes": {
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh2000001", "ngrid0001"],
+      "name": "Page"
+    },
+    "nh2000001": {
+      "id": "nh2000001",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Trois cartes"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 36,
+            "unit": "px"
+          },
+          "marginBottom": {
+            "value": 32,
+            "unit": "px"
+          }
+        },
+        "small": {
+          "fontSize": {
+            "value": 26,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ngrid0001": {
+      "id": "ngrid0001",
+      "type": "grid",
+      "props": {},
+      "style": {
+        "base": {
+          "columns": 3,
+          "gap": {
+            "value": 24,
+            "unit": "px"
+          }
+        },
+        "tablet": {
+          "columns": 2
+        },
+        "mobile": {
+          "gap": {
+            "value": 16,
+            "unit": "px"
+          }
+        },
+        "small": {
+          "columns": 1
+        }
+      },
+      "children": ["ncard0001", "ncard0002", "ncard0003"],
+      "name": "Grille"
+    },
+    "ncard0001": {
+      "id": "ncard0001",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#f9fafb",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["ncardh001", "ncardt001"]
+    },
+    "ncardh001": {
+      "id": "ncardh001",
+      "type": "heading",
+      "props": {
+        "level": 3,
+        "text": "Rapide"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ncardt001": {
+      "id": "ncardt001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Une carte de la grille, dont le nombre de colonnes dépend du breakpoint."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "color": "#4b5563"
+        }
+      },
+      "children": []
+    },
+    "ncard0002": {
+      "id": "ncard0002",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#f9fafb",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["ncardh002", "ncardt002"]
+    },
+    "ncardh002": {
+      "id": "ncardh002",
+      "type": "heading",
+      "props": {
+        "level": 3,
+        "text": "Sûr"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ncardt002": {
+      "id": "ncardt002",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Une carte de la grille, dont le nombre de colonnes dépend du breakpoint."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "color": "#4b5563"
+        }
+      },
+      "children": []
+    },
+    "ncard0003": {
+      "id": "ncard0003",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#f9fafb",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["ncardh003", "ncardt003"]
+    },
+    "ncardh003": {
+      "id": "ncardh003",
+      "type": "heading",
+      "props": {
+        "level": 3,
+        "text": "Réversible"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ncardt003": {
+      "id": "ncardt003",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Une carte de la grille, dont le nombre de colonnes dépend du breakpoint."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "color": "#4b5563"
+        }
+      },
+      "children": []
+    }
+  },
+  "assets": {}
+}

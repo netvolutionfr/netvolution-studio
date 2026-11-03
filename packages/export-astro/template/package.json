@@ -1,0 +1,19 @@
+{
+  "name": "site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "7.1.2",
+    "astro": "7.4.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

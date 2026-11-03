@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "breakpoints": [
+    { "id": "tablet", "maxWidth": 1023 },
+    { "id": "mobile", "maxWidth": 767 }
+  ],
+  "root": {
+    "id": "page", "type": "container", "props": {},
+    "style": { "base": { "maxWidth": "1120px", "marginInline": "auto", "paddingInline": "24px" } },
+    "children": [
+      {
+        "id": "hero", "type": "stack", "props": {},
+        "style": {
+          "base": { "flexDirection": "row", "alignItems": "center", "gap": "48px", "paddingBlock": "96px" },
+          "mobile": { "flexDirection": "column", "gap": "24px", "paddingBlock": "48px" }
+        },
+        "children": [
+          {
+            "id": "hero-copy", "type": "stack", "props": {},
+            "style": { "base": { "flexDirection": "column", "gap": "16px", "flex": "1 1 0" } },
+            "children": [
+              { "id": "h1", "type": "heading", "props": { "level": 1, "text": "Un studio pour des sites rapides" },
+                "style": { "base": { "fontSize": "48px", "lineHeight": "1.1" }, "tablet": { "fontSize": "40px" }, "mobile": { "fontSize": "32px" } } },
+              { "id": "p1", "type": "text", "props": { "text": "Concevez visuellement, exportez un projet Astro statique et autonome." },
+                "style": { "base": { "fontSize": "18px", "color": "#374151" } } },
+              { "id": "cta", "type": "button", "props": { "label": "Commencer", "href": "#cards" },
+                "style": { "base": { "alignSelf": "flex-start", "padding": "12px 20px", "backgroundColor": "#4f46e5", "color": "#ffffff", "borderRadius": "8px", "textDecoration": "none" } } }
+            ]
+          },
+          { "id": "img", "type": "image", "props": { "src": "/placeholder.svg", "alt": "Illustration abstraite", "width": 640, "height": 400 },
+            "style": { "base": { "flex": "1 1 0", "width": "100%", "height": "auto", "minWidth": "0" } } }
+        ]
+      },
+      {
+        "id": "cards", "type": "grid", "props": {},
+        "style": {
+          "base": { "gridTemplateColumns": "repeat(3, minmax(0, 1fr))", "gap": "24px", "paddingBlock": "48px" },
+          "tablet": { "gridTemplateColumns": "repeat(2, minmax(0, 1fr))" },
+          "mobile": { "gridTemplateColumns": "minmax(0, 1fr)" }
+        },
+        "children": [
+          { "id": "c1", "type": "stack", "props": {}, "style": { "base": { "flexDirection": "column", "gap": "8px", "padding": "24px", "backgroundColor": "#f3f4f6", "borderRadius": "12px" } },
+            "children": [ { "id": "c1h", "type": "heading", "props": { "level": 3, "text": "Rapide" }, "style": {} },
+                          { "id": "c1t", "type": "text", "props": { "text": "HTML pré-rendu, aucun JavaScript par défaut." }, "style": {} } ] },
+          { "id": "c2", "type": "stack", "props": {}, "style": { "base": { "flexDirection": "column", "gap": "8px", "padding": "24px", "backgroundColor": "#f3f4f6", "borderRadius": "12px" } },
+            "children": [ { "id": "c2h", "type": "heading", "props": { "level": 3, "text": "Sûr" }, "style": {} },
+                          { "id": "c2t", "type": "text", "props": { "text": "Pas de back-office exposé sur le site public." }, "style": {} } ] },
+          { "id": "c3", "type": "stack", "props": {}, "style": { "base": { "flexDirection": "column", "gap": "8px", "padding": "24px", "backgroundColor": "#f3f4f6", "borderRadius": "12px" } },
+            "children": [ { "id": "c3h", "type": "heading", "props": { "level": 3, "text": "Réversible" }, "style": {} },
+                          { "id": "c3t", "type": "text", "props": { "text": "Un projet Astro standard, documenté & <échappé>." }, "style": {} } ] }
+        ]
+      }
+    ]
+  }
+}

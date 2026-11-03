@@ -1,0 +1,13 @@
+{
+  "name": "@ns/export-astro",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ns/components": "*",
+    "@ns/core": "*"
+  }
+}

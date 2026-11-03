@@ -1,0 +1,670 @@
+{
+  "schemaVersion": 1,
+  "kind": "ns.page",
+  "id": "elements",
+  "title": "Éléments",
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "rootId": "nroot00001",
+  "nodes": {
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 960,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": [
+        "nh1000001",
+        "ntxt00001",
+        "nlst00001",
+        "nlst00002",
+        "nlst00003",
+        "ntxtpar001",
+        "nhrich0001",
+        "nhgrad0001",
+        "nrow00001",
+        "ndiv00001",
+        "nspc00001",
+        "nbtn00004",
+        "ndiv00002",
+        "nimg00001",
+        "nimg00002",
+        "nimg00003"
+      ],
+      "name": "Page"
+    },
+    "nh1000001": {
+      "id": "nh1000001",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Boutons, séparateurs et espaceurs"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          },
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          },
+          "letterSpacing": {
+            "value": 2,
+            "unit": "px"
+          },
+          "textTransform": "uppercase"
+        }
+      },
+      "children": []
+    },
+    "ntxt00001": {
+      "id": "ntxt00001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Texte "
+          },
+          {
+            "text": "gras et italique",
+            "bold": true,
+            "italic": true
+          },
+          {
+            "text": " puis un "
+          },
+          {
+            "text": "lien en gras",
+            "bold": true,
+            "link": {
+              "kind": "url",
+              "href": "mailto:contact@example.com"
+            }
+          },
+          {
+            "text": "."
+          },
+          {
+            "text": " Une ligne\nsuivie d’un retour à la ligne.",
+            "italic": true
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "marginBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "fontStyle": "normal"
+        }
+      },
+      "children": []
+    },
+    "nrow00001": {
+      "id": "nrow00001",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "wrap": true,
+          "gap": {
+            "value": 12,
+            "unit": "px"
+          },
+          "align": "center"
+        },
+        "mobile": {
+          "direction": "column",
+          "align": "stretch"
+        }
+      },
+      "children": ["nbtn00001", "nbtn00002", "nbtn00003"],
+      "name": "Boutons"
+    },
+    "nbtn00001": {
+      "id": "nbtn00001",
+      "type": "button",
+      "props": {
+        "label": "Principal",
+        "link": {
+          "kind": "url",
+          "href": "#contact"
+        },
+        "variant": "primary"
+      },
+      "style": {},
+      "children": []
+    },
+    "nbtn00002": {
+      "id": "nbtn00002",
+      "type": "button",
+      "props": {
+        "label": "Secondaire",
+        "link": {
+          "kind": "url",
+          "href": "https://example.com"
+        },
+        "variant": "secondary"
+      },
+      "style": {
+        "base": {
+          "radius": {
+            "value": 999,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nbtn00003": {
+      "id": "nbtn00003",
+      "type": "button",
+      "props": {
+        "label": "Lien texte",
+        "link": {
+          "kind": "url",
+          "href": "tel:+33100000000"
+        },
+        "variant": "text"
+      },
+      "style": {
+        "mobile": {
+          "hidden": true
+        },
+        "base": {
+          "borderWidth": {
+            "value": 2,
+            "unit": "px"
+          },
+          "borderStyle": "dashed",
+          "borderColor": "#3b5bdb"
+        }
+      },
+      "children": []
+    },
+    "ndiv00001": {
+      "id": "ndiv00001",
+      "type": "divider",
+      "props": {},
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "marginBottom": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nspc00001": {
+      "id": "nspc00001",
+      "type": "spacer",
+      "props": {},
+      "style": {
+        "base": {
+          "minHeight": {
+            "value": 48,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "minHeight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nbtn00004": {
+      "id": "nbtn00004",
+      "type": "button",
+      "props": {
+        "label": "Bouton personnalisé",
+        "link": {
+          "kind": "url",
+          "href": "#"
+        },
+        "variant": "primary"
+      },
+      "style": {
+        "base": {
+          "backgroundColor": "#0f766e",
+          "paddingTop": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 32,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 32,
+            "unit": "px"
+          },
+          "fontSize": {
+            "value": 18,
+            "unit": "px"
+          },
+          "radius": {
+            "value": 4,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "width": {
+            "value": 100,
+            "unit": "%"
+          }
+        }
+      },
+      "children": []
+    },
+    "ndiv00002": {
+      "id": "ndiv00002",
+      "type": "divider",
+      "props": {},
+      "style": {
+        "base": {
+          "minHeight": {
+            "value": 4,
+            "unit": "px"
+          },
+          "backgroundColor": "#3b5bdb",
+          "maxWidth": {
+            "value": 120,
+            "unit": "px"
+          },
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nimg00001": {
+      "id": "nimg00001",
+      "type": "image",
+      "props": {
+        "assetId": "afixture001",
+        "alt": "Dégradé bleu et violet",
+        "decorative": false,
+        "fit": "cover",
+        "loading": "eager"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          },
+          "shadow": {
+            "x": {
+              "value": 0,
+              "unit": "px"
+            },
+            "y": {
+              "value": 12,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 32,
+              "unit": "px"
+            },
+            "spread": {
+              "value": -4,
+              "unit": "px"
+            },
+            "color": "#00000040"
+          },
+          "borderWidth": {
+            "value": 4,
+            "unit": "px"
+          },
+          "borderStyle": "solid",
+          "borderColor": "#ffffff"
+        },
+        "mobile": {
+          "shadow": "none"
+        }
+      },
+      "children": []
+    },
+    "nimg00002": {
+      "id": "nimg00002",
+      "type": "image",
+      "props": {
+        "assetId": "afixture001",
+        "alt": "",
+        "decorative": true,
+        "fit": "cover",
+        "loading": "lazy"
+      },
+      "style": {
+        "base": {
+          "width": {
+            "value": 100,
+            "unit": "%"
+          },
+          "height": {
+            "value": 160,
+            "unit": "px"
+          },
+          "marginTop": {
+            "value": 24,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "height": {
+            "value": 96,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nimg00003": {
+      "id": "nimg00003",
+      "type": "image",
+      "props": {
+        "assetId": null,
+        "alt": "",
+        "decorative": false,
+        "fit": "contain",
+        "loading": "lazy"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nlst00001": {
+      "id": "nlst00001",
+      "type": "list",
+      "props": {
+        "marker": "disc",
+        "items": [
+          [
+            {
+              "text": "Sites "
+            },
+            {
+              "text": "rapides",
+              "bold": true
+            },
+            {
+              "text": " et sûrs"
+            }
+          ],
+          [
+            {
+              "text": "Hébergement ",
+              "italic": true
+            },
+            {
+              "text": "au choix",
+              "link": {
+                "kind": "url",
+                "href": "https://example.com/hebergement"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Code livré au client"
+            }
+          ]
+        ]
+      },
+      "style": {
+        "base": {
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nlst00002": {
+      "id": "nlst00002",
+      "type": "list",
+      "props": {
+        "marker": "decimal",
+        "items": [
+          [
+            {
+              "text": "Atelier de cadrage"
+            }
+          ],
+          [
+            {
+              "text": "Maquettes"
+            }
+          ],
+          [
+            {
+              "text": "Mise en ligne"
+            }
+          ]
+        ]
+      },
+      "style": {
+        "base": {
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          },
+          "color": "#1e3a8a"
+        }
+      },
+      "children": []
+    },
+    "nlst00003": {
+      "id": "nlst00003",
+      "type": "list",
+      "props": {
+        "marker": "none",
+        "items": [
+          [
+            {
+              "text": "Sans puce, avec la sémantique de liste"
+            }
+          ],
+          [
+            {
+              "text": "Second élément"
+            }
+          ]
+        ]
+      },
+      "style": {
+        "base": {
+          "marginBottom": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxtpar001": {
+      "id": "ntxtpar001",
+      "type": "text",
+      "props": {
+        "content": [
+          [
+            {
+              "text": "Premier paragraphe, "
+            },
+            {
+              "text": "avec un passage en couleur",
+              "color": "#be123c"
+            },
+            {
+              "text": "."
+            }
+          ],
+          [
+            {
+              "text": "Second paragraphe, ",
+              "italic": true
+            },
+            {
+              "text": "en gras",
+              "bold": true
+            }
+          ]
+        ]
+      },
+      "style": {
+        "base": {
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nhrich0001": {
+      "id": "nhrich0001",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": [
+          {
+            "text": "Central, "
+          },
+          {
+            "text": "Digital,",
+            "italic": true,
+            "color": "#1e3a8a"
+          },
+          {
+            "text": "\nOriginal.",
+            "bold": true
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 36,
+            "unit": "px"
+          },
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nhgrad0001": {
+      "id": "nhgrad0001",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Texte en dégradé"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 48,
+            "unit": "px"
+          },
+          "fontWeight": 800,
+          "textGradient": {
+            "kind": "linear",
+            "angle": 90,
+            "stops": [
+              {
+                "color": "#1e1b4b",
+                "at": 0
+              },
+              {
+                "color": "#be123c",
+                "at": 100
+              }
+            ]
+          }
+        },
+        "mobile": {
+          "textGradient": "none",
+          "color": "#be123c"
+        }
+      },
+      "children": []
+    }
+  },
+  "assets": {
+    "afixture001": {
+      "id": "afixture001",
+      "kind": "image",
+      "file": "afixture001.png",
+      "mime": "image/png",
+      "width": 640,
+      "height": 400
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# Copie de référence Tatsu/Oshin (GPL + composants tiers) : jamais versionnée
+/resources/
+
+# Dépendances et builds
+node_modules/
+dist/
+.astro/
+coverage/
+
+# Données locales du Studio (ADR-0004) et exports générés
+/data/
+/exports/
+
+# Tests
+test-results/
+playwright-report/
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Système / éditeurs
+.DS_Store
+.vscode/
+.idea/
+*.log

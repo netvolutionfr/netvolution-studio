@@ -1,0 +1,10 @@
+---
+import doc from '../../shared/doc.json';
+import Canvas from '../../shared/Canvas';
+import { toCss } from '../../shared/css';
+const css = toCss(doc);
+---
+<html lang="fr">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>Preview</title><style set:html={css}></style></head>
+  <body><Canvas client:only="react" /></body>
+</html>

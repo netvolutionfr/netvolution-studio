@@ -1,0 +1,15 @@
+# Netvolution Studio sur le serveur (ADR-0015). Copié dans le dossier de déploiement par le workflow
+# GitHub ; IMAGE_TAG y est fixé à chaque déploiement. Le port n'écoute que sur 127.0.0.1 : seul nginx
+# (HTTPS + mot de passe) y accède.
+services:
+  studio:
+    image: ghcr.io/netvolutionfr/netvolution-studio:${IMAGE_TAG:-latest}
+    container_name: netvolution-studio
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${NS_PORT:-3010}:8080"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/data

@@ -1,0 +1,10 @@
+---
+import doc from '../../shared/doc.json';
+import { Page } from '../../shared/components';
+import { toCss } from '../../shared/css';
+const css = toCss(doc);
+---
+<html lang="fr">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>Export</title><style set:html={css}></style></head>
+  <body><Page doc={doc} /></body>
+</html>

@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 2,
+  "kind": "ns.site",
+  "id": "layouts",
+  "name": "Header, menu et footer",
+  "settings": {
+    "lang": "fr",
+    "homePageId": "home",
+    "defaultLayouts": {
+      "header": "header",
+      "footer": "footer"
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "",
+      "rootId": "nroothome1",
+      "publish": true
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "slug": "services",
+      "rootId": "nrootserv1",
+      "publish": true
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "rootId": "nrootcont1",
+      "publish": true
+    },
+    {
+      "id": "mentions",
+      "title": "Mentions légales",
+      "slug": "mentions-legales",
+      "rootId": "nrootment1",
+      "publish": true,
+      "layouts": {
+        "header": null
+      }
+    }
+  ],
+  "layouts": [
+    {
+      "id": "header",
+      "name": "Header",
+      "role": "header",
+      "rootId": "nheader001"
+    },
+    {
+      "id": "footer",
+      "name": "Footer",
+      "role": "footer",
+      "rootId": "nfooter001"
+    }
+  ],
+  "menus": [
+    {
+      "id": "main",
+      "name": "Menu principal",
+      "items": [
+        {
+          "id": "e1",
+          "label": "Accueil",
+          "link": {
+            "kind": "page",
+            "pageId": "home"
+          }
+        },
+        {
+          "id": "e2",
+          "label": "Services",
+          "link": {
+            "kind": "page",
+            "pageId": "services"
+          },
+          "children": [
+            {
+              "id": "e3",
+              "label": "Conseil",
+              "link": {
+                "kind": "url",
+                "href": "https://example.com/conseil"
+              }
+            }
+          ]
+        },
+        {
+          "id": "e4",
+          "label": "Contact",
+          "link": {
+            "kind": "page",
+            "pageId": "contact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "legal",
+      "name": "Pied de page",
+      "items": [
+        {
+          "id": "e1",
+          "label": "Mentions légales",
+          "link": {
+            "kind": "page",
+            "pageId": "mentions"
+          }
+        },
+        {
+          "id": "e2",
+          "label": "Contact",
+          "link": {
+            "kind": "page",
+            "pageId": "contact"
+          }
+        }
+      ]
+    }
+  ],
+  "nodes": {
+    "nlogo00001": {
+      "id": "nlogo00001",
+      "type": "button",
+      "name": "Logo",
+      "props": {
+        "label": "Atelier Nord",
+        "link": {
+          "kind": "page",
+          "pageId": "home"
+        },
+        "variant": "text"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 20,
+            "unit": "px"
+          },
+          "fontWeight": 700
+        }
+      },
+      "children": []
+    },
+    "nnavhead01": {
+      "id": "nnavhead01",
+      "type": "nav",
+      "props": {
+        "menuId": "main",
+        "label": "Navigation principale",
+        "toggle": "Menu",
+        "collapse": "tablet"
+      },
+      "style": {},
+      "children": []
+    },
+    "nbarhead01": {
+      "id": "nbarhead01",
+      "type": "stack",
+      "name": "Barre",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "justify": "space-between",
+          "align": "center",
+          "wrap": true,
+          "gap": {
+            "value": 24,
+            "unit": "px"
+          },
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto"
+        }
+      },
+      "children": ["nlogo00001", "nnavhead01"]
+    },
+    "nheader001": {
+      "id": "nheader001",
+      "type": "container",
+      "name": "Header",
+      "props": {
+        "tag": "header"
+      },
+      "style": {
+        "base": {
+          "paddingTop": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#ffffff"
+        }
+      },
+      "children": ["nbarhead01"]
+    },
+    "ntxtfoot01": {
+      "id": "ntxtfoot01",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "© Atelier Nord — Lille"
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "color": "#e5e7eb"
+        }
+      },
+      "children": []
+    },
+    "nnavfoot01": {
+      "id": "nnavfoot01",
+      "type": "nav",
+      "props": {
+        "menuId": "legal",
+        "label": "Navigation du pied de page",
+        "toggle": "Menu",
+        "collapse": "never"
+      },
+      "style": {
+        "base": {
+          "color": "#e5e7eb"
+        }
+      },
+      "children": []
+    },
+    "nbarfoot01": {
+      "id": "nbarfoot01",
+      "type": "stack",
+      "name": "Barre",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "justify": "space-between",
+          "align": "center",
+          "wrap": true,
+          "gap": {
+            "value": 24,
+            "unit": "px"
+          },
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto"
+        }
+      },
+      "children": ["ntxtfoot01", "nnavfoot01"]
+    },
+    "nfooter001": {
+      "id": "nfooter001",
+      "type": "container",
+      "name": "Footer",
+      "props": {
+        "tag": "footer"
+      },
+      "style": {
+        "base": {
+          "paddingTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 32,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#111827"
+        }
+      },
+      "children": ["nbarfoot01"]
+    },
+    "nh1home001": {
+      "id": "nh1home001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Un site partagé"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nroothome1": {
+      "id": "nroothome1",
+      "type": "container",
+      "name": "Page",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 320,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1home001"]
+    },
+    "nh1serv001": {
+      "id": "nh1serv001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Nos services"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nrootserv1": {
+      "id": "nrootserv1",
+      "type": "container",
+      "name": "Page",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 320,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1serv001"]
+    },
+    "nh1cont001": {
+      "id": "nh1cont001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Nous écrire"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nrootcont1": {
+      "id": "nrootcont1",
+      "type": "container",
+      "name": "Page",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 320,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1cont001"]
+    },
+    "nh1ment001": {
+      "id": "nh1ment001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Mentions légales"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nrootment1": {
+      "id": "nrootment1",
+      "type": "container",
+      "name": "Page",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 320,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1ment001"]
+    }
+  },
+  "assets": {}
+}

@@ -1,0 +1,42 @@
+{
+  "name": "netvolution-studio",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tests/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @ns/studio",
+    "typecheck": "tsc",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "export": "node packages/export-astro/src/cli.ts",
+    "test:fidelity": "node tests/fidelity/run.ts",
+    "test:e2e": "node tests/e2e/shell.ts",
+    "demo": "node tests/e2e/demo.ts",
+    "demo:site": "node tests/e2e/demo-site.ts",
+    "demo:creative": "node tests/e2e/demo-creative.ts",
+    "fonts:catalog": "node fonts/build-catalog.ts",
+    "guide:screenshots": "node tests/e2e/guide-screens.ts",
+    "templates:build": "node templates/build.ts && biome format --write templates",
+    "templates:atelier": "node tests/e2e/demo-site.ts --write-template",
+    "templates:check": "node tests/e2e/templates-check.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.4",
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  },
+  "allowScripts": {
+    "fsevents": false
+  }
+}

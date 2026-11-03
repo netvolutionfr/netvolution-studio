@@ -1,0 +1,121 @@
+/*
+ * Netvolution Studio — design tokens (editor UI only; never loaded in the
+ * canvas iframe nor in exported sites). Components use the semantic tokens
+ * below, never raw colors, so a theme is a single override block.
+ */
+:root {
+  color-scheme: dark;
+  /* Surfaces */
+  --bg-app: #0f1013;
+  --bg-panel: #17191e;
+  --bg-elevated: #1f2229;
+  --bg-hover: #262a33;
+  --bg-active: #2e333e;
+  --bg-input: #121418;
+  /* Lines */
+  --border: #2a2e37;
+  --border-strong: #3b404c;
+  /* Text */
+  --text: #e7e9ee;
+  --text-muted: #a3aab6;
+  --text-subtle: #8a919e;
+  /* Accent: filled surfaces use --accent with --accent-fg (≥ 4.5:1); text on panels uses --accent-text */
+  --accent: #4a63e8;
+  --accent-hover: #5a72f0;
+  --accent-fg: #ffffff;
+  --accent-text: #93a5ff;
+  --accent-soft: rgb(74 99 232 / 0.22);
+  --danger: #ff7a85;
+  --danger-bg: #c4323f;
+  --success: #45c486;
+  --warning: #f2b84b;
+  --focus-ring: #93a5ff;
+  /* CSS editor syntax colors (≥ 4.5:1 on --bg-input) */
+  --syntax-selector: #93a5ff;
+  --syntax-property: #e7e9ee;
+  --syntax-value: #7ee0a8;
+  --syntax-string: #f2b84b;
+  --syntax-at: #ff9ac1;
+  --syntax-comment: #8a919e;
+  /* Canvas overlays */
+  --overlay-hover: #5ac8fa;
+  --overlay-selected: #4a63e8;
+
+  /* Typography */
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-lg: 14px;
+  --leading: 1.4;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Spacing (4 px grid, plus half steps for dense controls) */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 24px;
+
+  /* Sizes, radii, shadows */
+  --control-h: 28px;
+  --control-h-sm: 24px;
+  --toolbar-h: 44px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --shadow-popover: 0 8px 24px rgb(0 0 0 / 0.45), 0 0 0 1px var(--border-strong);
+  --shadow-frame: 0 0 0 1px rgb(255 255 255 / 0.06), 0 8px 32px rgb(0 0 0 / 0.5);
+  --transition: 120ms ease-out;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-app: #e9ebef;
+  --bg-panel: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #f0f2f5;
+  --bg-active: #e5e8ee;
+  --bg-input: #f7f8fa;
+  --border: #dde1e7;
+  --border-strong: #c6ccd5;
+  --text: #1a1d23;
+  --text-muted: #4e5562;
+  --text-subtle: #5f6672;
+  --accent: #3b5bdb;
+  --accent-hover: #3451c7;
+  --accent-fg: #ffffff;
+  --accent-text: #2f4bc0;
+  --accent-soft: rgb(59 91 219 / 0.12);
+  --danger: #b42330;
+  --danger-bg: #c4323f;
+  --success: #1f8a54;
+  --warning: #9a6300;
+  --focus-ring: #3b5bdb;
+  --syntax-selector: #2f4bc0;
+  --syntax-property: #1a1d23;
+  --syntax-value: #1a7a49;
+  --syntax-string: #8a5800;
+  --syntax-at: #a8285f;
+  --syntax-comment: #5f6672;
+  --overlay-hover: #1c9bd8;
+  --overlay-selected: #3b5bdb;
+  --shadow-popover: 0 8px 24px rgb(15 20 30 / 0.16), 0 0 0 1px var(--border);
+  --shadow-frame: 0 0 0 1px rgb(15 20 30 / 0.08), 0 6px 24px rgb(15 20 30 / 0.12);
+}
+
+/* Set while switching themes (App.tsx). */
+:root.no-transitions *,
+:root.no-transitions *::before {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: 0ms;
+  }
+}

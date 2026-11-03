@@ -1,0 +1,269 @@
+/* Netvolution Studio — UI primitives (buttons, segmented controls, tooltips, menus, sections, inputs). */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  height: var(--control-h);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+.ui-button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+.ui-button:active:not(:disabled) {
+  background: var(--bg-active);
+}
+.ui-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.ui-button.ui-sm {
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+}
+.ui-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+.ui-ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: transparent;
+  color: var(--text);
+}
+.ui-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.ui-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.ui-danger {
+  color: var(--danger);
+}
+.ui-icon {
+  width: var(--control-h);
+  padding: 0;
+}
+.ui-icon.ui-sm {
+  width: var(--control-h-sm);
+  padding: 0;
+}
+.ui-button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent-text);
+}
+
+/* Segmented control (Radix ToggleGroup) */
+.ui-segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+}
+.ui-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    color var(--transition);
+}
+.ui-segment:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.ui-segment[data-state="on"] {
+  background: var(--bg-active);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+}
+.ui-segmented.ui-sm .ui-segment {
+  min-width: 22px;
+  height: 18px;
+}
+
+/* Tooltip (Radix) */
+.ui-tooltip {
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 280px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-popover);
+  color: var(--text);
+  font-size: var(--text-xs);
+  line-height: var(--leading);
+}
+.ui-kbd {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+/* Dropdown menu (Radix) */
+.ui-menu {
+  z-index: 50;
+  min-width: 200px;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-popover);
+}
+.ui-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 30px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-md);
+  cursor: pointer;
+  outline: none;
+}
+.ui-menu-item[data-highlighted] {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+.ui-menu-item[data-disabled] {
+  opacity: 0.4;
+}
+.ui-menu-separator {
+  height: 1px;
+  margin: var(--space-2) 0;
+  background: var(--border);
+}
+
+/* Collapsible inspector section (native details/summary) */
+.ui-section {
+  border-bottom: 1px solid var(--border);
+}
+.ui-section > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+  padding: 0 var(--space-5);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.ui-section > summary::-webkit-details-marker {
+  display: none;
+}
+.ui-section > summary svg {
+  color: var(--text-subtle);
+  transition: transform var(--transition);
+}
+.ui-section[open] > summary svg {
+  transform: rotate(90deg);
+}
+.ui-section > summary:hover {
+  background: var(--bg-hover);
+}
+.ui-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-5) var(--space-5);
+}
+
+/* Form controls */
+:is(.shell, .projects) input:not([type="checkbox"], [type="range"], [type="color"], [type="file"]),
+:is(.shell, .projects) select,
+:is(.shell, .projects) textarea {
+  min-width: 0;
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+  transition: border-color var(--transition);
+}
+:is(.shell, .projects) textarea {
+  height: auto;
+  padding: var(--space-2) var(--space-3);
+}
+:is(.shell, .projects) input:hover:not(:disabled, [type="range"]),
+:is(.shell, .projects) select:hover:not(:disabled),
+:is(.shell, .projects) textarea:hover {
+  border-color: var(--border-strong);
+}
+:is(.shell, .projects) input:focus-visible,
+:is(.shell, .projects) select:focus-visible,
+:is(.shell, .projects) textarea:focus-visible {
+  border-color: var(--focus-ring);
+  outline: 1px solid var(--focus-ring);
+  outline-offset: 0;
+}
+:is(.shell, .projects) input:disabled {
+  opacity: 0.5;
+}
+:is(.shell, .projects) input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+:is(.shell, .projects) input[type="checkbox"],
+:is(.shell, .projects) input[type="range"] {
+  accent-color: var(--accent);
+}
+:is(.shell, .projects) input[type="range"] {
+  height: 16px;
+  margin: 0;
+}
+:is(.shell, .projects) input[type="color"] {
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  cursor: pointer;
+}
+:is(.shell, .projects) input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}

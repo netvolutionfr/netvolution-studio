@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "kind": "ns.page",
+  "id": "typography",
+  "title": "Typographie",
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "rootId": "nroot00001",
+  "nodes": {
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 48,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1000001", "ntxt00001", "nh2000001", "ntxt00002", "ntxt00003", "ntxt00004"],
+      "name": "Page"
+    },
+    "nh1000001": {
+      "id": "nh1000001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Typographie & <rythme> {vertical}"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 56,
+            "unit": "px"
+          },
+          "lineHeight": 1.1,
+          "fontWeight": 800,
+          "marginBottom": {
+            "value": 24,
+            "unit": "px"
+          }
+        },
+        "tablet": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxt00001": {
+      "id": "ntxt00001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Un paragraphe avec du "
+          },
+          {
+            "text": "gras",
+            "bold": true
+          },
+          {
+            "text": ", de l'"
+          },
+          {
+            "text": "italique",
+            "italic": true
+          },
+          {
+            "text": " et un "
+          },
+          {
+            "text": "lien",
+            "link": {
+              "kind": "url",
+              "href": "https://example.com/?a=1&b=2"
+            }
+          },
+          {
+            "text": "."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 20,
+            "unit": "px"
+          },
+          "lineHeight": 1.6,
+          "color": "#374151",
+          "maxWidth": {
+            "value": 680,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "fontSize": {
+            "value": 17,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nh2000001": {
+      "id": "nh2000001",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Titre centré"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 2,
+            "unit": "rem"
+          },
+          "textAlign": "center",
+          "marginTop": {
+            "value": 48,
+            "unit": "px"
+          },
+          "marginBottom": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxt00002": {
+      "id": "ntxt00002",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Texte justifié, interligne serré, couleur personnalisée. Texte justifié, interligne serré, couleur personnalisée. Texte justifié, interligne serré, couleur personnalisée. Texte justifié, interligne serré, couleur personnalisée. "
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "textAlign": "justify",
+          "lineHeight": 1.3,
+          "color": "#1e3a8a"
+        }
+      },
+      "children": []
+    },
+    "ntxt00003": {
+      "id": "ntxt00003",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Visible sauf sur mobile."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "fontWeight": 600
+        },
+        "mobile": {
+          "hidden": true
+        }
+      },
+      "children": []
+    },
+    "ntxt00004": {
+      "id": "ntxt00004",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Visible uniquement sur mobile."
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "hidden": true
+        },
+        "mobile": {
+          "hidden": false,
+          "marginTop": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    }
+  },
+  "assets": {}
+}

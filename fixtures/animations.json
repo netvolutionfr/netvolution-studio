@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 2,
+  "kind": "ns.site",
+  "id": "animations",
+  "name": "Animations",
+  "settings": {
+    "lang": "fr",
+    "homePageId": "home"
+  },
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "title": "Animations",
+      "slug": "",
+      "rootId": "nroot00001",
+      "publish": true
+    }
+  ],
+  "nodes": {
+    "nh1anim001": {
+      "id": "nh1anim001",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Animations déclaratives"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 44,
+            "unit": "px"
+          }
+        }
+      },
+      "children": [],
+      "animations": [
+        {
+          "trigger": "load",
+          "effect": {
+            "opacity": 0,
+            "y": -16
+          },
+          "duration": 500,
+          "delay": 0,
+          "easing": "ease-out",
+          "iterations": 1,
+          "direction": "normal"
+        }
+      ]
+    },
+    "ntxtanim01": {
+      "id": "ntxtanim01",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Faites défiler : les cartes apparaissent en cascade."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nspacer001": {
+      "id": "nspacer001",
+      "type": "spacer",
+      "props": {},
+      "style": {
+        "base": {
+          "height": {
+            "value": 1400,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nh3card100": {
+      "id": "nh3card100",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Carte 1"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxtcard10": {
+      "id": "ntxtcard10",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Entrée au défilement, décalée de 120 ms."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nstkcard10": {
+      "id": "nstkcard10",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#eef2ff",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh3card100", "ntxtcard10"]
+    },
+    "nh3card200": {
+      "id": "nh3card200",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Carte 2"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxtcard20": {
+      "id": "ntxtcard20",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Entrée au défilement, décalée de 120 ms."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nstkcard20": {
+      "id": "nstkcard20",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#eef2ff",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh3card200", "ntxtcard20"]
+    },
+    "nh3card300": {
+      "id": "nh3card300",
+      "type": "heading",
+      "props": {
+        "level": 2,
+        "text": "Carte 3"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "ntxtcard30": {
+      "id": "ntxtcard30",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Entrée au défilement, décalée de 120 ms."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "nstkcard30": {
+      "id": "nstkcard30",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "gap": {
+            "value": 8,
+            "unit": "px"
+          },
+          "paddingTop": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "backgroundColor": "#eef2ff",
+          "radius": {
+            "value": 12,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh3card300", "ntxtcard30"]
+    },
+    "ngridanim1": {
+      "id": "ngridanim1",
+      "type": "grid",
+      "props": {},
+      "style": {
+        "base": {
+          "columns": 3,
+          "gap": {
+            "value": 24,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "columns": 1
+        }
+      },
+      "children": ["nstkcard10", "nstkcard20", "nstkcard30"],
+      "animations": [
+        {
+          "trigger": "inView",
+          "effect": {
+            "opacity": 0,
+            "y": 32
+          },
+          "duration": 600,
+          "delay": 0,
+          "easing": "ease-out",
+          "iterations": 1,
+          "direction": "normal",
+          "stagger": 120
+        }
+      ]
+    },
+    "nbtnanim01": {
+      "id": "nbtnanim01",
+      "type": "button",
+      "props": {
+        "label": "Survolez-moi",
+        "link": {
+          "kind": "url",
+          "href": "https://example.com/"
+        },
+        "variant": "primary"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "alignSelf": "start"
+        }
+      },
+      "children": [],
+      "animations": [
+        {
+          "trigger": "hover",
+          "effect": {
+            "scale": 1.05
+          },
+          "duration": 150,
+          "delay": 0,
+          "easing": "ease-out",
+          "iterations": 1,
+          "direction": "normal"
+        }
+      ]
+    },
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 960,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 40,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 80,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nh1anim001", "ntxtanim01", "nspacer001", "ngridanim1", "nbtnanim01"]
+    }
+  },
+  "assets": {}
+}

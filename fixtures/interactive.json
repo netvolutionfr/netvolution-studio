@@ -1,0 +1,406 @@
+{
+  "schemaVersion": 2,
+  "kind": "ns.site",
+  "id": "interactive",
+  "name": "Composants interactifs",
+  "settings": {
+    "lang": "fr",
+    "homePageId": "home"
+  },
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "title": "Composants interactifs",
+      "slug": "",
+      "rootId": "nroot00001",
+      "publish": true
+    }
+  ],
+  "menus": [
+    {
+      "id": "footer",
+      "name": "Liens utiles",
+      "items": [
+        {
+          "id": "e1",
+          "label": "Accueil",
+          "link": {
+            "kind": "page",
+            "pageId": "home"
+          }
+        },
+        {
+          "id": "e2",
+          "label": "Exemple",
+          "link": {
+            "kind": "url",
+            "href": "https://example.com/"
+          }
+        }
+      ]
+    }
+  ],
+  "nodes": {
+    "nicon00000": {
+      "id": "nicon00000",
+      "type": "icon",
+      "props": {
+        "name": "phone",
+        "label": "Téléphone"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 28,
+            "unit": "px"
+          },
+          "color": "#1d4ed8"
+        }
+      },
+      "children": []
+    },
+    "nicon00001": {
+      "id": "nicon00001",
+      "type": "icon",
+      "props": {
+        "name": "mail",
+        "label": ""
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 28,
+            "unit": "px"
+          },
+          "color": "#1d4ed8"
+        }
+      },
+      "children": []
+    },
+    "nicon00002": {
+      "id": "nicon00002",
+      "type": "icon",
+      "props": {
+        "name": "map-pin",
+        "label": ""
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 28,
+            "unit": "px"
+          },
+          "color": "#1d4ed8"
+        }
+      },
+      "children": []
+    },
+    "nstkicons1": {
+      "id": "nstkicons1",
+      "type": "stack",
+      "props": {},
+      "style": {
+        "base": {
+          "direction": "row",
+          "gap": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nicon00000", "nicon00001", "nicon00002"]
+    },
+    "ntxttab001": {
+      "id": "ntxttab001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Un accompagnement sur mesure."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "ntab000001": {
+      "id": "ntab000001",
+      "type": "tab",
+      "props": {
+        "title": "Conseil"
+      },
+      "style": {},
+      "children": ["ntxttab001"]
+    },
+    "ntxttab002": {
+      "id": "ntxttab002",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Des sites rapides et accessibles."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "ntab000002": {
+      "id": "ntab000002",
+      "type": "tab",
+      "props": {
+        "title": "Création"
+      },
+      "style": {},
+      "children": ["ntxttab002"]
+    },
+    "ntxttab003": {
+      "id": "ntxttab003",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Maintenance et évolutions."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "ntab000003": {
+      "id": "ntab000003",
+      "type": "tab",
+      "props": {
+        "title": "Suivi"
+      },
+      "style": {},
+      "children": ["ntxttab003"]
+    },
+    "ntabs00001": {
+      "id": "ntabs00001",
+      "type": "tabs",
+      "props": {
+        "label": "Nos offres"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["ntab000001", "ntab000002", "ntab000003"]
+    },
+    "ntxtacc001": {
+      "id": "ntxtacc001",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Quatre à six semaines."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "naccitem01": {
+      "id": "naccitem01",
+      "type": "accordion-item",
+      "props": {
+        "title": "Combien de temps ?",
+        "open": true
+      },
+      "style": {},
+      "children": ["ntxtacc001"]
+    },
+    "ntxtacc002": {
+      "id": "ntxtacc002",
+      "type": "text",
+      "props": {
+        "content": [
+          {
+            "text": "Sur devis."
+          }
+        ]
+      },
+      "style": {},
+      "children": []
+    },
+    "naccitem02": {
+      "id": "naccitem02",
+      "type": "accordion-item",
+      "props": {
+        "title": "Quel budget ?",
+        "open": false
+      },
+      "style": {},
+      "children": ["ntxtacc002"]
+    },
+    "nacc000001": {
+      "id": "nacc000001",
+      "type": "accordion",
+      "props": {},
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["naccitem01", "naccitem02"]
+    },
+    "nvideo0001": {
+      "id": "nvideo0001",
+      "type": "video",
+      "props": {
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        "title": "Présentation du studio"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "maxWidth": {
+            "value": 640,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nimgfig001": {
+      "id": "nimgfig001",
+      "type": "image",
+      "props": {
+        "assetId": "afixture001",
+        "alt": "Dégradé",
+        "decorative": false,
+        "fit": "cover",
+        "loading": "lazy",
+        "caption": "Une image légendée et liée",
+        "link": {
+          "kind": "url",
+          "href": "https://example.com/"
+        }
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          },
+          "maxWidth": {
+            "value": 320,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nlinks0001": {
+      "id": "nlinks0001",
+      "type": "links",
+      "props": {
+        "menuId": "footer",
+        "label": "Liens utiles",
+        "direction": "row"
+      },
+      "style": {
+        "base": {
+          "marginTop": {
+            "value": 32,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nh1inter01": {
+      "id": "nh1inter01",
+      "type": "heading",
+      "props": {
+        "level": 1,
+        "text": "Composants interactifs"
+      },
+      "style": {
+        "base": {
+          "fontSize": {
+            "value": 40,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    },
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 960,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 40,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 40,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          }
+        }
+      },
+      "children": [
+        "nh1inter01",
+        "nstkicons1",
+        "ntabs00001",
+        "nacc000001",
+        "nvideo0001",
+        "nimgfig001",
+        "nlinks0001"
+      ]
+    }
+  },
+  "assets": {
+    "afixture001": {
+      "id": "afixture001",
+      "kind": "image",
+      "file": "afixture001.png",
+      "mime": "image/png",
+      "width": 640,
+      "height": 400,
+      "name": "Dégradé"
+    }
+  }
+}

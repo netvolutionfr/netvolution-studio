@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "ns.page",
+  "id": "blank",
+  "title": "Page vide",
+  "breakpoints": [
+    {
+      "id": "tablet",
+      "label": "Tablette",
+      "maxWidth": 1023
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "maxWidth": 767
+    }
+  ],
+  "rootId": "nroot00001",
+  "nodes": {
+    "nroot00001": {
+      "id": "nroot00001",
+      "type": "container",
+      "name": "Page",
+      "props": {
+        "tag": "main"
+      },
+      "style": {
+        "base": {
+          "maxWidth": {
+            "value": 1120,
+            "unit": "px"
+          },
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": {
+            "value": 40,
+            "unit": "px"
+          },
+          "paddingBottom": {
+            "value": 40,
+            "unit": "px"
+          },
+          "paddingLeft": {
+            "value": 24,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 24,
+            "unit": "px"
+          },
+          "minHeight": {
+            "value": 200,
+            "unit": "px"
+          }
+        },
+        "mobile": {
+          "paddingLeft": {
+            "value": 16,
+            "unit": "px"
+          },
+          "paddingRight": {
+            "value": 16,
+            "unit": "px"
+          }
+        }
+      },
+      "children": []
+    }
+  },
+  "assets": {}
+}
