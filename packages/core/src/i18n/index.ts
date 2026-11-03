@@ -21,8 +21,6 @@ export type MessageParams = { [name: string]: string | number | Message | Messag
 export const msg = (key: MessageKey, params?: MessageParams): Message => (params ? { key, params } : { key });
 
 export const LOCALE_STORAGE_KEY = 'ns.locale';
-// ponytail: French stays the default until the interface switches to English (ADR-0024, lot 4).
-const DEFAULT_LOCALE: Locale = 'fr';
 
 export const isLocale = (value: unknown): value is Locale =>
   typeof value === 'string' && Object.hasOwn(LOCALES, value);
@@ -36,9 +34,16 @@ function stored(): Locale | undefined {
   }
 }
 
+/** First language of the browser with a catalog (`fr-CA` → `fr`). */
+export function browserLocale(
+  languages: readonly string[] = globalThis.navigator?.languages ?? [],
+): Locale | undefined {
+  return languages.map((l) => l.toLowerCase().split('-')[0]).find(isLocale);
+}
+
 let current: Locale | undefined;
-/** Active interface language: the stored choice, else the default. */
-export const getLocale = (): Locale => (current ??= stored() ?? DEFAULT_LOCALE);
+/** Active interface language: the stored choice, else the browser's language, else English. */
+export const getLocale = (): Locale => (current ??= stored() ?? browserLocale() ?? 'en');
 
 /** Changes the interface language and remembers it in this browser. */
 export function setLocale(locale: Locale): void {

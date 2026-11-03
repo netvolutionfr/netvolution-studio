@@ -169,7 +169,7 @@ describe('AI service', () => {
     const missing = aiConfigFromEnv({ NS_AI_PROVIDER: 'anthropic' });
     expect([missing.provider, missing.reason && tm(missing.reason)]).toEqual([
       null,
-      expect.stringMatching(/ANTHROPIC_API_KEY est absente/),
+      expect.stringMatching(/ANTHROPIC_API_KEY is missing/),
     ]);
     const on = createAiService(aiConfigFromEnv({ NS_AI_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: SECRET }));
     expect(on.status()).toMatchObject({ enabled: true, provider: 'anthropic', model: 'claude-opus-5-5' });

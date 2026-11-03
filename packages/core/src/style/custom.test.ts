@@ -29,18 +29,18 @@ describe('custom CSS (ADR-0023)', () => {
   });
 
   it.each([
-    ['@import url("https://x.test/a.css");', /@import interdit/],
-    ['@font-face { font-family: X; src: url("ns-asset:afont00001") }', /@font-face interdit/],
-    ['@layer x { .a { color: red } }', /@layer interdit/],
-    ['.a { background: url("https://x.test/a.png") }', /url\(\) admis seulement/],
-    ['.a { background: url(//x.test/a.png) }', /url\(\) admis seulement/],
+    ['@import url("https://x.test/a.css");', /@import not allowed/],
+    ['@font-face { font-family: X; src: url("ns-asset:afont00001") }', /@font-face not allowed/],
+    ['@layer x { .a { color: red } }', /@layer not allowed/],
+    ['.a { background: url("https://x.test/a.png") }', /url\(\) only allowed/],
+    ['.a { background: url(//x.test/a.png) }', /url\(\) only allowed/],
     ['.a { background: \\75rl(https://x.test/a.png) }', /./],
-    ['.a { b\\61 ckground: red }', /Échappement interdit/],
-    ['.a { background-image: image-set("https://x.test/a.png" 1x) }', /image-set\(\) interdit/],
-    ['.a { width: expression(alert(1)) }', /expression\(\) interdit/],
-    ['.a { -moz-binding: none }', /-moz-binding interdit/],
-    ['.a::after { content: "</style><script>alert(1)</script>" }', /« < » interdit/],
-    ['.a { --x: url(https://x.test/a.png) }', /url\(\) admis seulement/],
+    ['.a { b\\61 ckground: red }', /Escape not allowed/],
+    ['.a { background-image: image-set("https://x.test/a.png" 1x) }', /image-set\(\) not allowed/],
+    ['.a { width: expression(alert(1)) }', /expression\(\) not allowed/],
+    ['.a { -moz-binding: none }', /-moz-binding not allowed/],
+    ['.a::after { content: "</style><script>alert(1)</script>" }', /“<” not allowed/],
+    ['.a { --x: url(https://x.test/a.png) }', /url\(\) only allowed/],
   ])('refuses %s', (css, message) => {
     expect(errors(css).join('\n')).toMatch(message);
   });
@@ -51,10 +51,10 @@ describe('custom CSS (ADR-0023)', () => {
 
   it('warns about quality pitfalls without refusing', () => {
     expect(warnings('.a:focus { outline: none }')).toEqual([
-      'outline supprimé sans règle :focus-visible : le focus clavier devient invisible',
+      'outline removed without a :focus-visible rule: keyboard focus becomes invisible',
     ]);
     expect(warnings('.a:focus { outline: none } .a:focus-visible { outline: 2px solid }')).toEqual([]);
-    expect(warnings('.a { display: none }')[0]).toMatch(/masque le contenu/);
+    expect(warnings('.a { display: none }')[0]).toMatch(/hides the content/);
     expect(warnings('@media (max-width: 767px) { .a { display: none } }')).toEqual([]);
     expect(warnings('.a { animation: flotte 2s infinite }')[0]).toMatch(/prefers-reduced-motion/);
     expect(
@@ -63,8 +63,8 @@ describe('custom CSS (ADR-0023)', () => {
       ),
     ).toEqual([]);
     expect(warnings('.ns-nroot0001 { color: red !important }')).toEqual([
-      '.ns-nroot0001 est une classe interne du Studio, susceptible de changer',
-      '!important : à éviter',
+      '.ns-nroot0001 is an internal class of the Studio, likely to change',
+      '!important: avoid it',
     ]);
     expect(checkCustomCss('.a { color: red !important }').ok).toBe(true);
   });

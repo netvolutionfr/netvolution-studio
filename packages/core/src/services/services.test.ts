@@ -45,10 +45,10 @@ describe('batches', () => {
       { breakpoint: 'mobile', key: 'fontSize', before: undefined, after: px(16) },
     ]);
     expect(summarize(r.diff).map((m) => tm(m))).toEqual([
-      '1 élément ajouté : label',
-      'box · children modifié',
-      'label · text : « Hello » → « Bonjour »',
-      'label · fontSize (mobile) : — → 16px',
+      '1 element added: label',
+      'box · children changed',
+      'label · text: “Hello” → “Bonjour”',
+      'label · fontSize (mobile): — → 16px',
     ]);
   });
 
@@ -59,7 +59,7 @@ describe('batches', () => {
     ];
     const r = runBatch(sampleDoc(), bad, ctx);
     expect(r.ok ? -1 : r.index).toBe(2);
-    expect(r.ok ? '' : tm(r.error.message)).toMatch(/^Opération 3 \(updateNodeProps\)/);
+    expect(r.ok ? '' : tm(r.error.message)).toMatch(/^Operation 3 \(updateNodeProps\)/);
     expect(runBatch(sampleDoc(), [{ name: 'eval', params: {} }], ctx)).toMatchObject({
       ok: false,
       error: { code: 'invalid' },
@@ -69,7 +69,7 @@ describe('batches', () => {
   it('are refused beyond the caller’s permissions', () => {
     const r = runBatch(sampleDoc(), calls.slice(1), ctx, new Set(['content']));
     expect(r.ok ? '' : tm(r.error.message)).toMatch(
-      /Opération 2 \(updateNodeStyle\) : autorisation « design » requise/,
+      /Operation 2 \(updateNodeStyle\): “design” permission required/,
     );
   });
 
@@ -84,7 +84,7 @@ describe('batches', () => {
       label: 'Proposition',
       commands: ['insertNode', 'updateNodeProps', 'updateNodeStyle'],
     });
-    expect(entry && tm(entry.changes)).toBe('1 ajout(s), 2 modification(s), 0 suppression(s)');
+    expect(entry && tm(entry.changes)).toBe('1 addition(s), 2 change(s), 0 removal(s)');
     expect(JSON.stringify(entry)).not.toContain('Bonjour');
     s.undo();
     expect(s.getState().doc).toBe(initial);

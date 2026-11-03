@@ -144,7 +144,7 @@ describe('fixtures', () => {
         description: '',
       }).ok,
     ).toBe(true);
-    expect(store.getState().doc.symbols?.[0]?.params.map((p) => p.label)).toContain('Liste — Éléments');
+    expect(store.getState().doc.symbols?.[0]?.params.map((p) => p.label)).toContain('List — Items');
   });
 
   it('render line breaks as <br> in texts, list items and headings', () => {
@@ -304,7 +304,7 @@ describe('media library (SB-06)', () => {
     image.props = { ...image.props, assetId: 'apdftarif1' };
     const refused = loadSite(site, registry);
     expect(refused.ok ? '' : refused.diagnostics.map((d) => tm(d.message)).join()).toMatch(
-      /Type de média non accepté/,
+      /Media type not accepted/,
     );
   });
 
@@ -321,7 +321,7 @@ describe('media library (SB-06)', () => {
     expect(store.dispatch('updateAsset', { id: 'apdftarif1', alt: 'x' }).ok).toBe(false);
     expect(store.dispatch('updateAsset', { id: 'apdftarif1', tags: ['ok', ''] }).ok).toBe(false);
     const used = store.dispatch('removeAsset', { id: 'afixture001' });
-    expect(used.ok ? '' : tm(used.error.message)).toMatch(/utilisé par 2/);
+    expect(used.ok ? '' : tm(used.error.message)).toMatch(/used by 2/);
     expect(store.dispatch('removeAsset', { id: 'apdftarif1' }).ok).toBe(true);
   });
 });

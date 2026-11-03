@@ -21,7 +21,8 @@ const api = createApi({
 });
 const app = await serve(join(repo, 'apps/studio/dist'), { middleware: api });
 const browser = await chromium.launch();
-const page: Page = await browser.newPage({ viewport: { width: 1700, height: 1000 } });
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+const page: Page = await browser.newPage({ locale: 'fr-FR', viewport: { width: 1700, height: 1000 } });
 const errors: string[] = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -427,6 +428,27 @@ await check('Langue de l’interface : anglais, puis retour au français (ADR-00
   await page.getByRole('menuitem', { name: 'Français' }).click();
   await eventually(status, 'Enregistré', 'retour au français');
 });
+
+await check(
+  'Langue par défaut : celle du navigateur si elle est traduite, sinon l’anglais (ADR-0024)',
+  async () => {
+    for (const [locale, expected] of [
+      ['en-US', 'Projects'],
+      ['de-DE', 'Projects'],
+      ['fr-CA', 'Projets'],
+    ] as const) {
+      const fresh = await browser.newPage({ locale });
+      await fresh.goto(`${app.url}/`);
+      await fresh.getByRole('heading', { name: expected, exact: true }).waitFor({ timeout: 5000 });
+      expect(
+        (await fresh.evaluate(() => document.documentElement.lang)) ===
+          (expected === 'Projets' ? 'fr' : 'en'),
+        `lang de la page (${locale})`,
+      );
+      await fresh.close();
+    }
+  },
+);
 
 await check('Site de 3 pages liées : créer, lier, renommer un slug, recharger (SB-02)', async () => {
   const pages = page.locator('.pages');

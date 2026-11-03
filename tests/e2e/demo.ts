@@ -23,7 +23,8 @@ const work = await mkdtemp(join(tmpdir(), 'ns-demo-'));
 const api = createApi({ dataDir: join(work, 'data'), mediaDirs: [], exportsDir: join(work, 'exports') });
 const app = await serve(join(repo, 'apps/studio/dist'), { middleware: api });
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
+// A French browser: the Studio opens in French (ADR-0024), the language of these scenarios and of the guide.
+const page = await browser.newPage({ locale: 'fr-FR', viewport: { width: 1600, height: 1000 } });
 page.on('dialog', (d) => void d.accept());
 const errors: string[] = [];
 page.on('pageerror', (e) => errors.push(e.message));

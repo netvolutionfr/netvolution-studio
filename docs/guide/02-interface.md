@@ -10,7 +10,7 @@ L’éditeur se découpe en cinq zones. Les panneaux de gauche et de droite se r
 
 C’est la page d’accueil du Studio. On y crée un projet depuis un **modèle**, on ouvre, **duplique** ou **supprime** un projet existant (il part dans une corbeille, côté serveur), et on **importe** une archive exportée d’un autre Studio. Les modèles de site que vous avez enregistrés apparaissent sous « Mes modèles de site ».
 
-Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène. Le bouton de **langue** (en haut à droite) choisit la langue de l’interface ; la page se recharge dans la langue choisie.
+Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène. Le bouton de **langue** (en haut à droite) choisit la langue de l’interface ; la page se recharge dans la langue choisie. À la première visite, le Studio s’ouvre dans la langue du navigateur s’il la connaît (français ou anglais), sinon en anglais ; le choix fait ensuite est retenu par le navigateur.
 
 ## La barre d’outils
 
