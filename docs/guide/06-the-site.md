@@ -2,7 +2,7 @@
 title: "6. The site"
 ---
 
-A Studio project is a complete site: pages, a shared header and footer, menus, search engine settings. This chapter goes round what lies beyond the page.
+A Studio project is a complete site: pages, a shared header and footer, menus, search engine settings. This chapter covers the parts of your site beyond individual pages.
 
 ## Pages
 
@@ -38,7 +38,7 @@ A site has a single header and a single footer. For a different header on one pa
 
 ## Menus
 
-A **menu** is a list of links, managed in the **Menus** panel (list icon in the toolbar). A menu does not show by itself: a **Navigation** or **Link list** component must point to it.
+A **menu** is a list of links, managed in the **Menus** panel (list icon in the toolbar). A menu does not appear by itself: a **Navigation** or **Link list** component must point to it.
 
 - **New menu**: one more menu ("Footer", "Legal"…).
 - **Add an entry**: a **Label** and a **Link**, to a page of the site, an address (URL, `mailto:`, `tel:`) or a file of the media library.

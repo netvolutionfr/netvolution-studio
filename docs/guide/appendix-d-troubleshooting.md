@@ -19,16 +19,16 @@ It may be hidden at this breakpoint, empty or without a background: go through t
 **A link or a button does not react to clicks.**
 That is normal in the canvas, where a click selects. Test the navigation in the **Site preview**.
 
-**My font does not show.**
+**My font does not appear.**
 Check that the font is imported (media library, "Font") and that its name comes **first** in the design system font, written exactly like the family of the media file (`Inter, sans-serif`). Then that the element uses this font, directly or through its text style.
 
 **My project CSS rule does not apply.**
 Read the messages under the editor: as long as an **error** remains, the last valid version applies. Then check that the element carries the class (inspector, Advanced section, **CSS classes**) and that the selector writes it with a dot (`.raised-card`). **Warnings** prevent nothing.
 
-**The export is refused ("blocking errors").**
+**The export is blocked ("blocking errors").**
 Click each error to go to the element concerned: most often a link to an unpublished page or a missing media file.
 
-**The online site does not show my latest changes.**
+**The published site does not show my latest changes.**
 Check that you saved, exported **again**, then replaced **all** the files at the host. Clear the browser cache (<kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>R</kbd>).
 
 **The pages show online, but not the 404 page, or the redirects do not work.**

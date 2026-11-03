@@ -6,7 +6,7 @@ Netvolution Studio is a tool to design showcase websites visually, as with Tatsu
 
 ## What does not change
 
-You will find your page builder habits again:
+You’ll find the page builder features you’re already familiar with:
 
 - a **library** of elements to drag into the page;
 - a **canvas** that shows the page as it will be published;
@@ -20,9 +20,9 @@ You will find your page builder habits again:
 > **There is no "live" site in the Studio.** The Studio is a workshop. When the site is ready, you **export** it: the Studio produces the site's files, which are then uploaded to any host. Changing the site means changing it in the Studio, then exporting again.
 
 - **No WordPress, no plugins.** The published pages contain neither a database nor a back office: nothing to update, nothing to hack.
-- **No free HTML or JavaScript.** There is no "HTML" widget and no shortcode: everything goes through the components and the inspector's settings. That is what guarantees valid, accessible pages, identical between the Studio and the published site. For an effect the inspector does not offer, the designer can write a **project stylesheet**, checked by the Studio (chapter [The design system](05-design-system.md)).
+- **No arbitrary HTML or JavaScript.** There is no "HTML" widget and no shortcode: everything goes through the components and the inspector's settings. That is what guarantees valid, accessible pages, identical between the Studio and the published site. For an effect the inspector does not offer, the designer can write a **project stylesheet**, checked by the Studio (chapter [The design system](05-design-system.md)).
 - **A freer structure.** No imposed Section > Row > Column: you nest **containers**, **stacks** (Flexbox) and **grids** (CSS Grid). Ready-made compositions ("Row, 2 columns", "Hero"…) give the usual layouts in one click.
-- **Texts are edited in the inspector**, not directly in the page. Click the text in the canvas, then change it on the right.
+- **Text is edited in the inspector**, not directly on the page. Click the text in the canvas, then change it on the right.
 - **The code produced belongs to the client.** The export is a standard, documented [Astro](https://astro.build) project: a developer can take it over without the Studio.
 
 ## Signing in

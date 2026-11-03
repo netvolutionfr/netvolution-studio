@@ -1,5 +1,5 @@
 ---
-title: "4. Styling and responsive"
+title: "4. Styling and responsive design"
 ---
 
 The inspector groups the styles into five sections. Only the settings useful to the element's type appear: a heading has no "Direction", a stack has no "Font".
@@ -67,7 +67,7 @@ In the **Style** section of boxes, buttons, images and dividers:
 | **Border color** | A custom or design system color |
 | **Shadow** | **Soft**, **Medium**, **Strong**, or **Custom**: X and Y offset, blur, spread, color, opacity, inset shadow. **None** removes an inherited shadow |
 
-A discreet shadow (soft or medium) is almost always enough to lift a card from the background; a strong shadow draws the eye, to keep for one element. Combine a border with the **Radius** for "outline" cards or buttons.
+A subtle shadow (soft or medium) is almost always enough to lift a card from the background; a strong shadow draws the eye, to keep for one element. Combine a border with the **Radius** for "outline" cards or buttons.
 
 ## Gradients and background images
 
@@ -154,7 +154,7 @@ So design for desktop first, then switch to tablet and mobile to correct: turn a
 ### Knowing where you are
 
 - The toolbar shows the **edited breakpoint** ("Base (desktop)", "Tablet", "Mobile"); the inspector repeats it: **Styles applied to: Mobile**.
-- In front of each setting, a **filled dot** shows a value **set at this breakpoint**; a **hollow dot**, a value **inherited** from a larger size. Hover the dot to read it.
+- Next to each setting, a **filled dot** shows a value **set at this breakpoint**; a **hollow dot**, a value **inherited** from a larger size. Hover the dot to read it.
 - The **circular arrow** to the right of a set value **resets** it: the element takes the inherited value back.
 
 ![The same hero on Mobile: direction in a column, reduced spacing, each value set for mobile only](images/mobile-override.png)

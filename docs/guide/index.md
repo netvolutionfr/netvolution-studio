@@ -2,7 +2,7 @@
 title: "User guide"
 ---
 
-This guide is for the designers and front-end developers who build showcase websites with Netvolution Studio. It starts from what you already know if you have worked with Tatsu or Elementor, and has you produce a real site from the first chapter.
+This guide is for the designers and front-end developers who build showcase websites with Netvolution Studio. If you’ve used Tatsu or Elementor, you can build on what you already know. The guide walks you through creating a complete site in the first tutorial.
 
 The guide is available in the Studio: the **?** button of the toolbar, or the "user guide" link of the Projects screen. It also exists [in French](/guide/fr/).
 
@@ -15,7 +15,7 @@ The guide is available in the Studio: the **?** button of the toolbar, or the "u
 ## Building a site
 
 3. [Building a page](03-building-a-page.md): containers, stacks and grids, compositions, components.
-4. [Styling and responsive](04-styling-and-responsive.md): styles, Flexbox and Grid, desktop, tablet and mobile.
+4. [Styling and responsive design](04-styling-and-responsive.md): styles, Flexbox and Grid, desktop, tablet and mobile.
 5. [The site's design system](05-design-system.md): colors, sizes, fonts, text styles and project CSS.
 6. [The site](06-the-site.md): pages and addresses, header and footer, menus, search engines, redirects.
 7. [Media](07-media.md): media library, alternative texts, image optimization.
@@ -32,7 +32,7 @@ The guide is available in the Studio: the **?** button of the toolbar, or the "u
 
 ## Appendices
 
-- [A. Tatsu / Elementor → Studio equivalences](appendix-a-equivalences.md)
+- [A. Tatsu and Elementor equivalents in Studio](appendix-a-equivalences.md)
 - [B. Current limits and workarounds](appendix-b-limits.md)
 - [C. Good practices: accessibility, search engines, performance](appendix-c-good-practices.md)
 - [D. Troubleshooting, FAQ and glossary](appendix-d-troubleshooting.md)

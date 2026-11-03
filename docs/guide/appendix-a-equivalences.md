@@ -1,5 +1,5 @@
 ---
-title: "Appendix A. Tatsu / Elementor → Studio equivalences"
+title: "Appendix A. Tatsu and Elementor equivalents in Studio"
 ---
 
 This table helps you find a habit again. The Tatsu and Elementor columns give the usual name; the last column says where to find it in the Studio.

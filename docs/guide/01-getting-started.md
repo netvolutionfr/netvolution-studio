@@ -51,7 +51,7 @@ Below the content, the **Style**, **Layout** and **Spacing** sections set the el
 
 ![The new "Pricing" page with a "Call to action" section](images/new-page.png)
 
-You can also **drag** an element of the library to the wanted place in the canvas: a marker shows where it will be dropped, and the Studio refuses impossible places.
+You can also **drag** an element from the library to the desired position in the canvas. A marker shows where it will be dropped, and the Studio prevents invalid placements.
 
 ## Step 5: add the page to the menu
 
@@ -63,7 +63,7 @@ A new page does not appear in the navigation by itself: you decide.
 
 ![The new entry of the main menu, which points to the Pricing page](images/menus.png)
 
-The link appears at once in the canvas header. The link follows the page: if you later change its address, the menu stays right. Click **Menus** again to return to the inspector.
+The link appears at once in the canvas header. The link follows the page: if you later change its address, the menu link will still work. Click **Menus** again to return to the inspector.
 
 ## Step 6: check on mobile
 
@@ -94,7 +94,7 @@ Click **Save** at the top left, or press <kbd>⌘</kbd> <kbd>S</kbd>. The status
 
 **Blocking errors**, on the other hand, must be fixed before exporting (a linked page that no longer exists, for instance).
 
-3. Tick **Also build the static site**, then click **Export**. Allow one to a few minutes.
+3. Tick **Also build the static site**, then click **Export**. This may take a few minutes.
 4. Two **Download (.tar.gz)** links appear:
    - the **Astro sources**, for a developer who would take the site over;
    - the **static site**, the HTML, CSS and image files ready to upload to a host.
@@ -109,4 +109,4 @@ Next:
 
 - [The interface](02-interface.md), to know each area and the shortcuts;
 - [Building a page](03-building-a-page.md), to build your own layouts;
-- [the equivalences with Tatsu and Elementor](appendix-a-equivalences.md), to find your habits again.
+- [the Tatsu and Elementor equivalents in Studio](appendix-a-equivalences.md), to find familiar features.
