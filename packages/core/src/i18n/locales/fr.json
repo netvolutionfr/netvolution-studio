@@ -255,7 +255,8 @@
     "rename": "Renommer",
     "classes": "Classes CSS (séparées par des espaces)",
     "classesDone": "Classes CSS",
-    "classesHint": "Pour la feuille « CSS du projet » (Système de design). Classe interne : "
+    "classesHint": "Pour la feuille « CSS du projet » (Système de design). Classe interne : ",
+    "editingInPlace": "En cours d’édition sur la page."
   },
   "canvas": {
     "resize": "Redimensionner",
@@ -268,7 +269,11 @@
     "alignEnd": "Aligner à la fin",
     "stretch": "Étirer",
     "zoom": "Zoom {{percent}} %",
-    "fullSize": "100 %"
+    "fullSize": "100 %",
+    "instanceText": "Texte du composant « {{name}} » : modifiez le composant ou exposez ce texte en paramètre.",
+    "editingStatus": "Édition du texte sur la page. Échap pour annuler.",
+    "editingLabel": " — édition",
+    "editText": "Modifier le texte"
   },
   "symbols": {
     "updateInstances": "Mettre à jour les instances",
@@ -591,7 +596,11 @@
     "clear": "Effacer la mise en forme",
     "colorLegend": "Couleur du texte sélectionné",
     "other": "Autre",
-    "invalid": "Texte vide ou lien invalide : le document n'est pas modifié."
+    "invalid": "Texte vide ou lien invalide : le document n'est pas modifié.",
+    "linkForm": "Lien du texte sélectionné",
+    "target": "Cible",
+    "apply": "Appliquer",
+    "cancel": "Annuler"
   },
   "animation": {
     "triggers": {

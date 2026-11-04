@@ -8,9 +8,6 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 
 | Limite | Contournement |
 |---|---|
-| Les textes ne s’éditent pas directement dans la page | Cliquez le texte dans le canvas, modifiez-le dans l’inspecteur (section Contenu) |
-| On ne peut pas attraper un élément dans le canvas pour le déplacer | Glissez sa ligne dans l’**arborescence**, ou coupez-collez (<kbd>⌘</kbd> <kbd>X</kbd>, sélection de la destination, <kbd>⌘</kbd> <kbd>V</kbd>) |
-| Pas de défilement automatique pendant un glisser-déposer | Repliez des parties de l’arborescence, ou utilisez couper-coller |
 | Pas de sélection multiple | Regroupez les éléments dans une boîte, puis agissez sur la boîte |
 | Le copier-coller ne fonctionne qu’à l’intérieur du Studio, dans un même projet | Entre projets : un modèle de site, ou l’archive du projet |
 | Les liens d’un texte enrichi se saisissent dans une petite fenêtre du navigateur | — |

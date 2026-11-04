@@ -99,6 +99,9 @@ Sous Windows et Linux, remplacez <kbd>⌘</kbd> par <kbd>Ctrl</kbd>.
 | Dupliquer l’élément | <kbd>⌘</kbd> <kbd>D</kbd> |
 | Supprimer l’élément | <kbd>Suppr</kbd> ou <kbd>⌫</kbd> |
 | Désélectionner | <kbd>Échap</kbd> |
+| Modifier un texte sur la page | Double-clic sur le texte (Titre, Texte, Bouton, Liste, titre d’accordéon, libellé d’onglet), ou <kbd>F2</kbd> sur l’élément sélectionné (<kbd>Entrée</kbd> aussi depuis le canvas ou sur sa ligne de l’arborescence) |
+| Déplacer l’élément d’un rang | <kbd>⌥</kbd> <kbd>↑</kbd> / <kbd>⌥</kbd> <kbd>↓</kbd> (<kbd>Alt</kbd> sous Windows et Linux) |
+| Valider / annuler la modification sur la page | Clic ailleurs (ou <kbd>Entrée</kbd>, sauf dans un Texte et une Liste) / <kbd>Échap</kbd> |
 
 Dans l’arborescence, les flèches <kbd>↑</kbd> <kbd>↓</kbd> passent d’un élément à l’autre, <kbd>→</kbd> et <kbd>←</kbd> déplient et replient, <kbd>Début</kbd> et <kbd>Fin</kbd> vont au premier et au dernier élément.
 

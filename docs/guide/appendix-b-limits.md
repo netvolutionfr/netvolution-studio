@@ -8,9 +8,6 @@ The Studio is young: some features of page builders do not exist yet, others are
 
 | Limit | Workaround |
 |---|---|
-| Text is not edited directly on the page | Click the text in the canvas, change it in the inspector (Content section) |
-| An element cannot be grabbed in the canvas to move it | Drag its row in the **layers**, or cut and paste (<kbd>⌘</kbd> <kbd>X</kbd>, select the destination, <kbd>⌘</kbd> <kbd>V</kbd>) |
-| No auto-scroll during a drag and drop | Collapse parts of the layers, or use cut and paste |
 | No multiple selection | Group the elements in a box, then act on the box |
 | Copy and paste only works inside the Studio, within one project | Between projects: a site template, or the project archive |
 | Links in rich text are entered in a small browser window | — |

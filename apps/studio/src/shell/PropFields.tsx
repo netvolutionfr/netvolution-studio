@@ -1,9 +1,11 @@
+import { registry } from '@ns/components';
 import { type CommandResult, contentText, type DocNode, type Link, type PropField, t } from '@ns/core';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { useId } from 'react';
 import { Button, IconButton } from '../ui/index.ts';
 import { AssetField } from './AssetField.tsx';
 import { AssetsField } from './AssetsField.tsx';
+import { useEditing } from './editing.ts';
 import { Field, TextField } from './fields.tsx';
 import { type Inline, RichTextField, type RichValue } from './RichTextField.tsx';
 import { useEditor, useStore } from './store.ts';
@@ -45,11 +47,18 @@ function PropControl({
   const store = useStore();
   const id = useId();
   const value = node.props[field.prop];
+  const editing = useEditing() === node.id && registry.get(node.type)?.inline?.prop === field.prop;
   const set = (v: unknown) =>
     onSet
       ? onSet(field.prop, v, field.label)
       : store.dispatch('updateNodeProps', { id: node.id, props: { [field.prop]: v } }, field.label);
 
+  if (editing)
+    return (
+      <Field label={field.label} stack>
+        <p className="hint">{t('inspector.editingInPlace')}</p>
+      </Field>
+    );
   switch (field.kind) {
     case 'text':
     case 'textarea':

@@ -90,8 +90,11 @@ export function App() {
         return;
       }
       if (editable(e.target)) return;
+      // Enter keeps activating the focused button or link; it edits the selection only from the page.
+      if (e.key === 'Enter' && e.target !== document.body) return;
       const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      if (handleShortcut(store, { key, mod: e.metaKey || e.ctrlKey, shift: e.shiftKey })) e.preventDefault();
+      if (handleShortcut(store, { key, mod: e.metaKey || e.ctrlKey, shift: e.shiftKey, alt: e.altKey }))
+        e.preventDefault();
     };
     addEventListener('keydown', onKey);
     const onLeave = (e: BeforeUnloadEvent) => {
@@ -146,6 +149,9 @@ export function App() {
         onRects={setRects}
         drop={drag?.target?.marker ?? null}
         preview={preview}
+        onDrag={setDrag}
+        dragging={drag?.item.nodeId ?? null}
+        dragPoint={drag ? { x: drag.x, y: drag.y } : null}
       />
       {!preview && (
         <Splitter

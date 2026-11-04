@@ -33,10 +33,10 @@
 
 ## Editing
 
-- **Rich text.** Bold, italic and link; links are entered through `prompt()`. The editor relies on `execCommand`, deprecated but universally supported. Lists go through the List component (one level, no sublist); no inline headings.
-- **Drag and drop.** Elements cannot be grabbed directly in the canvas (use the tree or the library), and there is no auto-scroll during a drag.
+- **Rich text.** Bold, italic and link; links are chosen in a small form (page, file or checked address). The editor relies on `execCommand`, deprecated but universally supported. Lists go through the List component (one level, no sublist); no inline headings.
+- **Drag and drop.** During a drag, the page scrolls near the edges, but the target shown only updates on the next pointer move (the drop recomputes it). In the canvas (ADR-0025), an element is grabbed directly, but a parent container is selected first (layers); no multiple selection.
 - **Clipboard** internal to the Studio tab. No exchange with the system clipboard, no pasting between documents: a media file missing from the target document is refused.
-- **Inline editing** in the canvas is missing: texts are edited in the inspector.
+- **In-place editing** (ADR-0025): Heading, Text, Button, List, accordion and tab titles; the other texts (captions, alternative texts, navigation labels) in the inspector. The page's formatting toolbar does not show the state of the selected text (bold, link…). A text of an instance is editable only if it is exposed as a parameter.
 - **Design tokens** (ADR-0009): no shadow tokens or editable breakpoints; fonts imported in WOFF2 only (ADR-0018); font and weight of text styles adjustable at the base breakpoint only in the panel.
 - **Breakpoints.** The model accepts any number of breakpoints, but the interface cannot create them yet: desktop, tablet and mobile come with the templates.
 
@@ -69,4 +69,4 @@
 ## Accessibility
 
 - **Automated check** with axe-core (WCAG 2.1 A/AA rules, serious violations) on the exported pages and on the editor. A human review is still needed (CS-12).
-- **Editor.** Drag and drop has no direct keyboard equivalent: cut, select the target, then paste. Moves within the same parent go through Move up and Move down.
+- **Editor.** Moves within the same parent have a keyboard equivalent (<kbd>Alt</kbd>+↑/↓, ADR-0025); to another box: cut, select the target, then paste.

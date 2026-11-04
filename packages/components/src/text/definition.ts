@@ -19,6 +19,7 @@ export const text = defineComponent({
   },
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'visibility', 'position', 'effects'],
+  inline: { prop: 'content' },
   fields: [
     { kind: 'richText', prop: 'content', label: t('components.text.fields.content'), paragraphs: true },
   ],

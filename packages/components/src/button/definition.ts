@@ -24,6 +24,7 @@ export const button = defineComponent({
   }),
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'background', 'visibility', 'position', 'effects'],
+  inline: { prop: 'label' },
   fields: [
     { kind: 'text', prop: 'label', label: t('components.button.fields.label') },
     { kind: 'link', prop: 'link', label: t('components.button.fields.link') },

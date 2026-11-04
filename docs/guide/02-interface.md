@@ -99,6 +99,9 @@ On Windows and Linux, replace <kbd>⌘</kbd> with <kbd>Ctrl</kbd>.
 | Duplicate the element | <kbd>⌘</kbd> <kbd>D</kbd> |
 | Delete the element | <kbd>Del</kbd> or <kbd>⌫</kbd> |
 | Deselect | <kbd>Esc</kbd> |
+| Edit a text on the page | Double-click the text (Heading, Text, Button, List, accordion title, tab label), or <kbd>F2</kbd> on the selected element (<kbd>Enter</kbd> too, from the canvas or on its row in the layers) |
+| Validate / cancel the edit on the page | Click elsewhere (or <kbd>Enter</kbd>, except in a Text and a List) / <kbd>Esc</kbd> |
+| Move the element one rank | <kbd>⌥</kbd> <kbd>↑</kbd> / <kbd>⌥</kbd> <kbd>↓</kbd> (<kbd>Alt</kbd> on Windows and Linux) |
 
 In the layers, the arrows <kbd>↑</kbd> <kbd>↓</kbd> move from one element to another, <kbd>→</kbd> and <kbd>←</kbd> expand and collapse, <kbd>Home</kbd> and <kbd>End</kbd> go to the first and last element.
 

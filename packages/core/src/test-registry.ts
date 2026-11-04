@@ -28,6 +28,7 @@ export const testRegistry = createRegistry([
     children: 'none',
     styleGroups: ['typography'],
     fields: [{ kind: 'text', prop: 'text', label: 'Texte' }],
+    inline: { prop: 'text' },
     display: 'block',
     viewName: 'Label',
   },
