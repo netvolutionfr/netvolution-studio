@@ -1,5 +1,7 @@
 # Netvolution Studio
 
+![The Studio editing the Studio Orbe template: pages, component library and layers on the left, the page in the canvas, the inspector on the right](docs/images/studio.png)
+
 **Netvolution Studio is a visual CMS to design professional showcase websites and publish them as standalone static sites.** Designers compose their pages with the mouse, as in a page builder; the Studio produces a standard Astro site, fast and secure, that can be hosted anywhere and no longer depends on the Studio once exported.
 
 - **Visual editor**: component library, drag and drop, tree, inspector, tablet and mobile preview, undo/redo, copy and paste.
