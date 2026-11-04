@@ -131,11 +131,27 @@ function checkOrigin(req: IncomingMessage) {
   if (req.method === 'GET' || req.method === 'HEAD') return;
   if (req.headers['x-ns-request'] !== '1') throw new HttpError(403, msg('server.header'));
   const origin = req.headers.origin;
-  if (origin && new URL(origin).host !== req.headers.host) throw new HttpError(403, msg('server.origin'));
+  if (!origin) return;
+  try {
+    const parsed = new URL(origin);
+    if (
+      !['http:', 'https:'].includes(parsed.protocol) ||
+      parsed.host.toLowerCase() !== (req.headers.host ?? '').toLowerCase()
+    )
+      throw new HttpError(403, msg('server.origin'));
+  } catch (error) {
+    if (error instanceof HttpError) throw error;
+    throw new HttpError(403, msg('server.origin'));
+  }
 }
 
 /** Host name of a `Host` header, without the port; empty when missing or malformed. */
-const hostname = (host = '') => URL.parse(`http://${host}`)?.hostname ?? '';
+const hostname = (host = '') => {
+  const parsed = URL.parse(`http://${host}`);
+  return parsed && !parsed.username && !parsed.password && parsed.pathname === '/'
+    ? parsed.hostname.toLowerCase()
+    : '';
+};
 
 const randomId = (prefix: string, length: number) =>
   `${prefix}${[...randomBytes(length)].map((b) => (b % 36).toString(36)).join('')}`;
