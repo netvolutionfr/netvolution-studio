@@ -108,6 +108,7 @@
     "projectName": "Nom du projet",
     "template": "Modèle",
     "starterPages": "Pages de départ",
+    "blankPage": "Page vide",
     "fullSites": "Sites complets",
     "pageCount_one": "{{count}} page",
     "pageCount_other": "{{count}} pages",
@@ -1089,6 +1090,7 @@
     "invalidDocument": "Document invalide",
     "header": "En-tête X-NS-Request manquant",
     "origin": "Origine refusée",
+    "host": "Hôte refusé",
     "projectId": "Identifiant de projet invalide",
     "project": "Projet introuvable",
     "template": "Modèle introuvable",
@@ -1138,7 +1140,8 @@
         "variant": {
           "primary": "Principal",
           "secondary": "Secondaire",
-          "text": "Lien texte"
+          "text": "Lien texte",
+          "plain": "Lien simple (logo)"
         }
       }
     },

@@ -29,13 +29,15 @@ const languageName = (lang: string) => {
   }
 };
 
+const BLANK = 'blank';
+
 /** Projects screen (SB-01): create from a template, import, open, duplicate, delete (to the trash). */
 export function Projects() {
   const [projects, setProjects] = useState<ProjectSummary[] | null>(null);
   const [siteTemplates, setSiteTemplates] = useState<TemplateSummary[]>([]);
   const [error, setError] = useState<{ message: string; diagnostics: Diagnostic[] } | null>(null);
   const [name, setName] = useState('');
-  const [template, setTemplate] = useState(templates[0]?.doc.id ?? '');
+  const [template, setTemplate] = useState(BLANK);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const run = async (action: () => Promise<unknown>) => {
@@ -68,7 +70,17 @@ export function Projects() {
       }
       const tpl = templates.find((x) => x.doc.id === template);
       if (!tpl) return;
-      const created = await createProject({ ...tpl.doc, name: name.trim() || tpl.doc.name });
+      // The blank page follows the interface language (ADR-0024): its names, and the content added to it.
+      const doc =
+        tpl.doc.id === BLANK
+          ? {
+              ...tpl.doc,
+              name: t('projects.blankPage'),
+              settings: { ...tpl.doc.settings, lang: getLocale() },
+              pages: tpl.doc.pages.map((p) => ({ ...p, title: t('projects.blankPage') })),
+            }
+          : tpl.doc;
+      const created = await createProject({ ...doc, name: name.trim() || doc.name });
       open(created.id, created.missingMedia);
     });
   const importJson = (file: File) =>
@@ -123,7 +135,7 @@ export function Projects() {
               <optgroup label={t('projects.starterPages')}>
                 {templates.map((tpl) => (
                   <option key={tpl.doc.id} value={tpl.doc.id}>
-                    {tpl.doc.name}
+                    {tpl.doc.id === BLANK ? t('projects.blankPage') : tpl.doc.name}
                   </option>
                 ))}
               </optgroup>

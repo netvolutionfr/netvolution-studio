@@ -12,6 +12,10 @@ const root = resolve(import.meta.dirname, 'dist');
 const dataDir = resolve(process.env.NS_DATA_DIR ?? join(repo, 'data'));
 const host = process.env.HOST ?? '127.0.0.1';
 const port = Number(process.env.PORT ?? 8080);
+// Names under which the Studio is reached (DNS rebinding): local ones, plus the proxy's public name.
+const allowedHosts = ['localhost', '127.0.0.1', '[::1]', ...(process.env.NS_ALLOWED_HOSTS ?? '').split(',')]
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
 
 const api = createApi({
   dataDir,
@@ -19,6 +23,7 @@ const api = createApi({
   fontsDir: join(repo, 'fonts'),
   exportsDir: resolve(process.env.NS_EXPORTS_DIR ?? join(dataDir, 'exports')),
   ai: aiConfigFromEnv(process.env, join(dataDir, 'ai-log.jsonl')),
+  allowedHosts,
 });
 
 const TYPES: Record<string, string> = {
@@ -62,5 +67,5 @@ async function statics(req: IncomingMessage, res: ServerResponse) {
 }
 
 createServer((req, res) => api(req, res, () => void statics(req, res))).listen(port, host, () =>
-  console.log(`Netvolution Studio sur http://${host}:${port}/ (données : ${dataDir})`),
+  console.log(`Netvolution Studio on http://${host}:${port}/ (data: ${dataDir})`),
 );

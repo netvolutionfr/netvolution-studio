@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { createServer } from 'node:http';
+import { createServer, request } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -114,6 +114,27 @@ describe('projects', () => {
       body: d,
     });
     expect(foreign.status).toBe(403);
+  });
+
+  it('refuses a Host outside allowedHosts (DNS rebinding), API and media alike', async () => {
+    const api = createApi({
+      dataDir: join(dir, 'hosts'),
+      exportsDir: join(dir, 'exports'),
+      allowedHosts: ['localhost'],
+    });
+    const server = createServer((req, res) => api(req, res, () => res.writeHead(404).end()));
+    await new Promise<void>((ok) => server.listen(0, '127.0.0.1', ok));
+    const port = (server.address() as { port: number }).port;
+    const get = (path: string, host: string) =>
+      new Promise<number>((ok, ko) =>
+        request({ port, path, headers: { host } }, (res) => ok(res.resume().statusCode ?? 0))
+          .on('error', ko)
+          .end(),
+      );
+    expect(await get('/api/projects', `localhost:${port}`)).toBe(200);
+    expect(await get('/api/projects', `evil.example:${port}`)).toBe(403);
+    expect(await get('/media/pnothere000/x.png', 'evil.example')).toBe(403);
+    server.close();
   });
 });
 

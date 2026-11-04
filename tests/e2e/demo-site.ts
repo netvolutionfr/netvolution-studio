@@ -156,6 +156,11 @@ try {
   await h1Style.getByLabel('Graisse').selectOption('700');
   await fill('Taille · Base', '52', h1Style);
   await fill('Taille · Mobile', '36', h1Style);
+  // Card and call-to-action titles (H2) in the same font.
+  await ds.getByRole('button', { name: 'Titre 2', exact: true }).click();
+  const h2Style = ds.locator('.ds-text').nth(1);
+  await h2Style.getByLabel('Police').selectOption({ label: 'Police' });
+  await h2Style.getByLabel('Graisse').selectOption('700');
   await dsButton.click();
 
   step('Médiathèque : import des images et du logo, textes alternatifs');

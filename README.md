@@ -1,5 +1,7 @@
 # Netvolution Studio
 
+![The Studio editing the Studio Orbe template: pages, component library and layers on the left, the page in the canvas, the inspector on the right](docs/images/studio.png)
+
 **Netvolution Studio is a visual CMS to design professional showcase websites and publish them as standalone static sites.** Designers compose their pages with the mouse, as in a page builder; the Studio produces a standard Astro site, fast and secure, that can be hosted anywhere and no longer depends on the Studio once exported.
 
 - **Visual editor**: component library, drag and drop, tree, inspector, tablet and mobile preview, undo/redo, copy and paste.
@@ -73,6 +75,7 @@ NS_DATA_DIR=/path/to/data node --env-file-if-exists=.env apps/studio/server.ts
 | `PORT` | Port | `8080` |
 | `NS_DATA_DIR` | Projects, media, templates, AI log | `data/` in the repository |
 | `NS_EXPORTS_DIR` | Generated exports | `<NS_DATA_DIR>/exports` |
+| `NS_ALLOWED_HOSTS` | Extra host names accepted in the `Host` header, comma-separated (the reverse proxy's public name) | `localhost`, `127.0.0.1`, `[::1]` only |
 | `NS_AI_*`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | AI assistant | disabled (see `.env.example`) |
 
 ### On a server
@@ -98,6 +101,7 @@ server {
 }
 ```
 
+- Set `NS_ALLOWED_HOSTS=studio.example.org`: any other `Host` is refused (protection against DNS rebinding), so the proxy must forward `Host` as above.
 - With Docker, keep the published port on `127.0.0.1`: Docker publishes its ports bypassing most firewalls.
 - Building the static site runs `npm ci` in the export: the server must reach the npm registry.
 - One user at a time per project: a concurrent save is refused, not merged.

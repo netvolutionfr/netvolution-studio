@@ -69,7 +69,7 @@ const link = (to: LinkTo) =>
 export const btn = (
   label: string,
   to: LinkTo,
-  variant: 'primary' | 'secondary' | 'text',
+  variant: 'primary' | 'secondary' | 'text' | 'plain',
   style?: ResponsiveStyle,
 ): T => ({ type: 'button', props: { label, link: link(to), variant }, ...(style && { style }) });
 export const icon = (name: string, style?: ResponsiveStyle): T => ({
