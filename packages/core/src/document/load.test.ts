@@ -9,6 +9,7 @@ const codes = (input: unknown) => {
 };
 const label = sampleDoc().nodes.nlabel001;
 const root = sampleDoc().nodes.nroot0001;
+if (!root) throw new Error('fixture');
 
 describe('loadSite', () => {
   it('accepts a valid document and round-trips it without loss', () => {
@@ -50,6 +51,24 @@ describe('loadSite', () => {
     expect(codes(patched('nodes.nroot0001.children', ['nlabel001', 'nlabel001']))).toEqual([
       'multiple-parents',
     ]);
+  });
+
+  it('rejects a cycle in a shared component without recursing forever', () => {
+    const doc = sampleDoc();
+    const rootId = 'ncycle000';
+    doc.nodes[rootId] = { ...root, id: rootId, children: [rootId] };
+    doc.symbols = [
+      {
+        id: 'cycle',
+        name: 'Cycle',
+        category: 'structure',
+        description: '',
+        version: 1,
+        rootId,
+        params: [],
+      },
+    ];
+    expect(codes(doc)).toContain('cycle');
   });
 
   it('validates props, nesting and style against the registry', () => {
