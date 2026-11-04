@@ -114,6 +114,14 @@ describe('projects', () => {
       body: d,
     });
     expect(foreign.status).toBe(403);
+    for (const origin of ['null', 'not a URL', 'file:///tmp/test']) {
+      const malformed = await fetch(`${base}/api/projects`, {
+        method: 'POST',
+        headers: { ...H, origin },
+        body: d,
+      });
+      expect(malformed.status).toBe(403);
+    }
   });
 
   it('refuses a Host outside allowedHosts (DNS rebinding), API and media alike', async () => {
@@ -132,7 +140,9 @@ describe('projects', () => {
           .end(),
       );
     expect(await get('/api/projects', `localhost:${port}`)).toBe(200);
+    expect(await get('/api/projects', `LOCALHOST:${port}`)).toBe(200);
     expect(await get('/api/projects', `evil.example:${port}`)).toBe(403);
+    expect(await get('/api/projects', `evil.example@localhost:${port}`)).toBe(403);
     expect(await get('/media/pnothere000/x.png', 'evil.example')).toBe(403);
     server.close();
   });
