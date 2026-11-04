@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 export type ButtonProps = {
   label: string;
   href: string;
-  variant: 'primary' | 'secondary' | 'text';
+  variant: 'primary' | 'secondary' | 'text' | 'plain';
 };
 
 export default function Button(p: { className: string; props: ButtonProps; children?: ReactNode }) {

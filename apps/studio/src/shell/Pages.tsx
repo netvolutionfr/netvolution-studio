@@ -204,9 +204,9 @@ function createLayout(store: EditorStore, role: LayoutRole) {
                 props: {
                   label: siteName,
                   link: { kind: 'page', pageId: doc.settings.homePageId },
-                  variant: 'text',
+                  variant: 'plain',
                 },
-                style: { base: { fontSize: px(20), fontWeight: 700 } },
+                style: { base: { color: '#111827', fontSize: px(20), fontWeight: 700 } },
               },
               nav(text('content.nav.label'), 'mobile'),
             ]),

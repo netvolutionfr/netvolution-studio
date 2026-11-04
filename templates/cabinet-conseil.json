@@ -72,7 +72,7 @@
       "nval000003": {
         "id": "nval000003",
         "type": "button",
-        "props": { "label": "Valéor", "link": { "kind": "page", "pageId": "accueil" }, "variant": "text" },
+        "props": { "label": "Valéor", "link": { "kind": "page", "pageId": "accueil" }, "variant": "plain" },
         "style": {
           "base": {
             "fontFamily": { "token": "titres" },

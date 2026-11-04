@@ -1140,7 +1140,8 @@
         "variant": {
           "primary": "Principal",
           "secondary": "Secondaire",
-          "text": "Lien texte"
+          "text": "Lien texte",
+          "plain": "Lien simple (logo)"
         }
       }
     },

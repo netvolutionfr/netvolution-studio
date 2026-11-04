@@ -849,7 +849,7 @@ const header: T = box(
         btn(
           'Orbe',
           { page: 'accueil' },
-          'text',
+          'plain',
           st({ color: tok('text'), fontFamily: tok('titres'), fontSize: px(26), fontWeight: 700 }),
         ),
         {

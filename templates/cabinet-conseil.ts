@@ -837,7 +837,7 @@ const header: T = box(
         btn(
           'Valéor',
           { page: 'accueil' },
-          'text',
+          'plain',
           st({ color: tok('fir'), fontFamily: tok('titres'), fontSize: px(28), fontWeight: 600 }),
         ),
         {

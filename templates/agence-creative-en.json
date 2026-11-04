@@ -72,7 +72,7 @@
       "norb000003": {
         "id": "norb000003",
         "type": "button",
-        "props": { "label": "Orbe", "link": { "kind": "page", "pageId": "accueil" }, "variant": "text" },
+        "props": { "label": "Orbe", "link": { "kind": "page", "pageId": "accueil" }, "variant": "plain" },
         "style": {
           "base": {
             "fontFamily": { "token": "titres" },

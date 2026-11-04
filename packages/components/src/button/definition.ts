@@ -10,7 +10,7 @@ export const button = defineComponent({
   props: z.strictObject({
     label: z.string().min(1).max(120),
     link: linkSchema,
-    variant: z.enum(['primary', 'secondary', 'text']),
+    variant: z.enum(['primary', 'secondary', 'text', 'plain']),
   }),
   defaults: {
     props: { label: 'content.button', link: { kind: 'url', href: '#' }, variant: 'primary' },
@@ -35,6 +35,7 @@ export const button = defineComponent({
         { value: 'primary', label: t('components.button.options.variant.primary') },
         { value: 'secondary', label: t('components.button.options.variant.secondary') },
         { value: 'text', label: t('components.button.options.variant.text') },
+        { value: 'plain', label: t('components.button.options.variant.plain') },
       ],
     },
   ],
@@ -44,6 +45,8 @@ export const button = defineComponent({
     'text-align:center;text-decoration:none;border:2px solid transparent}' +
     '.ns-button-primary{background-color:#3b5bdb;color:#ffffff}' +
     '.ns-button-secondary{border-color:currentColor;color:#3b5bdb}' +
-    '.ns-button-text{padding:0;border:0;color:#3b5bdb;text-decoration:underline}',
+    '.ns-button-text{padding:0;border:0;color:#3b5bdb;text-decoration:underline}' +
+    // A logo or a link styled by its own color and font: no underline, the surrounding color.
+    '.ns-button-plain{padding:0;border:0;border-radius:0;color:inherit}',
   viewName: 'Button',
 });
