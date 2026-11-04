@@ -20,6 +20,7 @@ export const heading = defineComponent({
   }),
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'visibility', 'position', 'effects'],
+  inline: { prop: 'text' },
   fields: [
     { kind: 'richText', prop: 'text', label: t('components.heading.fields.text') },
     {

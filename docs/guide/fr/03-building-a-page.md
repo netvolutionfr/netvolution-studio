@@ -65,11 +65,13 @@ Donnez un **nom** à vos boîtes (inspecteur, section **Avancé**, « Nom dans l
 
 | Pour | Faites |
 |---|---|
-| Changer l’ordre dans la même boîte | Flèches **Monter** / **Descendre** en haut de l’inspecteur |
-| Déplacer ailleurs dans la page | Glissez la ligne dans l’**arborescence** ; ou **couper** (<kbd>⌘</kbd> <kbd>X</kbd>), sélectionner la destination, **coller** (<kbd>⌘</kbd> <kbd>V</kbd>) |
+| Changer l’ordre dans la même boîte | Flèches **Monter** / **Descendre** en haut de l’inspecteur, ou <kbd>⌥</kbd> <kbd>↑</kbd> / <kbd>⌥</kbd> <kbd>↓</kbd> |
+| Déplacer ailleurs dans la page | **Attrapez l’élément dans le canvas** et glissez-le : un trait bleu montre où il va se poser, l’élément d’origine est voilé, <kbd>Échap</kbd> annule. Près du bord haut ou bas du canvas, la page défile toute seule. Ou glissez sa ligne dans l’**arborescence** ; ou **couper** (<kbd>⌘</kbd> <kbd>X</kbd>), sélectionner la destination, **coller** (<kbd>⌘</kbd> <kbd>V</kbd>) |
 | Déplacer vers une autre page | Couper, ouvrir l’autre page, sélectionner la destination, coller |
 | Dupliquer | <kbd>⌘</kbd> <kbd>D</kbd>, ou l’icône **Dupliquer** de l’inspecteur : la copie se place juste après |
 | Supprimer | <kbd>Suppr</kbd>, ou la corbeille rouge de l’inspecteur |
+
+Dans le canvas, c’est l’élément **sélectionné** qui se déplace si vous l’attrapez par l’intérieur (pour déplacer une boîte entière, sélectionnez-la d’abord, par exemple dans l’arborescence) ; sinon, c’est l’élément sous le pointeur. Un élément d’un composant réutilisable entraîne tout le composant. Le déplacement change l’ordre et la boîte d’accueil, jamais une position au pixel.
 
 Le collage suit la même règle que le clic dans la bibliothèque : dans la boîte sélectionnée, sinon après l’élément sélectionné.
 
@@ -96,9 +98,24 @@ Le collage suit la même règle que le clic dans la bibliothèque : dans la boî
 | **Accordéon** | — | Chaque **Élément d’accordéon** a un titre et un contenu libre. Cochez **Ouvert au chargement** pour l’éditer dans le canvas. |
 | **Onglets** | Nom accessible | Chaque **Onglet** a un titre et un contenu libre. |
 
+### Modifier un texte directement sur la page
+
+**Double-cliquez** sur un **Titre**, un **Texte**, un **Bouton**, une **Liste**, le titre d’un **Élément d’accordéon** ou le libellé d’un **Onglet** dans le canvas : le texte devient modifiable sur place, avec sa vraie police et sa vraie mise en page. Le cadre de sélection passe en pointillés, avec la mention « édition ».
+
+- Tapez votre texte ; <kbd>⌘</kbd> <kbd>B</kbd> et <kbd>⌘</kbd> <kbd>I</kbd> mettent en gras et en italique (Titre et Texte).
+- Dans un **Texte**, <kbd>Entrée</kbd> commence un nouveau paragraphe et <kbd>⇧</kbd> <kbd>Entrée</kbd> insère un retour à la ligne. Dans un **Titre**, <kbd>Entrée</kbd> valide et <kbd>⇧</kbd> <kbd>Entrée</kbd> insère un retour à la ligne. Dans une **Liste**, toute la liste se modifie : <kbd>Entrée</kbd> crée l’élément suivant, <kbd>⌫</kbd> en début d’élément le fusionne avec le précédent, et un élément vidé disparaît. Dans un **Bouton**, un titre d’accordéon ou un libellé d’onglet, <kbd>Entrée</kbd> valide.
+- **Cliquez ailleurs** (ou appuyez sur <kbd>Entrée</kbd> quand elle valide, voir ci-dessus) pour valider ; <kbd>Échap</kbd> annule et rend le texte d’avant.
+- Toute la saisie compte pour **une seule** étape : <kbd>⌘</kbd> <kbd>Z</kbd> après validation la défait d’un coup. Pendant la saisie, <kbd>⌘</kbd> <kbd>Z</kbd> et <kbd>Suppr</kbd> agissent dans le texte, jamais sur l’élément.
+- Un texte collé arrive **sans sa mise en forme**.
+- Dans un **composant réutilisable**, seuls les textes exposés en paramètre se modifient sur place, comme valeur propre à cette copie. Pour les autres, modifiez le composant lui-même.
+
+Pendant la saisie dans un Titre, un Texte ou une Liste, une **barre de mise en forme** flotte au-dessus du texte (en dessous s’il est en haut de la page) : **gras**, **italique**, **couleur**, **lien**, **retirer le lien** et **effacer la mise en forme**. Sélectionnez des mots, puis cliquez sur le bouton : la saisie continue. Ces boutons fonctionnent comme ceux de l’inspecteur, décrits ci-dessous.
+
 ### Le texte enrichi
 
-Le champ **Texte** a une petite barre d’outils : **gras** (<kbd>⌘</kbd> <kbd>B</kbd>), **italique** (<kbd>⌘</kbd> <kbd>I</kbd>), **couleur**, **lien**, **retirer le lien** et **effacer la mise en forme**. Sélectionnez des mots, puis cliquez sur le bouton voulu ; pour un lien, le Studio demande l’adresse.
+Le champ **Texte** a une petite barre d’outils : **gras** (<kbd>⌘</kbd> <kbd>B</kbd>), **italique** (<kbd>⌘</kbd> <kbd>I</kbd>), **couleur**, **lien**, **retirer le lien** et **effacer la mise en forme**. Sélectionnez des mots, puis cliquez sur le bouton voulu.
+
+- **Lien** ouvre un petit formulaire : choisissez une **page du site** (le lien suit ensuite ses changements d’adresse), un **fichier à télécharger** de la médiathèque, ou saisissez une **adresse** (https, http, mailto, tel ou #ancre ; une adresse de page comme `/a-propos/` devient un lien vers cette page). **Appliquer** pose le lien, <kbd>Échap</kbd> ou **Annuler** referme le formulaire.
 
 - Dans un **Texte**, <kbd>Entrée</kbd> commence un **nouveau paragraphe** et <kbd>⇧</kbd> <kbd>Entrée</kbd> insère un **retour à la ligne**.
 - Dans un **Titre**, <kbd>Entrée</kbd> insère un retour à la ligne (un titre reste un seul bloc).

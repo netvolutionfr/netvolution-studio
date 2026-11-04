@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { typeIcon } from '../ui/index.ts';
 import { type DragState, dragHandlers } from './drag.ts';
+import { editSelection } from './shortcuts.ts';
 import { useEditor, useStore } from './store.ts';
 
 export const nodeLabel = (doc: Site, id: string) => {
@@ -58,6 +59,8 @@ export function Tree({ onHover, drag }: { onHover: (id: string | null) => void; 
     });
 
   const onKeyDown = (e: KeyboardEvent, row: Row, index: number) => {
+    // Alt+↑/↓ moves the element (App's shortcuts), instead of moving through the tree.
+    if (e.altKey) return;
     const go = (r: Row | undefined) => r && store.select(r.id);
     switch (e.key) {
       case 'ArrowDown':
@@ -81,6 +84,10 @@ export function Tree({ onHover, drag }: { onHover: (id: string | null) => void; 
         else go(rows.find((r) => r.id === parentOf(doc, row.id)?.id));
         break;
       case 'Enter':
+        // On the selected row, Enter edits its text in the page (ED-03).
+        if (row.id === store.getState().selection) editSelection();
+        else store.select(row.id);
+        break;
       case ' ':
         store.select(row.id);
         break;

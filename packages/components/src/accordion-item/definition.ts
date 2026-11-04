@@ -12,6 +12,7 @@ export const accordionItem = defineComponent({
   defaults: { props: { title: 'content.accordionItem', open: false } },
   children: 'any',
   styleGroups: ['spacing', 'item', 'visibility', 'position', 'effects'],
+  inline: { prop: 'title', selector: '.ns-{id} > summary' },
   fields: [
     { kind: 'text', prop: 'title', label: t('components.accordionItem.fields.title') },
     { kind: 'boolean', prop: 'open', label: t('components.accordionItem.fields.open') },

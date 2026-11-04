@@ -33,7 +33,7 @@ Cette table aide à retrouver un réflexe. Les colonnes Tatsu et Elementor donne
 | Bordure, Box Shadow | Border, Box Shadow | Inspecteur, section **Style** : **Bordure**, **Ombre** |
 | Image de fond, Overlay, dégradé | Background (Classic, Gradient), Background Overlay | Inspecteur, section **Style** : **Image de fond**, **Dégradé** (préréglage « Voile sombre » pour l’overlay) |
 | Motion effects, animations d’entrée | Motion Effects, Entrance Animation | Inspecteur, section [**Animations**](09-animations.md) |
-| Édition du texte dans la page | Édition en ligne | Texte de la section **Contenu** de l’inspecteur |
+| Édition du texte dans la page | Édition en ligne | Double-clic sur le texte dans le canvas (titres, textes, boutons, listes, accordéons, onglets) |
 
 ## Modules et widgets
 

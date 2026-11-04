@@ -145,6 +145,100 @@ await check('Raccourcis relayés depuis le canvas : Suppr puis ⌘Z', async () =
   await heading.waitFor({ timeout: 2000 });
 });
 
+const editingOverlay = page.locator('.overlay-editing');
+await check('Édition sur place (ED-01) : double-clic, saisie, Entrée, une seule annulation', async () => {
+  await heading.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  expect(
+    ((await page.locator('aside').textContent()) ?? '').includes('En cours d’édition sur la page'),
+    'champ de l’inspecteur désactivé',
+  );
+  await page.keyboard.press('End');
+  await page.keyboard.type(' modifiéX');
+  // Backspace edits the text: it must not delete the element.
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Enter');
+  await eventually(() => editingOverlay.count(), 0, 'sortie de l’édition');
+  await eventually(() => heading.textContent(), 'Un hero en Flex modifié', 'texte validé');
+  // The canvas rebuilds the page from the document once the shell has written it.
+  await eventually(() => heading.getAttribute('contenteditable'), null, 'aucune trace d’édition dans le DOM');
+  const field = page.getByLabel('Texte', { exact: true });
+  expect((await field.textContent()) === 'Un hero en Flex modifié', 'inspecteur à jour');
+  await undo.click();
+  await eventually(() => heading.textContent(), 'Un hero en Flex', 'annulé en une étape');
+  expect(await undo.isDisabled(), 'une seule entrée d’historique');
+});
+
+await check('Édition sur place : Échap annule sans entrée d’historique', async () => {
+  await heading.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  await page.keyboard.type('xyz');
+  await page.keyboard.press('Escape');
+  await eventually(() => heading.textContent(), 'Un hero en Flex', 'texte d’origine');
+  expect(await undo.isDisabled(), 'aucune entrée d’historique');
+});
+
+await check('Édition sur place : Entrée crée un paragraphe, clic dehors valide (Texte)', async () => {
+  const text = canvas.locator('.ns-ntxt00001');
+  await text.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  // Caret at the end of the text (it wraps on two lines, so End would stop at the first one).
+  await text.evaluate((el) => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    getSelection()?.removeAllRanges();
+    getSelection()?.addRange(range);
+  });
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('Second paragraphe');
+  await heading.click();
+  await eventually(() => editingOverlay.count(), 0, 'validé au clic dehors');
+  await eventually(() => text.locator('p').count(), 2, 'deux paragraphes');
+  expect(((await text.getAttribute('class')) ?? '').includes('ns-text'), 'rendu en div.ns-text');
+  expect((await text.locator('p').nth(1).textContent()) === 'Second paragraphe', 'second paragraphe');
+  await undo.click();
+  await eventually(() => canvas.locator('p.ns-ntxt00001').count(), 1, 'un seul paragraphe après annulation');
+});
+
+await check(
+  'Édition sur place (ED-B) : barre flottante, gras et lien sur un mot, une seule annulation',
+  async () => {
+    await heading.dblclick();
+    await editingOverlay.waitFor({ timeout: 2000 });
+    const tools = page.locator('.format-tools');
+    await tools.waitFor({ timeout: 2000 });
+    // Select the first word, « Un ».
+    await heading.evaluate((el) => {
+      const range = document.createRange();
+      range.setStart(el.firstChild as Node, 0);
+      range.setEnd(el.firstChild as Node, 2);
+      getSelection()?.removeAllRanges();
+      getSelection()?.addRange(range);
+    });
+    await tools.getByRole('button', { name: 'Gras' }).click();
+    await eventually(() => heading.locator('b, strong').count(), 1, 'gras appliqué pendant l’édition');
+    await tools.getByRole('button', { name: 'Lien', exact: true }).click();
+    // The link form takes the focus: the edit goes on.
+    await tools.getByLabel('Adresse').fill('https://example.org');
+    await tools.getByRole('button', { name: 'Appliquer' }).click();
+    expect((await editingOverlay.count()) === 1, 'toujours en édition après le formulaire de lien');
+    // The format reaches the canvas by message: wait for it before validating.
+    await eventually(() => heading.locator('a[href="https://example.org"]').count(), 1, 'lien appliqué');
+    await page.keyboard.press('Enter');
+    await eventually(() => editingOverlay.count(), 0, 'validé');
+    await eventually(
+      () => heading.locator('a[href="https://example.org"] strong').textContent(),
+      'Un',
+      'lien et gras',
+    );
+    expect((await heading.textContent()) === 'Un hero en Flex', 'texte inchangé');
+    await undo.click();
+    await eventually(() => heading.locator('a').count(), 0, 'annulé en une étape');
+    expect(await undo.isDisabled(), 'une seule entrée d’historique');
+  },
+);
+
 const rootOrder = () =>
   canvas.locator('.ns-nroot00001 > *').evaluateAll((els) => els.map((e) => e.className).join(' | '));
 const drag = async (source: Locator, x: number, y: number) => {
@@ -165,6 +259,111 @@ await check('Bibliothèque : clic = insertion après la sélection, une seule an
   await eventually(order, 'H1,A,P', 'ordre dans la pile');
   await undo.click();
   await eventually(order, 'H1,P', 'après annulation');
+});
+
+/** Classes `ns-<id>` of the heading's parent's children, in order. */
+const heroOrder = () =>
+  heading.evaluate((el) =>
+    [...(el.parentElement?.children ?? [])]
+      .map((c) => [...c.classList].find((k) => /^ns-n/.test(k)))
+      .join(','),
+  );
+/** Press on `source` in the canvas, move past the threshold, then to (x, y). */
+const grab = async (source: Locator, x: number, y: number) => {
+  const s = await box(source);
+  await page.mouse.move(s.x + 20, s.y + s.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(s.x + 30, s.y + s.height / 2 + 10, { steps: 4 });
+  await page.mouse.move(x, y, { steps: 12 });
+};
+
+await check(
+  'Attraper un élément dans le canvas (ED-02) : déplacement atténué, une seule annulation',
+  async () => {
+    const before = await heroOrder();
+    expect(before.startsWith('ns-nh1000001,ns-ntxt00001'), `ordre initial : ${before}`);
+    const text = await box(canvas.locator('.ns-ntxt00001'));
+    await grab(heading, text.x + 20, text.y + text.height - 2);
+    await page.locator('.drop-marker').waitFor({ timeout: 2000 });
+    expect((await page.locator('.overlay-dragged').count()) === 1, 'élément d’origine atténué');
+    expect(((await page.locator('.drag-ghost').textContent()) ?? '').includes('Titre'), 'étiquette');
+    await page.mouse.up();
+    await eventually(
+      async () => (await heroOrder()).startsWith('ns-ntxt00001,ns-nh1000001'),
+      true,
+      'titre déplacé',
+    );
+    await page.getByRole('treeitem', { name: /^Titre/, selected: true }).waitFor({ timeout: 2000 });
+    await undo.click();
+    await eventually(heroOrder, before, 'annulé en une étape');
+    expect(await undo.isDisabled(), 'une seule entrée d’historique');
+  },
+);
+
+await check('Attraper un élément dans le canvas : Échap annule le glissement', async () => {
+  const before = await heroOrder();
+  const text = await box(canvas.locator('.ns-ntxt00001'));
+  await grab(heading, text.x + 20, text.y + text.height - 2);
+  await page.locator('.drop-marker').waitFor({ timeout: 2000 });
+  await page.keyboard.press('Escape');
+  await eventually(() => page.locator('.drop-marker').count(), 0, 'glissement annulé');
+  await page.mouse.up();
+  expect((await heroOrder()) === before, 'ordre inchangé');
+  expect(await undo.isDisabled(), 'aucune entrée d’historique');
+});
+
+await check(
+  'Clavier (ED-03) : Alt+↓ / Alt+↑ déplacent la sélection, Entrée et F2 éditent le texte',
+  async () => {
+    const before = await heroOrder();
+    await heading.click();
+    await page.keyboard.press('Alt+ArrowDown');
+    await eventually(async () => (await heroOrder()).startsWith('ns-ntxt00001,ns-nh1000001'), true, 'Alt+↓');
+    await page.keyboard.press('Alt+ArrowUp');
+    await eventually(heroOrder, before, 'Alt+↑');
+    await page.keyboard.press('Alt+ArrowUp');
+    expect((await heroOrder()) === before, 'aucun effet au premier rang');
+    await undo.click();
+    await undo.click();
+    expect(await undo.isDisabled(), 'deux déplacements, deux annulations');
+    // Enter from the canvas, F2 from the tree.
+    await heading.click();
+    await page.keyboard.press('Enter');
+    await editingOverlay.waitFor({ timeout: 2000 });
+    await page.keyboard.press('Escape');
+    await eventually(() => editingOverlay.count(), 0, 'Échap');
+    await page.getByRole('treeitem', { name: /^Titre/, selected: true }).focus();
+    await page.keyboard.press('F2');
+    await editingOverlay.waitFor({ timeout: 2000 });
+    await page.keyboard.type('X');
+    await page.keyboard.press('Escape');
+    await eventually(() => heading.textContent(), 'Un hero en Flex', 'texte inchangé');
+  },
+);
+
+await check('Glissement : la page défile près du bord du canvas (ED-02)', async () => {
+  const library = page.locator('.library');
+  const pageScroll = () => canvas.locator('html').evaluate(() => window.scrollY);
+  const tall = () =>
+    canvas.locator('html').evaluate(() => document.documentElement.scrollHeight > innerHeight + 300);
+  // A page taller than the canvas: as many tab blocks as needed.
+  let added = 0;
+  while (!(await tall()) && added < 15) {
+    await library.getByRole('button', { name: 'Bloc d’onglets' }).click();
+    added++;
+    await page.waitForTimeout(50);
+  }
+  expect(await tall(), 'page plus haute que le canvas');
+  const frame = await box(page.locator('iframe'));
+  const area = await box(page.locator('.canvas-area'));
+  const bottom = Math.min(frame.y + frame.height, area.y + area.height);
+  await grab(heading, frame.x + frame.width / 2, bottom - 8);
+  await eventually(async () => (await pageScroll()) > 100, true, 'défilement vers le bas');
+  await page.keyboard.press('Escape');
+  await page.mouse.up();
+  for (let i = 0; i < added; i++) await undo.click();
+  expect(await undo.isDisabled(), 'page rétablie');
+  await canvas.locator('html').evaluate(() => scrollTo(0, 0));
 });
 
 await check('Glisser une composition sous le contenu = ajout en fin de page', async () => {
@@ -761,6 +960,66 @@ await check(
   },
 );
 
+await check('Édition sur place (ED-C) : libellé d’onglet, titre d’accordéon, éléments de liste', async () => {
+  const caretAtEnd = (l: Locator) =>
+    l.evaluate((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      getSelection()?.removeAllRanges();
+      getSelection()?.addRange(range);
+    });
+  // Tab label: the button of the parent Tabs; Space types a space instead of pressing it.
+  const tab = canvas.getByRole('tab').first();
+  const tabTitle = (await tab.textContent()) ?? '';
+  await tab.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  await caretAtEnd(tab);
+  await page.keyboard.type(' bis');
+  await page.keyboard.press('Enter');
+  await eventually(
+    () => canvas.getByRole('tab').first().textContent(),
+    `${tabTitle} bis`,
+    'libellé d’onglet',
+  );
+  // Accordion title: the <summary>; editing it does not toggle the item.
+  const summary = canvas.locator('details.ns-accordion-item > summary').first();
+  const summaryTitle = (await summary.textContent()) ?? '';
+  const open = () => canvas.locator('details.ns-accordion-item[open]').count();
+  const opened = await open();
+  await summary.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  await caretAtEnd(summary);
+  await page.keyboard.type(' ter');
+  await page.keyboard.press('Enter');
+  await eventually(
+    () => canvas.locator('details.ns-accordion-item > summary').first().textContent(),
+    `${summaryTitle} ter`,
+    'titre d’accordéon',
+  );
+  expect((await open()) === opened, 'accordéon ni ouvert ni fermé par la saisie');
+  // List: Enter starts the next item, the whole session is one undo step.
+  await page.locator('.library').getByRole('button', { name: 'Liste', exact: true }).click();
+  const list = canvas.locator('.ns-list').last();
+  await eventually(() => list.locator('li').count(), 3, 'liste insérée');
+  const first = list.locator('li').first();
+  await first.dblclick();
+  await editingOverlay.waitFor({ timeout: 2000 });
+  await caretAtEnd(first);
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('Nouvel élément');
+  await summary.click();
+  await eventually(() => editingOverlay.count(), 0, 'validé au clic dehors');
+  await eventually(() => canvas.locator('.ns-list').last().locator('li').count(), 4, 'quatre éléments');
+  expect(
+    (await canvas.locator('.ns-list').last().locator('li').nth(1).textContent()) === 'Nouvel élément',
+    'nouvel élément en deuxième position',
+  );
+  await undo.click();
+  await eventually(() => canvas.locator('.ns-list').last().locator('li').count(), 3, 'annulé en une étape');
+  await undo.click();
+});
+
 await check(
   'Composants réutilisables : enregistrer, réutiliser sur 2 pages, propager, incompatibilité signalée (CS-01, CS-03)',
   async () => {
@@ -784,6 +1043,24 @@ await check(
     await page.getByLabel('Titre — Texte', { exact: true }).fill('Offre Pro');
     await page.getByLabel('Titre — Texte', { exact: true }).blur();
     await canvas.getByRole('heading', { name: 'Offre Pro' }).waitFor({ timeout: 2000 });
+    // An exposed parameter is edited in place too, as the instance's own value (ED-01).
+    await canvas.getByRole('heading', { name: 'Offre Pro' }).dblclick();
+    await editingOverlay.waitFor({ timeout: 2000 });
+    await page.keyboard.press('End');
+    await page.keyboard.type(' Plus');
+    await page.keyboard.press('Enter');
+    await canvas.getByRole('heading', { name: 'Offre Pro Plus' }).waitFor({ timeout: 2000 });
+    await page
+      .locator('.tree-row')
+      .filter({ has: page.locator('.tree-label', { hasText: /^Carte$/ }) })
+      .click();
+    await eventually(
+      () => page.getByLabel('Titre — Texte', { exact: true }).textContent(),
+      'Offre Pro Plus',
+      'paramètre de l’instance',
+    );
+    await undo.click();
+    await canvas.getByRole('heading', { name: 'Offre Pro', exact: true }).waitFor({ timeout: 2000 });
     // New version of the definition, published then propagated to both pages.
     const component = page.locator('.pages .pages-item', { hasText: 'Carte offre' });
     await component.click();

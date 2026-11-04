@@ -255,7 +255,8 @@
     "rename": "Rename",
     "classes": "CSS classes (separated by spaces)",
     "classesDone": "CSS classes",
-    "classesHint": "For the “Project CSS” stylesheet (Design system). Internal class: "
+    "classesHint": "For the “Project CSS” stylesheet (Design system). Internal class: ",
+    "editingInPlace": "Being edited on the page."
   },
   "canvas": {
     "resize": "Resize",
@@ -268,7 +269,11 @@
     "alignEnd": "Align to end",
     "stretch": "Stretch",
     "zoom": "Zoom {{percent}}%",
-    "fullSize": "100%"
+    "fullSize": "100%",
+    "instanceText": "Text of the component “{{name}}”: edit the component or expose this text as a parameter.",
+    "editingStatus": "Editing the text on the page. Escape to cancel.",
+    "editingLabel": " — editing",
+    "editText": "Edit text"
   },
   "symbols": {
     "updateInstances": "Update instances",
@@ -591,7 +596,11 @@
     "clear": "Clear formatting",
     "colorLegend": "Color of the selected text",
     "other": "Other",
-    "invalid": "Empty text or invalid link: the document is not changed."
+    "invalid": "Empty text or invalid link: the document is not changed.",
+    "linkForm": "Link of the selected text",
+    "target": "Target",
+    "apply": "Apply",
+    "cancel": "Cancel"
   },
   "animation": {
     "triggers": {

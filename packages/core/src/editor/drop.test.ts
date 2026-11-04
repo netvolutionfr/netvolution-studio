@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Site } from '../document/schema.ts';
 import { sampleDoc, testRegistry } from '../test-registry.ts';
-import { computeDropTarget, insertionPoint, isNoopMove } from './drop.ts';
+import { canvasDragSource, computeDropTarget, insertionPoint, isNoopMove } from './drop.ts';
 import { createEditorStore } from './store.ts';
 
 /** root (box, column) > [nlabel001, nbox00001 (box, row) > [nlabel002, nlabel003]] */
@@ -172,5 +172,25 @@ describe('toTemplate (copy/paste)', () => {
     const copy = s.getState().selection as string;
     expect(copy).not.toBe(box);
     expect(toTemplate(s.getState().doc, copy)).toEqual(tpl);
+  });
+});
+
+describe('node grabbed in the canvas (ED-02)', () => {
+  it('the selection when pressed inside it, else the pressed node; never the root', () => {
+    const { doc, box, a } = layout();
+    expect(canvasDragSource(doc, 'nroot0001', null, a)).toBe(a);
+    expect(canvasDragSource(doc, 'nroot0001', box, a)).toBe(box);
+    expect(canvasDragSource(doc, 'nroot0001', 'nlabel001', a)).toBe(a);
+    expect(canvasDragSource(doc, 'nroot0001', 'nroot0001', a)).toBeNull();
+    expect(canvasDragSource(doc, 'nroot0001', null, 'nroot0001')).toBeNull();
+    // Outside the open tree (e.g. a shared header seen from a page).
+    expect(canvasDragSource(doc, box, null, 'nlabel001')).toBeNull();
+  });
+
+  it('a node inside an instance moves the whole instance', () => {
+    const { doc, box, a } = layout();
+    const s = createEditorStore(doc, testRegistry);
+    s.dispatch('createSymbol', { nodeId: box, name: 'Carte', category: 'features', description: '' });
+    expect(canvasDragSource(s.getState().doc, 'nroot0001', null, a)).toBe(box);
   });
 });

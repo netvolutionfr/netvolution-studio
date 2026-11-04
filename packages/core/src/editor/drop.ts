@@ -113,3 +113,23 @@ export function insertionPoint(
     ? { parentId: root.id, index: root.children.length }
     : null;
 }
+
+/**
+ * Node moved by a drag started on `pressedId` in the canvas (ED-02): the selection when the press is
+ * inside it, else the pressed node; inside a shared component instance, the whole instance. Null for
+ * the root of the open tree and for nodes outside it (shared header or footer seen from a page).
+ */
+export function canvasDragSource(
+  doc: Site,
+  rootId: string,
+  selection: string | null,
+  pressedId: string,
+): string | null {
+  const ancestors: string[] = [];
+  for (let id: string | undefined = pressedId; id; id = parentOf(doc, id)?.id) ancestors.push(id);
+  if (ancestors.at(-1) !== rootId) return null;
+  let moved = selection && ancestors.includes(selection) ? selection : pressedId;
+  // The outermost instance holding it moves as a whole.
+  for (const id of ancestors.slice(ancestors.indexOf(moved))) if (doc.nodes[id]?.instance) moved = id;
+  return moved === rootId ? null : moved;
+}

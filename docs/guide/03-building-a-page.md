@@ -65,11 +65,13 @@ Give your boxes a **name** (inspector, **Advanced** section, "Name in the layers
 
 | To | Do |
 |---|---|
-| Change the order within the same box | **Move up** / **Move down** arrows at the top of the inspector |
-| Move elsewhere in the page | Drag the row in the **layers**; or **cut** (<kbd>⌘</kbd> <kbd>X</kbd>), select the destination, **paste** (<kbd>⌘</kbd> <kbd>V</kbd>) |
+| Change the order within the same box | **Move up** / **Move down** arrows at the top of the inspector, or <kbd>⌥</kbd> <kbd>↑</kbd> / <kbd>⌥</kbd> <kbd>↓</kbd> |
+| Move elsewhere in the page | **Grab the element in the canvas** and drag it: a blue line shows where it will land, the original element is dimmed, <kbd>Esc</kbd> cancels; near the top or bottom edge of the canvas, the page scrolls by itself. Or drag its row in the **layers**; or **cut** (<kbd>⌘</kbd> <kbd>X</kbd>), select the destination, **paste** (<kbd>⌘</kbd> <kbd>V</kbd>) |
 | Move to another page | Cut, open the other page, select the destination, paste |
 | Duplicate | <kbd>⌘</kbd> <kbd>D</kbd>, or the **Duplicate** icon of the inspector: the copy goes right after |
 | Delete | <kbd>Del</kbd>, or the red trash of the inspector |
+
+In the canvas, the **selected** element moves if you grab it from the inside (to move a whole box, select it first, for instance in the layers); otherwise, the element under the pointer moves. An element of a reusable component takes the whole component with it. A move changes the order and the containing box, never a pixel position.
 
 Pasting follows the same rule as a click in the library: into the selected box, otherwise after the selected element.
 
@@ -96,9 +98,24 @@ Pasting follows the same rule as a click in the library: into the selected box, 
 | **Accordion** | — | Each **Accordion item** has a title and free content. Tick **Open on load** to edit it in the canvas. |
 | **Tabs** | Accessible name | Each **Tab** has a title and free content. |
 
+### Editing a text directly on the page
+
+**Double-click** a **Heading**, a **Text**, a **Button**, a **List**, the title of an **Accordion item** or the label of a **Tab** in the canvas: the text becomes editable in place, with its real font and layout. The selection frame becomes dashed, marked "editing". <kbd>F2</kbd> does the same on the selected element (and <kbd>Enter</kbd>, from the canvas or on its row in the layers).
+
+- Type your text; <kbd>⌘</kbd> <kbd>B</kbd> and <kbd>⌘</kbd> <kbd>I</kbd> set bold and italic (Heading, Text, List).
+- In a **Text**, <kbd>Enter</kbd> starts a new paragraph and <kbd>⇧</kbd> <kbd>Enter</kbd> inserts a line break. In a **Heading**, <kbd>Enter</kbd> validates and <kbd>⇧</kbd> <kbd>Enter</kbd> inserts a line break. In a **List**, the whole list is edited: <kbd>Enter</kbd> creates the next item, <kbd>⌫</kbd> at the start of an item merges it with the previous one, and an emptied item disappears. In a **Button**, an accordion title or a tab label, <kbd>Enter</kbd> validates.
+- **Click elsewhere** (or press <kbd>Enter</kbd> where it validates, see above) to validate; <kbd>Esc</kbd> cancels and restores the previous text.
+- The whole input counts as **a single** step: <kbd>⌘</kbd> <kbd>Z</kbd> after validation undoes it at once. While typing, <kbd>⌘</kbd> <kbd>Z</kbd> and <kbd>Del</kbd> act in the text, never on the element.
+- Pasted text arrives **without its formatting**.
+- In a **reusable component**, only the texts exposed as parameters are edited in place, as a value of this copy. For the others, edit the component itself.
+
+While typing in a Heading, a Text or a List, a **formatting toolbar** floats above the text (below it when it is at the top of the page): **bold**, **italic**, **color**, **link**, **remove link** and **clear formatting**. Select words, then click the button: typing goes on. These buttons work like the inspector's, described below.
+
 ### Rich text
 
-The **Text** field has a small toolbar: **bold** (<kbd>⌘</kbd> <kbd>B</kbd>), **italic** (<kbd>⌘</kbd> <kbd>I</kbd>), **color**, **link**, **remove link** and **clear formatting**. Select words, then click the wanted button; for a link, the Studio asks for the address.
+The **Text** field has a small toolbar: **bold** (<kbd>⌘</kbd> <kbd>B</kbd>), **italic** (<kbd>⌘</kbd> <kbd>I</kbd>), **color**, **link**, **remove link** and **clear formatting**. Select words, then click the wanted button.
+
+- **Link** opens a small form: choose a **site page** (the link then follows its address changes), a **file to download** from the media library, or type an **address** (https, http, mailto, tel or #anchor; a page address such as `/about/` becomes a link to that page). **Apply** sets the link, <kbd>Esc</kbd> or **Cancel** closes the form.
 
 - In a **Text**, <kbd>Enter</kbd> starts a **new paragraph** and <kbd>⇧</kbd> <kbd>Enter</kbd> inserts a **line break**.
 - In a **Heading**, <kbd>Enter</kbd> inserts a line break (a heading stays a single block).

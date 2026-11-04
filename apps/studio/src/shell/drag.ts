@@ -25,41 +25,78 @@ const THRESHOLD = 4;
 let session: { start: { x: number; y: number }; state: DragState | null } | null = null;
 let suppressClick = false;
 
+type Env = { store: EditorStore; rects: () => Record<string, Rect>; onDrag: (d: DragState | null) => void };
+type Point = { clientX: number; clientY: number };
+
+function locate(item: DragItem, env: Env, e: Point): DragState {
+  const iframe = document.querySelector<HTMLIFrameElement>('iframe.canvas-iframe');
+  const frame = iframe?.getBoundingClientRect();
+  // The frame may be scaled for display; rects are in its unscaled coordinates.
+  const scale = frame && iframe?.offsetWidth ? frame.width / iframe.offsetWidth : 1;
+  const point = frame
+    ? { x: (e.clientX - frame.left) / scale, y: (e.clientY - frame.top) / scale }
+    : { x: -1, y: -1 };
+  const overCanvas =
+    !!frame &&
+    e.clientX >= frame.left &&
+    e.clientX <= frame.right &&
+    e.clientY >= frame.top &&
+    e.clientY <= frame.bottom;
+  const target = overCanvas
+    ? computeDropTarget(
+        env.store.getState().doc,
+        env.store.getState().rootId,
+        registry,
+        env.rects(),
+        point,
+        item,
+      )
+    : null;
+  return { item, x: e.clientX, y: e.clientY, overCanvas, target };
+}
+
+/** Applies a drop: a move of an existing node (unless a no-op), else an insertion. */
+function drop(item: DragItem, env: Env, target: DropTarget | null) {
+  if (!target) return;
+  if (item.nodeId) {
+    if (!isNoopMove(env.store.getState().doc, item.nodeId, target)) {
+      env.store.dispatch(
+        'moveNode',
+        { id: item.nodeId, parentId: target.parentId, index: target.index },
+        t('drag.move'),
+      );
+    }
+  } else {
+    env.store.dispatch(
+      'insertTree',
+      { parentId: target.parentId, index: target.index, tree: item.tree ?? { type: item.type } },
+      t('common.add', { label: item.label }),
+    );
+  }
+}
+
+/**
+ * Drag of an element grabbed in the canvas (ED-02): the frame keeps the pointer, so the canvas
+ * forwards the moves, already converted to client coordinates; same targets and drop as below.
+ */
+export function canvasDrag(item: DragItem, env: Env) {
+  return {
+    move: (e: Point) => env.onDrag(locate(item, env, e)),
+    end(e: Point) {
+      const done = locate(item, env, e);
+      env.onDrag(null);
+      drop(item, env, done.target);
+    },
+    cancel: () => env.onDrag(null),
+  };
+}
+
 /**
  * Pointer-based drag from the shell (library, tree) onto the canvas. The
  * source keeps pointer capture and App shows a transparent layer over the
  * iframe while dragging; the target is computed from the canvas rects.
  */
-export function dragHandlers(
-  item: DragItem,
-  env: { store: EditorStore; rects: () => Record<string, Rect>; onDrag: (d: DragState | null) => void },
-) {
-  const locate = (e: PointerEvent): DragState => {
-    const iframe = document.querySelector<HTMLIFrameElement>('iframe.canvas-iframe');
-    const frame = iframe?.getBoundingClientRect();
-    // The frame may be scaled for display; rects are in its unscaled coordinates.
-    const scale = frame && iframe?.offsetWidth ? frame.width / iframe.offsetWidth : 1;
-    const point = frame
-      ? { x: (e.clientX - frame.left) / scale, y: (e.clientY - frame.top) / scale }
-      : { x: -1, y: -1 };
-    const overCanvas =
-      !!frame &&
-      e.clientX >= frame.left &&
-      e.clientX <= frame.right &&
-      e.clientY >= frame.top &&
-      e.clientY <= frame.bottom;
-    const target = overCanvas
-      ? computeDropTarget(
-          env.store.getState().doc,
-          env.store.getState().rootId,
-          registry,
-          env.rects(),
-          point,
-          item,
-        )
-      : null;
-    return { item, x: e.clientX, y: e.clientY, overCanvas, target };
-  };
+export function dragHandlers(item: DragItem, env: Env) {
   const cancel = () => {
     session = null;
     env.onDrag(null);
@@ -78,31 +115,15 @@ export function dragHandlers(
       if (!session.state && Math.hypot(e.clientX - session.start.x, e.clientY - session.start.y) < THRESHOLD)
         return;
       if (!session.state) addEventListener('keydown', onKey);
-      session.state = locate(e);
+      session.state = locate(item, env, e);
       env.onDrag(session.state);
     },
     onPointerUp(e: PointerEvent) {
-      const done = session?.state ? locate(e) : null;
+      const done = session?.state ? locate(item, env, e) : null;
       cancel();
       if (!done) return;
       suppressClick = true;
-      const target = done.target;
-      if (!target) return;
-      if (item.nodeId) {
-        if (!isNoopMove(env.store.getState().doc, item.nodeId, target)) {
-          env.store.dispatch(
-            'moveNode',
-            { id: item.nodeId, parentId: target.parentId, index: target.index },
-            t('drag.move'),
-          );
-        }
-      } else {
-        env.store.dispatch(
-          'insertTree',
-          { parentId: target.parentId, index: target.index, tree: item.tree ?? { type: item.type } },
-          t('common.add', { label: item.label }),
-        );
-      }
+      drop(item, env, done.target);
     },
     onPointerCancel: cancel,
     /** A drag must not also trigger the source's click action. */

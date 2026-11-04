@@ -33,7 +33,7 @@ This table helps you find a habit again. The Tatsu and Elementor columns give th
 | Border, Box Shadow | Border, Box Shadow | Inspector, **Style** section: **Border**, **Shadow** |
 | Background image, Overlay, gradient | Background (Classic, Gradient), Background Overlay | Inspector, **Style** section: **Background image**, **Gradient** ("Dark veil" preset for the overlay) |
 | Motion effects, entrance animations | Motion Effects, Entrance Animation | Inspector, [**Animations**](09-animations.md) section |
-| Editing text in the page | Inline editing | Text of the inspector's **Content** section |
+| Editing text in the page | Inline editing | Double-click the text in the canvas (headings, texts, buttons, lists, accordions, tabs) |
 
 ## Modules and widgets
 

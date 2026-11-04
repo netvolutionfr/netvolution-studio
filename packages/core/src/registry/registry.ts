@@ -45,6 +45,12 @@ export interface ComponentDefinition<P extends Record<string, unknown> = Record<
   styleGroups: readonly StyleGroup[];
   /** Content fields shown in the inspector, in order. */
   fields: readonly PropField[];
+  /**
+   * Prop edited in place in the canvas by double-click (ADR-0025); its `text`, `richText` or
+   * `richTextList` field gives the editor. `selector` finds the element holding the text in the page
+   * (`{id}`: the node id), by default the node's own element `.ns-{id}`.
+   */
+  inline?: { prop: string; selector?: string };
   /** Default display, restored when `hidden: false` overrides an inherited `hidden: true`. */
   display: Display;
   /**

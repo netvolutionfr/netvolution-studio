@@ -9,12 +9,15 @@ const imports = (file: string) =>
 
 describe('Studio UI is isolated from rendered pages', () => {
   it('the canvas and site preview runtimes import no editor UI, design system, icon or Radix code', () => {
-    for (const file of ['canvas', 'preview'].flatMap((d) =>
-      readdirSync(join(src, d)).map((f) => join(d, f)),
-    )) {
+    // rich.ts: the DOM ↔ rich text conversion shared with in-place editing (ADR-0025), checked here too.
+    const allowed = ['@ns/components', '@ns/core', 'react-dom', 'react-dom/client', '../rich.ts'];
+    for (const file of [
+      ...['canvas', 'preview'].flatMap((d) => readdirSync(join(src, d)).map((f) => join(d, f))),
+      'rich.ts',
+    ]) {
       const deps = imports(join(src, file));
       expect(
-        deps.every((d) => ['@ns/components', '@ns/core', 'react-dom', 'react-dom/client'].includes(d ?? '')),
+        deps.every((d) => allowed.includes(d ?? '')),
         `${file}: ${deps}`,
       ).toBe(true);
     }

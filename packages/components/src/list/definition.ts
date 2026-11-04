@@ -33,6 +33,7 @@ export const list = defineComponent({
   }),
   children: 'none',
   styleGroups: ['spacing', 'size', 'item', 'typography', 'visibility', 'position', 'effects'],
+  inline: { prop: 'items' },
   fields: [
     {
       kind: 'select',
