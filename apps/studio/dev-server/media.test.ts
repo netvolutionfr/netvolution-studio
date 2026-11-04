@@ -18,6 +18,14 @@ describe('SVG policy (refusal, never rewriting)', () => {
   it.each([
     ['script', '<svg><script>alert(1)</script></svg>'],
     ['script with spaces', '<svg>< script >alert(1)</script></svg>'],
+    [
+      'namespaced script',
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:s="http://www.w3.org/2000/svg"><s:script>alert(1)</s:script></svg>',
+    ],
+    [
+      'aliased external href',
+      '<svg xmlns:x="http://www.w3.org/1999/xlink"><image x:href="https://evil.example/x"/></svg>',
+    ],
     ['event attribute', '<svg onload="alert(1)"></svg>'],
     ['event attribute on child', '<svg><rect width="1" onmouseover="alert(1)"/></svg>'],
     ['javascript href', '<svg><a href="javascript:alert(1)"><text>x</text></a></svg>'],
@@ -29,6 +37,7 @@ describe('SVG policy (refusal, never rewriting)', () => {
     ['xlink external', '<svg><use xlink:href="https://evil.example/a.svg#x"/></svg>'],
     ['data URI', '<svg><image href="data:image/svg+xml;base64,PHN2Zz4="/></svg>'],
     ['external CSS url', '<svg><style>rect{fill:url(https://evil.example/x)}</style></svg>'],
+    ['escaped CSS url', '<svg><style>rect{fill:u\\72l(https://evil.example/x)}</style></svg>'],
     ['CSS import', '<svg><style>@import "https://evil.example/x.css";</style></svg>'],
     [
       'DOCTYPE / XXE',

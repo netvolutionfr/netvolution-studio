@@ -87,12 +87,17 @@ const decodeEntities = (s: string) =>
 /** Refused constructs, checked on the raw text and on its numeric-entity-decoded form. */
 const FORBIDDEN: [RegExp, MessageKey][] = [
   [/<!DOCTYPE|<!ENTITY/i, 'svg.doctype'],
+  // Namespace aliases can hide active SVG elements (`<s:script>`) or external href attributes.
+  [/<\s*\/?\s*[a-z_][\w.-]*:/i, 'svg.active'],
+  [/\s(?!(?:xlink:href|xmlns:xlink|xml:(?:lang|space))\s*=)[a-z_][\w.-]*:[\w.-]+\s*=/i, 'svg.active'],
   [/<\s*(script|foreignObject|iframe|embed|object|audio|video|handler|listener)\b/i, 'svg.active'],
   [/\son[a-z]+\s*=/i, 'svg.event'],
   [/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:|vbscript\s*:|data\s*:/i, 'svg.scriptUrl'],
   // A quote may only be followed by '#': references must stay inside the document.
   [/(?:^|\s)(?:xlink:)?href\s*=\s*(?:["']\s*)?[^#"'\s]/i, 'svg.href'],
   [/url\(\s*(?:["']\s*)?[^#"'\s)]/i, 'svg.url'],
+  // CSS escapes can disguise `url()` inside a style element or presentation attribute.
+  [/\\/i, 'svg.url'],
   [/@import/i, 'svg.import'],
 ];
 
