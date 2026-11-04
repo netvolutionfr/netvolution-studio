@@ -383,23 +383,37 @@ function validateSemantics(doc: Site, registry: Registry): Diagnostic[] {
   const parents = new Map<string, string>();
   const onPath = new Set<string>();
   const walk = (id: string) => {
+    const stack = [{ id, child: 0 }];
     onPath.add(id);
-    for (const childId of doc.nodes[id]?.children ?? []) {
+    while (stack.length) {
+      const frame = stack[stack.length - 1] as { id: string; child: number };
+      const children = doc.nodes[frame.id]?.children ?? [];
+      if (frame.child >= children.length) {
+        onPath.delete(frame.id);
+        stack.pop();
+        continue;
+      }
+      const childId = children[frame.child++] as string;
       if (onPath.has(childId)) {
-        add('cycle', msg('diagnostics.cycle', { id, child: childId }), ['nodes', id, 'children'], id);
+        add(
+          'cycle',
+          msg('diagnostics.cycle', { id: frame.id, child: childId }),
+          ['nodes', frame.id, 'children'],
+          frame.id,
+        );
       } else if (parents.has(childId) || roots.has(childId)) {
         add(
           'multiple-parents',
           msg('diagnostics.multipleParents', { id: childId }),
-          ['nodes', id, 'children'],
+          ['nodes', frame.id, 'children'],
           childId,
         );
       } else if (doc.nodes[childId]) {
-        parents.set(childId, id);
-        walk(childId);
+        parents.set(childId, frame.id);
+        onPath.add(childId);
+        stack.push({ id: childId, child: 0 });
       }
     }
-    onPath.delete(id);
   };
   const rooted: [string, { rootId: string }[]][] = [
     ['pages', doc.pages],

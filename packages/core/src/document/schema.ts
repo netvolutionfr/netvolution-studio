@@ -318,6 +318,17 @@ export function pageLayout(site: Site, pageId: string, role: LayoutRole): Layout
 
 /** Node ids of the subtree rooted at `id`, in document order. */
 export function subtree(site: Site, id: string): string[] {
-  const node = site.nodes[id];
-  return node ? [id, ...node.children.flatMap((c) => subtree(site, c))] : [];
+  const out: string[] = [];
+  const pending = [id];
+  const seen = new Set<string>();
+  while (pending.length) {
+    const current = pending.pop() as string;
+    const node = site.nodes[current];
+    if (!node || seen.has(current)) continue;
+    seen.add(current);
+    out.push(current);
+    // Stack order keeps the same depth-first document order as the recursive implementation.
+    for (let i = node.children.length - 1; i >= 0; i--) pending.push(node.children[i] as string);
+  }
+  return out;
 }
