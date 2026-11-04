@@ -16,6 +16,7 @@ The Studio runs under a dedicated account, member of the `docker` group, which i
 | Deployment folder (`DEPLOY_PATH`) | `/srv/studio` (`compose.yaml` copied by the workflow) |
 | Data (projects, media, exports) | `<DEPLOY_PATH>/data`, owned by uid 1000 (the container's "node") |
 | Studio secrets (AI assistant, see `.env.example`) | `<DEPLOY_PATH>/.env`, mode 600, never versioned |
+| Public name of the Studio | `NS_ALLOWED_HOSTS=studio.example.org` in the `.env` (any other `Host` is refused) |
 | Internal port | `127.0.0.1:3010` (`NS_PORT` in the `.env` to change it) |
 | nginx virtual host | HTTPS proxy to `127.0.0.1:3010`, with `auth_basic` (or an authentication portal) |
 | Certificate | Let's Encrypt (certbot) |

@@ -38,6 +38,11 @@ export type ApiOptions = {
   exportsDir: string;
   /** Font catalog (ADR-0018): `catalog.json`, `files/*.woff2`; no catalog when absent. */
   fontsDir?: string;
+  /**
+   * Host names accepted in the `Host` header (DNS rebinding). Absent: no check, left to Vite
+   * (`server.allowedHosts`) in development; the production server always sets it.
+   */
+  allowedHosts?: string[];
 };
 
 type CatalogFont = {
@@ -128,6 +133,9 @@ function checkOrigin(req: IncomingMessage) {
   const origin = req.headers.origin;
   if (origin && new URL(origin).host !== req.headers.host) throw new HttpError(403, msg('server.origin'));
 }
+
+/** Host name of a `Host` header, without the port; empty when missing or malformed. */
+const hostname = (host = '') => URL.parse(`http://${host}`)?.hostname ?? '';
 
 const randomId = (prefix: string, length: number) =>
   `${prefix}${[...randomBytes(length)].map((b) => (b % 36).toString(36)).join('')}`;
@@ -224,6 +232,8 @@ export function createApi(options: ApiOptions) {
   };
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+    if (options.allowedHosts && !options.allowedHosts.includes(hostname(req.headers.host)))
+      throw new HttpError(403, msg('server.host'));
     const url = new URL(req.url ?? '/', 'http://local');
     const send = (status: number, data: unknown, headers: Record<string, string> = {}) => {
       res.writeHead(status, {

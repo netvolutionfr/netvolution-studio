@@ -1089,6 +1089,7 @@
     "invalidDocument": "Document invalide",
     "header": "En-tête X-NS-Request manquant",
     "origin": "Origine refusée",
+    "host": "Hôte refusé",
     "projectId": "Identifiant de projet invalide",
     "project": "Projet introuvable",
     "template": "Modèle introuvable",

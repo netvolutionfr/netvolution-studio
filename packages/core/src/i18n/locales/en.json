@@ -1089,6 +1089,7 @@
     "invalidDocument": "Invalid document",
     "header": "Missing X-NS-Request header",
     "origin": "Origin refused",
+    "host": "Host refused",
     "projectId": "Invalid project id",
     "project": "Project not found",
     "template": "Template not found",
