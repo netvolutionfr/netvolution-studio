@@ -108,6 +108,7 @@
     "projectName": "Nom du projet",
     "template": "Modèle",
     "starterPages": "Pages de départ",
+    "blankPage": "Page vide",
     "fullSites": "Sites complets",
     "pageCount_one": "{{count}} page",
     "pageCount_other": "{{count}} pages",
