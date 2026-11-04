@@ -23,7 +23,7 @@ The Studio is young: some features of page builders do not exist yet, others are
 
 | Limit | Workaround |
 |---|---|
-| No **form** (a static site has no server to receive the messages) | A button to a `mailto:` address, or to a hosted form (Tally, Typeform…) |
+| The **form** sends no email itself, stores no answers, and accepts no attachment | A form service (Formspree, Web3Forms…) or the host's script receives the data; for richer forms, a hosted form (Tally, Typeform…) |
 | Carousel: images only, no composed slide (heading, text, button) | A grid of cards, or a gallery |
 | Video: YouTube or Vimeo only | Host the video on one of these platforms |
 | About twenty icons | An SVG image from the media library |

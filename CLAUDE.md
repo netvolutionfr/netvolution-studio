@@ -27,7 +27,7 @@ The specifications are authoritative for their scope:
 - `docs/specifications/02-site-builder.md` — **Milestone 2, delivered and validated**: projects and pages, menus, shared header/footer, design tokens, media library, responsive, SEO and export of a complete showcase site. Review: `docs/history/reports/jalon-2-tranche-8.md`; known limitations: `docs/limitations.md`.
 - `docs/specifications/03-creative-studio.md` — **Milestone 3, delivered and validated**: reusable sections and components, site templates, advanced composition, declarative animations, services layer and AI assistance through structured commands with human approval. Review: `docs/history/reports/jalon-3-tranche-8.md`. Changes must not break the demonstrations or the bench (`npm run demo`, `npm run demo:site`, `npm run demo:creative`, `npm run test:fidelity`).
 - `docs/history/research/TATSU-ANALYSE.md` — reference research, **non-normative** (if present).
-- **Changes after milestone 3** (ADR-0017 to ADR-0025: decorative styles, imported fonts, fine typography, rich text, Gallery, Marquee, Carousel, custom CSS, internationalization, direct editing in the canvas). Limitations: `docs/limitations.md`. Specifications of these evolutions: `docs/specifications/04-direct-editing.md` (delivered).
+- **Changes after milestone 3** (ADR-0017 to ADR-0026: decorative styles, imported fonts, fine typography, rich text, Gallery, Marquee, Carousel, custom CSS, internationalization, direct editing in the canvas, contact form). Limitations: `docs/limitations.md`. Specifications of these evolutions: `docs/specifications/04-direct-editing.md` and `05-contact-form.md` (delivered).
 - `docs/guide/` — **user guide** for designers (Astro Starlight, served by the Studio at `/guide/`). Every visible feature updates it in both languages (the chapter concerned, appendices A and B); its screenshots, in both languages, are regenerated with `npm run guide:screenshots`.
 - `docs/history/research/essai-import-tatsu.md` — review of a **throwaway** trial converting a Tatsu site, to measure the gaps; it is not a migration feature (§1). The repository is public (Apache-2.0): no client content, name or address is versioned, nor the converter specific to a site.
 
@@ -166,7 +166,8 @@ private instance), `ADR-0017` (decorative styles: borders, shadows, gradients, b
 (rich text: paragraphs, color, rich headings, gradient), `ADR-0021` (masonry gallery and lightbox), `ADR-0022`
 (marquee and carousel), `ADR-0023` (custom CSS: project stylesheet and classes), `ADR-0024` (internationalization:
 message catalogs, English by default, French kept), `ADR-0025` (direct editing in the canvas: text in place, moving
-with the pointer); "JavaScript islands" addendum of `ADR-0002`.
+with the pointer), `ADR-0026` (contact form: native `<form>` sent to a configurable address); "JavaScript islands"
+addendum of `ADR-0002`.
 
 Record ADRs in `docs/architecture/adr/`, in English, with English file names. `npm run check` verifies the relative
 links of the documentation.

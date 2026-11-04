@@ -6,6 +6,7 @@ import {
   Columns3,
   CreditCard,
   Film,
+  FormInput,
   GalleryHorizontal,
   GalleryHorizontalEnd,
   Heading,
@@ -26,6 +27,7 @@ import {
   PanelTop,
   Pilcrow,
   Rows3,
+  Send,
   Shapes,
   SquareStack,
 } from 'lucide-react';
@@ -53,6 +55,8 @@ export const TYPE_ICONS: Record<string, LucideIcon> = {
   'accordion-item': ChevronsDownUp,
   tabs: PanelsTopLeft,
   tab: SquareStack,
+  form: Send,
+  'form-field': FormInput,
 };
 
 export const PRESET_ICONS: Record<string, LucideIcon> = {

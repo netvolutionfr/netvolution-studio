@@ -6,6 +6,8 @@ import Carousel from './carousel/view.tsx';
 import Container from './container/view.tsx';
 import type { definitions } from './definitions.ts';
 import Divider from './divider/view.tsx';
+import Form from './form/view.tsx';
+import FormField from './form-field/view.tsx';
 import Gallery from './gallery/view.tsx';
 import Grid from './grid/view.tsx';
 import Heading from './heading/view.tsx';
@@ -50,4 +52,6 @@ export const views: { [K in keyof Defs]: View<ViewPropsOf<Defs[K]>> } = {
   gallery: Gallery,
   carousel: Carousel,
   marquee: Marquee,
+  form: Form,
+  'form-field': FormField,
 };

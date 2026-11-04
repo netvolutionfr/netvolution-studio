@@ -1,6 +1,15 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { checkSite, createEditorStore, loadSite, pageRoots, type Site, tm, toCss } from '@ns/core';
+import {
+  checkSite,
+  createEditorStore,
+  loadSite,
+  localizeContent,
+  pageRoots,
+  type Site,
+  tm,
+  toCss,
+} from '@ns/core';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -22,7 +31,9 @@ describe('built-in components', () => {
     for (const def of Object.values(definitions)) {
       expect(views).toHaveProperty(def.type);
       expect(readdirSync(join(import.meta.dirname, def.type))).toContain('view.tsx');
-      expect(def.props.safeParse(def.defaults.props).success).toBe(true);
+      // Defaults are inserted translated into the site language (`content.*` keys, ADR-0024).
+      for (const lang of ['en', 'fr'])
+        expect(def.props.safeParse(localizeContent(def.defaults.props, lang)).success, def.type).toBe(true);
     }
   });
 
@@ -527,5 +538,120 @@ describe('advanced composition (CS-04)', () => {
     const hero = unanchored.nodes.nstkhero01;
     if (hero) hero.style.base = { ...hero.style.base, position: 'static' };
     expect(checkSite(unanchored, registry).checks.map((c) => c.code)).toContain('absolute-unanchored');
+  });
+});
+
+describe('contact form (ADR-0026)', () => {
+  /** A published page holding a form with `fields`, built by commands like the editor does. */
+  const withForm = (form: Record<string, unknown>, fields: Record<string, unknown>[]) => {
+    const s = createEditorStore(load('blank.json'), registry);
+    const rootId = s.getState().rootId;
+    s.dispatch('insertTree', {
+      parentId: rootId,
+      index: 0,
+      tree: { type: 'form', props: form, children: fields.map((props) => ({ type: 'form-field', props })) },
+    });
+    return s.getState().doc;
+  };
+  const field = (props: Record<string, unknown>) => ({
+    label: 'Nom',
+    name: 'nom',
+    type: 'text',
+    required: true,
+    placeholder: '',
+    options: [],
+    ...props,
+  });
+  const codes = (site: Site) =>
+    checkSite(site, registry, new Set()).checks.map((c) => `${c.severity}:${c.code}`);
+
+  it('renders a native form: post, action, hidden fields, labels tied to controls, autofill', () => {
+    const site = withForm(
+      {
+        action: 'https://formspree.io/f/abc',
+        submitLabel: 'Envoyer',
+        hidden: [{ name: 'access_key', value: 'k' }],
+      },
+      [
+        field({}),
+        field({ label: 'E-mail', name: 'email', type: 'email' }),
+        field({
+          label: 'Sujet',
+          name: 'sujet',
+          type: 'select',
+          required: false,
+          options: ['Devis', 'Autre'],
+        }),
+        field({ label: 'J’accepte', name: 'consentement', type: 'checkbox' }),
+      ],
+    );
+    const html = renderToStaticMarkup(
+      createElement(DocumentView, { site, pageId: site.pages[0]?.id as string }),
+    );
+    // One element per tag, its attributes in any order.
+    const tag = (open: RegExp) => html.match(open)?.[0] ?? '';
+    const form = tag(/<form [^>]*>/);
+    expect(form).toContain('method="post"');
+    expect(form).toContain('action="https://formspree.io/f/abc"');
+    expect(html).toContain('<input type="hidden" name="access_key" value="k"/>');
+    const id = /<label for="(ns-n[a-z0-9]+-input)">Nom<span aria-hidden="true"> \*<\/span><\/label>/.exec(
+      html,
+    )?.[1];
+    const nom = tag(/<input id="[^"]+"[^>]*name="nom"[^>]*>/);
+    expect(nom).toContain(`id="${id}"`);
+    expect(nom).toContain('required=""');
+    expect(nom.toLowerCase()).toContain('autocomplete="name"');
+    expect(tag(/<input [^>]*name="email"[^>]*>/)).toContain('type="email"');
+    expect(html).toMatch(
+      /name="sujet"><option value="" selected="">Choisir…<\/option><option value="Devis">Devis<\/option>/,
+    );
+    expect(html).toContain('<button type="submit" class="ns-form-submit">Envoyer</button>');
+    expect(html).not.toMatch(/<script/);
+  });
+
+  it('refuses an address other than https', () => {
+    for (const action of ['http://exemple.fr', 'javascript:alert(1)', '/contact', 'https://a b'])
+      expect(
+        registry.get('form')?.props.safeParse({ action, submitLabel: 'Envoyer', hidden: [] }).success,
+        action,
+      ).toBe(false);
+    expect(registry.get('form-field')?.props.safeParse(field({ name: '1 nom' })).success).toBe(false);
+  });
+
+  it('checks before export: address, fields, names, nesting, field outside a form, consent', () => {
+    const ok = withForm({ action: 'https://exemple.fr/envoi', submitLabel: 'Envoyer', hidden: [] }, [
+      field({ type: 'email', name: 'email' }),
+      field({ type: 'checkbox', name: 'consentement' }),
+    ]);
+    expect(codes(ok).filter((c) => c.includes(':form-'))).toEqual([]);
+    const bad = withForm({ action: '', submitLabel: 'Envoyer', hidden: [{ name: 'email', value: 'x' }] }, [
+      field({ type: 'email', name: 'email' }),
+      field({ type: 'select', name: 'choix' }),
+    ]);
+    expect(
+      codes(bad)
+        .filter((c) => c.includes(':form-'))
+        .sort(),
+    ).toEqual([
+      'error:form-duplicate-name',
+      'error:form-no-action',
+      'error:form-select-empty',
+      'warning:form-no-consent',
+    ]);
+    const empty = withForm({ action: 'https://exemple.fr', submitLabel: 'Envoyer', hidden: [] }, []);
+    expect(codes(empty)).toContain('error:form-no-field');
+    // A field moved out of its form, and a form put inside another one.
+    const s = createEditorStore(ok, registry);
+    const rootId = s.getState().rootId;
+    const formId = s.getState().doc.nodes[rootId]?.children[0] as string;
+    const fieldId = s.getState().doc.nodes[formId]?.children[0] as string;
+    s.dispatch('moveNode', { id: fieldId, parentId: rootId, index: 1 });
+    expect(codes(s.getState().doc)).toContain('error:form-field-outside');
+    s.dispatch('insertTree', {
+      parentId: formId,
+      index: 0,
+      tree: { type: 'stack', children: [{ type: 'form' }] },
+    });
+    expect(codes(s.getState().doc)).toContain('error:form-nested');
   });
 });

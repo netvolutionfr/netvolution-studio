@@ -23,7 +23,7 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 
 | Limite | Contournement |
 |---|---|
-| Pas de **formulaire** (un site statique n’a pas de serveur pour recevoir les messages) | Un bouton vers une adresse `mailto:`, ou vers un formulaire hébergé (Tally, Framaforms…) |
+| Le **formulaire** n’envoie pas d’e-mail lui-même, ne stocke pas les réponses, et n’accepte pas de pièce jointe | Un service de formulaires (Formspree, Web3Forms…) ou le script de l’hébergeur reçoit les données ; pour des formulaires plus riches, un formulaire hébergé (Tally, Framaforms…) |
 | Carrousel : images seulement, pas de diapositive composée (titre, texte, bouton) | Une grille de cartes, ou une galerie |
 | Vidéo : YouTube ou Vimeo seulement | Hébergez la vidéo sur l’une de ces plateformes |
 | Une vingtaine d’icônes | Une image SVG de la médiathèque |
