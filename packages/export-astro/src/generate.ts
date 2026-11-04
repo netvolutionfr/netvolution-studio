@@ -255,6 +255,9 @@ function headTags(site: Site, page: Page, title: string): string[] {
 
 const xml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+/** One quoted nginx argument: no directive delimiter, comment or variable interpolation. */
+const nginxArgument = (s: string) => `"${s.replaceAll('\\', '%5C').replaceAll('$', '%24')}"`;
+
 /**
  * Site-level files (SB-08, SB-10, SB-12): sitemap and robots.txt, redirects (Astro configuration and
  * documented host configurations), media inventory.
@@ -309,7 +312,7 @@ export function siteFiles(site: Site): Files {
   if (redirects.length) {
     files['redirects/_redirects'] = `${redirects.map((r) => `${r.from} ${r.to} ${r.status}`).join('\n')}\n`;
     files['redirects/nginx.conf'] = `${redirects
-      .map((r) => `location = ${r.from} { return ${r.status} ${r.to}; }`)
+      .map((r) => `location = ${r.from} { return ${r.status} ${nginxArgument(r.to)}; }`)
       .join('\n')}\n`;
     files['redirects/.htaccess'] =
       `${redirects.map((r) => `Redirect ${r.status} ${r.from} ${r.to}`).join('\n')}\n`;

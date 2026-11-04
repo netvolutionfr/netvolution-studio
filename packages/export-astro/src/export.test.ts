@@ -105,6 +105,11 @@ describe('SEO, sitemap, robots, 404 and redirects (SB-08)', () => {
     site.redirects = [
       { from: '/ancien-contact/', to: { kind: 'page', pageId: 'contact' }, permanent: true },
       { from: '/blog', to: { kind: 'url', href: 'https://blog.example/' }, permanent: false },
+      {
+        from: '/private',
+        to: { kind: 'url', href: 'https://example.invalid/$http_cookie' },
+        permanent: true,
+      },
     ];
     const r = loadSite(site, registry);
     if (!r.ok) throw new Error(JSON.stringify(r.diagnostics));
@@ -126,11 +131,16 @@ describe('SEO, sitemap, robots, 404 and redirects (SB-08)', () => {
     expect(site_['public/sitemap.xml']).not.toContain('mentions-legales');
     expect(site_['public/robots.txt']).toContain('Sitemap: https://atelier.example/sitemap.xml');
     expect(site_['redirects/_redirects']).toBe(
-      '/ancien-contact/ /contact/ 301\n/blog https://blog.example/ 302\n',
+      '/ancien-contact/ /contact/ 301\n/blog https://blog.example/ 302\n' +
+        '/private https://example.invalid/$http_cookie 301\n',
     );
     expect(site_['astro.config.mjs']).toContain('"/ancien-contact/": {');
     expect(site_['astro.config.mjs']).not.toContain('blog.example'); // external: host configurations only
     expect(site_['astro.config.mjs']).toContain('integrations: [react()],');
+    expect(site_['redirects/nginx.conf']).toContain(
+      'location = /private { return 301 "https://example.invalid/%24http_cookie"; }',
+    );
+    expect(site_['redirects/nginx.conf']).not.toContain('$http_cookie');
   });
 });
 
