@@ -68,7 +68,7 @@ Ces éléments n’existent pas dans le Studio, souvent par choix :
 |---|---|
 | HTML, shortcode, code personnalisé | Exclus par conception : ils échappent aux contrôles de qualité, d’accessibilité et de sécurité, et à la fidélité entre le Studio et le site. Un besoin récurrent est à remonter à l’équipe : il deviendra un composant. |
 | CSS personnalisé, classe CSS d’un élément | **CSS du projet** (design system) et **Classes CSS** (inspecteur, Avancé) : feuille contrôlée, sans @import ni ressource externe |
-| Formulaire de contact | Pas encore disponible (un site statique n’a pas de serveur pour recevoir le message). En attendant : un bouton vers une adresse `mailto:` ou vers un formulaire hébergé. |
+| Formulaire de contact (Contact Form 7, WPForms) | **Formulaire** et ses **Champs** ; section **Contact**. L’envoi passe par un service de formulaires (Formspree, Web3Forms…) ou le script de l’hébergeur, dont on saisit l’adresse : le site statique n’envoie pas d’e-mail lui-même. |
 | Google Maps, widgets externes | Pas d’intégration de contenus tiers : un bouton ou un lien vers la carte. |
 | Compteurs, barres de progression, effets de parallaxe | Pas disponibles. Les animations du Studio couvrent l’entrée au défilement et le survol. |
 | Plugins | Pas de plugins : le site exporté n’a besoin de rien d’autre que d’un hébergement de fichiers. |

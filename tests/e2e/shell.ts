@@ -1198,6 +1198,72 @@ await check(
 );
 
 let archivePath = '';
+await check(
+  'Formulaire de contact (ADR-0026) : section, clic dans un champ, nom suivi, adresse exigée avant export',
+  async () => {
+    const library = page.locator('.library');
+    await page.locator('.pages .pages-item').first().click();
+    await library.getByRole('radio', { name: 'Sections' }).click();
+    await library
+      .getByRole('listitem', { name: 'Contact', exact: true })
+      .getByRole('button', { name: 'Insérer', exact: true })
+      .click();
+    await library.getByRole('radio', { name: 'Composants' }).click();
+    const form = canvas.locator('form.ns-form').last();
+    await eventually(() => form.locator('.ns-field').count(), 4, 'quatre champs');
+    expect((await form.getAttribute('method')) === 'post', 'envoi en POST');
+    // A click in a field selects it, without the typing focus.
+    const email = form.locator('input[type="email"]');
+    await email.click();
+    await page.locator('aside h2', { hasText: 'Champ' }).waitFor({ timeout: 2000 });
+    expect(!(await email.evaluate((el) => el === document.activeElement)), 'pas de focus de saisie');
+    // The name sent follows the label while it was not changed by hand (« email » stays: it is not
+    // derived from « E-mail », and services expect it).
+    const nom = form.locator('input[name="nom"]');
+    await nom.click();
+    const label = page.getByLabel('Libellé', { exact: true });
+    await eventually(() => label.inputValue(), 'Nom', 'champ Nom sélectionné');
+    await label.fill('Nom complet');
+    await label.blur();
+    await eventually(
+      () => form.locator('.ns-field input').first().getAttribute('name'),
+      'nom-complet',
+      'nom suivi',
+    );
+    await undo.click();
+    await eventually(() => nom.count(), 1, 'libellé annulé');
+    // Export blocked while the address is empty.
+    const openExport = async () => {
+      await page.getByRole('button', { name: 'Plus d’actions' }).click();
+      await page.getByRole('menuitem', { name: 'Exporter le site (Astro)…' }).click();
+      return page.getByRole('dialog', { name: 'Exporter le site' });
+    };
+    let dialog = await openExport();
+    await dialog.getByText(/adresse d.envoi manquante/).waitFor({ timeout: 5000 });
+    await dialog.getByRole('button', { name: 'Fermer' }).click();
+    await page
+      .locator('.tree-row')
+      .filter({ has: page.locator('.tree-label', { hasText: /^Formulaire de contact$/ }) })
+      .click();
+    const action = page.getByLabel('Adresse d’envoi (https://)', { exact: true });
+    await action.fill('http://exemple.fr');
+    expect((await action.getAttribute('aria-invalid')) === 'true', 'http refusé');
+    await action.fill('https://formspree.io/f/essai');
+    await action.blur();
+    await eventually(() => form.getAttribute('action'), 'https://formspree.io/f/essai', 'adresse rendue');
+    dialog = await openExport();
+    await dialog.getByRole('heading').first().waitFor({ timeout: 5000 });
+    expect(
+      !((await dialog.textContent()) ?? '').includes('envoi manquante'),
+      'plus d’erreur sur le formulaire',
+    );
+    await dialog.getByRole('button', { name: 'Fermer' }).click();
+    await undo.click();
+    await undo.click();
+    await eventually(() => canvas.locator('form.ns-form').count(), 0, 'section retirée');
+  },
+);
+
 await check('SEO, contrôles bloquants avant export, archive du projet (SB-08, SB-11, SB-12)', async () => {
   await page.locator('.pages .pages-item').first().click();
   await page.keyboard.press('Escape');

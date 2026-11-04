@@ -6,7 +6,19 @@ export type Display = 'block' | 'inline-block' | 'flex' | 'grid';
 
 /** Inspector control for a prop. Style controls are shared and derived from `styleGroups`. */
 export type PropField =
-  | { kind: 'text' | 'textarea' | 'boolean'; prop: string; label: string }
+  | {
+      kind: 'text' | 'textarea' | 'boolean';
+      prop: string;
+      label: string;
+      /** Help shown under the control. */
+      hint?: string;
+      /** While the value is the identifier derived from this other prop, it follows its changes. */
+      follows?: string;
+    }
+  /** A list of short texts (e.g. the choices of a list), shown only `when` another prop has a value. */
+  | { kind: 'stringList'; prop: string; label: string; when?: { prop: string; equals: string } }
+  /** Name/value pairs (e.g. the hidden fields of a form). */
+  | { kind: 'keyValues'; prop: string; label: string; hint?: string }
   /** Rich text: one paragraph, or several with `paragraphs` (Enter starts a new one, ADR-0020). */
   | { kind: 'richText'; prop: string; label: string; paragraphs?: boolean }
   /** An array of rich text lines (list items), edited one by one. */

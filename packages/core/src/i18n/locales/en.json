@@ -431,7 +431,7 @@
       },
       "contact": {
         "name": "Contact",
-        "description": "Invitation to write and contact details with icons."
+        "description": "Contact form (sending address to fill in) and contact details with icons."
       }
     }
   },
@@ -862,7 +862,8 @@
     "title": "Site preview",
     "notFound": "Page not found",
     "backHome": "Back to the home page",
-    "noProject": "No project to preview."
+    "noProject": "No project to preview.",
+    "formDisabled": "Sending is disabled in the Studio: on the published site, the form goes to its sending address."
   },
   "diagnostics": {
     "invalidDocument": "JSON document with a numeric schemaVersion expected",
@@ -937,7 +938,9 @@
     "path": "path expected, e.g. /old-page/",
     "origin": "origin expected (https://example.org)",
     "aiContent": "Content too long",
-    "videoUrl": "YouTube or Vimeo address expected"
+    "videoUrl": "YouTube or Vimeo address expected",
+    "formAction": "https:// address expected",
+    "fieldName": "letters, digits, - and _, starting with a letter"
   },
   "checks": {
     "homeUnpublished": "The home page is not published",
@@ -962,7 +965,16 @@
     "instanceModified": "{{name}}: modified outside its parameters (overwritten at the next update)",
     "instanceIncompatible": "{{name}}: incompatible values ({{props}})",
     "missingFile": "File of media “{{name}}” not found",
-    "heavyBackground": "Background image “{{name}}”: {{size}} MB, not optimized at export (reduce it below 500 KB)"
+    "heavyBackground": "Background image “{{name}}”: {{size}} MB, not optimized at export (reduce it below 500 KB)",
+    "form": "Form",
+    "formNamed": "Form “{{name}}”",
+    "formFieldOutside": "Field “{{label}}”: outside a form",
+    "formSelectEmpty": "Field “{{label}}”: choice list without options",
+    "formNested": "{{name}}: inside another form",
+    "formNoAction": "{{name}}: missing sending address",
+    "formNoField": "{{name}}: no fields",
+    "formDuplicateName": "{{name}}: several fields named {{names}}",
+    "formNoConsent": "{{name}}: an email address is requested without a required consent checkbox"
   },
   "errors": {
     "missingNode": "Node does not exist: {{id}}",
@@ -1359,6 +1371,42 @@
         "url": "YouTube or Vimeo address",
         "title": "Title (accessible)"
       }
+    },
+    "form": {
+      "name": "Form",
+      "fields": {
+        "action": "Sending address (https://)",
+        "submitLabel": "Send button label",
+        "hidden": "Hidden fields"
+      },
+      "hints": {
+        "action": "Given by a form service (Formspree, Web3Forms…) or by your host. It is visible in the page’s code.",
+        "hidden": "Required by some services (access key, subject, redirection page). Visible in the page’s code: no secrets."
+      }
+    },
+    "formField": {
+      "name": "Field",
+      "fields": {
+        "label": "Label",
+        "type": "Type",
+        "name": "Name sent (name)",
+        "required": "Required",
+        "placeholder": "Hint in the field",
+        "options": "Choices of the list"
+      },
+      "hints": {
+        "name": "Name of the data received by the service; unique in the form."
+      },
+      "options": {
+        "type": {
+          "text": "Text",
+          "email": "Email",
+          "tel": "Phone",
+          "textarea": "Text area",
+          "checkbox": "Checkbox",
+          "select": "Choice list"
+        }
+      }
     }
   },
   "content": {
@@ -1460,9 +1508,9 @@
       "invitation": "Invitation",
       "talk": "Let’s talk about your project",
       "answerTime": "Answer within 2 business days.",
-      "write": "Write to us",
       "details": "Contact details",
-      "line": "Line"
+      "line": "Line",
+      "contactForm": "Contact form"
     },
     "gallery": {
       "dialog": "Enlarged image",
@@ -1489,6 +1537,29 @@
       "title": "Page not found",
       "text": "The page you requested does not exist or has been moved.",
       "home": "Back to home"
+    },
+    "form": {
+      "choice": "Choice {{n}}",
+      "submit": "Send",
+      "name": "Name",
+      "nameField": "name",
+      "email": "Email",
+      "message": "Message",
+      "consent": "I agree that my data is used to answer my request",
+      "consentField": "consent",
+      "notice": "The information you enter is only used to answer you.",
+      "choose": "Choose…"
     }
+  },
+  "stringList": {
+    "item": "Choice {{n}}",
+    "remove": "Delete choice {{n}}",
+    "add": "Add a choice"
+  },
+  "keyValues": {
+    "name": "Name {{n}}",
+    "value": "Value {{n}}",
+    "remove": "Delete hidden field {{n}}",
+    "add": "Add a hidden field"
   }
 }

@@ -81,6 +81,11 @@ if (!projectId) {
       .then((d: unknown) => d && accept(d))
       .catch(() => root.render(<p>Projet introuvable.</p>));
   }, 300);
+  // Forms (ADR-0026): the browser checks the fields, but nothing is sent from the Studio.
+  addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert(t('preview.formDisabled'));
+  });
   addEventListener('hashchange', () => {
     render();
     if (route()) scrollTo(0, 0);

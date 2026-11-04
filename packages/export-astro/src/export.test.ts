@@ -168,6 +168,16 @@ describe('animations export (ADR-0012)', () => {
 });
 
 describe('design tokens export', () => {
+  it('documents the contact forms in the README: address, fields, public hidden fields (ADR-0026)', async () => {
+    const text = readme(await fixture('elements.json'));
+    expect(text).toContain('## Forms');
+    expect(text).toContain(
+      '| https://exemple.fr/contact | `nom`, `email`, `message`, `sujet`, `consentement` | `sujet_mail` |',
+    );
+    expect(text).toContain('**public**');
+    expect(readme(await fixture('flex.json'))).not.toContain('## Forms');
+  });
+
   it('declares tokens as CSS variables and documents them in the README', async () => {
     const site = await fixture('tokens.json');
     const css = String(generatePageFiles(site, registry, await readViews(site))['src/styles/index.css']);

@@ -24,7 +24,7 @@
 ## Milestone 2 delivered
 
 - Projects, pages, design tokens, menus, header/footer, site preview, media library and richer components, SEO, checks before export, complete export (404, sitemap, robots, redirects, static build) and archive available. Demonstration: `npm run demo:site`.
-- Components: YouTube/Vimeo video only (no local file), 20 icons, no form; a closed accordion is edited through "Open" or the tree.
+- Components: YouTube/Vimeo video only (no local file), 20 icons; contact form without its own sending (ADR-0026: a service or the host's script receives the data), without attachment, radio button or conditional field; a closed accordion is edited through "Open" or the tree.
 - Media library: no folders, file replacement or cleanup of orphans (fonts: see the changes of 10/31/2026). The bench no longer compares image pixels, optimized at build time (ADR-0010).
 - Navigation: one submenu level, no closing with Escape; the collapsed menu opens in the flow. One header and one footer in the interface.
 - Export: static build run within the request (network required, no progress); no ZIP; no contrast check in the Studio; sitemap and absolute URLs only when the site URL is set.

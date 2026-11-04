@@ -97,6 +97,8 @@ Le collage suit la même règle que le clic dans la bibliothèque : dans la boî
 | **Liste de liens** | Menu, disposition (en colonne, en ligne) | Un menu sans bouton de repli, pour un footer par exemple. |
 | **Accordéon** | — | Chaque **Élément d’accordéon** a un titre et un contenu libre. Cochez **Ouvert au chargement** pour l’éditer dans le canvas. |
 | **Onglets** | Nom accessible | Chaque **Onglet** a un titre et un contenu libre. |
+| **Formulaire** | Adresse d’envoi, libellé du bouton, champs cachés | Contient des **Champs**, et éventuellement des textes, titres, piles ou grilles. Voir ci-dessous. |
+| **Champ** | Libellé, type, nom envoyé, obligatoire, indication | Texte, e-mail, téléphone, zone de texte, case à cocher ou liste de choix. Toujours à l’intérieur d’un Formulaire. |
 
 ### Modifier un texte directement sur la page
 
@@ -110,6 +112,25 @@ Le collage suit la même règle que le clic dans la bibliothèque : dans la boî
 - Dans un **composant réutilisable**, seuls les textes exposés en paramètre se modifient sur place, comme valeur propre à cette copie. Pour les autres, modifiez le composant lui-même.
 
 Pendant la saisie dans un Titre, un Texte ou une Liste, une **barre de mise en forme** flotte au-dessus du texte (en dessous s’il est en haut de la page) : **gras**, **italique**, **couleur**, **lien**, **retirer le lien** et **effacer la mise en forme**. Sélectionnez des mots, puis cliquez sur le bouton : la saisie continue. Ces boutons fonctionnent comme ceux de l’inspecteur, décrits ci-dessous.
+
+### Le formulaire de contact
+
+Le plus simple : la section **Contact** de la bibliothèque (onglet **Sections**), avec un formulaire prêt à l’emploi (nom, e-mail, message, case de consentement et mention d’information).
+
+Un site statique ne peut pas envoyer d’e-mail lui-même : le formulaire **envoie les données à une adresse**, qui s’occupe du reste. Cette adresse vient :
+
+- d’un **service de formulaires** : [Formspree](https://formspree.io) donne une adresse `https://formspree.io/f/…` ; [Web3Forms](https://web3forms.com) donne `https://api.web3forms.com/submit` et une clé, à saisir dans un **champ caché** nommé `access_key` ;
+- ou du **script de votre hébergeur ou de l’agence**.
+
+Sélectionnez le Formulaire (arborescence) et renseignez **Adresse d’envoi** : seules les adresses `https://` sont acceptées. Tant qu’elle est vide, l’export est bloqué.
+
+- **Champs cachés** : les valeurs demandées par certains services (clé d’accès, sujet de l’e-mail, page de remerciement). Comme l’adresse, elles sont **visibles dans le code de la page** : n’y mettez jamais de mot de passe.
+- **Nom envoyé** : le nom de la donnée reçue par le service. Il suit le libellé tant que vous ne le modifiez pas, et doit être unique dans le formulaire. Gardez `email` pour l’adresse de l’internaute : les services s’en servent pour vous permettre de lui répondre.
+- **Obligatoire** : le navigateur refuse l’envoi tant que le champ est vide ; une étoile s’affiche après le libellé.
+- **Liste de choix** : ajoutez les choix dans **Choix de la liste** ; l’**indication** devient la première ligne (« Choisir… » par défaut).
+- Demandez-vous un e-mail ? Ajoutez une **case à cocher obligatoire** de consentement (le contrôle avant export le rappelle) et vérifiez où le service héberge les données (RGPD).
+
+Dans le canvas, un clic dans un champ le sélectionne (on n’y tape pas) ; un double-clic modifie son libellé ou celui du bouton. Dans l’**Aperçu du site**, le navigateur vérifie les champs, mais rien n’est envoyé.
 
 ### Le texte enrichi
 
