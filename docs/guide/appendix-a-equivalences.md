@@ -68,7 +68,7 @@ These elements do not exist in the Studio, often by choice:
 |---|---|
 | HTML, shortcode, custom code | Excluded by design: they escape the quality, accessibility and security checks, and the fidelity between the Studio and the site. A recurring need is to be reported: it will become a component. |
 | Custom CSS, CSS class of an element | **Project CSS** (design system) and **CSS classes** (inspector, Advanced): a checked stylesheet, without @import or external resources |
-| Contact form | Not available yet (a static site has no server to receive the message). Meanwhile: a button to a `mailto:` address or to a hosted form. |
+| Contact form (Contact Form 7, WPForms) | **Form** and its **Fields**; **Contact** section. Sending goes through a form service (Formspree, Web3Forms…) or the host's script, whose address you enter: the static site sends no email itself. |
 | Google Maps, external widgets | No embedding of third-party content: a button or a link to the map. |
 | Counters, progress bars, parallax effects | Not available. The Studio's animations cover the entrance on scroll and hover. |
 | Plugins | No plugins: the exported site needs nothing more than file hosting. |

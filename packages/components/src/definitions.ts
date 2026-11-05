@@ -5,6 +5,8 @@ import { button } from './button/definition.ts';
 import { carousel } from './carousel/definition.ts';
 import { container } from './container/definition.ts';
 import { divider } from './divider/definition.ts';
+import { form } from './form/definition.ts';
+import { formField } from './form-field/definition.ts';
 import { gallery } from './gallery/definition.ts';
 import { grid } from './grid/definition.ts';
 import { heading } from './heading/definition.ts';
@@ -44,6 +46,8 @@ export const definitions = {
   'accordion-item': accordionItem,
   tabs,
   tab,
+  form,
+  'form-field': formField,
 };
 
 export const registry = createRegistry(Object.values(definitions));

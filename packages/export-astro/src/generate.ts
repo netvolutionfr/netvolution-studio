@@ -12,6 +12,7 @@ import {
   pageRoots,
   type Registry,
   type Site,
+  subtree,
   toCss,
   viewProps,
 } from '@ns/core';
@@ -426,7 +427,49 @@ ${site.pages
   .filter((p) => p.publish)
   .map((p) => `- \`/${p.slug}\`: ${p.title || '(untitled)'}`)
   .join('\n')}
-${tokensDoc(site)}`;
+${formsDoc(site)}${tokensDoc(site)}`;
+
+/** Contact forms (ADR-0026): where they send, and how to change it without the Studio. */
+function formsDoc(site: Site) {
+  const forms = site.pages
+    .filter((p) => p.publish)
+    .flatMap((page) =>
+      pageRoots(site, page.id)
+        .flatMap((r) => subtree(site, r))
+        .flatMap((id) => {
+          const node = site.nodes[id];
+          if (node?.type !== 'form') return [];
+          const fields = subtree(site, id).flatMap((f) =>
+            site.nodes[f]?.type === 'form-field' ? [`\`${String(site.nodes[f]?.props.name)}\``] : [],
+          );
+          const hidden = (node.props.hidden as { name: string }[]).map((h) => `\`${h.name}\``);
+          return [
+            `| \`/${page.slug}\` | ${String(node.props.action) || '(not set)'} | ${fields.join(', ')} | ${hidden.join(', ') || '—'} |`,
+          ];
+        }),
+    );
+  if (!forms.length) return '';
+  return `
+## Forms
+
+Forms are standard HTML \`<form method="post">\` elements, without JavaScript: the browser checks the fields, then
+sends the data to the **sending address**, which does the rest (email, storage, spam protection). The site itself
+sends no email. The address comes from a form service, for example:
+
+- [Formspree](https://formspree.io): \`https://formspree.io/f/<id>\`;
+- [Web3Forms](https://web3forms.com): \`https://api.web3forms.com/submit\`, with an \`access_key\` hidden field;
+
+or from a script of the host or the agency. To change it without the Studio: \`action\` prop of the \`Form\` component
+in \`src/page/<page>.tsx\`, then \`npm run build\`.
+
+The address and the hidden fields are **public** (in the HTML of the pages): never put a secret there. The choice of
+the service determines how personal data is processed (GDPR: processor, data location).
+
+| Page | Sending address | Fields | Hidden fields |
+|---|---|---|---|
+${forms.join('\n')}
+`;
+}
 
 /** Design tokens are CSS custom properties declared in each page's stylesheet (\`:root\`). */
 function tokensDoc(site: Site) {

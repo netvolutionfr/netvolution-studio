@@ -123,6 +123,14 @@ document.addEventListener('pointercancel', (e) => {
   if (dragging) dragTo('cancel', e);
   endDrag();
 });
+// Form controls (ADR-0026) do not take the typing focus: a click selects their node, as elsewhere.
+document.addEventListener(
+  'mousedown',
+  (e) => {
+    if (e.target instanceof Element && e.target.closest('input, textarea, select')) e.preventDefault();
+  },
+  true,
+);
 document.addEventListener('dblclick', (e) => {
   if (editing) return;
   caretAt = { x: e.clientX, y: e.clientY };

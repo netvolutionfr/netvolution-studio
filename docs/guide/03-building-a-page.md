@@ -97,6 +97,27 @@ Pasting follows the same rule as a click in the library: into the selected box, 
 | **Link list** | Menu, layout (in a column, in a row) | A menu without a collapse button, for a footer for instance. |
 | **Accordion** | — | Each **Accordion item** has a title and free content. Tick **Open on load** to edit it in the canvas. |
 | **Tabs** | Accessible name | Each **Tab** has a title and free content. |
+| **Form** | Sending address, send button label, hidden fields | Holds **Fields**, and possibly texts, headings, stacks or grids. See below. |
+| **Field** | Label, type, name sent, required, hint | Text, email, phone, text area, checkbox or choice list. Always inside a Form. |
+
+### The contact form
+
+The simplest: the **Contact** section of the library (**Sections** tab), with a ready-to-use form (name, email, message, consent checkbox and information notice), in the site's language.
+
+A static site cannot send an email by itself: the form **sends the data to an address**, which does the rest. This address comes:
+
+- from a **form service**: [Formspree](https://formspree.io) gives an address `https://formspree.io/f/…`; [Web3Forms](https://web3forms.com) gives `https://api.web3forms.com/submit` and a key, to enter in a **hidden field** named `access_key`;
+- or from the **script of your host or of the agency**.
+
+Select the Form (layers) and fill in **Sending address**: only `https://` addresses are accepted. While it is empty, the export is blocked.
+
+- **Hidden fields**: the values some services require (access key, email subject, thank-you page). Like the address, they are **visible in the page's code**: never put a password there.
+- **Name sent**: the name of the data received by the service. It follows the label as long as you do not change it, and must be unique in the form. Keep `email` for the visitor's address: services use it so that you can reply.
+- **Required**: the browser refuses to send while the field is empty; a star follows the label.
+- **Choice list**: add the choices in **Choices of the list**; the **hint** becomes the first line ("Choose…" by default).
+- Asking for an email? Add a **required consent checkbox** (the check before export reminds it) and check where the service hosts the data (GDPR).
+
+In the canvas, a click in a field selects it (you do not type in it); a double-click edits its label or the button's. In the **Site preview**, the browser checks the fields, but nothing is sent.
 
 ### Editing a text directly on the page
 

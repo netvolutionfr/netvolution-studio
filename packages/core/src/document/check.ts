@@ -108,6 +108,44 @@ export function checkSite(
       warn('absolute-unanchored', msg('checks.absolute', { name: node.name ?? node.type }), ['nodes', id]);
   }
 
+  // Contact forms (ADR-0026): sent somewhere, with fields, each name once, never nested; a field
+  // only inside a form (containers accepting anything cannot refuse it).
+  const parents = new Map<string, string>();
+  for (const n of Object.values(site.nodes)) for (const c of n.children) parents.set(c, n.id);
+  const formOf = (id: string) => {
+    for (let p = parents.get(id); p; p = parents.get(p)) if (site.nodes[p]?.type === 'form') return p;
+  };
+  for (const id of exportedRoots) {
+    const node = site.nodes[id];
+    if (node?.type === 'form-field') {
+      const label = String(node.props.label);
+      if (!formOf(id)) error('form-field-outside', msg('checks.formFieldOutside', { label }), ['nodes', id]);
+      if (node.props.type === 'select' && !(node.props.options as unknown[]).length)
+        error('form-select-empty', msg('checks.formSelectEmpty', { label }), ['nodes', id]);
+    }
+    if (node?.type !== 'form') continue;
+    const name = node.name ? msg('checks.formNamed', { name: node.name }) : msg('checks.form');
+    if (formOf(id)) error('form-nested', msg('checks.formNested', { name }), ['nodes', id]);
+    if (!node.props.action) error('form-no-action', msg('checks.formNoAction', { name }), ['nodes', id]);
+    const fields = subtree(site, id).flatMap((f) =>
+      site.nodes[f]?.type === 'form-field' ? [site.nodes[f]] : [],
+    );
+    if (!fields.length) error('form-no-field', msg('checks.formNoField', { name }), ['nodes', id]);
+    const names = [
+      ...(node.props.hidden as { name: string }[]).map((h) => h.name),
+      ...fields.map((f) => String(f?.props.name)),
+    ];
+    const twice = [...new Set(names.filter((n, i) => names.indexOf(n) !== i))];
+    if (twice.length)
+      error('form-duplicate-name', msg('checks.formDuplicateName', { name, names: twice.join(', ') }), [
+        'nodes',
+        id,
+      ]);
+    const consent = fields.some((f) => f?.props.type === 'checkbox' && f.props.required === true);
+    if (fields.some((f) => f?.props.type === 'email') && !consent)
+      warn('form-no-consent', msg('checks.formNoConsent', { name }), ['nodes', id]);
+  }
+
   // Shared components (ADR-0011): instances behind their definition, or edited outside their parameters.
   for (const node of Object.values(site.nodes)) {
     const status = node.instance && instanceStatus(site, node.id, registry);

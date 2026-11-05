@@ -48,10 +48,26 @@ function PropControl({
   const id = useId();
   const value = node.props[field.prop];
   const editing = useEditing() === node.id && registry.get(node.type)?.inline?.prop === field.prop;
+  // Props that follow this one while unchanged by hand (`follows`), updated in the same command.
+  const followers = (v: unknown) =>
+    Object.fromEntries(
+      (registry.get(node.type)?.fields ?? []).flatMap((f) =>
+        'follows' in f &&
+        f.follows === field.prop &&
+        node.props[f.prop] === identifier(value) &&
+        identifier(v)
+          ? [[f.prop, identifier(v)]]
+          : [],
+      ),
+    );
   const set = (v: unknown) =>
     onSet
       ? onSet(field.prop, v, field.label)
-      : store.dispatch('updateNodeProps', { id: node.id, props: { [field.prop]: v } }, field.label);
+      : store.dispatch(
+          'updateNodeProps',
+          { id: node.id, props: { ...followers(v), [field.prop]: v } },
+          field.label,
+        );
 
   if (editing)
     return (
@@ -59,14 +75,30 @@ function PropControl({
         <p className="hint">{t('inspector.editingInPlace')}</p>
       </Field>
     );
+  if (field.kind === 'stringList' && field.when && node.props[field.when.prop] !== field.when.equals)
+    return null;
   switch (field.kind) {
     case 'text':
     case 'textarea':
       return (
-        <TextField
+        <>
+          <TextField
+            label={field.label}
+            value={String(value ?? '')}
+            multiline={field.kind === 'textarea'}
+            onChange={set}
+          />
+          {field.hint && <p className="hint">{field.hint}</p>}
+        </>
+      );
+    case 'stringList':
+      return <StringListField label={field.label} value={(value as string[]) ?? []} onChange={set} />;
+    case 'keyValues':
+      return (
+        <KeyValuesField
           label={field.label}
-          value={String(value ?? '')}
-          multiline={field.kind === 'textarea'}
+          hint={field.hint}
+          value={(value as { name: string; value: string }[]) ?? []}
           onChange={set}
         />
       );
@@ -304,6 +336,106 @@ function ListItemsField(props: {
         onClick={() => props.onChange([...items, [{ text: contentText(lang)('content.list.new') }]])}
       >
         {t('listField.add')}
+      </Button>
+    </fieldset>
+  );
+}
+
+/** Identifier derived from a label (e.g. a form field's name): no accents, lowercase, dashes. */
+const identifier = (text: unknown) =>
+  String(text ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^[^a-z]+|-+$/g, '')
+    .slice(0, 64);
+
+/** A list of short texts, each in its own field, removable, with an Add button. */
+function StringListField(props: {
+  label: string;
+  value: string[];
+  onChange: (v: string[]) => CommandResult;
+}) {
+  const items = props.value;
+  // New choices are site content: in the site's language (ADR-0024).
+  const lang = useEditor((s) => s.doc.settings.lang);
+  return (
+    <fieldset className="list-items">
+      <legend>{props.label}</legend>
+      {items.map((item, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: items have no identity; edited in place, in order.
+        <div className="list-item" key={i}>
+          <TextField
+            label={t('stringList.item', { n: i + 1 })}
+            value={item}
+            onChange={(v) => props.onChange(items.map((x, j) => (j === i ? v : x)))}
+          />
+          <IconButton
+            size="sm"
+            variant="danger"
+            label={t('stringList.remove', { n: i + 1 })}
+            icon={Trash2}
+            onClick={() => props.onChange(items.filter((_, j) => j !== i))}
+          />
+        </div>
+      ))}
+      <Button
+        size="sm"
+        icon={Plus}
+        onClick={() =>
+          props.onChange([...items, contentText(lang)('content.form.choice', { n: items.length + 1 })])
+        }
+      >
+        {t('stringList.add')}
+      </Button>
+    </fieldset>
+  );
+}
+
+/** Name/value pairs (hidden fields of a form). */
+function KeyValuesField(props: {
+  label: string;
+  hint?: string | undefined;
+  value: { name: string; value: string }[];
+  onChange: (v: { name: string; value: string }[]) => CommandResult;
+}) {
+  const pairs = props.value;
+  const update = (i: number, patch: Partial<{ name: string; value: string }>) =>
+    props.onChange(pairs.map((p, j) => (j === i ? { ...p, ...patch } : p)));
+  return (
+    <fieldset className="list-items">
+      <legend>{props.label}</legend>
+      {props.hint && <p className="hint">{props.hint}</p>}
+      {pairs.map((pair, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: pairs have no identity; edited in place, in order.
+        <div className="list-item" key={i}>
+          <TextField
+            label={t('keyValues.name', { n: i + 1 })}
+            value={pair.name}
+            onChange={(name) => update(i, { name })}
+          />
+          <TextField
+            label={t('keyValues.value', { n: i + 1 })}
+            value={pair.value}
+            onChange={(value) => update(i, { value })}
+          />
+          <IconButton
+            size="sm"
+            variant="danger"
+            label={t('keyValues.remove', { n: i + 1 })}
+            icon={Trash2}
+            onClick={() => props.onChange(pairs.filter((_, j) => j !== i))}
+          />
+        </div>
+      ))}
+      <Button
+        size="sm"
+        icon={Plus}
+        disabled={pairs.length >= 10}
+        onClick={() => props.onChange([...pairs, { name: `field${pairs.length + 1}`, value: '' }])}
+      >
+        {t('keyValues.add')}
       </Button>
     </fieldset>
   );

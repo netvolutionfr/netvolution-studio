@@ -65,7 +65,8 @@
         "ndiv00002",
         "nimg00001",
         "nimg00002",
-        "nimg00003"
+        "nimg00003",
+        "nform00001"
       ],
       "name": "Page"
     },
@@ -654,6 +655,104 @@
           "color": "#be123c"
         }
       },
+      "children": []
+    },
+    "nform00001": {
+      "id": "nform00001",
+      "type": "form",
+      "name": "Contact",
+      "props": {
+        "action": "https://exemple.fr/contact",
+        "submitLabel": "Envoyer",
+        "hidden": [
+          {
+            "name": "sujet_mail",
+            "value": "Contact depuis le site"
+          }
+        ]
+      },
+      "style": {
+        "base": {
+          "gap": {
+            "value": 16,
+            "unit": "px"
+          },
+          "maxWidth": {
+            "value": 560,
+            "unit": "px"
+          }
+        }
+      },
+      "children": ["nfld00001", "nfld00002", "nfld00003", "nfld00004", "nfld00005"]
+    },
+    "nfld00001": {
+      "id": "nfld00001",
+      "type": "form-field",
+      "props": {
+        "label": "Nom",
+        "name": "nom",
+        "type": "text",
+        "required": true,
+        "placeholder": "Jeanne Martin",
+        "options": []
+      },
+      "style": {},
+      "children": []
+    },
+    "nfld00002": {
+      "id": "nfld00002",
+      "type": "form-field",
+      "props": {
+        "label": "E-mail",
+        "name": "email",
+        "type": "email",
+        "required": true,
+        "placeholder": "",
+        "options": []
+      },
+      "style": {},
+      "children": []
+    },
+    "nfld00003": {
+      "id": "nfld00003",
+      "type": "form-field",
+      "props": {
+        "label": "Message",
+        "name": "message",
+        "type": "textarea",
+        "required": true,
+        "placeholder": "Votre projet en quelques lignes",
+        "options": []
+      },
+      "style": {},
+      "children": []
+    },
+    "nfld00004": {
+      "id": "nfld00004",
+      "type": "form-field",
+      "props": {
+        "label": "Sujet",
+        "name": "sujet",
+        "type": "select",
+        "required": false,
+        "placeholder": "",
+        "options": ["Devis", "Partenariat", "Autre"]
+      },
+      "style": {},
+      "children": []
+    },
+    "nfld00005": {
+      "id": "nfld00005",
+      "type": "form-field",
+      "props": {
+        "label": "J’accepte que mes données servent à me répondre",
+        "name": "consentement",
+        "type": "checkbox",
+        "required": true,
+        "placeholder": "",
+        "options": []
+      },
+      "style": {},
       "children": []
     }
   },

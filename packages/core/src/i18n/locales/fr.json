@@ -431,7 +431,7 @@
       },
       "contact": {
         "name": "Contact",
-        "description": "Invitation à écrire et coordonnées avec icônes."
+        "description": "Formulaire de contact (adresse d’envoi à renseigner) et coordonnées avec icônes."
       }
     }
   },
@@ -862,7 +862,8 @@
     "title": "Aperçu du site",
     "notFound": "Page introuvable",
     "backHome": "Retour à l'accueil",
-    "noProject": "Aucun projet à prévisualiser."
+    "noProject": "Aucun projet à prévisualiser.",
+    "formDisabled": "L’envoi est désactivé dans le Studio : sur le site publié, le formulaire part à son adresse d’envoi."
   },
   "diagnostics": {
     "invalidDocument": "Document JSON attendu avec un schemaVersion numérique",
@@ -937,7 +938,9 @@
     "path": "chemin attendu, ex. /ancienne-page/",
     "origin": "origine attendue (https://exemple.fr)",
     "aiContent": "Contenu trop long",
-    "videoUrl": "Adresse YouTube ou Vimeo attendue"
+    "videoUrl": "Adresse YouTube ou Vimeo attendue",
+    "formAction": "adresse https:// attendue",
+    "fieldName": "lettres, chiffres, - et _, en commençant par une lettre"
   },
   "checks": {
     "homeUnpublished": "La page d'accueil n'est pas publiée",
@@ -962,7 +965,16 @@
     "instanceModified": "{{name}} : modifiée hors de ses paramètres (écrasé à la prochaine mise à jour)",
     "instanceIncompatible": "{{name}} : valeurs incompatibles ({{props}})",
     "missingFile": "Fichier du média « {{name}} » introuvable",
-    "heavyBackground": "Image de fond « {{name}} » : {{size}} Mo, non optimisée à l'export (réduisez-la sous 500 Ko)"
+    "heavyBackground": "Image de fond « {{name}} » : {{size}} Mo, non optimisée à l'export (réduisez-la sous 500 Ko)",
+    "form": "Formulaire",
+    "formNamed": "Formulaire « {{name}} »",
+    "formFieldOutside": "Champ « {{label}} » : hors d’un formulaire",
+    "formSelectEmpty": "Champ « {{label}} » : liste de choix sans option",
+    "formNested": "{{name}} : dans un autre formulaire",
+    "formNoAction": "{{name}} : adresse d’envoi manquante",
+    "formNoField": "{{name}} : aucun champ",
+    "formDuplicateName": "{{name}} : plusieurs champs nommés {{names}}",
+    "formNoConsent": "{{name}} : un e-mail est demandé sans case de consentement obligatoire"
   },
   "errors": {
     "missingNode": "Nœud inexistant : {{id}}",
@@ -1359,6 +1371,42 @@
         "url": "Adresse YouTube ou Vimeo",
         "title": "Titre (accessible)"
       }
+    },
+    "form": {
+      "name": "Formulaire",
+      "fields": {
+        "action": "Adresse d’envoi (https://)",
+        "submitLabel": "Libellé du bouton d’envoi",
+        "hidden": "Champs cachés"
+      },
+      "hints": {
+        "action": "Fournie par un service de formulaires (Formspree, Web3Forms…) ou par votre hébergeur. Elle est visible dans le code de la page.",
+        "hidden": "Demandés par certains services (clé d’accès, sujet, page de redirection). Visibles dans le code de la page : aucun secret."
+      }
+    },
+    "formField": {
+      "name": "Champ",
+      "fields": {
+        "label": "Libellé",
+        "type": "Type",
+        "name": "Nom envoyé (name)",
+        "required": "Obligatoire",
+        "placeholder": "Indication dans le champ",
+        "options": "Choix de la liste"
+      },
+      "hints": {
+        "name": "Nom de la donnée reçue par le service ; unique dans le formulaire."
+      },
+      "options": {
+        "type": {
+          "text": "Texte",
+          "email": "E-mail",
+          "tel": "Téléphone",
+          "textarea": "Zone de texte",
+          "checkbox": "Case à cocher",
+          "select": "Liste de choix"
+        }
+      }
     }
   },
   "content": {
@@ -1460,9 +1508,9 @@
       "invitation": "Invitation",
       "talk": "Parlons de votre projet",
       "answerTime": "Réponse sous 48 heures ouvrées.",
-      "write": "Nous écrire",
       "details": "Coordonnées",
-      "line": "Ligne"
+      "line": "Ligne",
+      "contactForm": "Formulaire de contact"
     },
     "gallery": {
       "dialog": "Image agrandie",
@@ -1489,6 +1537,29 @@
       "title": "Page introuvable",
       "text": "La page demandée n’existe pas ou a été déplacée.",
       "home": "Retour à l’accueil"
+    },
+    "form": {
+      "choice": "Choix {{n}}",
+      "submit": "Envoyer",
+      "name": "Nom",
+      "nameField": "nom",
+      "email": "E-mail",
+      "message": "Message",
+      "consent": "J’accepte que mes données servent à répondre à ma demande",
+      "consentField": "consentement",
+      "notice": "Les informations saisies servent uniquement à vous répondre.",
+      "choose": "Choisir…"
     }
+  },
+  "stringList": {
+    "item": "Choix {{n}}",
+    "remove": "Supprimer le choix {{n}}",
+    "add": "Ajouter un choix"
+  },
+  "keyValues": {
+    "name": "Nom {{n}}",
+    "value": "Valeur {{n}}",
+    "remove": "Supprimer le champ caché {{n}}",
+    "add": "Ajouter un champ caché"
   }
 }

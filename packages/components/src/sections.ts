@@ -27,6 +27,11 @@ const heading = (text: string | ContentRef, level = 2, size = 32): NodeTemplate 
   props: { level, text },
   style: { base: { fontSize: px(size) } },
 });
+/** A required field of a contact form (ADR-0026); label and name are `content.*` keys. */
+const formField = (label: string, name: string, type: string): NodeTemplate => ({
+  type: 'form-field',
+  props: { label, name, type, required: true, placeholder: '', options: [] },
+});
 const paragraph = (text: string | ContentRef, style?: NodeTemplate['style']): NodeTemplate => ({
   type: 'text',
   props: { content: [{ text }] },
@@ -466,7 +471,7 @@ export const sections: LibrarySection[] = [
     id: 'contact',
     category: 'contact',
     description: t('sections.builtIn.contact.description'),
-    version: 1,
+    version: 2,
     name: t('sections.builtIn.contact.name'),
     tree: {
       type: 'grid',
@@ -483,13 +488,18 @@ export const sections: LibrarySection[] = [
           children: [
             heading('content.sections.talk'),
             paragraph('content.sections.answerTime'),
+            // ADR-0026: the address is set by the user (a form service or the host's script).
             {
-              type: 'button',
-              props: {
-                label: 'content.sections.write',
-                link: { kind: 'url', href: 'mailto:contact@exemple.fr' },
-                variant: 'primary',
-              },
+              type: 'form',
+              name: 'content.sections.contactForm',
+              props: { action: '', submitLabel: 'content.form.submit', hidden: [] },
+              children: [
+                formField('content.form.name', 'content.form.nameField', 'text'),
+                formField('content.form.email', 'email', 'email'),
+                formField('content.form.message', 'message', 'textarea'),
+                formField('content.form.consent', 'content.form.consentField', 'checkbox'),
+                paragraph('content.form.notice'),
+              ],
             },
           ],
         },
