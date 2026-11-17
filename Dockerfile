@@ -4,7 +4,7 @@
 
 # 1. Build of the application (development dependencies included)
 # Node 26 LTS (active), version and checksum pinned; Dependabot proposes the patches.
-FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94 AS build
+FROM node:26.13.1-alpine@sha256:6bd9ab43c0ec0190ca7b2d193906cb8b7edf6e7f4afa43ddeccd6452710bffb5 AS build
 WORKDIR /app
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 COPY package.json package-lock.json ./
@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build -w @ns/studio
 
 # 2. Runtime dependencies only, then the sources run by Node (native TypeScript)
-FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94 AS runtime-deps
+FROM node:26.13.1-alpine@sha256:6bd9ab43c0ec0190ca7b2d193906cb8b7edf6e7f4afa43ddeccd6452710bffb5 AS runtime-deps
 WORKDIR /app
 COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/apps/studio/package.json apps/studio/
@@ -40,7 +40,7 @@ COPY apps/studio/dev-server apps/studio/dev-server
 COPY --from=build /app/apps/studio/dist apps/studio/dist
 
 # 3. Final image: unprivileged user; npm and tar serve the export (Astro build, archive)
-FROM node:26.13.0-alpine@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94
+FROM node:26.13.1-alpine@sha256:6bd9ab43c0ec0190ca7b2d193906cb8b7edf6e7f4afa43ddeccd6452710bffb5
 # The day's Alpine security patches, on every build.
 RUN apk upgrade --no-cache && apk add --no-cache tar && mkdir /data && chown node:node /data
 WORKDIR /app
