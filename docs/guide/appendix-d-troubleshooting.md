@@ -40,6 +40,9 @@ The site must be at the **root** of the domain, and it is **the content** of the
 **The interface is in the wrong language.**
 The **language** button of the toolbar (or of the Projects screen) changes it; the choice is remembered by your browser. The language of the site itself is a separate setting (inspector, Site section).
 
+**Preview on a phone: the phone shows a black or blank page that never loads.**
+The phone must be on the **same Wi-Fi** as the computer: not over 4G/5G, nor through a VPN. Some guest Wi-Fi networks also isolate their devices from each other. If the project was shared again in the meantime, scan the new code: the old one no longer works.
+
 ## Frequently asked questions
 
 **Can I import a WordPress, Tatsu or Elementor site?**

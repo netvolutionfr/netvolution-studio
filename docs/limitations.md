@@ -70,3 +70,10 @@
 
 - **Automated check** with axe-core (WCAG 2.1 A/AA rules, serious violations) on the exported pages and on the editor. A human review is still needed (CS-12).
 - **Editor.** Moves within the same parent have a keyboard equivalent (<kbd>Alt</kbd>+↑/↓, ADR-0025); to another box: cut, select the target, then paste.
+
+## Desktop application (ADR-0028) and device preview (ADR-0027)
+
+- **Static build of an export** in the desktop application: it needs Node and npm installed on the machine. The Astro sources export works without them.
+- **AI assistant** unavailable in the desktop application: no screen to enter a key yet.
+- **No automatic update**. macOS is signed and notarized; Windows and Linux are not signed, and not tried yet.
+- **Device preview**: view only (no selection or editing from the phone), over HTTP on the local network with a token. The phone must be on the same Wi-Fi as the computer. Reloading the Studio interrupts the live updates until the dialog is reopened.

@@ -14,6 +14,7 @@ The Studio is young: some features of page builders do not exist yet, others are
 | No subheading or list inside a text | A **Heading** or **List** component between two **Text**s |
 | No size, background or gradient on part of a text (only bold, italic, color, link) | Split into several elements, or apply the setting to the whole element |
 | A color chosen in the text does not follow changes of the design system | For a whole element, use the inspector's **Text color** |
+| The phone preview only shows the site: no selection or editing from the phone, desktop application only | Edit on the computer, the phone follows |
 | The canvas does not display animations by default | Tick **Play animations in the canvas**, or use the **Site preview** |
 | No history between two sessions: undo and the log start from zero when reopening | Before a big change, export the project archive (**⋯** menu) |
 | No automatic saving | <kbd>⌘</kbd> <kbd>S</kbd> regularly; the Studio warns if you close the tab without saving |

@@ -41,7 +41,7 @@ Complete multi-user editorial CMS, standalone client administration interface, r
 
 ## 3. Technical decisions and assumptions
 
-- **Main distribution: web application** usable in modern browsers on macOS, Windows and Linux, hosted as a private instance for the team (`studio.netvolution.fr`, ADR-0015, ADR-0016). No Tauri/Electron desktop client nor multi-tenant SaaS for now.
+- **Distribution: desktop application** (Tauri, `desktop/`, ADR-0028) for designers, running the same Studio server with a bundled Node; the **hosted web application** (`studio.netvolution.fr`, ADR-0015, ADR-0016) stays available from the same sources. No Electron client nor multi-tenant SaaS.
 - **Main language: strict TypeScript**; **interface: modern React**.
 - **Architecture: modular monolith**, without microservices or premature multiplication of packages.
 - **Public site: Astro**, statically rendered by default and without depending on NS at runtime.
@@ -49,7 +49,7 @@ Complete multi-user editorial CMS, standalone client administration interface, r
 - **CSS: modern standards** (Flexbox, Grid, variables, media/container queries), explicit responsive, design tokens.
 - **Animations: declarative model**, native CSS / Web Animations API first, Motion as a candidate; GSAP subject to a license check before any integration.
 - **Persistence: simple adapter for the prototype**; database, third-party CMS and final backend not decided.
-- **Rust/WASM, Tauri/Electron, Payload**: future options, **no** dependency to introduce without a reasoned decision.
+- **Rust/WASM, Electron, Payload**: future options, **no** dependency to introduce without a reasoned decision. Tauri is limited to the desktop shell (ADR-0028): no business logic in Rust without a new ADR.
 
 These orientations do not replace an ADR for structuring choices; do not present open options as definitively chosen.
 
@@ -166,7 +166,8 @@ private instance), `ADR-0017` (decorative styles: borders, shadows, gradients, b
 (rich text: paragraphs, color, rich headings, gradient), `ADR-0021` (masonry gallery and lightbox), `ADR-0022`
 (marquee and carousel), `ADR-0023` (custom CSS: project stylesheet and classes), `ADR-0024` (internationalization:
 message catalogs, English by default, French kept), `ADR-0025` (direct editing in the canvas: text in place, moving
-with the pointer), `ADR-0026` (contact form: native `<form>` sent to a configurable address); "JavaScript islands"
+with the pointer), `ADR-0026` (contact form: native `<form>` sent to a configurable address), `ADR-0027` (device preview on the
+local network: QR code, read-only, live), `ADR-0028` (desktop application: Tauri, Studio server as a Node sidecar); "JavaScript islands"
 addendum of `ADR-0002`.
 
 Record ADRs in `docs/architecture/adr/`, in English, with English file names. `npm run check` verifies the relative

@@ -14,6 +14,7 @@ Le Studio est jeune : certaines fonctions des page builders n’existent pas enc
 | Pas d’intertitre ni de liste à l’intérieur d’un texte | Un composant **Titre** ou **Liste** entre deux **Texte** |
 | Pas de taille, de fond ni de dégradé sur une partie d’un texte (seulement gras, italique, couleur, lien) | Découpez en plusieurs éléments, ou appliquez le réglage à tout l’élément |
 | Une couleur choisie dans le texte ne suit pas les changements du design system | Pour tout un élément, utilisez la **Couleur du texte** de l’inspecteur |
+| L’aperçu sur téléphone montre seulement le site : ni sélection ni édition depuis le téléphone, application de bureau uniquement | Éditez sur l’ordinateur, le téléphone suit |
 | Le canvas ne montre pas les animations par défaut | Cochez **Jouer les animations dans le canvas**, ou utilisez l’**Aperçu du site** |
 | Pas d’historique entre deux sessions : l’annulation et le journal repartent de zéro à la réouverture | Avant une grosse modification, exportez l’archive du projet (menu **⋯**) |
 | Pas d’enregistrement automatique | <kbd>⌘</kbd> <kbd>S</kbd> régulièrement ; le Studio prévient si vous fermez l’onglet sans enregistrer |

@@ -1149,6 +1149,22 @@ aside.panel {
   color: var(--danger);
 }
 
+/* ---------- Device preview on the local network (ADR-0027) ---------- */
+.device-dialog {
+  width: min(440px, calc(100vw - 32px));
+}
+.device-qr {
+  display: block;
+  width: 240px;
+  height: 240px;
+  margin: var(--space-4) auto;
+  border-radius: var(--radius-md);
+  image-rendering: pixelated;
+}
+.device-dialog code {
+  word-break: break-all;
+}
+
 /* ---------- Export (SB-10, SB-11) ---------- */
 .export-dialog {
   width: min(640px, calc(100vw - 32px));

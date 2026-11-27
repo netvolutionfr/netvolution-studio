@@ -7,7 +7,7 @@ import '../ui/tokens.css';
 import '../ui/ui.css';
 import './shell.css';
 import { TipProvider } from '../ui/index.ts';
-import { getProject } from './api.ts';
+import { getProject, pushLive } from './api.ts';
 import { Projects, projectHash } from './Projects.tsx';
 import { setSession } from './persistence.ts';
 import { createStore, StoreContext } from './store.ts';
@@ -60,6 +60,12 @@ function Root() {
     const channel = new BroadcastChannel('ns-preview');
     let last = editor.store.getState().doc;
     const send = () => channel.postMessage({ type: 'site', doc: editor.store.getState().doc });
+    // Devices on the local network (ADR-0027): the same site, at most every 250 ms.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const relay = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => pushLive(editor.store.getState().doc), 250);
+    };
     channel.onmessage = (e: MessageEvent<{ type?: string; projectId?: string }>) => {
       if (e.data?.type === 'request' && e.data.projectId === editor.id) send();
     };
@@ -67,8 +73,10 @@ function Root() {
       if (editor.store.getState().doc === last) return;
       last = editor.store.getState().doc;
       send();
+      relay();
     });
     return () => {
+      clearTimeout(timer);
       off();
       channel.close();
     };

@@ -24,6 +24,7 @@ import {
 } from '@ns/core';
 import { exportProject } from '../../../packages/export-astro/src/write.ts';
 import { type AiConfig, createAiService } from './ai/service.ts';
+import type { Lan } from './lan.ts';
 import { checkSvg, cleanName, EXT_TYPE, guessFont, MAX_UPLOAD, MEDIA_FILE, MEDIA_TYPES } from './media.ts';
 
 export type ApiOptions = {
@@ -43,6 +44,8 @@ export type ApiOptions = {
    * (`server.allowedHosts`) in development; the production server always sets it.
    */
   allowedHosts?: string[];
+  /** Device preview on the local network (ADR-0027); unavailable when absent. */
+  lan?: Lan;
 };
 
 type CatalogFont = {
@@ -341,6 +344,38 @@ export function createApi(options: ApiOptions) {
         'cache-control': 'public, max-age=86400',
       });
       res.end(content);
+      return true;
+    }
+
+    // Device preview on the local network (ADR-0027): status, share one project, stop; the editor's
+    // current site (saved or not) is relayed to the devices.
+    if (url.pathname === '/api/lan') {
+      const lan = options.lan;
+      if (req.method === 'GET') {
+        send(200, { available: Boolean(lan), share: lan?.status() ?? null });
+        return true;
+      }
+      if (!lan) throw new HttpError(404, msg('server.route'));
+      if (req.method === 'DELETE') {
+        await lan.stop();
+        res.writeHead(204).end();
+        return true;
+      }
+      if (req.method === 'POST') {
+        const id = String(((await jsonBody(req)) as { projectId?: unknown })?.projectId ?? '');
+        await readSite(id);
+        const share = await lan.start(id);
+        if (!share) throw new HttpError(503, msg('server.lanAddress'));
+        send(200, share);
+        return true;
+      }
+    }
+    const live = /^\/api\/live\/([^/]+)$/.exec(url.pathname);
+    if (live && req.method === 'PUT' && options.lan) {
+      const site = validDocument(await jsonBody(req));
+      if (site.id !== live[1] || !options.lan.publish(site.id, site))
+        throw new HttpError(409, msg('server.lanShare'));
+      res.writeHead(204).end();
       return true;
     }
 

@@ -29,6 +29,10 @@ The three planned milestones are delivered and validated (10/30/2026): visual ed
 
 Out of the current scope: accounts and roles in the Studio, real-time collaboration, editorial administration for the client, e-commerce, WordPress migration.
 
+## Desktop application
+
+Download the installer of the latest version from the [releases page](https://github.com/netvolutionfr/netvolution-studio/releases): `.dmg` for macOS (Apple Silicon), `.msi` or `-setup.exe` for Windows, `.AppImage` or `.deb` for Linux. The projects stay on your computer. Building the static site of an export needs [Node.js](https://nodejs.org) installed; the Astro sources export does not. Details: [ADR-0028](docs/architecture/adr/ADR-0028-desktop-application.md); building it yourself: [desktop/README.md](desktop/README.md).
+
 ## Trying it locally
 
 Requirements: Node.js 26 LTS (or 24 LTS) and npm 11.
@@ -163,6 +167,7 @@ fonts/                  catalog of free fonts, with their licenses
 fixtures/               reference documents (starter pages, fidelity bench)
 tests/                  fidelity bench, end-to-end scenarios (Playwright), documentation checks
 deploy/                 automated deployment (GitHub Actions, Docker, nginx)
+desktop/                desktop application (Tauri): shell, staging of the server, bundled Node
 docs/                   guide, specifications, architecture, ADRs and history
 prototypes/             throwaway prototypes
 ```
