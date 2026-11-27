@@ -31,10 +31,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          d="https://github.com/$GITHUB_REPOSITORY/releases/download/$GITHUB_REF_NAME"
+          body="## Download
+
+          | System | Installer |
+          |---|---|
+          | **macOS** (Apple Silicon) | [Netvolution-Studio_darwin_aarch64.dmg]($d/Netvolution-Studio_darwin_aarch64.dmg) |
+          | **Windows** (x64) | [Netvolution-Studio_windows_x64-setup.exe]($d/Netvolution-Studio_windows_x64-setup.exe) (or the [.msi]($d/Netvolution-Studio_windows_x64.msi)) |
+          | **Linux** (x64) | [.AppImage]($d/Netvolution-Studio_linux_amd64.AppImage) · [.deb]($d/Netvolution-Studio_linux_amd64.deb) · [.rpm]($d/Netvolution-Studio_linux_x86_64.rpm) |
+
+          macOS: signed and notarized by Apple. Windows: not signed yet; on \"Windows protected your PC\", click **More info**, then **Run anyway**. First steps: [user guide](https://github.com/$GITHUB_REPOSITORY/blob/main/docs/guide/01-getting-started.md)."
           id=$(gh api -X POST "repos/$GITHUB_REPOSITORY/releases" \
             -f tag_name="$GITHUB_REF_NAME" -f name="Netvolution Studio $GITHUB_REF_NAME" -F draft=true \
-            -f body='Desktop application of Netvolution Studio. Installation and first launch: see the user guide, chapter "Getting started". Windows and Linux builds are not signed yet.' \
-            --jq .id)
+            -f body="$body" --jq .id)
           echo "id=$id" >> "$GITHUB_OUTPUT"
 
   build:
@@ -111,4 +120,6 @@ jobs:
           tauriScript: npx tauri
           # Empty without a tag: no release, the installers are workflow artifacts.
           releaseId: ${{ needs.release.outputs.id }}
+          # Stable names (no version): the README links to releases/latest/download/<name>.
+          releaseAssetNamePattern: Netvolution-Studio_[platform]_[arch][setup][ext]
           uploadWorkflowArtifacts: true

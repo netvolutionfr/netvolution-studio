@@ -2,7 +2,7 @@
 
 **A desktop application for designers to build professional showcase websites visually, and deliver them as fast, secure, standalone sites.**
 
-[**Download for macOS, Windows or Linux**](https://github.com/netvolutionfr/netvolution-studio/releases) · [User guide](docs/guide/index.md) ([français](docs/guide/fr/index.md)) · Free and open source (Apache-2.0)
+**Download:** [macOS](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_darwin_aarch64.dmg) · [Windows](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_windows_x64-setup.exe) · [Linux](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_linux_amd64.AppImage) · [User guide](docs/guide/index.md) ([français](docs/guide/fr/index.md)) · Free and open source (Apache-2.0)
 
 ![The Studio editing the Studio Orbe template: pages, component library and layers on the left, the page in the canvas, the inspector on the right](docs/images/studio.png)
 
@@ -41,13 +41,13 @@ It is not meant for online shops, blogs with many authors or web applications.
 
 ## Download and install
 
-Download the installer of the latest version from the [releases page](https://github.com/netvolutionfr/netvolution-studio/releases):
+The links below always download the latest version (all versions: [releases page](https://github.com/netvolutionfr/netvolution-studio/releases)).
 
-| System | File | First launch |
+| System | Download | First launch |
 |---|---|---|
-| macOS (Apple Silicon) | `.dmg` | Drag **Netvolution Studio** into **Applications**. The application is signed and notarized by Apple. |
-| Windows (x64) | `-setup.exe` or `.msi` | Not signed yet: on "Windows protected your PC", click **More info**, then **Run anyway**. |
-| Linux (x64) | `.deb` or `.AppImage` | Install the `.deb`, or make the `.AppImage` executable. |
+| macOS (Apple Silicon) | [**Netvolution Studio for macOS**](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_darwin_aarch64.dmg) (`.dmg`) | Drag **Netvolution Studio** into **Applications**. The application is signed and notarized by Apple. |
+| Windows (x64) | [**Netvolution Studio for Windows**](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_windows_x64-setup.exe) (`.exe`), or the [`.msi`](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_windows_x64.msi) | Not signed yet: on "Windows protected your PC", click **More info**, then **Run anyway**. |
+| Linux (x64) | [**`.AppImage`**](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_linux_amd64.AppImage) · [`.deb`](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_linux_amd64.deb) · [`.rpm`](https://github.com/netvolutionfr/netvolution-studio/releases/latest/download/Netvolution-Studio_linux_x86_64.rpm) | Make the `.AppImage` executable and open it, or install the `.deb` / `.rpm`. |
 
 The [user guide](docs/guide/01-getting-started.md) then walks you through a first site in 20 minutes. Exporting the Astro sources works as is; building the ready-to-host static site also needs [Node.js](https://nodejs.org) installed. Known limits of this first version: [docs/limitations.md](docs/limitations.md). How the application is built: [ADR-0028](docs/architecture/adr/ADR-0028-desktop-application.md) and [desktop/README.md](desktop/README.md).
 
