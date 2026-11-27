@@ -65,6 +65,8 @@
     "journalTip": "Opérations de la session (vous et l’IA)",
     "sitePreview": "Aperçu du site",
     "sitePreviewTip": "Naviguer dans le site, sans les outils d’édition (nouvel onglet)",
+    "devicePreview": "Aperçu sur un téléphone",
+    "devicePreviewTip": "Afficher le site en direct sur un téléphone ou une tablette du même réseau",
     "preview": "Aperçu",
     "previewTip": "Aperçu sans les contrôles de l’éditeur",
     "guide": "Guide d’utilisation",
@@ -124,6 +126,16 @@
     "myTemplates": "Mes modèles de site",
     "removeTemplate": "Supprimer le modèle {{name}}",
     "confirmRemoveTemplate": "Supprimer le modèle « {{name}} » ? Les projets créés avec restent intacts."
+  },
+  "devicePreview": {
+    "title": "Aperçu sur un téléphone",
+    "intro": "Scannez ce code avec l’appareil photo d’un téléphone ou d’une tablette connecté au même Wi-Fi que cet ordinateur (pas en 4G/5G). La page suit vos modifications, enregistrées ou non.",
+    "link": "Ou ouvrez cette adresse :",
+    "stop": "Arrêter le partage",
+    "close": "Fermer",
+    "starting": "Démarrage…",
+    "unavailable": "Disponible uniquement dans l’application de bureau.",
+    "security": "Toute personne de ce réseau qui a ce code peut voir le projet, jusqu’à l’arrêt du partage."
   },
   "export": {
     "title": "Exporter le site",
@@ -1137,7 +1149,9 @@
     "templateName": "Nom du modèle requis",
     "route": "Route inconnue",
     "internal": "Erreur interne",
-    "json": "JSON invalide"
+    "json": "JSON invalide",
+    "lanAddress": "Aucune adresse sur le réseau local : connectez cet ordinateur à un réseau Wi-Fi ou Ethernet",
+    "lanShare": "Ce projet n’est pas partagé sur le réseau local"
   },
   "components": {
     "accordionItem": {

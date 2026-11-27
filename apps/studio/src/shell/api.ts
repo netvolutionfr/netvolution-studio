@@ -237,3 +237,28 @@ export async function addCatalogFont(projectId: string, font: string): Promise<A
   });
   return (await res.json()) as Asset[];
 }
+
+/** Device preview on the local network (ADR-0027): one shared project, its address and QR code (SVG). */
+export type LanShare = { projectId: string; url: string; qr: string };
+export const lanStatus = async () =>
+  (await (await call('./api/lan')).json()) as { available: boolean; share: LanShare | null };
+export const startLan = async (projectId: string) =>
+  (await (
+    await call('./api/lan', { method: 'POST', headers: HEADERS, body: JSON.stringify({ projectId }) })
+  ).json()) as LanShare;
+export const stopLan = async () => void (await call('./api/lan', { method: 'DELETE', headers: HEADERS }));
+
+/** Project whose current site is relayed to the devices, if any (set by the device preview dialog). */
+let liveProject: string | null = null;
+export const setLiveProject = (id: string | null) => {
+  liveProject = id;
+};
+/** Sends the editor's site to the devices; silently skipped when its project is not shared. */
+export function pushLive(doc: Site) {
+  if (doc.id !== liveProject) return;
+  void fetch(`./api/live/${encodeURIComponent(doc.id)}`, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify(doc),
+  }).catch(() => undefined);
+}

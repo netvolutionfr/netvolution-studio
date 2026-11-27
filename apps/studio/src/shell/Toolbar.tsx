@@ -10,6 +10,7 @@ import {
   Monitor,
   Moon,
   Palette,
+  QrCode,
   Redo2,
   Smartphone,
   Sparkles,
@@ -17,8 +18,10 @@ import {
   Tablet,
   Undo2,
 } from 'lucide-react';
+import { useState } from 'react';
 import { IconButton, Segmented } from '../ui/index.ts';
 import type { SidePanel } from './App.tsx';
+import { DevicePreview } from './DevicePreview.tsx';
 import { DocumentBar } from './DocumentBar.tsx';
 import { guideUrl, LanguageMenu } from './LanguageMenu.tsx';
 import { useEditor, useStore } from './store.ts';
@@ -45,6 +48,7 @@ export function Toolbar(props: {
   const bp = activeBreakpoint(doc, props.width);
   const bpLabel = bp === 'base' ? t('viewport.base') : doc.breakpoints.find((b) => b.id === bp)?.label;
   const preset = VIEWPORTS.find((v) => v.width === props.width)?.id;
+  const [devices, setDevices] = useState(false);
 
   return (
     <header className="toolbar">
@@ -147,6 +151,13 @@ export function Toolbar(props: {
             open(`./preview.html#/${doc.id}${pagePath(slug)}`, `ns-preview-${doc.id}`);
           }}
         />
+        <IconButton
+          label={t('toolbar.devicePreview')}
+          icon={QrCode}
+          tooltip={t('toolbar.devicePreviewTip')}
+          onClick={() => setDevices(true)}
+        />
+        <DevicePreview open={devices} onClose={() => setDevices(false)} />
         <IconButton
           label={t('toolbar.preview')}
           icon={Eye}

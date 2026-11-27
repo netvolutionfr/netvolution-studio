@@ -1,35 +1,61 @@
 # Netvolution Studio
 
+**A desktop application for designers to build professional showcase websites visually, and deliver them as fast, secure, standalone sites.**
+
+[**Download for macOS, Windows or Linux**](https://github.com/netvolutionfr/netvolution-studio/releases) · [User guide](docs/guide/index.md) ([français](docs/guide/fr/index.md)) · Free and open source (Apache-2.0)
+
 ![The Studio editing the Studio Orbe template: pages, component library and layers on the left, the page in the canvas, the inspector on the right](docs/images/studio.png)
 
-**Netvolution Studio is a visual CMS to design professional showcase websites and publish them as standalone static sites.** Designers compose their pages with the mouse, as in a page builder; the Studio produces a standard Astro site, fast and secure, that can be hosted anywhere and no longer depends on the Studio once exported.
+## The need
 
-- **Visual editor**: component library, drag and drop, tree, inspector, tablet and mobile preview, undo/redo, copy and paste.
-- **Complete site**: pages, menus, shared header and footer, design system (colors, typography, spacing), media library, SEO, redirects.
-- **Creation**: reusable sections and components, site templates, accessible animations, rich text, gallery, marquee, carousel, controlled custom CSS.
-- **AI assistant** (optional): proposes changes as commands, previewed and approved by the user (Anthropic or any OpenAI-compatible service, local ones included).
-- **Export**: a readable, documented Astro project, and the static site ready to go online (HTML, CSS, optimized images, `sitemap.xml`, `robots.txt`, 404 page).
-- **Languages**: interface in English and French, following the browser; the content the Studio writes into a site follows the site's language ([ADR-0024](docs/architecture/adr/ADR-0024-internationalization.md)). A new language is one JSON catalog.
+A showcase website (an agency, a studio, a craftsman, a small company) is usually built with WordPress and a page builder, or with a hosted site builder. Both work, and both cost more over time than they seem at first:
 
-The [user guide](docs/guide/index.md) walks designers through the Studio step by step, in English and [French](docs/guide/fr/index.md); the Studio also serves it at `/guide/`.
+- **WordPress** needs a server, a database, plugins and their updates. The back office stays exposed on the Internet, and the pages are rebuilt on each visit.
+- **Hosted builders** keep the site on their platform: a subscription for as long as the site lives, and no files of your own to take elsewhere.
 
-## Principles
+Netvolution Studio keeps the comfort of a page builder and removes the rest. You compose the pages with the mouse; the Studio produces **plain static files**: HTML, CSS and optimized images. They go online on any host, and nothing of the Studio stays behind them.
 
-- **Versioned JSON document** as the source of truth, independent of React, Astro and any CMS.
-- **Faithful rendering**: the editor preview and the export use the same components and the same stylesheet; the difference is measured automatically.
-- **Static sites by default**: pre-rendered HTML, no JavaScript shipped without need, no back office exposed with the site.
-- **Security by design**: validated documents, typed styles, no arbitrary HTML or JavaScript; custom CSS is parsed and republished by the Studio, never inserted as typed (ADR-0023).
-- **Reversibility**: the export is a standard Astro project, which builds without the Studio, and projects export as archives.
+## Who it is for
 
-Tatsu (a WordPress page builder) is an ergonomic reference only; none of its code is reused or versioned.
+- **Graphic and web designers** who create showcase websites for their clients and want to control the result to the pixel, without writing code.
+- **Small agencies and freelancers** who deliver sites that must stay fast, secure and cheap to host for years.
+- **Developers** who take a site over: the export is a standard, documented [Astro](https://astro.build) project.
 
-## Project status
+It is not meant for online shops, blogs with many authors or web applications.
 
-The three planned milestones are delivered and validated (10/30/2026): visual editor of a page, complete showcase site, then creativity and productivity (reuse, animations, AI). Changes followed (ADR-0017 to ADR-0024). Known limitations: [docs/limitations.md](docs/limitations.md).
+## Why use it
 
-Out of the current scope: accounts and roles in the Studio, real-time collaboration, editorial administration for the client, e-commerce, WordPress migration.
+- **Visual and precise.** Drag and drop, layers, an inspector for every setting, a design system (colors, typography, spacing) shared by the whole site, desktop, tablet and mobile settings, undo and redo.
+- **The real rendering, on your own phone.** Scan a QR code: the site opens on your phone or tablet, on the same Wi-Fi, and follows each change as you make it, saved or not ([ADR-0027](docs/architecture/adr/ADR-0027-device-preview-on-the-local-network.md)).
+- **Fast and secure sites.** Pre-rendered pages, no database, no back office online, JavaScript only where a component needs it. There is nothing to patch on the published site.
+- **Yours, everywhere.** Projects stay on your computer. The site goes to any host: shared hosting over FTP, Netlify, Cloudflare Pages, your own server. No subscription, no lock-in.
+- **A complete showcase site.** Pages and menus, shared header and footer, media library, SEO and redirects, reusable sections and components, site templates, accessible animations, rich text, gallery, marquee, carousel, contact form, controlled custom CSS.
+- **AI assistance under control** (optional, web version for now): the assistant proposes changes, which you preview and approve before anything is applied.
+- **English and French** interface; the content the Studio writes into a site follows the site's language.
 
-## Trying it locally
+<p align="center">
+  <img src="docs/images/device-preview.png" alt="The Preview on a phone dialog in the Studio, with a QR code to scan" width="68%">
+  &nbsp;
+  <img src="docs/images/phone-preview.png" alt="The same site, Studio Orbe, displayed on a phone" width="24%">
+</p>
+
+## Download and install
+
+Download the installer of the latest version from the [releases page](https://github.com/netvolutionfr/netvolution-studio/releases):
+
+| System | File | First launch |
+|---|---|---|
+| macOS (Apple Silicon) | `.dmg` | Drag **Netvolution Studio** into **Applications**. The application is signed and notarized by Apple. |
+| Windows (x64) | `-setup.exe` or `.msi` | Not signed yet: on "Windows protected your PC", click **More info**, then **Run anyway**. |
+| Linux (x64) | `.deb` or `.AppImage` | Install the `.deb`, or make the `.AppImage` executable. |
+
+The [user guide](docs/guide/01-getting-started.md) then walks you through a first site in 20 minutes. Exporting the Astro sources works as is; building the ready-to-host static site also needs [Node.js](https://nodejs.org) installed. Known limits of this first version: [docs/limitations.md](docs/limitations.md). How the application is built: [ADR-0028](docs/architecture/adr/ADR-0028-desktop-application.md) and [desktop/README.md](desktop/README.md).
+
+## Web version (self-hosted)
+
+The same Studio also runs as a web application, for a team that prefers one shared instance on a server. It is the way to use the AI assistant today. It is meant for technical users: it is installed from the sources or with Docker.
+
+### Trying it from the sources
 
 Requirements: Node.js 26 LTS (or 24 LTS) and npm 11.
 
@@ -42,13 +68,13 @@ npm run dev        # http://127.0.0.1:5173/
 
 Projects are saved in `data/projects/`, exports in `exports/`. To enable the AI assistant, copy `.env.example` to `.env` and fill in the provider and its key.
 
-## Installing the Studio on your machine or server
+### Installing it on a machine or server
 
 The production Studio is a single Node process: the compiled application and its API on one port, with the data in a folder.
 
 > **The Studio has no authentication.** Anyone who reaches its port has full rights over the projects. Keep it listening on `127.0.0.1` and, for remote access, put it behind a proxy that provides HTTPS and proven authentication (nginx password, Authelia, Cloudflare Access…).
 
-### With Docker (recommended)
+#### With Docker (recommended)
 
 ```sh
 docker build -t netvolution-studio .
@@ -61,7 +87,7 @@ docker run -d --name netvolution-studio --restart unless-stopped \
 
 The Studio is at http://127.0.0.1:8080/. The `data/` folder holds the projects, media, templates and exports: that is what to back up. The container runs as the `node` user (uid 1000): the folder must belong to it. Remove `--env-file .env` if you do not use the AI assistant.
 
-### Without Docker
+#### Without Docker
 
 ```sh
 npm ci
@@ -78,7 +104,7 @@ NS_DATA_DIR=/path/to/data node --env-file-if-exists=.env apps/studio/server.ts
 | `NS_ALLOWED_HOSTS` | Extra host names accepted in the `Host` header, comma-separated (the reverse proxy's public name) | `localhost`, `127.0.0.1`, `[::1]` only |
 | `NS_AI_*`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | AI assistant | disabled (see `.env.example`) |
 
-### On a server
+#### On a server
 
 Run the Studio as above, on `127.0.0.1`, then expose it through a reverse proxy. nginx example:
 
@@ -112,7 +138,7 @@ server {
 The Studio does not publish the site itself: it exports files, which you upload to any host. Nothing runs on the server and no link to the Studio remains. The details, for designers, are in the guide's [publishing chapter](docs/guide/11-publish-and-deliver.md).
 
 1. **Export**: in the Studio, **⋯** menu > **Export site (Astro)…**, tick **Also build the static site**, then **Export**. Fix the blocking errors of the checks before export first.
-2. **Download** the static site archive (`.tar.gz`) and extract it. It contains the site ready to serve: HTML, CSS, images, `sitemap.xml`, `robots.txt`, `404.html`.
+2. **Retrieve** the static site: in the desktop application, the export dialog shows the folder on your computer; in the web version, download the archive (`.tar.gz`) and extract it. It contains the site ready to serve: HTML, CSS, images, `sitemap.xml`, `robots.txt`, `404.html`.
 3. **Upload the content** of the static folder (the files, not the folder) **to the root** of a domain or subdomain, not into a subfolder:
 
 | Hosting | Upload | 404 page |
@@ -133,6 +159,22 @@ A document can also be exported from the command line:
 npm run export -- fixtures/grid.json ../site-grid
 cd ../site-grid && npm ci && npm run build      # static site in dist/
 ```
+
+## How it works
+
+- **Versioned JSON document** as the source of truth, independent of React, Astro and any CMS.
+- **Faithful rendering**: the editor preview and the export use the same components and the same stylesheet; the difference is measured automatically.
+- **Static sites by default**: pre-rendered HTML, no JavaScript shipped without need, no back office exposed with the site.
+- **Security by design**: validated documents, typed styles, no arbitrary HTML or JavaScript; custom CSS is parsed and republished by the Studio, never inserted as typed (ADR-0023).
+- **Reversibility**: the export is a standard Astro project, which builds without the Studio, and projects export as archives.
+
+Tatsu (a WordPress page builder) is an ergonomic reference only; none of its code is reused or versioned.
+
+### Project status
+
+The three planned milestones are delivered and validated (10/30/2026): visual editor of a page, complete showcase site, then creativity and productivity (reuse, animations, AI). Changes followed (ADR-0017 to ADR-0026), then the desktop application and the device preview (ADR-0027, ADR-0028). Known limitations: [docs/limitations.md](docs/limitations.md).
+
+Out of the current scope: accounts and roles in the Studio, real-time collaboration, editorial administration for the client, e-commerce, WordPress migration.
 
 ## Development
 
@@ -163,6 +205,7 @@ fonts/                  catalog of free fonts, with their licenses
 fixtures/               reference documents (starter pages, fidelity bench)
 tests/                  fidelity bench, end-to-end scenarios (Playwright), documentation checks
 deploy/                 automated deployment (GitHub Actions, Docker, nginx)
+desktop/                desktop application (Tauri): shell, staging of the server, bundled Node
 docs/                   guide, specifications, architecture, ADRs and history
 prototypes/             throwaway prototypes
 ```

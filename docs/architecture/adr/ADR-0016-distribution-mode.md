@@ -1,6 +1,6 @@
 # ADR-0016 — Distribution mode: hosted web application, private instance
 
-**Status:** Accepted on 10/30/2026 · **Date:** 10/30/2026 · **Ref.:** CLAUDE §3, §8 and §12, ADR-0014, ADR-0015
+**Status:** Accepted on 10/30/2026; partly superseded by ADR-0028 (desktop application) on 11/27/2026 · **Date:** 10/30/2026 · **Ref.:** CLAUDE §3, §8 and §12, ADR-0014, ADR-0015
 
 ## Context
 

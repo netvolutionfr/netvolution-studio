@@ -1,0 +1,114 @@
+name: Desktop application
+
+# Desktop application (ADR-0028), built on each platform's runner. A version tag (v*) creates a DRAFT
+# GitHub release with the installers, published by hand after a check; a pull request touching the
+# application, or a manual run, only builds them as workflow artifacts. Same supply-chain rules as
+# deploy.yaml: actions pinned by commit, least privilege. macOS is signed and notarized when the
+# Apple secrets exist, else left unsigned.
+
+on:
+  push:
+    tags: ["v*"]
+  pull_request:
+    paths: ["desktop/**", "apps/studio/server.ts", ".github/workflows/desktop.yaml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # One draft release per tag, created before the builds: three parallel jobs would each create one
+  # (a draft cannot be found by its tag).
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      id: ${{ steps.create.outputs.id }}
+    steps:
+      - id: create
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          id=$(gh api -X POST "repos/$GITHUB_REPOSITORY/releases" \
+            -f tag_name="$GITHUB_REF_NAME" -f name="Netvolution Studio $GITHUB_REF_NAME" -F draft=true \
+            -f body='Desktop application of Netvolution Studio. Installation and first launch: see the user guide, chapter "Getting started". Windows and Linux builds are not signed yet.' \
+            --jq .id)
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: release
+    # Also without a tag (pull request, manual run), where the release job is skipped.
+    if: ${{ !failure() && !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # upload the installers to the draft release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The Node of .nvmrc (official build) becomes the bundled sidecar (desktop/stage.ts).
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: npm
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable
+      - name: Linux build dependencies (WebKitGTK)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - run: npm ci --no-audit --no-fund
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+      - run: npm ci --no-audit --no-fund
+        working-directory: desktop
+      - name: Version from the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          node -e '
+            const f = "desktop/src-tauri/tauri.conf.json", c = JSON.parse(require("fs").readFileSync(f, "utf8"));
+            c.version = process.argv[1];
+            require("fs").writeFileSync(f, JSON.stringify(c, null, 2));
+          ' "${GITHUB_REF_NAME#v}"
+      - name: Apple signing and notarization (when configured)
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+        # Exported only when present: an empty APPLE_CERTIFICATE would make the build fail.
+        run: |
+          if [ -z "$APPLE_CERTIFICATE" ]; then
+            echo "::warning::No Apple certificate: the macOS build is not signed."
+            exit 0
+          fi
+          printf '%s' "$APPLE_API_KEY_P8" > "$RUNNER_TEMP/AuthKey.p8"
+          {
+            echo "APPLE_CERTIFICATE=$APPLE_CERTIFICATE"
+            echo "APPLE_CERTIFICATE_PASSWORD=$APPLE_CERTIFICATE_PASSWORD"
+            echo "APPLE_API_KEY=$APPLE_API_KEY"
+            echo "APPLE_API_ISSUER=$APPLE_API_ISSUER"
+            echo "APPLE_API_KEY_PATH=$RUNNER_TEMP/AuthKey.p8"
+          } >> "$GITHUB_ENV"
+      - run: npm run stage
+        working-directory: desktop
+      - uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # action-v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: desktop
+          tauriScript: npx tauri
+          # Empty without a tag: no release, the installers are workflow artifacts.
+          releaseId: ${{ needs.release.outputs.id }}
+          uploadWorkflowArtifacts: true

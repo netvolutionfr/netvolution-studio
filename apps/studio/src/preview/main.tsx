@@ -74,6 +74,9 @@ if (!projectId) {
     if (e.data?.type === 'site') accept(e.data.doc);
   };
   channel.postMessage({ type: 'request', projectId });
+  // On a device of the local network (ADR-0027): the editor's site, live. Elsewhere the route does
+  // not exist and the stream closes for good (a 404 is never retried).
+  new EventSource(`./api/live/${projectId}`).onmessage = (e) => accept(JSON.parse(e.data));
   setTimeout(() => {
     if (site) return;
     fetch(`./api/projects/${projectId}`)

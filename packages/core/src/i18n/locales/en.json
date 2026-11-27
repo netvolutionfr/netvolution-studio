@@ -65,6 +65,8 @@
     "journalTip": "Operations of this session (you and the AI)",
     "sitePreview": "Site preview",
     "sitePreviewTip": "Browse the site without the editing tools (new tab)",
+    "devicePreview": "Preview on a phone",
+    "devicePreviewTip": "Show the site live on a phone or tablet on the same network",
     "preview": "Preview",
     "previewTip": "Preview without the editor controls",
     "guide": "User guide",
@@ -124,6 +126,16 @@
     "myTemplates": "My site templates",
     "removeTemplate": "Delete the template {{name}}",
     "confirmRemoveTemplate": "Delete the template “{{name}}”? Projects created from it are kept."
+  },
+  "devicePreview": {
+    "title": "Preview on a phone",
+    "intro": "Scan this code with the camera of a phone or tablet connected to the same Wi-Fi as this computer (not over 4G/5G). The page follows your edits, saved or not.",
+    "link": "Or open this address:",
+    "stop": "Stop sharing",
+    "close": "Close",
+    "starting": "Starting…",
+    "unavailable": "Available in the desktop application only.",
+    "security": "Anyone on this network who has this code can view the project until you stop sharing."
   },
   "export": {
     "title": "Export the site",
@@ -1137,7 +1149,9 @@
     "templateName": "Template name required",
     "route": "Unknown route",
     "internal": "Internal error",
-    "json": "Invalid JSON"
+    "json": "Invalid JSON",
+    "lanAddress": "No local network address: connect this computer to a Wi-Fi or Ethernet network",
+    "lanShare": "This project is not shared on the local network"
   },
   "components": {
     "accordionItem": {

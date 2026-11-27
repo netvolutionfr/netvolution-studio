@@ -6,6 +6,16 @@ In this tutorial, you start from the "Atelier Nord" template, a five-page showca
 
 > Nothing you do here is published: the Studio is a workshop. You can delete this trial project at the end.
 
+## Before you start: install the Studio
+
+Download the installer from the [releases page](https://github.com/netvolutionfr/netvolution-studio/releases), the latest version:
+
+- **macOS** (Apple Silicon): open the `.dmg` and drag **Netvolution Studio** into **Applications**;
+- **Windows**: run the `-setup.exe` (or the `.msi`). The installer is not signed yet: if Windows shows "Windows protected your PC", click **More info**, then **Run anyway**;
+- **Linux**: install the `.deb`, or make the `.AppImage` executable and open it.
+
+Your projects stay on your computer. To also build the **static site** of an export, [Node.js](https://nodejs.org) must be installed; exporting the Astro sources works without it.
+
 ## Step 1: create the project
 
 Open the Studio. The **Projects** screen lists the team's sites.

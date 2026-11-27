@@ -39,6 +39,7 @@ Depuis l’éditeur, le lien **← Projets** en haut à gauche y ramène. Le bou
 Puis :
 
 - **Aperçu du site** ouvre le site dans un nouvel onglet, pour naviguer de page en page sans les outils d’édition ;
+- **Aperçu sur un téléphone** (le QR code) affiche ce même aperçu sur un téléphone ou une tablette connecté au même réseau : scannez le code avec son appareil photo. La page suit vos modifications, enregistrées ou non, jusqu’à **Arrêter le partage**. Application de bureau uniquement ;
 - **Aperçu** (l’œil) masque les panneaux et les cadres de sélection, pour juger la page seule ;
 - **?** ouvre ce guide ;
 - le soleil ou la lune bascule l’interface en **thème clair ou sombre** (le site produit n’est pas concerné) ;

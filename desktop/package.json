@@ -1,0 +1,14 @@
+{
+  "name": "ns-desktop",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "stage": "node stage.ts",
+    "dev": "npm run stage && tauri dev",
+    "build": "npm run stage && tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.6"
+  }
+}

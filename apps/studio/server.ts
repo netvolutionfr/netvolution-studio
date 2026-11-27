@@ -6,6 +6,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { extname, join, resolve, sep } from 'node:path';
 import { aiConfigFromEnv } from './dev-server/ai/service.ts';
 import { createApi } from './dev-server/api.ts';
+import { createLan } from './dev-server/lan.ts';
 
 const repo = resolve(import.meta.dirname, '../..');
 const root = resolve(import.meta.dirname, 'dist');
@@ -17,6 +18,16 @@ const allowedHosts = ['localhost', '127.0.0.1', '[::1]', ...(process.env.NS_ALLO
   .map((h) => h.trim().toLowerCase())
   .filter(Boolean);
 
+// Device preview on the local network (ADR-0027): only where the Studio runs on the designer's own
+// machine (desktop application), never in the hosted container.
+const lan =
+  process.env.NS_LAN_PREVIEW === '1'
+    ? createLan({
+        api: (req, res) => api(req, res, () => void res.writeHead(404).end()),
+        statics: (req, res) => void statics(req, res),
+      })
+    : undefined;
+
 const api = createApi({
   dataDir,
   templatesDir: join(repo, 'templates'),
@@ -24,6 +35,7 @@ const api = createApi({
   exportsDir: resolve(process.env.NS_EXPORTS_DIR ?? join(dataDir, 'exports')),
   ai: aiConfigFromEnv(process.env, join(dataDir, 'ai-log.jsonl')),
   allowedHosts,
+  ...(lan && { lan }),
 });
 
 const TYPES: Record<string, string> = {

@@ -10,6 +10,9 @@
       "!prototypes",
       "!data",
       "!exports",
+      "!desktop/src-tauri/target",
+      "!desktop/src-tauri/resources",
+      "!desktop/src-tauri/gen",
       "!test-results",
       "!**/package-lock.json",
       "!**/*.md"

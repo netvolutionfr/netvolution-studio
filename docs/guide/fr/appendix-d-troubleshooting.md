@@ -37,6 +37,9 @@ Elles demandent une configuration de l’hébergeur (chapitre [Publier et livrer
 **Les images ou le style manquent en ligne.**
 Le site doit être à la **racine** du domaine, et c’est **le contenu** du dossier exporté qu’il faut copier, pas le dossier lui-même.
 
+**Aperçu sur un téléphone : le téléphone affiche une page noire ou blanche qui ne se charge pas.**
+Le téléphone doit être sur le **même Wi-Fi** que l’ordinateur : pas en 4G/5G, ni à travers un VPN. Certains Wi-Fi invités isolent aussi leurs appareils les uns des autres. Si le projet a été partagé de nouveau entre-temps, scannez le nouveau code : l’ancien ne fonctionne plus.
+
 ## Questions fréquentes
 
 **Puis-je importer un site WordPress, Tatsu ou Elementor ?**

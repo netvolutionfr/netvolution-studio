@@ -39,6 +39,7 @@ From the editor, the **← Projects** link at the top left brings you back. The 
 Then:
 
 - **Site preview** opens the site in a new tab, to browse from page to page without the editing tools;
+- **Preview on a phone** (the QR code) shows the same preview on a phone or tablet connected to the same network: scan the code with its camera. The page follows your edits, saved or not, until you click **Stop sharing**. Desktop application only;
 - **Preview** (the eye) hides the panels and selection frames, to judge the page alone;
 - **?** opens this guide;
 - the sun or the moon switches the interface to a **light or dark theme** (the produced site is not affected);
